@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <!-- TMS Menu -->
+        <menuitem
+            id="hr_menu_tms_root"
+            name="Time Mgmt System"
+            sequence="10"
+            web_icon="sanbe_hr_tms,static/description/icon.png"
+            groups="hr.group_hr_manager"
+        />
+        <menuitem
+            id="menu_hr_employee_group_setting"
+            name="Set Emp Group"
+            parent="hr_menu_tms_root"
+            sequence="1"
+        />
+        <menuitem
+            id="menu_hr_employee_group_settings"
+            name="Set Emp Groups"
+            parent="menu_hr_employee_group_setting"
+            sequence="1"
+            action="action_hr_employeegroup"
+        />
+        <menuitem
+            id="menu_hr_employee_list_settings"
+            name="List Of Employee Schedule"
+            parent="menu_hr_employee_group_setting"
+            sequence="2"
+            action="hr_employee_list_schedule_action"
+        />
+        <menuitem
+        id="hr_holidays_status_menu_configuration_ext"
+        action="hr_holidays.open_view_holiday_status"
+        name="Permission Code"
+        parent="sanbe_hr_tms.hr_menu_tms_config"
+        groups="hr_holidays.group_hr_holidays_manager"
+        sequence="6"/>
+<!--        <menuitem-->
+<!--            id="menu_hr_employee_list_schedule"-->
+<!--            name="List Of Employee Schedule"-->
+<!--            parent="menu_hr_employee_group_setting"-->
+<!--            sequence="2"-->
+<!--            action="hr_employee_list_schedule_action"-->
+<!--        />-->
+<!--        <menuitem-->
+<!--            id="menu_hr_holidays_my_leaves"-->
+<!--            name="My Time"-->
+<!--            parent="hr_menu_tms_dashboard"-->
+<!--            sequence="1" />-->
+
+<!--        <menuitem-->
+<!--            id="hr_leave_menu_new_request"-->
+<!--            parent="hr_menu_tms_dashboard"-->
+<!--            action="hr_holidays.hr_leave_action_new_request"-->
+<!--            sequence="1" />-->
+
+<!--        <menuitem-->
+<!--            id="hr_leave_menu_my"-->
+<!--            parent="hr_menu_tms_dashboard"-->
+<!--            action="hr_holidays.hr_leave_action_my"-->
+<!--            sequence="2" />-->
+
+<!--        <menuitem-->
+<!--            id="menu_open_allocation"-->
+<!--            name="My Allocations"-->
+<!--            parent="hr_menu_tms_dashboard"-->
+<!--            action="hr_holidays.hr_leave_allocation_action_my"-->
+<!--            sequence="3" />-->
+
+        <!-- TMS Transaction / Processing -->
+        <menuitem
+            id="hr_menu_tms_transaction"
+            name="Transaction"
+            sequence="2"
+            parent="hr_menu_tms_root"
+            groups="base.group_user"
+        />
+
+        <menuitem
+            id="menu_hr_permission_entry"
+            name="Permission Entry"
+            sequence="20"
+            parent="sanbe_hr_tms.hr_menu_tms_transaction"
+            action="action_hr_permission_entry"
+        />
+        <menuitem
+            id="menu_hr_overtime_request_entry"
+            name="Overtime Request - Planning"
+            sequence="30"
+            parent="sanbe_hr_tms.hr_menu_tms_transaction"
+            action="action_hr_overtime_planning"
+        />
+<!--        <menuitem-->
+<!--            id="menu_hr_tms_entry_recap"-->
+<!--            name="Recapitulation"-->
+<!--            sequence="40"-->
+<!--            parent="sanbe_hr_tms.hr_menu_tms_transaction"-->
+<!--            action="action_hr_tmsentry_recap"-->
+<!--        />-->
+
+        <menuitem id="menu_hr_tms_entry_summary"
+            name="TMS Entry Summary"
+            sequence="40"
+            parent="sanbe_hr_tms.hr_menu_tms_transaction"
+            action="action_hr_tmsentry_summary"
+        />
+        <menuitem
+            id="menu_hr_tms_entry"
+            name="TMS Entry"
+            sequence="50"
+            parent="sanbe_hr_tms.hr_menu_tms_transaction"
+            action="action_hr_tmsentry"
+        />
+
+          <!-- Reporting -->
+        <menuitem
+            id="hr_menu_tms_processing"
+            name="Processing"
+            sequence="3"
+            parent="hr_menu_tms_root"
+            groups="base.group_user"
+        />
+        <menuitem
+            id="menu_hr_tms_entry_sync"
+            name="Penarikan Data Absensi"
+            sequence="10"
+            parent="sanbe_hr_tms.hr_menu_tms_processing"
+            action="action_hr_tmsentry_sync"
+        />
+        <menuitem
+            id="menu_hr_tms_processing"
+            name="TMS Calculation"
+            sequence="20"
+            parent="sanbe_hr_tms.hr_menu_tms_processing"
+            action="action_hr_tms_processing"
+        />
+        <menuitem
+            id="menu_hr_tms_entry_transfer_payroll"
+            name="Transfer To Payroll"
+            sequence="30"
+            parent="sanbe_hr_tms.hr_menu_tms_processing"
+            action="action_view_hr_transfer_payroll"
+        />
+        <!-- Reporting -->
+        <menuitem
+            id="hr_menu_tms_reporting"
+            name="Reporting"
+            sequence="4"
+            parent="hr_menu_tms_root"
+            groups="base.group_user"
+        />
+
+        <!-- Setting Parameter -->
+        <menuitem
+            id="hr_menu_tms_config"
+            name="Setting Parameter"
+            sequence="5"
+            parent="hr_menu_tms_root"
+            groups="base.group_user"
+        />
+
+<!--        <menuitem-->
+<!--            id="menu_hr_machine_setting"-->
+<!--            name="Fingerprint Settings"-->
+<!--            parent="sanbe_hr_tms.hr_menu_tms_config"-->
+<!--            sequence="2"-->
+<!--            action="action_hr_machine_setting"-->
+<!--        />-->
+        <menuitem
+            id="hr_holidays_public_time_off_menu_configuration"
+            name="Set Calendar Day"
+            sequence="1"
+            action="sanbe_hr_tms.hr_opens_public_holiday"
+            parent="hr_menu_tms_config"
+            groups="hr_holidays.group_hr_holidays_manager"
+        />
+        <menuitem
+            id="menu_hr_workinghour_setting"
+            name="Set Working Days"
+            parent="sanbe_hr_tms.hr_menu_tms_config"
+            sequence="2"
+            action="action_hr_workingdays"
+        />
+        <menuitem
+            id="menu_hr_opening_closing_periode"
+            name="Set Opening and CLosing Periode"
+            parent="sanbe_hr_tms.hr_menu_tms_config"
+            sequence="2"
+            action="action_hr_openin_closing"
+        />
+    </data>
+</odoo>

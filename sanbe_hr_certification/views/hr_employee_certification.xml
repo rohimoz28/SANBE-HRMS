@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_hr_certificated_tree" model="ir.ui.view">
+            <field name="name">certificate.type.tree</field>
+            <field name="model">hr.employee.certification</field>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <tree string="HR Certificated ">
+                    <field name="employee_id" column_invisible="1" />
+                    <field name="name" />
+                    <field name="number" />
+                    <field name="certification_types" />
+                    <field name="must" />
+                    <field name="issuing_institution" />
+                    <field name="valid_from" />
+                    <field name="valid_to" />
+                    <field name="certificate_attachmentids" widget="many2many_binary" />
+                    <field name="remarks" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_certificate_form" model="ir.ui.view">
+            <field name="name">hr.employee.certification.form</field>
+            <field name="model">hr.employee.certification</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Certificated Type">
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Certification Name" />
+                        </h1>
+                        <h2>
+                            <field name="number" placeholder="Certification Number" />
+                        </h2>
+                    </div>
+                    <group>
+                        <field name="employee_id" readonly="1" force_save="1" />
+                        <field name="certification_types" />
+                        <field name="must" />
+                        <field name="issuing_institution" />
+                        <field name="valid_from" required="1" />
+                        <field name="valid_to" required="must == True" />
+                        <field name="certificate_attachmentids" widget="many2many_binary" />
+                        <field name="remarks" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_certificate_search" model="ir.ui.view">
+            <field name="name">employee.certification.search</field>
+            <field name="model">hr.employee.certification</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <search string="Employee Certification">
+                    <field name="name" />
+                    <field name="number" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="open_view_employee_certificate_tree" model="ir.actions.act_window">
+            <field name="name">Employees Certificate</field>
+            <field name="res_model">hr.employee.certification</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_certificated_tree" />
+            <field name="domain">[]</field>
+            <field name="search_view_id" ref="view_certificated_type_search" />
+        </record>
+
+        <record id="open_view_employee_list" model="ir.actions.act_window">
+            <field name="name">Employees Certificate</field>
+            <field name="res_model">hr.employee.certification</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" eval="False" />
+            <field name="search_view_id" ref="view_certificated_type_search" />
+        </record>
+
+    </data>
+</openerp>

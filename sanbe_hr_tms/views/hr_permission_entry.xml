@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+         <!--        View Form    -->
+        <record id="hr_permission_entry_form" model="ir.ui.view">
+            <field name="name">hr.permission.entry.form</field>
+            <field name="model">hr.permission.entry</field>
+            <field name="arch" type="xml">
+                <form string="Permission Entry">
+                    <header>
+                         <field name="permission_status" widget="statusbar" statusbar_visible="draft,approved1,approved2,approved3,done" force_save="1"/>
+                    </header>
+                        <group>
+                            <group>
+                                <!-- Area_id is mandatory -->
+                                <field name="trans_number"/>
+                                <field name="doc_number"/>
+                                <field name="area_id"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
+                                <field name="branch_ids" invisible="1" />
+                                 <!-- branch_id is mandatory and filtered by area_id branch -->
+                                <field name="branch_id"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True" />
+                                <!-- employee_id is mandatory -->
+                                <field name="employee_id"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
+                            </group>
+                            <group>
+                                <!-- department_id is mandatory if employee_id != False -->
+                                <field name="alldepartment" invisible="1"/>
+                                <field name="department_id" readonly="1" force_save="1"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}"  required="employee_id !=False"/>
+                            </group>
+                            <group>
+                                <!-- job_id is mandatory if employee_id != Fakse -->
+                                <field name="job_id" readonly="1" force_save="1"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
+                            </group>
+                        </group>
+                        <group>
+                            <!-- permition code  -->
+                            <!--field name="permission_code" /-->
+                            <field name="employee_company_id" invisible="1"/>
+                            <field name="holiday_status_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
+                        </group>
+                        <group col="3">
+                            <group>
+                                <!-- permition date_from is mandatory -->
+                                <field name="permission_date_from"  required="True"/>
+                            </group>
+                            <group>
+                                <!-- permition date_to is mandatory -->
+                                <field name="permission_date_To" required="True"/>
+                            </group>
+                        </group>
+                        <group col="3">
+                            <group>
+                                <!-- permition time_from is mandatory -->
+                                <field name="permission_time_from" widget="easy_timepicker" required="True"/>
+                            </group>
+                            <group>
+                                <!-- permition time_to is mandatory -->
+                                <field name="permission_time_to" widget="easy_timepicker" required="True"/>
+                            </group>
+                            <group>
+                                <label for="time_days" />
+                                <div class="o_row">
+                                    <div class="column">
+                                        <field name="time_days" />
+                                    </div>
+                                    <div class="column">
+                                        <field name="time_hour" />
+                                    </div>
+                                </div>
+                            </group>
+                        </group>
+                        <group col="2">
+                            <group>
+                                <field name="handled_temp_to" />
+                            </group>
+                            <group>
+                                <field name="back_to_office" widget="easy_timepicker"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="remarks" />
+                        </group>
+                        <group col="2">
+                            <group>
+                                <field name="approve1_by" />
+                            </group>
+                            <group>
+                                <field name="approve1_job_title" />
+                            </group>
+                            <group>
+                                <field name="approve2_by" />
+                            </group>
+                            <group>
+                                <field name="approve2_job_title" />
+                            </group>
+                            <group>
+                                <field name="approve3_by" />
+                            </group>
+                            <group>
+                                <field name="approve3_job_title" />
+                            </group>
+                        </group>
+
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div>
+                </form>
+            </field>
+        </record>
+        <!--        List View    -->
+        <record id="hr_permission_entry_tree" model="ir.ui.view">
+            <field name="name">hr.permission.entry.tree</field>
+            <field name="model">hr.permission.entry</field>
+            <field name="arch" type="xml">
+                <tree string="HR Permission Entry">
+                    <field name="area_id" />
+                    <field name="employee_id" />
+                </tree>
+            </field>
+        </record>
+         <!--      Action Windows    -->
+        <record id="action_hr_permission_entry" model="ir.actions.act_window">
+            <field name="name">Permission Entry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.permission.entry</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report HR Permission Entry
+                </p>
+                <p>
+                    Create new Permission Entry
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

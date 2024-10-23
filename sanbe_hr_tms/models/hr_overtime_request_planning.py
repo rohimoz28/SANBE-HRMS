@@ -1,0 +1,215 @@
+# -*- coding : utf-8 -*-
+#################################################################################
+# Author    => Albertus Restiyanto Pramayudha
+# email     => xabre0010@gmail.com
+# linkedin  => https://www.linkedin.com/in/albertus-restiyanto-pramayudha-470261a8/
+# youtube   => https://www.youtube.com/channel/UCCtgLDIfqehJ1R8cohMeTXA
+#################################################################################
+
+from odoo import fields, models, api, _, Command
+from odoo.exceptions import ValidationError,UserError
+from odoo.osv import expression
+import pytz
+from datetime import datetime
+
+TMS_OVERTIME_STATE = [
+    ('draft', 'Draft'),
+    ('approved', 'Approved'),
+    ('done', "Close"),
+    ('reject', "Reject"),
+]
+class HREmpOvertimeRequest(models.Model):
+    _name = "hr.overtime.planning"
+    _description = 'HR Employee Overtime Planning Request'
+    _rec_name = 'name'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
+
+    def _get_active_periode_from(self):
+        mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
+        return mycari.open_periode_from or False
+
+    def _get_active_periode_to(self):
+        mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
+        return mycari.open_periode_to or False
+
+    @api.depends('area_id')
+    def _isi_semua_branch(self):
+        for allrecs in self:
+            databranch = []
+            for allrec in allrecs.area_id.branch_id:
+                mybranch = self.env['res.branch'].search([('name', '=', allrec.name)], limit=1)
+                databranch.append(mybranch.id)
+            allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
+            allrecs.branch_ids = [Command.set(allbranch.ids)]
+            
+    @api.depends('area_id','branch_id')
+    def _isi_department_branch(self):
+        for allrecs in self:
+            allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
+            allrecs.alldepartment =[Command.set(allbranch.ids)]
+
+    name = fields.Char('Planning Request #',default=lambda self: _('New'),
+       copy=False, readonly=True, tracking=True, requirement=True)
+    request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
+    area_id = fields.Many2one('res.territory', string='Area ID', index=True, required=True)
+    branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
+                                  store=False)
+
+    branch_id = fields.Many2one('res.branch', string='Bisnis Unit', index=True, domain="[('id','in',branch_ids)]")
+    alldepartment = fields.Many2many('hr.department','hr_department_plan_ot_rel', string='All Department',compute='_isi_department_branch',store=False)
+    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
+    periode_from = fields.Date('Periode From',default=_get_active_periode_from)
+    periode_to = fields.Date('Periode To',default=_get_active_periode_to)
+    approve1 = fields.Boolean('Supervisor Departement',default=False)
+    approve2 = fields.Boolean('Manager Departement',default=False)
+    approve3 = fields.Boolean('HMC Departement',default=False)
+    state = fields.Selection(
+        selection=TMS_OVERTIME_STATE,
+        string="TMS Overtime Status",
+        readonly=True, copy=False, index=True,
+        tracking=3,
+        default='draft')
+
+    hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        #CHP = Area Cimahi
+        #CMP = Area Cimareme
+        #TSP = Area Taman Sari
+        #CHP24000001
+        for vals in vals_list:
+            if vals.get('name', _('New')) == _('New'):
+                if 'area_id' in vals:
+                    area = vals.get('area_id')
+                    dt_area = self.env['res.territory'].sudo().search([('id','=',int(area))],limit=1)
+                    if dt_area:
+                        if dt_area.area_code == 'TSR':
+                            cdo = 'TSL'
+                        if dt_area.area_code == 'CMH':
+                            cdo = 'CHL'
+                        if dt_area.area_code == 'CMR':
+                            cdo = 'CML'
+                        if dt_area.area_code == 'SBF':
+                            cdo = 'SBL'
+                        tgl = fields.Date.today()
+                        tahun = str(tgl.year)[2:]
+                        vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code(
+                            'hr.overtime.planning'))
+                
+        res = super(HREmpOvertimeRequest,self).create(vals_list)
+        return res
+    
+    def btn_approved(self):
+        for rec in self:
+            if rec.approve1 == True and rec.approve2 == True and rec.approve3 == True:
+                rec.state = 'approved'
+            else:
+                raise UserError('Approve Not Complete')
+    
+    def btn_done(self):
+        for rec in self:
+            rec.state = 'done'
+    
+    def btn_reject(self):
+        for rec in self:
+            rec.state = 'reject'
+    
+    def btn_backdraft(self):
+        for rec in self:
+            rec.state = 'draft'
+            
+    def action_search_employee(self):
+        #if self.department_id:
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Search Employee'),
+            'res_model': 'hr.employeedepartment',
+            'view_mode': 'form',
+            'target': 'current',
+            'context': {
+                'active_id': self.id, 
+                'fieldname':'plan_id', 
+                'default_modelname':'hr.overtime.planning',
+                'default_area_id':self.area_id.id,
+                'default_branch_id':self.branch_id.id,
+                'default_plann_date_from':self.periode_from,
+                'default_plann_date_to':self.periode_to,
+                'default_department_id':self.department_id.id,
+                },
+            'views': [[False, 'form']]
+        }
+        #else:
+        #    raise UserError('Sub Department Not Selected')
+    
+class HREmpOvertimeRequestEmployee(models.Model):
+    _name = "hr.overtime.employees"
+    _description = 'HR Employee Overtime Planning Request Employee'
+
+    @api.depends('area_id')
+    def _isi_semua_branch(self):
+        for allrecs in self:
+            databranch = []
+            for allrec in allrecs.area_id.branch_id:
+                mybranch = self.env['res.branch'].search([('name','=', allrec.name)], limit=1)
+                databranch.append(mybranch.id)
+            allbranch = self.env['res.branch'].sudo().search([('id','in', databranch)])
+            allrecs.branch_ids =[Command.set(allbranch.ids)]
+            
+    @api.depends('area_id', 'branch_id')
+    def _isi_department_branch(self):
+        for allrecs in self:
+            databranch = []
+            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
+            allrecs.alldepartment = [Command.set(allbranch.ids)]
+            
+    @api.depends('areah_id','branchh_id','departmenth_id')
+    def _ambil_employee(self):
+        for rec in self:
+            if rec.areah_id:
+                emp = self.env['hr.employee'].sudo().search([('area','=',rec.areah_id.id)])
+                if rec.branchh_id:
+                    emp = emp.filtered(lambda p:p.branch_id.id == rec.branchh_id.id)
+                if rec.departmenth_id:
+                    emp = emp.filtered(lambda p:p.department_id.id == rec.departmenth_id.id)
+                rec.employee_ids = [Command.set(emp.ids)]
+
+    branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
+    alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
+    planning_id = fields.Many2one('hr.overtime.planning',string='HR Overtime Request Planning',index=True)
+    areah_id = fields.Many2one('res.territory', string='Area ID Header', related='planning_id.area_id',index=True, readonly=True)
+    area_id = fields.Many2one('res.territory', string='Area ID',index=True)
+    branchh_id = fields.Many2one('res.branch', related='planning_id.branch_id',string='Bisnis Unit Header', index=True, readonly=True)
+    departmenth_id = fields.Many2one('hr.department', related='planning_id.department_id',string='Department ID Header', index=True, readonly=True)
+    nik = fields.Char('Employee NIK',index=True)
+    employee_ids = fields.Many2many('hr.employee','ov_plan_emp_rel',compute='_ambil_employee',string='Employee Name',store=False)
+    employee_id = fields.Many2one('hr.employee',domain="[('id','in',employee_ids),('state','=','approved')]",string='Employee Name',index=True)
+    plann_date_from = fields.Date('Plann Date From')
+    plann_date_to = fields.Date('Plann Date To')
+    ot_plann_from = fields.Float('OT Plann From')
+    ot_plann_to = fields.Float('OT Plann To')
+    approve_time_from = fields.Float('Approve Time From')
+    approve_time_to = fields.Float('Approve Time To')
+    machine = fields.Char('Machine')
+    work_plann = fields.Char('Work Plann')
+    output_plann = fields.Char('Output Plann')
+    branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Bisnis Unit', index=True)
+    department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Department ID')
+    transport = fields.Boolean('Transport')
+    meals = fields.Boolean('Meal')
+    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT type')
+    
+    
+    @api.onchange('employee_id')
+    def rubah_employee(self):
+        for rec in self:
+            if rec.employee_id:
+                emp = self.env['hr.employee'].sudo().search([('id','=',rec.employee_id.id)],limit=1)
+                if emp:
+                    rec.nik = emp.nik
+                    #rec.branch_id = emp.branch_id.id
+                    #rec.department_id = emp.department_id.id
+                    #rec.area_id = emp.area.id
+
+    

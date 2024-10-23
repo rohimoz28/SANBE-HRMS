@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="hr_tms_overtime_planning_form" model="ir.ui.view">
+            <field name="name">hr.overtime.planning.form</field>
+            <field name="model">hr.overtime.planning</field>
+            <field name="arch" type="xml">
+                <form string="TMS Over Time Planning Entry " create="0">
+                    <header>
+                        <button string="Approved" name="btn_approved" type="object" invisible="state != 'draft'" />
+                        <button string="Draft" name="btn_backdraft" type="object" invisible="state != 'approved'" />
+                        <button string="Close" name="btn_done" type="object" invisible="state != 'approved'" />
+                        <button string="Reject" name="btn_reject" type="object" invisible="state in ('approved','done')" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,done,reject"/>
+                    </header>
+<!--                    <sheet>-->
+                        <group string="TMS Over Time Planning Entry" name="entry_planning">
+                            <group>
+                                <field name="name"/>
+                                <field name="area_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1" readonly="state == 'done'"/>
+                                <field name="branch_ids" invisible="1" />
+                                <field name="alldepartment" invisible="1" />
+                                <field name="branch_id"
+                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" readonly="state == 'done'"/>
+                                <field name="department_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" readonly="state == 'done'"/>
+                            </group>
+                            <group>
+                                <field name="request_date"/>
+                                <!--field name="employee_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/-->
+                                <field name="periode_from" />
+                                <field name="periode_to" />
+                            </group>
+                            <group>
+                                <field name="approve1"/>
+                                <field name="approve2" />
+                                <field name="approve3" />
+                            </group>
+                            <group>
+                                <button name="action_search_employee" string="Search Employee"
+                                    type="object" class="oe_highlight" data-hotkey="q" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Request" name="overtime_request">
+                                <field name="hr_ot_planning_ids" readonly="state == 'close'" context="{'default_area_id': area_id,'default_branch_id': branch_id,'default_department_id': department_id}">
+                                    <tree editable="bottom">
+                                        <field name="ot_type"/>
+                                        <field name="planning_id" column_invisible="1"/>
+                                        <field name="employee_ids" column_invisible="1"/>
+                                        <field name="employee_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="nik" readonly="1" force_save="1"/>
+                                        <field name="plann_date_from" widget="date"/>
+                                        <field name="plann_date_to" widget="date"/>
+                                        <field name="ot_plann_from" widget="easy_timepicker"/>
+                                        <field name="ot_plann_to" widget="easy_timepicker"/>
+                                        <field name="approve_time_from" widget="easy_timepicker"/>
+                                        <field name="approve_time_to" widget="easy_timepicker"/>
+                                        <field name="machine" />
+                                        <field name="work_plann" />
+                                        <field name="output_plann" />
+                                        <field name="area_id"  options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" force_save="1"/>
+                                        <field name="areah_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" column_invisible="1"/>
+                                        <field name="branch_ids" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" column_invisible="1"/>
+                                        <field name="branchh_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" column_invisible="1"/>
+                                        <field name="alldepartment" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" column_invisible="1"/>
+                                        <field name="departmenth_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" column_invisible="1"/>
+                                        <field name="branch_id" context="{'default_branch_id': branch_id}" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" force_save="1"/>
+                                        <field name="department_id" context="{'default_department_id': department_id}" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" force_save="1"/>
+                                        <field name="transport" />
+                                        <field name="meals" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+<!--                    </sheet>-->
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_overtime_planning_tree" model="ir.ui.view">
+            <field name="name">hr.overtime.planning.tree</field>
+            <field name="model">hr.overtime.planning</field>
+            <field name="arch" type="xml">
+                <tree string="HR TMS Overtime Planning">
+                        <field name="area_id"/>
+                        <field name="name"/>
+                        <field name="request_date"/>
+                        <field name="department_id"/>
+                        <field name="branch_id"/>
+                        <field name="periode_from" />
+                        <field name="periode_to" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_hr_overtime_planning" model="ir.actions.act_window">
+            <field name="name">TMS Overtime Request - Planning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.overtime.planning</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report HR TMS Overtime Plamming
+                </p>
+                <p>
+                    Create new HR TMS Overtime Planning
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

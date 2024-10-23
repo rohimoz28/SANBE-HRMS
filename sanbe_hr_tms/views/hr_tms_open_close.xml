@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+         <!--        View Form    -->
+        <record id="hr_opening_closing_form" model="ir.ui.view">
+            <field name="name">hr.opening.closing.form</field>
+            <field name="model">hr.opening.closing</field>
+            <field name="arch" type="xml">
+                <form string="HR Opening And Closing">
+                    <header>
+                        <field name="isopen" invisible="1"/>
+                        <button name="action_opening_periode" invisible="isopen == True" string="Open" type="object" class="btn-primary"/>
+                        <button name="action_closing_periode" invisible="isopen == False" string="Close" type="object" class="btn-primary"/>
+                        <field name="state_process" widget="statusbar" statusbar_visible="draft,running,transfer_to_payroll,done" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="area_id" readonly="isopen == True" options="{'no_create': True,'no_create_edit': True}" />
+                                <field name="branch_ids" invisible="1" />
+                                <field name="branch_id" readonly="isopen == True" options="{'no_create': True,'no_create_edit': True}" />
+                            </group>
+                        </group>
+                            <group col="2">
+                                <group>
+                                     <field name="open_periode_from" readonly="isopen == True"/>
+                                </group>
+                                <group>
+                                    <field name="open_periode_to" readonly="isopen == True"/>
+                                </group>
+                            </group>
+                            <group col="2">
+                                <group>
+                                    <field name="close_periode_from" readonly="isopen == True"/>
+                                </group>
+                                <group>
+                                    <field name="close_periode_to" readonly="isopen == True"/>
+                                </group>
+                            </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--   List View    -->
+        <record id="hr_opening_closing_tree" model="ir.ui.view">
+            <field name="name">hr.opening.closing.tree</field>
+            <field name="model">hr.opening.closing</field>
+            <field name="arch" type="xml">
+                <tree string="HR Opening and Closing">
+                    <field name="name" readonly="1"/>
+                    <field name="area_id" optional="show" />
+                    <field name="isopen" invisible="1"/>
+                    <field name="branch_id" readonly="isopen == True"/>
+                    <field name="open_periode_from" readonly="isopen == True"/>
+                    <field name="open_periode_to" readonly="isopen == True"/>
+                    <field name="close_periode_from" readonly="isopen == True"/>
+                    <field name="close_periode_to" readonly="isopen == True"/>
+                    <field name="state_process" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        <!--  Action Windows    -->
+        <record id="action_hr_openin_closing" model="ir.actions.act_window">
+            <field name="name">Close and Open Periode</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.opening.closing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report HR Opening And Closing Periode
+                </p>
+                <p>
+                    Create new HR Opening And Closing Periode
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
