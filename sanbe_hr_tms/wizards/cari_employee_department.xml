@@ -21,9 +21,10 @@
                                     <field name="plan_id" invisible="1"/>
                                     <field name="modelname" invisible="1"/>
                                     <field name="branch_id" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="wdcode" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="1"/>
-                                    <field name="valid_from" widget="date" invisible="modelname == 'hr.overtime.planning'" required="1"/>
-                                    <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="1"/>
+                                    <field name="wdcode" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
+                                    <!--field name="periode_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/-->
+                                    <field name="valid_from" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
+                                    <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="plann_date_from" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="plann_date_to" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="ot_plann_from" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
@@ -40,6 +41,7 @@
                                 </group>
                                 <group>
                                     <button name="action_insert_empgroup" string="Apply" type="object" class="oe_highlight" data-hotkey="q" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <button name="btn_select_all" string="Selected All" type="object" class="oe_highlight" invisible="modelname != 'hr.overtime.planning'"/>
                                     <button string="Discard" class="btn-secondary" special="cancel" data-hotkey="x" invisible="modelname != 'hr.overtime.planning'"/>
                                 </group>
                             </group>
@@ -59,8 +61,9 @@
                             </notebook>
                     </sheet>
                     <footer>
-                        <button name="action_insert_empgroup" string="Apply" type="object" class="oe_highlight" data-hotkey="q"/>
-                        <button string="Discard" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                        <button name="action_insert_empgroup" string="Apply" type="object" class="oe_highlight" data-hotkey="q" invisible="modelname == 'hr.overtime.planning'"/>
+                        <button name="btn_select_all" string="Selected All" type="object" class="oe_highlight" invisible="modelname == 'hr.overtime.planning'"/>
+                        <button string="Discard" class="btn-secondary" special="cancel" data-hotkey="x" invisible="modelname == 'hr.overtime.planning'"/>
                     </footer>
                 </form>
             </field>

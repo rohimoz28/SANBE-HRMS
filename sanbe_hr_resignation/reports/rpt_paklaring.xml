@@ -45,8 +45,8 @@
                         </div>
                     </div>
                     <div class="col-6 text-right" style="position: relative;">
-                        <span style="font-size:23px; position:absolute; bottom:0; right:0;">
-                            REGISTERED</span>
+                        <!-- <span style="font-size:23px; position:absolute; bottom:0; right:0;">
+                            REGISTERED</span> -->
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                         <tr style="font-size:15px;">
                             <td width="50%"></td>
                             <td width="50%" style="font-family: 'Times New Roman', Times, serif;">
-                                <span t-esc="company.name.upper()" />
+                                <span t-esc="company.name.upper()" /> Pharmaceutical Manufacturer
                             </td>
                         </tr>
                         <tr style="font-size:15px;">
@@ -133,7 +133,7 @@
                 t-att-data-oe-lang="o and o.env.context.get('lang')">
                 <t t-out="0" />
             </div>
-            <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+            <!-- <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
                 <div class="text-center" style="border-top: 1px solid black;">
                     <div class="col-12 mb4">
                         <div class="row">
@@ -150,7 +150,7 @@
                         <span t-out="o.name">(document name)</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </template>
 
         <template id="paklaring_report_document">
@@ -161,57 +161,52 @@
                         <div class="col-12">
                             <br />
                             <br />
-                            <h2 style="letter-spacing: 2px; line-height: 0.1;">
-                                <i>
+                            <h2 style="line-height: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                <strong>
                                     <u>
-                                        <center>CERTIFICATE OF EMPLOYEMENT</center>
+                                        <center>SURAT KETERANGAN</center>
                                     </u>
-                                </i>
+                                </strong>
                             </h2>
-                            <h2 style="letter-spacing: 2px; line-height: 0.1;">
+                            <!-- <h2 style="letter-spacing: 2px; line-height: 0.1;">
                                 <strong>
                                     <center>SURAT KETERANGAN KERJA</center>
                                 </strong>
-                            </h2>
-                            <p style="line-height: 0.1;">
-                                <center style="line-height: 0.1;">No.<span t-esc="doc.letter_no" /></center>
+                            </h2> -->
+                            <p style="line-height: 1; font-size:9px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                <center style="line-height: 0.1;">NO. .../PERS/………..-../REF/VI/2022<span t-esc="doc.letter_no" /></center>
                             </p>
                         </div>
                     </div>
-                    <br />
-                    <br />
-                    <br />
                     <br />
                     <br />
                     <div class="row" id="hash_header">
                         <div class="col-12">
-                            <p style="line-height: 0.1;">
+                            <!-- <p style="line-height: 0.1;">
                                 <i>On behalf of the Management PT. Sanbe Farma we here by inform
                                     that:</i>
-                            </p>
+                            </p> -->
                             <p style="line-height: 0.1;">
-                                <strong>Atas nama manajemen PT Sanbe Farma, dengan ini menerangkan
-                                    bahwa:</strong>
+                                Yang bertanda tangan dibawah ini :
                             </p>
                         </div>
                     </div>
-                    <br />
                     <div class="oe_structure"></div>
-                    <table class="table table-sm o_main_table table-borderless mt-4">
+                    <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 48px; border-collapse: collapse;">
                         <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                        <tr style="height: 42px;">
-                            <td style="width: 300px;">
-                                <p style="line-height: 0.1;">
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
                                     <u>NAME</u>
-                                </p>
-                                <p style="line-height: 0.1;">NAMA</p>
+                                </p> -->
+                                <p style="line-height: 0.1;">Nama</p>
                             </td>
-                            <td style="width: 15px;">:</td>
-                            <td style="width: 300px;">
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
                                 <t t-esc="doc.emp_nos.name" />
                             </td>
                         </tr>
-                        <tr style="height: 120px;">
+                        <!-- <tr style="height: 120px;">
                             <td style="width: 300px;">
                                 <p style="line-height: 0.1;">
                                     <u>UPDATE PHOTO</u>
@@ -225,84 +220,122 @@
                                         style="max-height:82pt;width: 150px;" alt="Employee Image" />
                                 </t>
                             </td>
-                        </tr>
-                        <tr style="height: 42px;">
-                            <td style="width: 300px;">
-                                <p style="line-height: 0.1;">
-                                    <u>ADDRESS</u>
-                                </p>
-                                <p style="line-height: 0.1;">ALAMAT</p>
+                        </tr> -->
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
+                                    <u>BEGINNING CLASIFICATION</u>
+                                </p> -->
+                                <p style="line-height: 0.1;">Jabatan</p>
                             </td>
-                            <td style="width: 15px;">:</td>
-                            <td style="width: 300px;">
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
+                                <t t-esc="doc.emp_nos.job_id.name" />
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <div class="row" id="hash_header">
+                        <div class="col-12">
+                            <!-- <p style="line-height: 0.1;">
+                                <i>On behalf of the Management PT. Sanbe Farma we here by inform
+                                    that:</i>
+                            </p> -->
+                            <p style="line-height: 0.1;">
+                                Menerangkan Bahwa :
+                            </p>
+                        </div>
+                    </div>
+                    <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 48px; border-collapse: collapse;">
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
+                                    <u>NAME</u>
+                                </p> -->
+                                <p style="line-height: 0.1;">Nama</p>
+                            </td>
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
                                 <t t-esc="doc.emp_nos.name" />
                             </td>
                         </tr>
-                        <tr style="height: 42px;">
-                            <td style="width: 300px;">
-                                <p style="line-height: 0.1;">
-                                    <u>EMPLOYEE NO.</u>
-                                </p>
-                                <p style="line-height: 0.1;">NIK</p>
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
+                                    <u>ADDRESS</u>
+                                </p> -->
+                                <p style="line-height: 0.1;">Alamat</p>
                             </td>
-                            <td style="width: 15px;">:</td>
-                            <td style="width: 300px;">
-                                <t t-esc="doc.emp_nos.nik" />
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
+                                <t t-esc="doc.emp_nos.name" />
                             </td>
                         </tr>
-                        <tr style="height: 42px;">
+                        <!-- <tr style="height: 10px;">
                             <td style="width: 300px;">
                                 <p style="line-height: 0.1;">
                                     <u>BEGINNING CLASIFICATION</u>
                                 </p>
-                                <p style="line-height: 0.1;">JABATAN AWAL</p>
+                                <p style="line-height: 0.1;">Jabatan Awal</p>
                             </td>
                             <td style="width: 15px;">:</td>
                             <td style="width: 300px;">
                                 <t t-esc="doc.emp_nos.job_id.name" />
                             </td>
-                        </tr>
-                        <tr style="height: 42px;">
-                            <td style="width: 300px;">
-                                <p style="line-height: 0.1;">
+                        </tr> -->
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
                                     <u>FINAL CLASIFICATION</u>
-                                </p>
-                                <p style="line-height: 0.1;">JABATAN TERAKHIR</p>
+                                </p> -->
+                                <p style="line-height: 0.1;">Jabatan Terakhir</p>
                             </td>
-                            <td style="width: 15px;">:</td>
-                            <td style="width: 300px;">
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
                                 <t t-esc="doc.emp_nos.job_id.name" />
                             </td>
                         </tr>
-                        <tr style="height: 42px;">
+                        <tr style="height: 10px;">
+                            <td style="width: 150px; padding: 0; margin: 0;">
+                                <!-- <p style="line-height: 0.1;">
+                                    <u>EMPLOYEE NO.</u>
+                                </p> -->
+                                <p style="line-height: 0.1;">NIK</p>
+                            </td>
+                            <td style="width: 15px; padding: 0; margin: 0;">:</td>
+                            <td style="width: 300px; padding: 0; margin: 0;">
+                                <t t-esc="doc.emp_nos.nik" />
+                            </td>
+                        </tr>
+                        <!-- <tr style="height: 10px;">
                             <td style="width: 300px;">
                                 <p style="line-height: 0.1;">
                                     <u>PERIOD OF SERVICE</u>
                                 </p>
-                                <p style="line-height: 0.1;">MASA KERJA</p>
+                                <p style="line-height: 0.1;">Masa Kerja</p>
                             </td>
                             <td style="width: 15px;">:</td>
                             <td style="width: 300px;"><t t-esc="doc.emp_nos.ws_year" /> Year <t
                                     t-esc="doc.emp_nos.ws_month" /> Month <t
                                     t-esc="doc.emp_nos.ws_day" /> Day </td>
-                        </tr>
-                        <tr style="height: 42px;">
+                        </tr> -->
+                        <!-- <tr style="height: 10px;">
                             <td style="width: 300px;">
                                 <p style="line-height: 0.1;">
                                     <u>REASON OF LEAVING</u>
                                 </p>
-                                <p style="line-height: 0.1;">ALASAN BERHENTI KERJA</p>
+                                <p style="line-height: 0.1;">Alasan Berhenti Kerja</p>
                             </td>
                             <td style="width: 15px;">:</td>
                             <td style="width: 300px;">
                                 <t t-esc="doc.reason" />
                             </td>
-                        </tr>
+                        </tr> -->
                     </table>
                     <br />
                     <div class="row" id="info_inggris">
                         <div class="col-12">
-                            <p style="line-height: 0.1;">
+                            <!-- <p style="line-height: 0.1;">
                                 <i>During his/her service in our company, he/she has shown his/her
                                     good work performance. We take this</i>
                             </p>
@@ -313,19 +346,22 @@
                             <p style="line-height: 0.1;">
                                 <i>for use as necessary.</i>
                             </p>
-                            <br />
-                            <p style="line-height: 0.1;">
-                                <strong style="line-height: 0.1;">Selama bekerja di perusahaan kami,
-                                    yang bersangkutan telah menunjukkan kinerja yang baik. Pada</strong>
+                            <br /> -->
+                            <!-- <p style="line-height: 1;">
+                                <strong style="line-height: 0.1;">
+                                Selama bekerja di perusahaan kami,
+                                yang bersangkutan telah menunjukkan kinerja yang baik. Pada
+                                </strong>
+                            </p> -->
+                            <p style="line-height: 1; margin: 1;">
+                                <!-- <strong style="line-height: 0.1;"> -->
+                                Adalah benar pernah bekerja pada PT. ……………………. dari tanggal ……………. dan <br/>terhitung tanggal …………………. telah mengundurkan diri atas permintaannya sendiri. 
+                                <!-- </strong> -->
                             </p>
-                            <p style="line-height: 0.1;">
-                                <strong style="line-height: 0.1;">kesempatan ini kami mengucapkan
-                                    terima kasih atas karya dan dedikasinya selama masa tugas
-                                    tersebut. </strong>
-                            </p>
-                            <p style="line-height: 0.1;">
-                                <strong style="line-height: 0.1;">Demikian surat keterangan ini
-                                    dibuat untuk digunakan sebagaimana mestinya.</strong>
+                            <p style="line-height: 1; margin: 1;">
+                                <!-- <strong style="line-height: 0.1;"> -->
+                                Demikian surat keterangan ini kami <br/>buat untuk dapat dipergunakan sebagaimana mestinya.
+                                <!-- </strong> -->
                             </p>
                         </div>
                     </div>
@@ -337,9 +373,11 @@
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" />
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" />
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference">
-                            <span t-esc="doc.area.name" />, (<span
-                                t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')" />
-                            ) <br />
+                            <span t-esc="doc.area.name" />, <span
+                                t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
+                            <br />
+                            <span>Hormat Kami,</span>
+                            <br />
                                          <br />
                                          <br />
                                          <br />

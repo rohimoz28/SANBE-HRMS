@@ -61,6 +61,18 @@ class HrContract(models.Model):
         ('contract_code_unique', 'UNIQUE(name)', 'A Contract must have a unique name.'),
     ]
 
+    @api.model
+    def create(self, vals):
+        check_contract = self.env['hr.contract'].search(
+            [('employee_id', '=', vals.get('employee_id')),
+             ('state', '!=', 'close')
+             ], limit=1)
+        
+        if check_contract:
+            raise UserError('A contract with the same employee is already active. You cannot create another contract for the same employee.')
+        
+        return super(HrContract, self).create(vals)
+
     @api.constrains('name')
     def _contrains_name(self):
         # Prevent a coupon from having the same code a program

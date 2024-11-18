@@ -57,7 +57,6 @@ class HRTmsMachineDetails(models.Model):
 
     name = fields.Char('Badges Number')
     employee_id = fields.Many2one('hr.employee',string='Employee Name',index=True)
-
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:

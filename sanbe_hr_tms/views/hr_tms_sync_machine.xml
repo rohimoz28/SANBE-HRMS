@@ -34,15 +34,15 @@
                                     options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="transfer_from == 'absent_machine'"/>
                             </group>
                         </group>
-                        <group>
+                        <!--group>
                              <field name="periode_id"  options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                        </group>
+                        </group-->
                         <group col="2">
                             <group>
-                                <field name="date_from" readonly="True" required="True"/>
+                                <field name="date_from" readonly="False" required="True"/>
                             </group>
                             <group>
-                                <field name="date_to" readonly="True" required="True"/>
+                                <field name="date_to" readonly="False" required="True"/>
                             </group>
                         </group>
                         <group>

@@ -17,6 +17,7 @@
     'assets': {
         'web.assets_backend': [
             'sanbe_one2many_standard/static/src/css/header.css',
+            'sanbe_one2many_standard/static/src/css/widget.css',
             'sanbe_one2many_standard/static/src/scss/stycki_header.scss',
             'sanbe_one2many_standard/static/src/js/sanbe_exportdata_dialog.js',
             'sanbe_one2many_standard/static/src/js/sanbe_one2many.js',

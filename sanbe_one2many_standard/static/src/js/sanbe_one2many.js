@@ -1,5 +1,6 @@
 /** @odoo-module **/
 import { registry } from "@web/core/registry";
+import { listView } from "@web/views/list/list_view";
 import { evaluateBooleanExpr } from "@web/core/py_js/py";
 import { X2ManyField, x2ManyField } from "@web/views/fields/x2many/x2many_field";
 import { patch } from "@web/core/utils/patch";
@@ -13,8 +14,10 @@ import { useModelWithSampleData } from "@web/model/model";
 import {
     Component,
     onMounted,
+    onPatched,
     onWillPatch,
     onWillStart,
+    toRaw,
     useEffect,
     useRef,
     useState,
@@ -31,17 +34,106 @@ import { ViewButton } from "@web/views/view_button/view_button";
 import { SearchBar } from "@web/search/search_bar/search_bar";
 import { useSearchBarToggler } from "@web/search/search_bar/search_bar_toggler";
 
+export class O2MListRenderer extends ListRenderer {
+    /** Replace the existing function to show selection in the One2many field
+         when delete possible **/
+    get hasSelectors() {
+        const recss = ["hr.empgroup.details","hr.attendance"]
+        if (this.props.list.resModel == 'hr.attendance' || this.props.list.resModel == 'hr.empgroup.details') {
+            this.props.allowSelectors = true
+        }
+        
+        let list = this.props.list
+        list.selection = list.records.filter((rec) => rec.selected)
+        list.selectDomain = (value) => {
+            list.isDomainSelected = value;
+            list.model.notify();
+        }
+        return this.props.allowSelectors && !this.env.isSmall;
+    }
+    async onCellClicked(record, column, ev) {
+        if (this.props.list.resModel == 'hr.attendance') {
+            console.log('0000000000')
+            console.log(this.props.list.resModel)
+            console.log(record)
+            console.log(record.evalContext)
+            console.log(record.evalContext.id)
+            console.log('0000000000')
+            const re_action = {
+                name: "hr attendance",
+                //'views': [[self.env.ref('sanbe_hr_tms.hr_tmsentry_form_ext').id, 'form']],
+                res_model: "hr.attendance",
+                res_id: record.evalContext.id,
+                type: "ir.actions.act_window",
+                views: [[false, "form"]],
+                target: "current",
+                context: {'create':"0",'edit':"0",'delete':"0",'force_save':"1",
+                    dialog_size: 'medium',
+                    form_view_ref: 'sanbe_hr_tms.hr_tmsentry_form_ext'
+                }
+            }
+            this.env.services.action.doAction(re_action);
+        }
+        else{
+            super.onCellClicked(record, column, ev);
+        }
+    }
+    toggleSelection() {
+        const list = this.props.list;
+        if (!this.canSelectRecord) {
+            return;
+        }
+        if (list.selection.length === list.records.length) {
+            list.records.forEach((record) => {
+                record.toggleSelection(false);
+                list.selectDomain(false);
+            });
+        } else {
+            list.records.forEach((record) => {
+                record.toggleSelection(true);
+            });
+        }
+    }
+    /** Function that returns if selected any records **/
+    get selectAll() {
+        const list = this.props.list;
+        const nbDisplayedRecords = list.records.length;
+        if (list.isDomainSelected) {
+          return true;
+        }
+        else {
+          return false
+        }
+    }
+}
+
+export const ImportModuleListViewAtt = {
+    ...listView,
+    Renderer: O2MListRenderer,
+}
+
+registry.category("views").add("ir_module_module_tree_att_view", ImportModuleListViewAtt);
+
 patch(X2ManyField.prototype, {
 
     onInputKeyUp() {
-//        const record = this.model.root
+        const recsss = ["hr.empgroup.details","hr.attendance"]
         var value = $(event.currentTarget).val().toLowerCase();
         $(".o_list_table tr:not(:lt(1))").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     },
+    
     setup() {
         super.setup(...arguments);
+        const resModelx = this.list.resModel;
+        if (resModelx == 'hr.attendance' || resModelx == 'hr.empgroup.details') {
+            X2ManyField.components = { Pager, KanbanRenderer, ListRenderer: O2MListRenderer };
+        }else{
+            X2ManyField.components = { Pager, KanbanRenderer, ListRenderer};
+        }
+        
+        this.orm = useService("orm");
         this.dialogService = useService("dialog");
         this.addDialog = useOwnedDialogs();
         this.action = useService("action");
@@ -49,7 +141,71 @@ patch(X2ManyField.prototype, {
         this.optionalActiveFields = [];
         this.IdsData = this.props.record.data[this.props.name].currentIds;
         this.searchBarToggler = useSearchBarToggler();
-        this.firstLoad = true;
+        //this.firstLoad = true;
+    },
+    
+    get hasSelected(){
+        //if (this.list.resModel === "hr.empgroup.details") {
+        return this.list.records.filter((rec) => rec.selected).length;
+        //} else {
+        //    return;
+        //}
+    },
+    
+    async deleteSelected(){
+        if (this.list.resModel !== "hr.empgroup.details") {
+            return;
+        }
+        var current_model = this.field.relation;
+        var w_response = confirm("Do You Want to Delete ?");
+        if (w_response){
+            let selected = this.list.records.filter((rec) => rec.selected)
+            if (selected[0].evalContext.empgroup_id.state == 'approved' || selected[0].evalContext.empgroup_id.state == 'close'){
+              this.dialog.add(AlertDialog, {
+                        body: _t("Can't able to delete This Record"),
+                        });
+            }
+            else{
+                selected.forEach((rec) => {
+                            if (this.activeActions.onDelete) {
+                                    selected.forEach((rec) => {
+                                            this.activeActions.onDelete(rec);
+                                    })
+                            }
+                })
+            }
+        }
+    },
+    //Function to delete all the unselected records
+    async ApproveSelected(){
+        let selectedx = this.list.records.filter((rec) => rec.selected)
+        const record = this.list.model.root;
+        
+        if (this.list.resModel !== "hr.attendance") {
+            return;
+        }
+        var current_model = this.field.relation;
+        var w_response = confirm("Do You Want to Approve Selected Record ?");
+        if (w_response){
+            let selected = this.list.records.filter((rec) => rec.selected)
+            if (selected.length > 0){
+                selected.forEach((rec) => {
+                    //this.activeActions.onDelete(rec);
+                    console.log('uuuuuuuuuuuuuu');
+                    console.log(rec.evalContext.id);
+                    console.log(rec.evalContext.time_in);
+                    console.log(rec.evalContext.time_in_edited);
+                    console.log(rec.evalContext.time_out);
+                    console.log(rec.evalContext.time_out_edited);
+                    console.log('uuuuuuuuuuuuuu');
+                    const message = this.orm.call(this.list.resModel, "approved_data_all", [rec.evalContext.id]);
+                    rec.load();
+                });
+            }
+            
+            record.load();
+            record.model.notify();
+        }
     },
     async onDirectExportData() {
         await this.downloadExport(this.defaultExportList, false, "xlsx");
@@ -158,6 +314,3 @@ patch(X2ManyField.prototype, {
     },
 
 });
-
-
-

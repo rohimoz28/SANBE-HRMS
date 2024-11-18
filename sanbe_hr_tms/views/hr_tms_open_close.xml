@@ -1,43 +1,57 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-         <!--        View Form    -->
+        <!--        View Form    -->
         <record id="hr_opening_closing_form" model="ir.ui.view">
             <field name="name">hr.opening.closing.form</field>
             <field name="model">hr.opening.closing</field>
             <field name="arch" type="xml">
-                <form string="HR Opening And Closing">
+                <form string="Processing and Period">
                     <header>
                         <field name="isopen" invisible="1"/>
-                        <button name="action_opening_periode" invisible="isopen == True" string="Open" type="object" class="btn-primary"/>
-                        <button name="action_closing_periode" invisible="isopen == False" string="Close" type="object" class="btn-primary"/>
-                        <field name="state_process" widget="statusbar" statusbar_visible="draft,running,transfer_to_payroll,done" readonly="1"/>
+                        <button name="action_opening_periode" invisible="isopen == True or state_process == 'done'"
+                                string="Open" type="object" class="btn-primary"/>
+                        <button name="reopening" string="Process"
+                                type="object" class="btn-primary"
+                                invisible="state_process == 'transfer_to_payroll' or state_process == 'draft' or state_process == 'done'"/>
+                        <button name="action_closing_periode" invisible="isopen == False" string="Close" type="object"
+                                class="btn-primary" groups="sanbe_hr_tms.module_sub_category_processing_period_manager"/>
+                        <button name="transfer_payroll" type="object" data-hotkey="shift+g"
+                                string="Transfer To Payroll" class="oe_highlight" invisible="state_process != 'done'"/>
+                        <field name="state_process" widget="statusbar"
+                               statusbar_visible="draft,running,done,transfer_to_payroll" readonly="1"/>
                     </header>
                     <sheet>
                         <group>
                             <group>
                                 <field name="name" readonly="1"/>
-                                <field name="area_id" readonly="isopen == True" options="{'no_create': True,'no_create_edit': True}" />
-                                <field name="branch_ids" invisible="1" />
-                                <field name="branch_id" readonly="isopen == True" options="{'no_create': True,'no_create_edit': True}" />
+                                <field name="area_id" readonly="isopen == True"
+                                       options="{'no_create': True,'no_create_edit': True}"/>
+                                <field name="branch_ids" invisible="1"/>
+                                <field name="branch_id" readonly="isopen == True"
+                                       options="{'no_create': True,'no_create_edit': True}"/>
                             </group>
                         </group>
-                            <group col="2">
-                                <group>
-                                     <field name="open_periode_from" readonly="isopen == True"/>
-                                </group>
-                                <group>
-                                    <field name="open_periode_to" readonly="isopen == True"/>
-                                </group>
+                        <group col="2">
+                            <group>
+                                <field name="open_periode_from" readonly="isopen == True" string="Date From"/>
                             </group>
-                            <group col="2">
-                                <group>
-                                    <field name="close_periode_from" readonly="isopen == True"/>
-                                </group>
-                                <group>
-                                    <field name="close_periode_to" readonly="isopen == True"/>
-                                </group>
+                            <group>
+                                <field name="open_periode_to" readonly="isopen == True" string="Date To"/>
                             </group>
+                        </group>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" groups="base.group_user"/>
+                            <field name="message_ids"/>
+                        </div>
+                        <!--                            <group col="2">-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="close_periode_from" readonly="isopen == False"/>-->
+                        <!--                                </group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="close_periode_to" readonly="isopen == False"/>-->
+                        <!--                                </group>-->
+                        <!--                            </group>-->
                     </sheet>
                 </form>
             </field>
@@ -47,31 +61,32 @@
             <field name="name">hr.opening.closing.tree</field>
             <field name="model">hr.opening.closing</field>
             <field name="arch" type="xml">
-                <tree string="HR Opening and Closing">
+               <tree string="Processing and Period" default_order='id desc'>
+                    <field name="id" column_invisible="True"/>
                     <field name="name" readonly="1"/>
-                    <field name="area_id" optional="show" />
-                    <field name="isopen" invisible="1"/>
+                    <field name="area_id" optional="show"/>
+                    <field name="isopen" column_invisible="True"/>
                     <field name="branch_id" readonly="isopen == True"/>
-                    <field name="open_periode_from" readonly="isopen == True"/>
-                    <field name="open_periode_to" readonly="isopen == True"/>
-                    <field name="close_periode_from" readonly="isopen == True"/>
-                    <field name="close_periode_to" readonly="isopen == True"/>
+                    <field name="open_periode_from" readonly="isopen == True" string="Date From"/>
+                    <field name="open_periode_to" readonly="isopen == True" string="Date To"/>
+                    <!--                    <field name="close_periode_from" readonly="isopen == True"/>-->
+                    <!--                    <field name="close_periode_to" readonly="isopen == True"/>-->
                     <field name="state_process" readonly="1"/>
                 </tree>
             </field>
         </record>
         <!--  Action Windows    -->
         <record id="action_hr_openin_closing" model="ir.actions.act_window">
-            <field name="name">Close and Open Periode</field>
+            <field name="name">Processing and Period</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.opening.closing</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No Report HR Opening And Closing Periode
+                    No Report Processing and Period
                 </p>
                 <p>
-                    Create new HR Opening And Closing Periode
+                    Create New HR Processing and Period
                 </p>
             </field>
         </record>

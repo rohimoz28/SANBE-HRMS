@@ -12,7 +12,7 @@ class IrConfigParameter(Model):
     def get_web_dialog_size_config(self):
         get_param = self.sudo().get_param
         return {
-            "default_maximize": const_eval(
-                get_param("web_dialog_size.default_maximize", "False")
-            )
+            "default_maximize":
+                get_param("web_dialog_size.default_maximize", False)
+
         }

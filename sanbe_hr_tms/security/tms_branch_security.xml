@@ -191,6 +191,14 @@
         <!-- Organization Chart -->
         <!-- Contract and Monitoring -->
 
+        <record id="group_tms_hr_employee" model="res.groups">
+            <field name="name">User TMS</field>
+        </record>
+        
+        <record id="group_tms_reopen_close" model="res.groups">
+            <field name="name">User Reopen TMS</field>
+        </record>
+
         <!-- HR Mutation -->
         <record id="hr_employee_mutation_branch_manager_rule" model="ir.rule">
             <field name="name">HR Employee Mutation Branch Manager</field>

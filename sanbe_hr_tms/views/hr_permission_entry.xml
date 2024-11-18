@@ -6,23 +6,30 @@
             <field name="name">hr.permission.entry.form</field>
             <field name="model">hr.permission.entry</field>
             <field name="arch" type="xml">
-                <form string="Permission Entry">
+                <form string="Permission">
                     <header>
-                         <field name="permission_status" widget="statusbar" statusbar_visible="draft,approved1,approved2,approved3,done" force_save="1"/>
+                        <button name="btn_approve" type="object" data-hotkey="shift+g"
+                           string="Approved" class="oe_highlight" invisible="permission_status != 'draft'"/>
+                        <!-- <button name="btn_close" type="object" data-hotkey="shift+g"
+                           string="Close" class="oe_highlight" invisible="permission_status != 'approved'"/> -->
+                        <button name="btn_draft" type="object" data-hotkey="shift+g"
+                           string="Draft" class="oe_highlight" invisible="permission_status != 'approved'"/>
+                        <field name="permission_status" widget="statusbar" statusbar_visible="draft,approved,done" force_save="1"/>
                     </header>
                         <group>
                             <group>
                                 <!-- Area_id is mandatory -->
-                                <field name="trans_number"/>
-                                <field name="doc_number"/>
-                                <field name="area_id"
+                                <field name="trans_number" readonly="permission_status == 'done'"/>
+                                <field name="periode_id" readonly="permission_status == 'done'"/>
+                                <field name="doc_number" readonly="permission_status == 'done'"/>
+                                <field name="area_id" readonly="permission_status == 'done'"
                                     options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
                                 <field name="branch_ids" invisible="1" />
                                  <!-- branch_id is mandatory and filtered by area_id branch -->
-                                <field name="branch_id"
+                                <field name="branch_id" readonly="permission_status == 'done'"
                                     options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True" />
                                 <!-- employee_id is mandatory -->
-                                <field name="employee_id"
+                                <field name="employee_id" readonly="permission_status == 'done'"
                                     options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
                             </group>
                             <group>
@@ -41,68 +48,93 @@
                             <!-- permition code  -->
                             <!--field name="permission_code" /-->
                             <field name="employee_company_id" invisible="1"/>
-                            <field name="holiday_status_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
+                            <field name="holiday_status_id" readonly="permission_status == 'done'"
+                                   options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
                         </group>
                         <group col="3">
                             <group>
                                 <!-- permition date_from is mandatory -->
-                                <field name="permission_date_from"  required="True"/>
+                                <field name="permission_date_from" readonly="permission_status == 'done'"
+                                       required="True"/>
                             </group>
                             <group>
                                 <!-- permition date_to is mandatory -->
-                                <field name="permission_date_To" required="True"/>
+                                <field name="permission_date_To" readonly="permission_status == 'done'"
+                                       required="True"/>
                             </group>
                         </group>
                         <group col="3">
                             <group>
                                 <!-- permition time_from is mandatory -->
-                                <field name="permission_time_from" widget="easy_timepicker" required="True"/>
+                                <field name="permission_time_from" readonly="permission_status == 'done'"
+                                       widget="easy_timepicker" required="True"/>
                             </group>
                             <group>
                                 <!-- permition time_to is mandatory -->
-                                <field name="permission_time_to" widget="easy_timepicker" required="True"/>
+                                <field name="permission_time_to" readonly="permission_status == 'done'"
+                                       widget="easy_timepicker" required="True"/>
                             </group>
                             <group>
-                                <label for="time_days" />
+                                <label for="time_days" readonly="permission_status == 'done'" />
                                 <div class="o_row">
                                     <div class="column">
-                                        <field name="time_days" />
+                                        <field name="time_days" readonly="permission_status == 'done'" />
                                     </div>
                                     <div class="column">
-                                        <field name="time_hour" />
+                                        <field name="time_hour" readonly="permission_status == 'done'" />
                                     </div>
                                 </div>
                             </group>
                         </group>
                         <group col="2">
                             <group>
-                                <field name="handled_temp_to" />
+                                <field name="handled_temp_to" readonly="permission_status == 'done'" />
                             </group>
                             <group>
-                                <field name="back_to_office" widget="easy_timepicker"/>
+                                <field name="back_to_office" readonly="permission_status == 'done'"
+                                       widget="easy_timepicker"/>
                             </group>
                         </group>
                         <group>
-                            <field name="remarks" />
+                            <field name="remarks" readonly="permission_status == 'done'" />
+                            <field name="is_approved" invisible="1"/>
                         </group>
                         <group col="2">
                             <group>
-                                <field name="approve1_by" />
+                                <label for="approve1_by" string="Approve1 By"/>
+                                <div class="mr8 oe_inline">
+                                    <field name="approved1" readonly="id==False or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                    <field name="approve1_by" readonly="approved1==True or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                </div>
                             </group>
                             <group>
-                                <field name="approve1_job_title" />
+                                <field name="approve1_job_title" readonly="approved1==True or permission_status == 'done'" />
                             </group>
                             <group>
-                                <field name="approve2_by" />
+                                <label for="approve2_by" string="Approve2 By"/>
+                                <div class="mr8 oe_inline">
+                                    <field name="approved2" readonly="id==False or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                    <field name="approve2_by" readonly="approved2==True or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                </div>
                             </group>
                             <group>
-                                <field name="approve2_job_title" />
+                                <field name="approve2_job_title" readonly="approved2==True or permission_status == 'done'"/>
                             </group>
                             <group>
-                                <field name="approve3_by" />
+                                <label for="approve3_by" string="approve3_by By"/>
+                                <div class="mr8 oe_inline">
+                                    <field name="approved3" readonly="id==False or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                    <field name="approve3_by" readonly="approved3==True or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                </div>
                             </group>
                             <group>
-                                <field name="approve3_job_title" />
+                                <field name="approve3_job_title" readonly="approved3==True or permission_status == 'done'"/>
                             </group>
                         </group>
 
@@ -119,15 +151,23 @@
             <field name="name">hr.permission.entry.tree</field>
             <field name="model">hr.permission.entry</field>
             <field name="arch" type="xml">
-                <tree string="HR Permission Entry">
+                <tree string="HR Permission" default_order="id desc">
+                    <field name="trans_number" />
                     <field name="area_id" />
                     <field name="employee_id" />
+                    <field name="nik" string="NIK" />
+                    <field name="holiday_status_id" />
+                    <field name="permission_date_from" />
+                    <field name="permission_date_To" />
+                    <field name="periode_id" />
+                    <field name="permission_status" string="Status"/>
+                    <!-- <field name="employee_id" /> -->
                 </tree>
             </field>
         </record>
          <!--      Action Windows    -->
         <record id="action_hr_permission_entry" model="ir.actions.act_window">
-            <field name="name">Permission Entry</field>
+            <field name="name">Permission</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.permission.entry</field>
             <field name="view_mode">tree,form</field>

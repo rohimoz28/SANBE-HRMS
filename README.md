@@ -1,2 +1,2 @@
-# REPO SANBE HRMS
-LIVE HRMS - PT. SANBE FARMA
+# sanbe_hrms
+HRMS Project For PT Sanbe Farma 2024

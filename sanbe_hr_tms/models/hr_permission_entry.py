@@ -7,15 +7,15 @@
 #################################################################################
 
 from odoo import fields, models, api, _, Command
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 from odoo.osv import expression
-import pytz
-from datetime import datetime,time
+from pytz import timezone, UTC
+from datetime import datetime, timedelta, time
+from odoo.tools.misc import format_date
+
 TMS_PERMITION_ENTRY_STATE = [
     ('draft', 'Draft'),
-    ('approved1', "Approved 1"),
-    ('approved2', "Approved 2"),
-    ('approved3', 'Approved 3'),
+    ('approved', "Approved"),
     ('done','Close'),
 ]
 
@@ -79,17 +79,23 @@ class HRPermissionEntry(models.Model):
     is_holiday = fields.Boolean('Is Holiday', default=False)
     leave_id = fields.Many2one('hr.leave',string='Leaves ID',index=True)
     employee_company_id = fields.Many2one(related='employee_id.company_id', string="Employee Company", store=True)
+    is_approved = fields.Boolean(default=False,string='is Approved')
+    approved1 = fields.Boolean(default=False,string='Approved1')
+    approved2 = fields.Boolean(default=False,string='Approved2')
+    approved3 = fields.Boolean(default=False,string='Approved3')
     holiday_status_id = fields.Many2one(
         "hr.leave.type",
         store=True, string="Permission Code",
         required=True, readonly=False,
-        domain="""[
-            ('company_id', 'in', [employee_company_id, False]),
-            '|',
-                ('requires_allocation', '=', 'no'),
-                ('has_valid_allocation', '=', True),
-        ]""",
+        # domain="""[
+        #     ('company_id', 'in', [employee_company_id, False]),
+        #     '|',
+        #         ('requires_allocation', '=', 'no'),
+        #         ('has_valid_allocation', '=', True),
+        # ]""",
         tracking=True)
+    nik = fields.Char(related='employee_id.nik')
+    periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
 
     @api.depends('permission_date_from','permission_date_To')
     def _get_days_duration(self):
@@ -154,22 +160,29 @@ class HRPermissionEntry(models.Model):
             if vals.get('trans_number', _('New')) == _('New'):
                 if 'area_id' in vals:
                     area = vals.get('area_id')
+                    department = vals.get('department_id')
+                    branch_id = vals.get('branch_id')
                     dt_area = self.env['res.territory'].sudo().search([('id','=',int(area))],limit=1)
+                    dept = self.env['hr.department'].sudo().search([('id','=',int(department))],limit=1)
+                    department_code = dept.department_code
+                    branch = self.env['res.branch'].sudo().search([('id','=',int(branch_id))],limit=1)
+                    branch_unit_id = branch.unit_id
                     if dt_area:
-                        if dt_area.area_code == 'TSR':
-                            cdo = 'TSP'
-                        if dt_area.area_code == 'CMH':
-                            cdo = 'CHP'
-                        if dt_area.area_code == 'CMR':
-                            cdo = 'CMP'
-                        if dt_area.area_code == 'SBF':
-                            cdo = 'SBP'
+                        # if dt_area.area_code == 'TSR':
+                        #     cdo = 'TSP'
+                        # if dt_area.area_code == 'CMH':
+                        #     cdo = 'CHP'
+                        # if dt_area.area_code == 'CMR':
+                        #     cdo = 'CMP'
+                        # if dt_area.area_code == 'SBF':
+                        #     cdo = 'SBP'
                         tgl = fields.Date.today()
                         tahun = str(tgl.year)[2:]
-                        vals['trans_number'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code(
-                            'hr.permission.entry'))
-                
+                        bulan = str(tgl.month)
+                        # vals['trans_number'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.permission.entry'))
+                        vals['trans_number'] = f"{tahun}/{bulan}/{branch_unit_id}/PE/{department_code}/{self.env['ir.sequence'].next_by_code('hr.permission.entry')}"
         res = super(HRPermissionEntry,self).create(vals_list)
+
         for alldata in res:
             #Search if data is holiday based on tmsentry data
             if not alldata.is_holiday:
@@ -192,19 +205,34 @@ class HRPermissionEntry(models.Model):
                                                                   'permition_id': alldata.id or alldata._origin.id})
                     alldata.leave_id = myleave.id
         return res
+    
+    @api.onchange('approved1','approved2','approved3')
+    def set_approved_status(self):
+        for allrec in self:
+            print('param 1 ',(allrec.approved1 == True and allrec.approved2 == True))
+            print('param 2 ',(allrec.approved1 == True and allrec.approved3 == True))
+            print('param 3 ',(allrec.approved2 == True and allrec.approved3 == True))
+            if (allrec.approved1 == True and allrec.approved2 == True) or \
+                (allrec.approved1 == True and allrec.approved3 == True) or \
+                (allrec.approved2 == True and allrec.approved3 == True):
+                allrec.is_approved = True
+            else:
+                allrec.is_approved = False
+
     @api.onchange('approve1_by')
     def set_approved_status1(self):
         for allrec in self:
             if not allrec.approve1_by:
-                return
+               return
             allrec.approve1_job_title = allrec.approve1_by.job_id.id
-
+            
     @api.onchange('approve2_by')
     def set_approved_status2(self):
         for allrec in self:
             if not allrec.approve2_by:
                return
             allrec.approve2_job_title = allrec.approve2_by.job_id.id
+            
     @api.onchange('approve3_by')
     def set_approved_status3(self):
             for allrec in self:
@@ -212,27 +240,42 @@ class HRPermissionEntry(models.Model):
                     return
                 allrec.approve3_job_title = allrec.approve3_by.job_id.id
 
-    @api.onchange('ot1_approve')
-    def change_status1(self):
-            for allrec in self:
-                if not allrec.ot1_approve:
-                    return
-                allrec.permission_status = 'approved1'
-
-    @api.onchange('ot2_approve')
-    def change_status2(self):
-            for allrec in self:
-                if not allrec.ot2_approve:
-                    return
-                allrec.permission_status = 'approved2'
-
-
-    @api.onchange('ot3_approve')
-    def change_status3(self):
-        for allrec in self:
-            if not allrec.ot3_approve:
-                return
-            allrec.permission_status = 'approved3'
+    def btn_approve(self):
+        for rec in self:
+            if rec.is_approved == True:
+                rec.permission_status = 'approved'
+            else:
+                raise UserError('Need 2 Approver check List')
+            
+    def btn_draft(self):
+        for rec in self:
+            rec.permission_status = 'draft'
+            
+    def btn_close(self):
+        for rec in self:
+            rec.permission_status = 'done'
+            
+    #@api.onchange('ot1_approve')
+    #def change_status1(self):
+    #        for allrec in self:
+    #            if not allrec.ot1_approve:
+    #                return
+    #            allrec.permission_status = 'approved1'
+#
+    #@api.onchange('ot2_approve')
+    #def change_status2(self):
+    #        for allrec in self:
+    #            if not allrec.ot2_approve:
+    #                return
+    #            allrec.permission_status = 'approved2'
+#
+#
+    #@api.onchange('ot3_approve')
+    #def change_status3(self):
+    #    for allrec in self:
+    #        if not allrec.ot3_approve:
+    #            return
+    #        allrec.permission_status = 'approved3'
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
@@ -244,7 +287,15 @@ class HRPermissionEntry(models.Model):
                           node.set('readonly', 'True')
                    for node in arch.xpath("//button"):
                           node.set('invisible', 'True')
+                          node.set('create', '0')
         return arch, view
+
+    # restart running number
+    def _reset_sequence_permission_entry(self):
+        sequences = self.env['ir.sequence'].search([('code', '=like', '%permission.entry%')])
+        sequences.write({'number_next_actual': 1})
+
+
 class HolidaysRequest(models.Model):
     _inherit = "hr.leave"
 
@@ -284,4 +335,5 @@ class HolidaysRequest(models.Model):
                           node.set('readonly', 'True')
                    for node in arch.xpath("//button"):
                           node.set('invisible', 'True')
+                          node.set('create', '0')
         return arch, view

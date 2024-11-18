@@ -21,3 +21,19 @@ from . import hr_tms_open_close
 from . import hr_overtime_request_planning
 from . import hr_transfer_topayroll
 from . import hr_employee
+from . import hr_attendance
+from . import tmsentry_details
+from . import hr_tms_overtime_setting
+from . import sb_adjustment_requests
+from . import sb_adjusment_request_details
+from . import sb_incomplete_attendances
+from . import sb_incomplete_attendance_details
+from . import sb_attendance_corrections
+from . import sb_attendance_correction_details
+from . import sb_allowances
+from . import sb_allowance_details
+from . import sb_employee_attendance
+from . import sb_overtime_attendance
+from . import stg_transform_absent
+#from . import idris
+

@@ -79,7 +79,7 @@ class HRWorkingDays(models.Model):
     isfullday = fields.Boolean('Full Day')
     isfullhalf = fields.Boolean('Full Day And Half Day')
     isholiday = fields.Boolean('Holiday')
-    type_hari = fields.Selection([('fday','Full Day'),('fhday','Full Day And Half Day'),('hday','Holiday')],string='Employee Working Hours')
+    type_hari = fields.Selection([('fday','Full Day'),('fhday','Full Day And Half Day'),('hday','Holiday'), ('shift','Shift')],string='Employee Working Hours')
     isavailabel = fields.Char('Available For')
     available_for = fields.Many2many('res.branch','available_for_rel', string='Available For',domain="[('id','in',branch_ids)]",tracking=True )
     bu3 = fields.Boolean('BU3')
@@ -92,17 +92,28 @@ class HRWorkingDays(models.Model):
     valid_from = fields.Date('Valid From')
     valid_to = fields.Date('To')
     delay_allow = fields.Integer(string='Permitted Delays (Minute)', default=10)
+    is_ot_holiday = fields.Boolean(
+        string='Overtime',
+        required=False)
+    is_ot_automatic = fields.Boolean(
+        string='OT Otomatis',
+        required=False)
     
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
+        
         if view_type in ('tree', 'form'):
-               group_name = self.env['res.groups'].search([('name','=','HRD CA')])
-               cekgroup = self.env.user.id in group_name.users.ids
-               if cekgroup:
-                   for node in arch.xpath("//field"):
-                          node.set('readonly', 'True')
-                   for node in arch.xpath("//button"):
-                          node.set('invisible', 'True')
+            group_name = self.env['res.groups'].search([('name','in',['User TMS','HRD CA'])])
+            cekgroup = self.env.user.id in group_name.users.ids
+            if cekgroup:
+                for node in arch.xpath("//field"):
+                    node.set('readonly', 'True')
+                for node in arch.xpath("//button"):
+                    node.set('invisible', 'True')
+                for node in arch.xpath("//tree"):
+                    node.set('create', '0')
+                for node in arch.xpath("//form"):
+                    node.set('create', '0')
         return arch, view
     
     @api.onchange('is_active')
@@ -134,14 +145,19 @@ class HROTlist(models.Model):
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
+        
         if view_type in ('tree', 'form'):
-               group_name = self.env['res.groups'].search([('name','=','HRD CA')])
-               cekgroup = self.env.user.id in group_name.users.ids
-               if cekgroup:
-                   for node in arch.xpath("//field"):
-                          node.set('readonly', 'True')
-                   for node in arch.xpath("//button"):
-                          node.set('invisible', 'True')
+            group_name = self.env['res.groups'].search([('name','in',['User TMS','HRD CA'])])
+            cekgroup = self.env.user.id in group_name.users.ids
+            if cekgroup:
+                for node in arch.xpath("//field"):
+                    node.set('readonly', 'True')
+                for node in arch.xpath("//button"):
+                    node.set('invisible', 'True')
+                for node in arch.xpath("//tree"):
+                    node.set('create', '0')
+                for node in arch.xpath("//form"):
+                    node.set('create', '0')
         return arch, view
     
     @api.model_create_multi
@@ -169,14 +185,19 @@ class HROTTollerancelist(models.Model):
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
+        
         if view_type in ('tree', 'form'):
-               group_name = self.env['res.groups'].search([('name','=','HRD CA')])
-               cekgroup = self.env.user.id in group_name.users.ids
-               if cekgroup:
-                   for node in arch.xpath("//field"):
-                          node.set('readonly', 'True')
-                   for node in arch.xpath("//button"):
-                          node.set('invisible', 'True')
+            group_name = self.env['res.groups'].search([('name','in',['User TMS','HRD CA'])])
+            cekgroup = self.env.user.id in group_name.users.ids
+            if cekgroup:
+                for node in arch.xpath("//field"):
+                    node.set('readonly', 'True')
+                for node in arch.xpath("//button"):
+                    node.set('invisible', 'True')
+                for node in arch.xpath("//tree"):
+                    node.set('create', '0')
+                for node in arch.xpath("//form"):
+                    node.set('create', '0')
         return arch, view
 
 class AllowanceDeduction(models.Model):
@@ -185,9 +206,27 @@ class AllowanceDeduction(models.Model):
 
     workingday_id = fields.Many2one('hr.working.days',string='Working Days List',index=True)
     code = fields.Selection([('ashf','ASHF - Attendee Premi'),
-                             ('ansf','ANSF - Night Shift Allowance'),
+                             ('ans1','ANS1 - Night Shift Allowance 1'),
+                             ('ans2','ANS2 - Night Shift Allowance 2'),
                              ('atrp','ATRP - Transport Allowance'),
                              ('amea','AMEA - Meal Allowance')],default='ashf',string='Component Code')
     time_from = fields.Float('Time From')
     time_to = fields.Float('Time To')
     qty = fields.Float('Qty')
+    
+    def _get_view(self, view_id=None, view_type='form', **options):
+        arch, view = super()._get_view(view_id, view_type, **options)
+        
+        if view_type in ('tree', 'form'):
+            group_name = self.env['res.groups'].search([('name','in',['User TMS','HRD CA'])])
+            cekgroup = self.env.user.id in group_name.users.ids
+            if cekgroup:
+                for node in arch.xpath("//field"):
+                    node.set('readonly', 'True')
+                for node in arch.xpath("//button"):
+                    node.set('invisible', 'True')
+                for node in arch.xpath("//tree"):
+                    node.set('create', '0')
+                for node in arch.xpath("//form"):
+                    node.set('create', '0')
+        return arch, view

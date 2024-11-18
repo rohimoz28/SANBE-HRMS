@@ -72,6 +72,12 @@ class HrEmployee(models.Model):
                                      compute='_isi_department_branch', store=False)
     branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True,
                                 required=True)
+    street = fields.Char(related='branch_id.street')
+    street2 = fields.Char(related='branch_id.street2')
+    city = fields.Char(related='branch_id.city')
+    state_id = fields.Char(related='branch_id.state_id')
+    zip = fields.Char(related='branch_id.zip')
+    country_id = fields.Many2one(related='branch_id.country_id')
     department_id = fields.Many2one(domain="[('id','in',alldepartment),('active','=',True)]", required=True,
                                     string='Sub Department')
     employee_id = fields.Char('Employee ID', default='New')
@@ -173,6 +179,10 @@ class HrEmployee(models.Model):
                                     string="KPI Category", index=True, tracking=True, default='none')
     apoteker = fields.Boolean('Apoteker', default=False)
     first_date_join = fields.Date('First Date Of Joining')
+    workingday = fields.Integer(
+        string='Workingday',
+        help='Total Working Day in a Month',
+        required=False)
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,

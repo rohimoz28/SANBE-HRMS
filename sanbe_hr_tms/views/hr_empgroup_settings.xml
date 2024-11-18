@@ -6,7 +6,7 @@
             <field name="name">hr.empgroup.setting.form</field>
             <field name="model">hr.empgroup</field>
             <field name="arch" type="xml">
-                <form string="Employee Group Setting">
+                <form string="Employee Group">
                     <header>
                         <button name="btn_approved" type="object" data-hotkey="shift+g"
                            string="Approved" class="oe_highlight" invisible="state != 'draft'"/>
@@ -20,30 +20,36 @@
                         <group>
                             <label for="name" string="Employee Group"/>
                             <div class="mr8 oe_inline">
-                                <field name="name" class="mr8 oe_inline"/>
-                                <field name="description" class="mr8 oe_inline"/>
+                                <field name="name" class="mr8 oe_inline" readonly="1"/>
+                                <!-- <field name="description" class="mr8 oe_inline"/> -->
                             </div>
                         </group>
                         <group col="2">
                             <group>
-                                <field name="area_id"
+                                <!-- <field name="periode_id" readonly="state == 'approved' or state == 'close'"/> -->
+                                <field name="area_id" readonly="state == 'approved' or state == 'close'"
                                     options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1" />
                                 <field name="branch_ids" invisible="1" />
-                                <field name="alldepartment" invisible="1" />
                                 <field name="branch_id"
-                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                                <field name="department_id"
-                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>    
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       readonly="state == 'approved' or state == 'close'"/>
+                                <!--field name="periode_id" required="1"/-->
+                                <field name="alldepartment" invisible="1"/>
+                                <field name="department_id" readonly="state == 'approved' or state == 'close'"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
                             </group>
                                 <group>
                                     <label for="islabelstate" string="Status"/>
                                     <field name="islabelstate" invisible="1"/>
                                     <div class="mr8 oe_inline">
-                                    <field name="is_active" class="mr8 oe_inline"/>
+                                    <field name="is_active" readonly="state == 'approved' or state == 'close'" class="mr8 oe_inline"/>
                                     <label for="is_active"/>
-                                    <field name="is_inactive" class="mr8 oe_inline"/>
+                                    <field name="is_inactive" readonly="state == 'approved' or state == 'close'" class="mr8 oe_inline"/>
                                     <label for="is_inactive"/>
                                     </div>
+                                </group>
+                                <group>
+                                    <field name="description" readonly="state == 'approved' or state == 'close'"/>
                                 </group>
                         </group>
                         <!--group col="2">
@@ -55,25 +61,27 @@
                             <group />
                         </group-->
                         <group col="2">
-                            <!--group>
-                                <field name="wdcode_ids" invisible="1"/>
-                                <field name="wdcode" options="{'no_create': True}"/>
-                            </group-->
                             <group>
                                 <button name="action_search_employee" string="Search Employee"
-                                    type="object" class="oe_highlight" data-hotkey="q" />
-                                <button name="btn_process" string="Process Employee"
-                                    type="object" class="oe_highlight" data-hotkey="p" />
+                                    type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
+                                <button name="action_generate_employee_group" string="Generate Emp. Group"
+                                        type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
+                                <!--button name="btn_clear_child" string="Clear Employees List"
+                                    type="object" class="oe_highlight" data-hotkey="q" invisible="state != 'approved'"/-->
+                                <!-- <button name="btn_process" string="Process Employee"
+                                    type="object" class="oe_highlight" data-hotkey="p" invisible="state != 'approved'"/> -->
                             </group>
                         </group>
                         <notebook>
                             <page string="Employee List" name="empgroup_list">
-                                <field name="empgroup_ids" required="1">
-                                    <tree editable="bottom" widget='one2many_delete'>
+                                <field name="empgroup_ids" required="1" readonly="state == 'approved' or state == 'close'">
+                                    <tree editable="bottom" widget='one2many_delete' context="{'default_area_id': area_id,'default_branch_id': branch_id,'default_department_id': department_id}">
                                         <field name="empgroup_id" column_invisible="1" />
                                         <field name="branch_ids" column_invisible="1" />
                                         <field name="alldepartment" column_invisible="1"/>
+                                        <field name="state" column_invisible="1"/>
                                         <field name="wdcode_ids" column_invisible="1"/>
+                                        <!--field name="periode_id"/-->
                                         <field name="employee_id" />
                                         <field name="emp_status" />
                                         <field name="wdcode" options="{'no_create': True}"/>
@@ -97,9 +105,10 @@
             <field name="name">hr.employeegroup.setting.tree</field>
             <field name="model">hr.empgroup</field>
             <field name="arch" type="xml">
-                <tree string="HR Services Types Name">
+                <tree string="Emp Group" default_order="id desc">
                     <field name="name" optional="show" />
                     <field name="description"/>
+                    <field name="state" string="Status"/>
                     <!--field name="wdcode"/-->
                     <field name="area_id" />
                     <field name="branch_id" />
@@ -137,16 +146,16 @@
         </record-->
         <!--    Action Windows    -->
         <record id="action_hr_employeegroup" model="ir.actions.act_window">
-            <field name="name">Set Emp Group</field>
+            <field name="name">Emp Group</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.empgroup</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No Report HR Employee Group Setting
+                    No Report HR Employee Group
                 </p>
                 <p>
-                    Create new Employee Group Settings
+                    Create new Employee Group
                 </p>
             </field>
         </record>

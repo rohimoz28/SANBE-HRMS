@@ -10,7 +10,9 @@ from odoo import fields, models, api, _, Command
 from odoo.exceptions import ValidationError,UserError
 from odoo.osv import expression
 import pytz
-from datetime import datetime
+from datetime import datetime,time, timedelta
+import logging
+_logger = logging.getLogger(__name__)
 
 TMS_OVERTIME_STATE = [
     ('draft', 'Draft'),
@@ -69,10 +71,24 @@ class HREmpOvertimeRequest(models.Model):
         readonly=True, copy=False, index=True,
         tracking=3,
         default='draft')
-
+    periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
-    
+
+    # restart running number
+    def _reset_sequence_overtime_employees(self):
+        sequences = self.env['ir.sequence'].search([('code', '=like', '%hr.overtime.planning%')])
+        sequences.write({'number_next_actual': 1})
+
+    def unlink(self):
+        for record in self:
+            # Check if there are any detail records linked to this master record
+            if record.hr_ot_planning_ids:
+                raise ValidationError(
+                    _("You cannot delete this record as it has related detail records.")
+                )
+        return super(HREmpOvertimeRequest, self).unlink()
+
     @api.model_create_multi
     def create(self, vals_list):
         #CHP = Area Cimahi
@@ -83,21 +99,19 @@ class HREmpOvertimeRequest(models.Model):
             if vals.get('name', _('New')) == _('New'):
                 if 'area_id' in vals:
                     area = vals.get('area_id')
+                    department = vals.get('department_id')
+                    branch_id = vals.get('branch_id')
                     dt_area = self.env['res.territory'].sudo().search([('id','=',int(area))],limit=1)
+                    dept = self.env['hr.department'].sudo().search([('id','=',int(department))],limit=1)
+                    department_code = dept.department_code
+                    branch = self.env['res.branch'].sudo().search([('id','=',int(branch_id))],limit=1)
+                    branch_unit_id = branch.unit_id
                     if dt_area:
-                        if dt_area.area_code == 'TSR':
-                            cdo = 'TSL'
-                        if dt_area.area_code == 'CMH':
-                            cdo = 'CHL'
-                        if dt_area.area_code == 'CMR':
-                            cdo = 'CML'
-                        if dt_area.area_code == 'SBF':
-                            cdo = 'SBL'
                         tgl = fields.Date.today()
                         tahun = str(tgl.year)[2:]
-                        vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code(
-                            'hr.overtime.planning'))
-                
+                        bulan = str(tgl.month)
+                        # vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.overtime.planning'))
+                        vals['name'] = f"{tahun}/{bulan}/{branch_unit_id}/RA/{department_code}/{self.env['ir.sequence'].next_by_code('hr.overtime.planning')}"
         res = super(HREmpOvertimeRequest,self).create(vals_list)
         return res
     
@@ -142,6 +156,15 @@ class HREmpOvertimeRequest(models.Model):
         }
         #else:
         #    raise UserError('Sub Department Not Selected')
+    def action_generate_ot(self):
+        try:
+            self.env.cr.execute("CALL generate_ot_request()")
+            self.env.cr.commit()
+            _logger.info("Stored procedure executed successfully.")
+        except Exception as e:
+            _logger.error("Error calling stored procedure: %s", str(e))
+            raise UserError("Error executing the function: %s" % str(e))
+
     
 class HREmpOvertimeRequestEmployee(models.Model):
     _name = "hr.overtime.employees"
@@ -185,12 +208,12 @@ class HREmpOvertimeRequestEmployee(models.Model):
     nik = fields.Char('Employee NIK',index=True)
     employee_ids = fields.Many2many('hr.employee','ov_plan_emp_rel',compute='_ambil_employee',string='Employee Name',store=False)
     employee_id = fields.Many2one('hr.employee',domain="[('id','in',employee_ids),('state','=','approved')]",string='Employee Name',index=True)
-    plann_date_from = fields.Date('Plann Date From')
-    plann_date_to = fields.Date('Plann Date To')
-    ot_plann_from = fields.Float('OT Plann From')
-    ot_plann_to = fields.Float('OT Plann To')
-    approve_time_from = fields.Float('Approve Time From')
-    approve_time_to = fields.Float('Approve Time To')
+    plann_date_from = fields.Date('Plan Date From')
+    plann_date_to = fields.Date('Plan Date To')
+    ot_plann_from = fields.Float('OT Plan From')
+    ot_plann_to = fields.Float('OT Plan To')
+    approve_time_from = fields.Float('OT App From')
+    approve_time_to = fields.Float('OT App To')
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plann')
     output_plann = fields.Char('Output Plann')
@@ -199,8 +222,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     transport = fields.Boolean('Transport')
     meals = fields.Boolean('Meal')
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT type')
-    
-    
+    planning_req_name = fields.Char(string='Planning Request Name',required=False)
+
     @api.onchange('employee_id')
     def rubah_employee(self):
         for rec in self:
@@ -212,4 +235,28 @@ class HREmpOvertimeRequestEmployee(models.Model):
                     #rec.department_id = emp.department_id.id
                     #rec.area_id = emp.area.id
 
-    
+    @api.constrains('nik','plann_date_from','plann_date_to')
+    def check_duplicate_record(self):
+        for rec in self:
+            '''Method to avoid duplicate overtime request'''
+            duplicate_record = self.search([
+                ('id', '!=', rec.id),
+                ('nik','=',rec.nik),
+                ('plann_date_from','=',rec.plann_date_from),
+                ('plann_date_to','=',rec.plann_date_to),
+            ])
+            if duplicate_record:
+                raise ValidationError(f"Duplicate record found for employee {rec.employee_id.name} in {rec.planning_id.name}. "
+                                      f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
+
+    @api.model
+    def create(self, vals):
+        # Add the duplicate check before creating a new record
+        self.check_duplicate_record()
+        return super(HREmpOvertimeRequestEmployee, self).create(vals)
+
+    def write(self, vals):
+        # Add the duplicate check before updating a record
+        res = super(HREmpOvertimeRequestEmployee, self).write(vals)
+        self.check_duplicate_record()
+        return res

@@ -64,7 +64,7 @@ class HrAttendance(models.Model):
     job_id = fields.Many2one('hr.job',string='Job Title',related='employee_id.job_id')
     nik = fields.Char('NIK',related = 'employee_id.nik')
     day = fields.Char('Day')
-    dates = fields.Date('Date')
+    dates = fields.Date('Date', tracking=True)
     day_type = fields.Selection([('w','W'),
                                  ('h','H')],string='Type',default='w',index=True)
     wdcode_ids = fields.Many2many('hr.working.days','wd_tms_entry_rel',string='WD Code All',compute='_isi_department_branch', store=False)
@@ -77,9 +77,9 @@ class HrAttendance(models.Model):
                                ('absent','Absent'),
                                ('delay_in','Delay In'),
                                ('leave','Leave'),
-                               ('outstation','OutStation')],string='Attendence Status')
-    time_in = fields.Float('Time In' )
-    time_out = fields.Float('Time Out')
+                               ('outstation','OutStation')],string='Attendence Status', tracking=True)
+    time_in = fields.Float('Time In', tracking=True)
+    time_out = fields.Float('Time Out', tracking=True)
     add_hour = fields.Float('Add Hour')
     ot1 = fields.Char('AOT1')
     ot2 = fields.Char('AOT2')
@@ -116,26 +116,26 @@ class HrAttendance(models.Model):
     premi_attendee = fields.Float('Premi Attendee')
     night_shift = fields.Float('Night Shift')
     
-    approved = fields.Boolean('Approved')
+    approved = fields.Boolean('Approved', tracking=True)
     ot_reject = fields.Boolean('OT Reject')
-    wd_type = fields.Char('WD Type')
+    wd_type = fields.Char('WD Type', tracking=True)
     hour_adv = fields.Float('Hour Adv')
-    permision_code = fields.Char('Permision Code')
-    plan_ot_from = fields.Float('Plan Overtime From')
-    plan_ot_to = fields.Float('Plan Overtime To')
-    time_in_edited = fields.Float('Time In (Edited)')
-    time_out_edited = fields.Float('Time Out (Edited)')
-    approval_ot_from = fields.Float('Approval Overtime From')
-    approval_ot_to = fields.Float('Approval Overtime To')
+    permision_code = fields.Char('Permision Code', tracking=True)
+    plan_ot_from = fields.Float('Plan Overtime From', tracking=True)
+    plan_ot_to = fields.Float('Plan Overtime To', tracking=True)
+    time_in_edited = fields.Float('Time In (Edited)', tracking=True)
+    time_out_edited = fields.Float('Time Out (Edited)', tracking=True)
+    approval_ot_from = fields.Float('Approval Overtime From', tracking=True)
+    approval_ot_to = fields.Float('Approval Overtime To', tracking=True)
     hour_adv1 = fields.Float('Hour Adv Edited')
 
     valid_from = fields.Date('Valid From')
     valid_to = fields.Date('Valid To')
-    delayed = fields.Float('Delay (jam:menit)')
+    delayed = fields.Float('Delay (jam:menit)', tracking=True)
     tms_entry_ot = fields.One2many('hr.tmsentry.details','tms_entry_id',auto_join=True)
     tms_entry_premi = fields.One2many('hr.tmsentry.premicode','tms_entry_id',auto_join=True)
-    tgl_masuk = fields.Date('Date In')
-    tgl_keluar = fields.Date('Date Out')
+    tgl_masuk = fields.Date('Date In', tracking=True)
+    tgl_keluar = fields.Date('Date Out', tracking=True)
     att_time = fields.Float('Attendance Time')
 
     #def init(self):
@@ -340,7 +340,34 @@ class HrAttendance(models.Model):
                         alldata.attendence_status = 'outstation'
                 else:    
                     return
+                
+            if alldata.time_in_edited:
+                jammasuk1 = datetime.strptime(str(alldata.ubahjam(alldata.time_in_edited)).replace(' ', ''), '%H:%M:%S')
+                #jammasuk1 = alldata.ubahjam(alldata.time_in_edited)
+                jammasuk = jammasuk1.strftime('%H:%M:%S')
+            else:
+                if alldata.time_in:    
+                    jammasuk1 = datetime.strptime(str(alldata.ubahjam(alldata.time_in)).replace(' ', ''), '%H:%M:%S')
+                    #jammasuk1 = alldata.ubahjam(alldata.time_in)
+                    jammasuk = jammasuk1.strftime('%H:%M:%S')
+                else:
+                    jammasuk = False
             
+            if alldata.time_out_edited: 
+                jamkeluar1 = datetime.strptime(str(alldata.ubahjam(alldata.time_out_edited)).replace(' ', ''), '%H:%M:%S')
+                #jamkeluar1 = alldata.ubahjam(alldata.time_out_edited)
+                jamkeluar = jamkeluar1.strftime('%H:%M:%S')
+            else:
+                if alldata.time_out:
+                    jamkeluar1 = datetime.strptime(str(alldata.ubahjam(alldata.time_out)).replace(' ', ''), '%H:%M:%S')
+                    #jamkeluar1 = alldata.ubahjam(alldata.time_out)
+                    jamkeluar = jamkeluar1.strftime('%H:%M:%S')
+                else:
+                    jamkeluar = False
+            
+            if jammasuk and jamkeluar:
+                alldata.attendence_status = 'attendee'
+                
             wd = False
             if alldata.wdcode_edited:
                 wd = alldata.wdcode_edited
@@ -362,30 +389,20 @@ class HrAttendance(models.Model):
                             alldata.attendence_status = 'delay_in'
                         if scode == 'LEAV':
                             alldata.attendence_status = 'outstation'
+                            
                     
-                    if alldata.time_in_edited:
-                        jammasuk1 = datetime.strptime(str(alldata.ubahjam(alldata.time_in_edited)).replace(' ', ''), '%H:%M:%S')
-                        #jammasuk1 = alldata.ubahjam(alldata.time_in_edited)
-                        jammasuk = jammasuk1.strftime('%H:%M:%S')
-                    else:
-                        if alldata.time_in:    
-                            jammasuk1 = datetime.strptime(str(alldata.ubahjam(alldata.time_in)).replace(' ', ''), '%H:%M:%S')
-                            #jammasuk1 = alldata.ubahjam(alldata.time_in)
-                            jammasuk = jammasuk1.strftime('%H:%M:%S')
-                        else:
-                            jammasuk = False
-                    
-                    if alldata.time_out_edited: 
-                        jamkeluar1 = datetime.strptime(str(alldata.ubahjam(alldata.time_out_edited)).replace(' ', ''), '%H:%M:%S')
-                        #jamkeluar1 = alldata.ubahjam(alldata.time_out_edited)
-                        jamkeluar = jamkeluar1.strftime('%H:%M:%S')
-                    else:
-                        if alldata.time_out:
-                            jamkeluar1 = datetime.strptime(str(alldata.ubahjam(alldata.time_out)).replace(' ', ''), '%H:%M:%S')
-                            #jamkeluar1 = alldata.ubahjam(alldata.time_out)
-                            jamkeluar = jamkeluar1.strftime('%H:%M:%S')
-                        else:
-                            jamkeluar = False
+                    # print('===================')
+                    # print('tanggal',alldata.dates)
+                    # print('Employee',alldata.employee_id.name)
+                    # print('jam masuk edit',alldata.time_in_edited)
+                    # print('jam masuk edit konversi',alldata.ubahjam(alldata.time_in_edited))
+                    # print('jam masuk',alldata.time_in)
+                    # print('jam masuk konversi',alldata.ubahjam(alldata.time_in))
+                    # print('jam keluar edit',alldata.time_out_edited)
+                    # print('jam keluar edit konversi',alldata.ubahjam(alldata.time_out_edited))
+                    # print('jam keluar',alldata.time_out)
+                    # print('jam keluar konversi',alldata.ubahjam(alldata.time_out))
+                    # print('===================')
                     
                     stimefrom1 = datetime.strptime(str(alldata.ubahjam(wd.fullday_from)).replace(' ', ''), '%H:%M:%S')
                     #stimefrom1 = alldata.ubahjam(wd.fullday_from)
@@ -481,54 +498,113 @@ class HrAttendance(models.Model):
                         ttrans = 0
                         tatten = 0
                         tmeal = 0
-                        for allow in wd.allowance_ids:
-                            if alldata.employee_id.attende_premie == True:
-                                if allow.code == 'ashf':
-                                    asfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
-                                    #asfrom1 = alldata.ubahjam(allow.time_from)
-                                    asfrom = asfrom1.strftime('%H:%M:%S')
-                                    asto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
-                                    #asto1 = alldata.ubahjam(allow.time_to)
-                                    asto = asto1.strftime('%H:%M:%S')
-                                    asqty = allow.qty
-                                    if dtmasuk <= asfrom1 and dtkeluar >= asto1:
-                                        tatten += asqty
-                                
-                            if alldata.employee_id.allowance_transport == True:
-                                if allow.code == 'atrp':
-                                    atfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
-                                    #atfrom1 = alldata.ubahjam(allow.time_from)
-                                    atfrom = atfrom1.strftime('%H:%M:%S')
-                                    atto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
-                                    #atto1 = alldata.ubahjam(allow.time_to)
-                                    atto = atto1.strftime('%H:%M:%S')
-                                    atqty = allow.qty
-                                    if dtmasuk <= atfrom1 and dtkeluar >= atto1:
-                                        ttrans += atqty
-                                        
-                            if alldata.employee_id.allowance_night_shift == True:
-                                if allow.code == 'ansf':
-                                    anfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
-                                    #anfrom1 = alldata.ubahjam(allow.time_from)
-                                    anfrom = anfrom1.strftime('%H:%M:%S')
-                                    anto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
-                                    #anto1 = alldata.ubahjam(allow.time_to)
-                                    anto = anto1.strftime('%H:%M:%S')
-                                    atqty = allow.qty
-                                    if dtmasuk <= anfrom1 and dtkeluar >= anto1:
-                                        tshift += atqty
-                                        
-                            if alldata.employee_id.allowance_meal == True:
-                                if allow.code == 'amea':
-                                    amfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
-                                    #amfrom1 = alldata.ubahjam(allow.time_from)
-                                    amfrom = amfrom1.strftime('%H:%M:%S')
-                                    amto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
-                                    #amto1 = alldata.ubahjam(allow.time_to)
-                                    amto = amto1.strftime('%H:%M:%S')
-                                    atqty = allow.qty
-                                    if dtmasuk <= amfrom1 and dtkeluar >= amto1:
-                                        tmeal += atqty
+                        if alldata.time_out_edited:
+                            tout = alldata.time_out_edited
+                        else:
+                            tout = alldata.time_out
+                        
+                        if alldata.time_in_edited:
+                            tin = alldata.time_in_edited
+                        else:
+                            tin = alldata.time_in
+                        
+                        if alldata.employee_id.attende_premie == True:
+                            print('--------------------')
+                            print(tin)
+                            print(tout)
+                            print(wd.id)
+                            sql = """
+                                select qty from hr_allowance_list hal 
+                                where hal.workingday_id={wdid} and hal.code ='ashf'
+                                    and (hal.time_from >= {masuk} and hal.time_to <= {keluar})
+                                order by qty desc,time_from asc
+                            """.format(wdid=wd.id,masuk=tin,keluar=tout)
+                            self.env.cr.execute(sql)
+                            allow_att = self.env.cr.fetchone()
+                            #allow_att = wd.allowance_ids.filtered(lambda p: p.code == 'ashf' and p.time_from >= tin and p.time_to <= tout)
+                            print(allow_att)
+                            #print(allow_att[0])
+                            print('--------------------')
+                            ##for allow in wd.allowance_ids.filtered(lambda p: p.code == 'ashf'):
+                            ##asfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
+                            ##asfrom1 = alldata.ubahjam(allow.time_from)
+                            #asfrom = asfrom1.strftime('%H:%M:%S')
+                            #asto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
+                            ##asto1 = alldata.ubahjam(allow.time_to)
+                            #asto = asto1.strftime('%H:%M:%S')
+                            #asqty = allow.qty
+                            #if dtmasuk <= asfrom1 and dtkeluar >= asto1:
+                            if allow_att or allow_att is not None:
+                                tatten = float(allow_att[0])
+                            
+                        if alldata.employee_id.allowance_transport == True:
+                            #allow_trans = wd.allowance_ids.filtered(lambda p: p.code == 'atrp' and (tin <= p.time_from and tout >= p.time_to))
+                            sql = """
+                                select qty from hr_allowance_list hal 
+                                where hal.workingday_id={wdid} and hal.code ='atrp'
+                                    and (hal.time_from >= {masuk} and hal.time_to <= {keluar})
+                                order by qty desc,time_from asc
+                            """.format(wdid=wd.id,masuk=tin,keluar=tout)
+                            self.env.cr.execute(sql)
+                            allow_trans = self.env.cr.fetchone()
+                            if allow_trans or allow_trans is not None:
+                                ttrans = float(allow_trans[0])
+                            #if allow.code == 'atrp':
+                            #    atfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
+                            #    #atfrom1 = alldata.ubahjam(allow.time_from)
+                            #    atfrom = atfrom1.strftime('%H:%M:%S')
+                            #    atto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
+                            #    #atto1 = alldata.ubahjam(allow.time_to)
+                            #    atto = atto1.strftime('%H:%M:%S')
+                            #    atqty = allow.qty
+                            #    if dtmasuk <= atfrom1 and dtkeluar >= atto1:
+                            #        ttrans += atqty
+                                    
+                        if alldata.employee_id.allowance_night_shift == True:
+                            #allow_night = wd.allowance_ids.filtered(lambda p: p.code == 'ansf' and (tin <= p.time_from and tout >= p.time_to))
+                            sql = """
+                                select qty from hr_allowance_list hal 
+                                where hal.workingday_id={wdid} and hal.code ='ansf'
+                                    and (hal.time_from >= {masuk} and hal.time_to <= {keluar})
+                                order by qty desc,time_from asc
+                            """.format(wdid=wd.id,masuk=tin,keluar=tout)
+                            self.env.cr.execute(sql)
+                            allow_night = self.env.cr.fetchone()
+                            if allow_night or allow_night is not None:
+                                tshift = float(allow_night[0])
+                            #if allow.code == 'ansf':
+                            #    anfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
+                            #    #anfrom1 = alldata.ubahjam(allow.time_from)
+                            #    anfrom = anfrom1.strftime('%H:%M:%S')
+                            #    anto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
+                            #    #anto1 = alldata.ubahjam(allow.time_to)
+                            #    anto = anto1.strftime('%H:%M:%S')
+                            #    atqty = allow.qty
+                            #    if dtmasuk <= anfrom1 and dtkeluar >= anto1:
+                            #        tshift += atqty
+                                    
+                        if alldata.employee_id.allowance_meal == True:
+                            #allow_meal = wd.allowance_ids.filtered(lambda p: p.code == 'amea' and (tin <= p.time_from and tout >= p.time_to))
+                            sql = """
+                                select qty from hr_allowance_list hal 
+                                where hal.workingday_id={wdid} and hal.code ='amea'
+                                    and (hal.time_from >= {masuk} and hal.time_to <= {keluar})
+                                order by qty desc,time_from asc
+                            """.format(wdid=wd.id,masuk=tin,keluar=tout)
+                            self.env.cr.execute(sql)
+                            allow_meal = self.env.cr.fetchone()
+                            if allow_meal or allow_meal is not None:
+                                tmeal = float(allow_meal[0])
+                            #if allow.code == 'amea':
+                            #    amfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
+                            #    #amfrom1 = alldata.ubahjam(allow.time_from)
+                            #    amfrom = amfrom1.strftime('%H:%M:%S')
+                            #    amto1 = datetime.strptime(str(alldata.ubahjam(allow.time_to)).replace(' ', ''), '%H:%M:%S')
+                            #    #amto1 = alldata.ubahjam(allow.time_to)
+                            #    amto = amto1.strftime('%H:%M:%S')
+                            #    atqty = allow.qty
+                            #    if dtmasuk <= amfrom1 and dtkeluar >= amto1:
+                            #        tmeal += atqty
                                     
                         alldata.premi_attendee = tatten
                         alldata.night_shift = tshift

@@ -11,6 +11,16 @@
             <field name="binding_model_id" eval="False"/>
             <field name="binding_type">report</field>
         </record>
+        <record id="action_report_paklaring_steril" model="ir.actions.report">
+            <field name="name">Paklaring</field>
+            <field name="model">hr.resignation</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sanbe_hr_resignation.paklaring_report_steril</field>
+            <field name="report_file">sanbe_hr_resignation.paklaring_report_steril</field>
+            <field name="print_report_name">('Paklaring - %s' % (object.emp_nos.name))</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="binding_type">report</field>
+        </record>
         <record id="hr_resignation_sanbe_form" model="ir.ui.view">
             <field name="name">hr.resignation.sanbe.form</field>
             <field name="model">hr.resignation</field>
@@ -26,7 +36,9 @@
                         <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//button[@name='action_reject_resignation']" position="after">
-                       <button name="%(action_report_paklaring)d" string="Print Paklaring" type="action" invisible="state !='approved'" groups="base.group_user" class="oe_highlight" />
+                        <button name="%(action_report_paklaring)d" string="Print Paklaring" type="action" invisible="not (state == 'approved' and branch_id == 1)" groups="base.group_user" class="oe_highlight" />
+                        <button name="%(action_report_paklaring_steril)d" string="Print Paklaring" type="action" invisible="not (state == 'approved' and branch_id == 6)" groups="base.group_user" class="oe_highlight" />
+
                 </xpath>
                 <xpath expr="//div[hasclass('oe_title')]" position="replace">
                     <div class="oe_title">

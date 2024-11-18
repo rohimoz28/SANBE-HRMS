@@ -7,7 +7,7 @@
 #################################################################################
 
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -45,6 +45,21 @@ class HrEmployee(models.Model):
 
     def action_approval(self):
         self.ensure_one()
+        for data in self.env['hr.employee'].browse(self.ids):
+            if data.nik:
+                data_upload_attendance = self.env['data.upload.attendance'].sudo().search([
+                    ('nik', '=', self.nik)
+                ])
+
+                if data_upload_attendance:
+                    data_employee = {
+                        'employee_id': data.id,
+                        'nik': data.nik,
+                        'area_id': data.area.id,
+                        'branch_id': data.branch_id.id,
+                        'state': 'register'
+                    }
+                    data_upload_attendance.write(data_employee)
         datalog = {'employee_id': self.id,
                    'service_type': 'NEWS',
                    'start_date': self.join_date,
