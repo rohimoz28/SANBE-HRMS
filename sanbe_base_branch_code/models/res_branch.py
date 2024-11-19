@@ -13,6 +13,15 @@ class ResBranch(models.Model):
     _inherit = "res.branch"
 
     branch_code = fields.Char('Branch Code')
+    street = fields.Char(string='Street')
+    street2 = fields.Char('Street2')
+    city = fields.Char('City')
+    state_id = fields.Char('State')
+    zip = fields.Char('ZIP')
+    country_id = fields.Many2one('res.country','Country')
+    phone = fields.Char('Phone')
+    fax = fields.Char('Fax')
+    email = fields.Char('Email')
 
     @api.depends('branch_code','name')
     def _compute_display_name(self):
