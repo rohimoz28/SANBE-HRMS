@@ -22,6 +22,7 @@ class ResBranch(models.Model):
     phone = fields.Char('Phone')
     fax = fields.Char('Fax')
     email = fields.Char('Email')
+    unit_id = fields.Char(string='Kode Unit', required=False)
 
     @api.depends('branch_code','name')
     def _compute_display_name(self):
