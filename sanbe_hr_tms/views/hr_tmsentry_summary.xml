@@ -264,7 +264,7 @@
             <field name="name">hr.tmsentry.sumarry.tree</field>
             <field name="model">hr.tmsentry.summary</field>
             <field name="arch" type="xml">
-                <tree string="HR TMS Entry Summary Tree" create="0" default_order="periode_id desc">
+                <tree string="HR TMS Entry Summary Tree" create="0" default_order="periode_id desc">   
                     <field name="employee_id"/>
                     <field name="nik"/>
                     <field name="area_id"/>
@@ -319,6 +319,9 @@
                                 context="{'approval_type': 'approved'}"/>
                     </header>
                 </xpath>
+                <xpath expr="//tree" position="attributes">
+                        <attribute name="js_class">owl_list_controller</attribute>
+                    </xpath>
             </field>
         </record>
 

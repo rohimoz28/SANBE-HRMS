@@ -57,6 +57,9 @@ class HREmpGroupSetting(models.Model):
     state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], default='draft', copy=True)
     #valid_from = fields.Date('Valid From', required=True, copy=True)
     #valid_to = fields.Date('To', required=True, copy=True)
+    summary_details_id = fields.Many2one('sb.tms.tmsentry.details', string='details')
+    employee_id = fields.Many2one('hr.employee', string="Employee", required=True,
+                                  ondelete='cascade', index=True)
     empgroup_ids = fields.One2many('hr.empgroup.details','empgroup_id',auto_join=True,string='Employee Group Setting Details', copy=True)
     # periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
     
@@ -307,10 +310,48 @@ class HREmpGroupSetting(models.Model):
             _logger.error("Error calling stored procedure: %s", str(e))
             raise UserError("Error executing the function: %s" % str(e))
 
+    def action_export_excel(self):
+        print("MULAIIIII")
+        self.ensure_one()
+        
+        tms_summary_domain = []
+        if self.area_id:
+            tms_summary_domain.append(('area', '=', self.area_id.id))
+        if self.branch_id:
+            tms_summary_domain.append(('branch_id', '=', self.branch_id.id))
+        if self.department_id:
+            tms_summary_domain.append(('department_id', '=', self.department_id.id))
+        print(tms_summary_domain, "ini bossss")
+        
+        tms_summaries = self.env['hr.employee'].search(tms_summary_domain)
+        print(tms_summaries, "ini cokkkk")
+        _logger.info(f"Domain: {tms_summary_domain}")
+        _logger.info(f"TMS Summaries: {tms_summaries}")
+        
+        if not tms_summaries:
+            print(">>>>>>>>>>>>>>>>>")
+            print(tms_summary_domain, "ini bossss")
+            print(">>>>>>>>>>>>>>>>")
+            raise UserError(_("Tidak Ada Datas Record Dari data yang dipilih"))
+        
+        return {
+            'type': 'ir.actions.report',
+            'report_name': 'sanbe_hr_tms.rekap_empgroup_xls',
+            'report_type': 'xlsx',
+            'report_file': f'Rekap_Empgroup_{self.department_id.name or "All"}',
+            'context': {
+                'active_model': 'hr.tmsentry.summary',
+                'active_ids': tms_summaries.ids,  # semua record
+            }
+        }
+
     # restart running number
     def _reset_sequence_empgroup(self):
         sequences = self.env['ir.sequence'].search([('code', '=like', '%hr.empgroup%')])
         sequences.write({'number_next_actual': 1})
+        print(">>>>>>>>>>>>>>>")
+        print("sequences:",sequences)
+        print(">>>>>>>>>>>>>>>")
 
     #Function For AutoFill data Employee Based On Code
     @api.onchange('code')
@@ -359,6 +400,9 @@ class HREmpGroupSetting(models.Model):
                         bulan = str(tgl.month)
                         # vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.overtime.planning'))
                         vals['name'] = f"{tahun}/{bulan}/{branch_unit_id}/EG/{department_code}/{self.env['ir.sequence'].next_by_code('hr.empgroup')}"
+                        print(">>>>>>>>>>>>")
+                        print("sequence:",vals['name'])
+                        print(">>>>>>>>>>>>")
         res = super(HREmpGroupSetting,self).create(vals_list)
         return res
 
