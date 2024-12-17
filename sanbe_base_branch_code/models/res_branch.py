@@ -18,7 +18,7 @@ class ResBranch(models.Model):
     city = fields.Char('City')
     state_id = fields.Char('State')
     zip = fields.Char('ZIP')
-    country_id = fields.Many2one('res.country','Country')
+    country_id = fields.Many2one('res.country')
     phone = fields.Char('Phone')
     fax = fields.Char('Fax')
     email = fields.Char('Email')
