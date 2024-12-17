@@ -22,7 +22,8 @@
     # any module necessary for this one to work correctly
     'depends': [
         'base', 'hr_holidays', 'sanbe_hr_employee_mutation', 'hr_attendance', 'hr_holidays_attendance',
-        'base_territory', 'project', 'sale', 'purchase', 'stock', 'account', 'event', 'field_timepicker'
+        'base_territory', 'project', 'sale', 'purchase', 'stock', 'account', 'event', 'field_timepicker',
+        'report_xlsx', 'sanbe_hr_dashboard'
     ],
     'data': [
         'data/ir_cron_data.xml',
@@ -50,16 +51,19 @@
         'views/tms_entry.xml',
         'views/hr_tms_open_close.xml',
         'views/hr_tms_machine_setting.xml',
+        'report/report_kehadiran_templates.xml',
+        'report/report_kehadiran_html.xml',
+        'wizards/export_excel_tms.xml',
         'wizards/cari_employee_department.xml',
         'wizards/hr_tmsimport_data_entry.xml',
         # 'wizards/hr_list_employee_scheduled.xml',
         # 'views/hr_transfer_to_payroll.xml',
         'views/hr_employee.xml',
         'views/data_upload_attendance.xml',
+        'security/ir.model.access.csv',
         'security/tms_branch_security.xml',
         'security/tms_groups.xml',
         'views/hr_tms_overtime_Setting.xml',
-        'views/tmsentry_details.xml',
         'views/tms_menu.xml',
         'data/tms_seq_number.xml',
         'db/calculate_tms.sql',
@@ -67,11 +71,18 @@
         'db/generate_ot_request.sql',
         'db/temporary_table.sql',
         'db/functions.sql',
-        'security/ir.model.access.csv',
+        
+        'views/tmsentry_details.xml',
+        
     ],
     'assets': {
             'web.assets_backend': [
                 'hr_holidays/static/src/**/*',
+                'sanbe_hr_tms/static/src/xml/export_button.xml',
+                'sanbe_hr_tms/static/src/js/export_button.js',
+                'sanbe_hr_tms/static/src/js/report_esm.js',
+                'sanbe_hr_tms/static/src/js/report_action.js'
+                
             ],
     },
     # only loaded in demonstration mode

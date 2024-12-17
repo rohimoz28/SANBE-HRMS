@@ -59,6 +59,35 @@
         </record>
 
         <!-- TMS Entry Summary -->
+        <!-- <record id="export_excel_tms_branch_view" model="ir.rule">
+            <field name="name">Export Excel Branch Group View</field>
+            <field name="model_id" ref="model_export_excel_tms"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record> -->
+
+        <record id="hr_opening_closing_branch_view" model="ir.rule">
+            <field name="name">HR Opening Closing Group View</field>
+            <field name="model_id" ref="model_hr_opening_closing"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record>
+
+        <record id="hr_tms_entry_summary_branch_view" model="ir.rule">
+            <field name="name">TMS Summary Branch Group View</field>
+            <field name="model_id" ref="model_hr_tmsentry_summary"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record>
+
         <record id="hr_tms_entry_summary_branch_manager_rule" model="ir.rule">
             <field name="name">TMS Summary Branch Manager</field>
             <field name="model_id" ref="model_hr_tmsentry_summary" />

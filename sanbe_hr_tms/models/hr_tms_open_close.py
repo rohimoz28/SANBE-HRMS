@@ -29,6 +29,7 @@ class HRTmsOpenClose(models.Model):
     _name = "hr.opening.closing"
     _description = 'HR TMS Open And Close'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'id DESC'
 
     # @api.depends('area_id')
     # def _isi_semua_branch(self):
@@ -132,7 +133,7 @@ class HRTmsOpenClose(models.Model):
         res = super(HRTmsOpenClose, self).write(vals)
         return res
 
-    def reopening(self):
+    def action_reproses(self):
         for data in self:
             period_id = data.id
             area_id = data.area_id
