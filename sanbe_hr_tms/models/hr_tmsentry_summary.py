@@ -8,6 +8,8 @@
 import pdb
 
 from odoo import fields, models, api, _, Command
+import logging
+_logger = logging.getLogger(__name__)
 from odoo.exceptions import ValidationError, UserError
 from odoo.osv import expression
 import pytz
@@ -166,6 +168,8 @@ class HRTMSEntrySummary(models.Model):
         compute="_compute_progress_approval_hrd"
     )
 
+    def btn_export_to_excel(self):
+        print('ieu')
 
     @api.depends('tmsentry_details_ids')
     def _task_progress_approval(self):

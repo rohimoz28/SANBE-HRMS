@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <!--        View Form    -->
-        <record id="hr_opening_closing_form" model="ir.ui.view">
+        <record id="hr_processing_and_period_form" model="ir.ui.view">
             <field name="name">hr.opening.closing.form</field>
             <field name="model">hr.opening.closing</field>
             <field name="arch" type="xml">
@@ -11,9 +11,9 @@
                         <field name="isopen" invisible="1"/>
                         <button name="action_opening_periode" invisible="isopen == True or state_process == 'done'"
                                 string="Open" type="object" class="btn-primary"/>
-                        <button name="reopening" string="Process"
+                        <button name="action_reproses" string="Proses"
                                 type="object" class="btn-primary"
-                                invisible="state_process == 'transfer_to_payroll' or state_process == 'draft' or state_process == 'done'"/>
+                                invisible="state_process != 'running'"/>
                         <button name="action_closing_periode" invisible="isopen == False" string="Close" type="object"
                                 class="btn-primary" groups="sanbe_hr_tms.module_sub_category_processing_period_manager"/>
                         <button name="transfer_payroll" type="object" data-hotkey="shift+g"
