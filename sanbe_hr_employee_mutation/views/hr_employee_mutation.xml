@@ -10,7 +10,6 @@
                 <tree string="HR Mutation ">
                     <field name="name"/>
                     <field name="letter_no"/>
-                    <field name="emp_nos_ids" invisible="1"/>
                     <field name="emp_nos" options="{'no_create': True,'no_create_edit': True}"
                                         context="{'search_by': 'No','search_by_name': False}" />
                     <field name="nik" />

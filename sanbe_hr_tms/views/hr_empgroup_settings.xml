@@ -71,6 +71,10 @@
                                 <!-- <button name="btn_process" string="Process Employee"
                                     type="object" class="oe_highlight" data-hotkey="p" invisible="state != 'approved'"/> -->
                             </group>
+                            <group>
+                            <button name="action_export_excel" string="Export to Excel"
+                                        type="object" class="oe_highlight" data-hotkey="q"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Employee List" name="empgroup_list">
