@@ -58,10 +58,18 @@ class HREmpGroupSetting(models.Model):
     #valid_from = fields.Date('Valid From', required=True, copy=True)
     #valid_to = fields.Date('To', required=True, copy=True)
     summary_details_id = fields.Many2one('sb.tms.tmsentry.details', string='details')
+    value_id = fields.Integer('value_id', compute='action_export_excel')
+    value_name = fields.Char('value_name')
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True,
                                   ondelete='cascade', index=True)
+    employee_ids = fields.One2many('hr.employee', 'emp_group_id', string='employee')
     empgroup_ids = fields.One2many('hr.empgroup.details','empgroup_id',auto_join=True,string='Employee Group Setting Details', copy=True)
     # periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
+
+    @api.depends('value_id')
+    def _compute_value_id(self):
+        for record in self:
+            record.value_id = record.id
     
     @api.constrains('is_active', 'is_inactive')
     def _check_active(self):
@@ -310,10 +318,9 @@ class HREmpGroupSetting(models.Model):
             _logger.error("Error calling stored procedure: %s", str(e))
             raise UserError("Error executing the function: %s" % str(e))
 
-    def action_export_excel(self):
-        print("MULAIIIII")
+    def action_export_excel(self, model_id=None):
         self.ensure_one()
-        
+        # value_id = self.value_id
         tms_summary_domain = []
         if self.area_id:
             tms_summary_domain.append(('area', '=', self.area_id.id))
@@ -321,19 +328,20 @@ class HREmpGroupSetting(models.Model):
             tms_summary_domain.append(('branch_id', '=', self.branch_id.id))
         if self.department_id:
             tms_summary_domain.append(('department_id', '=', self.department_id.id))
-        print(tms_summary_domain, "ini bossss")
         
         tms_summaries = self.env['hr.employee'].search(tms_summary_domain)
-        print(tms_summaries, "ini cokkkk")
         _logger.info(f"Domain: {tms_summary_domain}")
         _logger.info(f"TMS Summaries: {tms_summaries}")
         
+        # _logger.info(f"ID: {value_id}")
+        value = self.env['value.group'].create({
+                'value_id': self.id,
+                'value_name': self.name
+            })
+                    
         if not tms_summaries:
-            print(">>>>>>>>>>>>>>>>>")
-            print(tms_summary_domain, "ini bossss")
-            print(">>>>>>>>>>>>>>>>")
             raise UserError(_("Tidak Ada Datas Record Dari data yang dipilih"))
-        
+
         return {
             'type': 'ir.actions.report',
             'report_name': 'sanbe_hr_tms.rekap_empgroup_xls',
@@ -341,9 +349,10 @@ class HREmpGroupSetting(models.Model):
             'report_file': f'Rekap_Empgroup_{self.department_id.name or "All"}',
             'context': {
                 'active_model': 'hr.tmsentry.summary',
-                'active_ids': tms_summaries.ids,  # semua record
+                'active_ids': tms_summaries.ids,
             }
         }
+        
 
     # restart running number
     def _reset_sequence_empgroup(self):
@@ -407,8 +416,16 @@ class HREmpGroupSetting(models.Model):
         return res
 
 
+  
+class ValueGroup(models.TransientModel):
+    _name = 'value.group'
+    _description = 'Value Group'
 
-#Details Data
+    value_id = fields.Integer('value_id')
+    value_name = fields.Char('value_name')
+    
+
+#Details Data 
 class HREmpGroupSettingDetails(models.Model):
     _name = "hr.empgroup.details"
     _description = 'HR Employee Group Setting Details'
