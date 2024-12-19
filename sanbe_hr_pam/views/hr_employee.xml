@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Extends the 'hr.employee' form view to include the 'resign_date' field-->
+    <record id="inherit_view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit.hr.pam</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
+                <field name="workingday" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
