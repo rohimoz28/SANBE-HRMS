@@ -27,7 +27,9 @@
     # any module necessary for this one to work correctly
     'depends': ['base', 'hr','sanbe_hr','hr_payroll_community','hr_contract'],
     'data': [
-        'views/hr_employee.xml',
+        'security/ir.model.access.csv',
+        'views/hr_emp_status.xml',
+        'views/hr_employee.xml'
     ],
     'assets': {
         'web.assets_backend': [

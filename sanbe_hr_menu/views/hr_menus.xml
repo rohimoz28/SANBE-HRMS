@@ -167,5 +167,13 @@
             sequence="14"
         />
 
+        <menuitem
+            id="menu_hr_emp_status"
+            name="Employee Status"
+            action="sanbe_hr_pam.action_hr_emp_status"
+            parent="hr.menu_human_resources_configuration"
+            sequence="15"
+        />
+
     </data>
 </odoo>
