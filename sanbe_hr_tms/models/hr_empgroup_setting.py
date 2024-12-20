@@ -487,11 +487,12 @@ class HREmpGroupSettingDetails(models.Model):
                 tfrom = (datetime.strptime(str(vals['valid_from']), "%Y-%m-%d").date())
                 tto = (datetime.strptime(str(vals['valid_to']), "%Y-%m-%d").date())
                 demp = self.env['hr.empgroup.details'].sudo().search([('empgroup_id','!=',False),('employee_id','=',int(vals['employee_id'])),('valid_from','<=',tfrom),('valid_to','>=',tfrom)])
+                empgroup_name = demp.empgroup_id.name if demp.empgroup_id else "Unknown Group"
                 if demp:
-                    raise UserError('Valid From over with existing data')
+                    raise UserError(f'Valid From overlaps with existing data in EMP Group: {empgroup_name}')
                 demp = self.env['hr.empgroup.details'].sudo().search([('empgroup_id','!=',False),('employee_id','=',int(vals['employee_id'])),('valid_from','<=',tto),('valid_to','>=',tto)])
                 if demp:
-                    raise UserError('Valid to over with existing data')
+                    raise UserError(f'Valid to over with existing data in EMP Group: {empgroup_name}')
         res = super(HREmpGroupSettingDetails,self).create(values)
         return res
     
@@ -503,7 +504,6 @@ class HREmpGroupSettingDetails(models.Model):
             if rec.valid_from > rec.valid_to:
                 raise UserError('Date Valid To must be bigger then Date Valid From')
             datecek = self.env['hr.empgroup.details'].sudo().search([('empgroup_id','!=',False),('id','!=',rec.id),('employee_id','=',rec.employee_id.id),('valid_from','<=',tfrom),('valid_to','>=',tfrom)])
-            
             if datecek:
                 raise UserError('Valid From over lap with existing data')
             datecek = self.env['hr.empgroup.details'].sudo().search([('empgroup_id','!=',False),('id','!=',rec.id),('employee_id','=',rec.employee_id.id),('valid_from','<=',tto),('valid_to','>=',tto)])
