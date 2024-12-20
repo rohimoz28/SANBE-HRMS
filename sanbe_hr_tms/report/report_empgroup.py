@@ -7,12 +7,14 @@ class ReportEmpgroupXlsx(models.AbstractModel):
     _name = 'report.sanbe_hr_tms.rekap_empgroup_xls'
     _inherit = 'report.report_xlsx.abstract'
 
-    
-
     def generate_xlsx_report(self, workbook, data, lines):
         try:
             _logger.info(f"Context: {self.env.context}")
-            
+
+            # Get the latest value group record
+            value = self.env['value.group'].search([], order='id desc', limit=1)
+            _logger.info(f"Value group data: {value}")
+
             # Determine lines to process
             if not lines:
                 active_ids = self.env.context.get('active_ids', [])
@@ -38,11 +40,10 @@ class ReportEmpgroupXlsx(models.AbstractModel):
 
             # Create worksheet
             sheet = workbook.add_worksheet("Employee Group Report")
-            # sheet.merge_range('A1:G1', 'Employee Group Report', format_header)
 
             # Headers
             headers = [
-                'EMP_FIRSTNAME', 'NIK', 'Job Position', 
+                'Emp Group Name', 'Employee Name', 'NIK', 'Job Position', 
                 'Working Day', 'Date From', 'Date To'
             ]
             col_widths = [len(header) for header in headers]
@@ -67,18 +68,18 @@ class ReportEmpgroupXlsx(models.AbstractModel):
                     continue
 
                 try:
+                    # Get value_id and value_name for each row
+                    current_value = self.env['value.group'].search([], order='id desc', limit=1)
+                    
                     # Prepare row data
                     data_row = [
-                        # global_index,
+                        current_value.value_name or '',
                         obj.name or 'Tidak Diketahui',
                         obj.nik or 'Tidak Diketahui',
                         obj.job_title or 'Tidak Diketahui',
-                        '',
-                        '',
-                        ''
-                        # obj.emp_status or 'Tidak Diketahui',
-                        # self.format_date(obj.date_joined) if hasattr(obj, 'date_joined') else 'Tidak Diketahui',
-                        # obj.department_id.name or 'Tidak Diketahui'
+                        obj.workingday or 0,
+                        '01/12/2024',
+                        '01/12/2024'
                     ]
 
                     _logger.info(f"Processing row {data_row}")
