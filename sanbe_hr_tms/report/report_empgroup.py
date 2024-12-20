@@ -43,8 +43,8 @@ class ReportEmpgroupXlsx(models.AbstractModel):
 
             # Headers
             headers = [
-                'Employee Name', 'NIK', 'Job Position', 
-                'Working Day', 'Date From', 'Date To', 'Emp Group Name'
+                'Emp Group Name', 'Employee Name', 'NIK', 'Job Position', 
+                'Working Day', 'Date From', 'Date To'
             ]
             col_widths = [len(header) for header in headers]
 
@@ -73,13 +73,13 @@ class ReportEmpgroupXlsx(models.AbstractModel):
                     
                     # Prepare row data
                     data_row = [
+                        current_value.value_name or '',
                         obj.name or 'Tidak Diketahui',
                         obj.nik or 'Tidak Diketahui',
                         obj.job_title or 'Tidak Diketahui',
-                        '',
-                        '',
-                        '',
-                        current_value.value_name or ''
+                        obj.workingday or 0,
+                        '01/12/2024',
+                        '01/12/2024'
                     ]
 
                     _logger.info(f"Processing row {data_row}")
