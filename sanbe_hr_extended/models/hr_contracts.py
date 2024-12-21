@@ -65,7 +65,8 @@ class HrContract(models.Model):
     def create(self, vals):
         check_contract = self.env['hr.contract'].search(
             [('employee_id', '=', vals.get('employee_id')),
-             ('state', '!=', 'close')
+             #  ('state', '!=', 'close')
+             ('state', '=', 'open')
              ], limit=1)
         
         if check_contract:
