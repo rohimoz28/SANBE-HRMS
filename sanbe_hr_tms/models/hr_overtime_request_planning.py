@@ -16,7 +16,9 @@ _logger = logging.getLogger(__name__)
 
 TMS_OVERTIME_STATE = [
     ('draft', 'Draft'),
-    ('approved', 'Approved'),
+    ('approved_mgr', "Approved By MGR"),
+    ('approved_pmr', "Approved By PMR"),
+    ('approved', 'Approved By HCM'),
     ('done', "Close"),
     ('reject', "Reject"),
 ]
@@ -125,6 +127,35 @@ class HREmpOvertimeRequest(models.Model):
     def btn_done(self):
         for rec in self:
             rec.state = 'done'
+
+    @api.model
+    def _get_visible_states(self):
+        """Menentukan state mana yang akan ditampilkan berdasarkan state saat ini"""
+        self.ensure_one()
+        if self.state == '':
+            return 'draft,approved_mgr,done,reject'
+        elif self.state == 'draft':
+            return 'draft,approved_mgr,done,reject'
+        elif self.state == 'approved_mgr':
+            return 'draft,approved_mgr,done,reject'
+        elif self.state == 'approved_pmr':
+            return 'draft,approved_pmr,done,reject'
+        elif self.state == 'approved':
+            return 'draft,approved,done,reject'
+        elif self.state == 'done':
+            return 'draft,done,reject'
+        elif self.state == 'reject':
+            return 'draft,done,reject'
+        else:
+            return 'draft,approved_mgr,approved_pmr,approved,done,reject'
+
+    def btn_approved_mgr(self):
+        for rec in self:
+            rec.state = 'approved_mgr'
+            
+    def btn_approved_pmr(self):
+        for rec in self:
+            rec.state = 'approved_pmr'
     
     def btn_reject(self):
         for rec in self:
@@ -220,7 +251,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Bisnis Unit', index=True)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Department ID')
     transport = fields.Boolean('Transport')
-    meals = fields.Boolean('Meal')
+    meals = fields.Boolean(string='Meal Dine In')
+    meals_cash = fields.Boolean(string='Meal Cash')
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT type')
     planning_req_name = fields.Char(string='Planning Request Name',required=False)
 

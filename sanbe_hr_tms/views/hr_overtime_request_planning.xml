@@ -7,12 +7,14 @@
             <field name="arch" type="xml">
                 <form string="Overtime Request" create="0">
                     <header>
-                        <button string="Approved" name="btn_approved" type="object" invisible="state != 'draft'"/>
-                        <button string="Draft" name="btn_backdraft" type="object" invisible="state != 'approved'"/>
+                        <button string="Approved By HCM" name="btn_approved" type="object" invisible="state != 'approved_pmr'"/>
+                        <button string="Draft" name="btn_backdraft" type="object" invisible="state in ('draft', 'approved_mgr', 'approved_pmr')"/>
+                        <button string="Approved By Manager" name="btn_approved_mgr" type="object" invisible="state != 'draft'"/>
+                        <button string="Approved By Plan Manager" name="btn_approved_pmr" type="object" invisible="state != 'approved_mgr'"/>
                         <!-- <button string="Close" name="btn_done" type="object" invisible="state != 'approved'" /> -->
                         <button string="Reject" name="btn_reject" type="object"
-                                invisible="state in ('approved','done')"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,done,reject"/>
+                                invisible="state in ('reject', 'approved')"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,reject"/>
                     </header>
                     <!--                    <sheet>-->
                     <group string="TMS Over Time Planning Entry" name="entry_planning">
@@ -98,6 +100,7 @@
                                            force_save="1"/>
                                     <field name="transport"/>
                                     <field name="meals"/>
+                                    <field name="meals_cash"/>
                                 </tree>
                             </field>
                         </page>

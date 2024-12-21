@@ -11,7 +11,7 @@
                         <button name="btn_approved" type="object" data-hotkey="shift+g"
                            string="Approved" class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="btn_close" type="object" data-hotkey="shift+g"
-                           string="Close" class="oe_highlight" invisible="state != 'approved'"/>
+                           string="Close" class="oe_highlight" invisible="state != 'approved' or uid != 2"/>
                         <button name="btn_draft" type="object" data-hotkey="shift+g"
                            string="Draft" class="oe_highlight" invisible="state != 'approved'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved,close"/>
