@@ -220,7 +220,6 @@ class HrEmployee(models.Model):
          "The NO NPWP  must be unique, this one is already assigned to another employee."),
         ('identification_id_uniq', 'check(1=1)',
          "The Identification ID  must be unique, this one is already assigned to another employee."),
-        ('contract_id_unique', 'UNIQUE(contract_id)', "Contract must be unique, this one is already assigned to another employee.")
     ]
 
     # @api.constrains('emp_status')
