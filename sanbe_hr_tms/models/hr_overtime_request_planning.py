@@ -77,6 +77,36 @@ class HREmpOvertimeRequest(models.Model):
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
 
+    @api.onchange('periode_id')
+    def _onchange_periode_id(self):
+        """Update area_id and branch_id based on periode_id and apply dynamic domain."""
+        if self.periode_id:
+            # Set default values for area_id and branch_id
+            self.area_id = self.periode_id.area_id.id if self.periode_id.area_id else False
+            self.branch_id = self.periode_id.branch_id.id if self.periode_id.branch_id else False
+
+            # self.area_id = [('id', '=', self.periode_id.area_id.id)]
+            # self.branch_id = [('id', '=', self.periode_id.branch_id.id)]
+            # _logger.info("Domain for area_id: %s", self.area_id)
+            # _logger.info("Domain for branch_id: %s", self.branch_id)
+
+            # Apply dynamic domains for area_id and branch_id
+            # return {
+            #     'domain': {
+            #         'area_id': domain_area,
+            #         'branch_id': domain_branch,
+            #     }
+            # }
+        else:
+            self.area_id = False
+            self.branch_id = False
+            return {
+                'domain': {
+                    'area_id': [],
+                    'branch_id': [],
+                }
+            }
+
     # restart running number
     def _reset_sequence_overtime_employees(self):
         sequences = self.env['ir.sequence'].search([('code', '=like', '%hr.overtime.planning%')])

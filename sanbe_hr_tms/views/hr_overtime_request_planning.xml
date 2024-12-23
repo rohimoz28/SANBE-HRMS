@@ -20,16 +20,23 @@
                     <group string="TMS Over Time Planning Entry" name="entry_planning">
                         <group>
                             <field name="name"/>
-                            <field name="periode_id" readonly="state == 'approved' or state == 'done'"/>
+                            <field name="periode_id" domain="[('state_process', '=', 'running')]"  readonly="state == 'approved' or state == 'done'" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
+                            <!-- <field name="area_id"
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   required="1"
+                                   readonly="state == 'approved' or state == 'done'"  /> -->
                             <field name="area_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                    required="1"
-                                   readonly="state == 'approved' or state == 'done'"/>
+                                   readonly="1"  />
                             <field name="branch_ids" invisible="1"/>
                             <field name="alldepartment" invisible="1"/>
+                            <!-- <field name="branch_id"
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="state == 'approved' or state == 'done'" /> -->
                             <field name="branch_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state == 'approved' or state == 'done'"/>
+                                   readonly="1" />
                             <field name="department_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                    readonly="state == 'approved' or state == 'done'"/>
