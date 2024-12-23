@@ -457,21 +457,24 @@ class HrEmployee(models.Model):
                     vals['retire_age'] = 0
                     vals['periode_probation'] = 0
                     vals['joining_date'] = False
-
+            
+            res = super(HrEmployee, self).create(vals_list)
             if vals.get('contract_id'):
                 contractid = vals.get('contract_id')
                 existing = self.env['hr.employee'].sudo().search([('name', '=', vals.get('name'))])
+                mycontract = self.env['hr.contract'].browse(contractid)
+                mycontract.write({'employee_id': res.id})
             # else:
             #     print('ini kemari ', vals.get('name'))
             #     return super(HrEmployee,self).create(vals_list)
-        res = super(HrEmployee, self).create(vals_list)
-        if existing:
-            #     print('ini bener ',existing.name)
-            mycontract = self.env['hr.contract'].browse(contractid)
-            myemps = self.env['hr.employee'].sudo().browse(mycontract.employee_id.id)
-            myemps.unlink()
-            mycontract.write({'employee_id': res.id})
-        return res
+        
+            if existing:
+                #     print('ini bener ',existing.name)
+                mycontract = self.env['hr.contract'].browse(contractid)
+                myemps = self.env['hr.employee'].sudo().browse(mycontract.employee_id.id)
+                myemps.unlink()
+                mycontract.write({'employee_id': res.id})
+            return res
 
     def unlink(self):
         for allrec in self:
