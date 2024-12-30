@@ -84,7 +84,8 @@ class HREmpOvertimeRequest(models.Model):
             # Set default values for area_id and branch_id
             self.area_id = self.periode_id.area_id.id if self.periode_id.area_id else False
             self.branch_id = self.periode_id.branch_id.id if self.periode_id.branch_id else False
-
+            # import pdb
+            # pdb.set_trace()
             # self.area_id = [('id', '=', self.periode_id.area_id.id)]
             # self.branch_id = [('id', '=', self.periode_id.branch_id.id)]
             # _logger.info("Domain for area_id: %s", self.area_id)
@@ -123,29 +124,40 @@ class HREmpOvertimeRequest(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        #CHP = Area Cimahi
-        #CMP = Area Cimareme
-        #TSP = Area Taman Sari
-        #CHP24000001
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                if 'area_id' in vals:
-                    area = vals.get('area_id')
-                    department = vals.get('department_id')
-                    branch_id = vals.get('branch_id')
-                    dt_area = self.env['res.territory'].sudo().search([('id','=',int(area))],limit=1)
-                    dept = self.env['hr.department'].sudo().search([('id','=',int(department))],limit=1)
-                    department_code = dept.department_code
-                    branch = self.env['res.branch'].sudo().search([('id','=',int(branch_id))],limit=1)
-                    branch_unit_id = branch.unit_id
-                    if dt_area:
-                        tgl = fields.Date.today()
-                        tahun = str(tgl.year)[2:]
-                        bulan = str(tgl.month)
-                        # vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.overtime.planning'))
-                        vals['name'] = f"{tahun}/{bulan}/{branch_unit_id}/RA/{department_code}/{self.env['ir.sequence'].next_by_code('hr.overtime.planning')}"
-        res = super(HREmpOvertimeRequest,self).create(vals_list)
-        return res
+                area_id = vals.get('area_id')
+                branch_id = vals.get('branch_id')
+
+                # Fetch area and branch if missing
+                if not area_id or not branch_id:
+                    periode_id = vals.get('periode_id')
+                    if periode_id:
+                        periode = self.env['hr.opening.closing'].sudo().search([('id', '=', int(periode_id))], limit=1)
+                        if periode:
+                            area_id = periode.area_id.id
+                            branch_id = periode.branch_id.id
+                            vals['area_id'] = area_id
+                            vals['branch_id'] = branch_id
+
+                # Fetch related records for generating 'name'
+                department_id = vals.get('department_id')
+                area = self.env['res.territory'].sudo().search([('id', '=', int(area_id))], limit=1)
+                department = self.env['hr.department'].sudo().search([('id', '=', int(department_id))], limit=1)
+                branch = self.env['res.branch'].sudo().search([('id', '=', int(branch_id))], limit=1)
+
+            # Validate necessary data and generate 'name'
+            if area and department and branch:
+                department_code = department.department_code
+                branch_unit_id = branch.unit_id
+                tgl = fields.Date.today()
+                tahun = str(tgl.year)[2:]
+                bulan = str(tgl.month)
+                sequence_code = self.env['ir.sequence'].next_by_code('hr.overtime.planning')
+                vals['name'] = f"{tahun}/{bulan}/{branch_unit_id}/RA/{department_code}/{sequence_code}"
+                # res = super(HREmpOvertimeRequest,self).create(vals_list)
+
+        return super(HREmpOvertimeRequest, self).create(vals_list)
     
     def btn_approved(self):
         for rec in self:
