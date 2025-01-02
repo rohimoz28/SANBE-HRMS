@@ -116,5 +116,12 @@
                 </p>
             </field>
         </record>
+        <menuitem
+            id="menu_data_upload_attendance"
+            name="Data Absen"
+            sequence="10"
+            parent="sanbe_hr_tms.hr_menu_tms_processing"
+            action="action_data_upload_attendance"
+        />
     </data>
 </odoo>
