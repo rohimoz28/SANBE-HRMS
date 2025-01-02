@@ -172,7 +172,8 @@ begin
                                   tsttd.approved_by_ca,
                                   tsttd.is_edited,
                                   tsttd.date_in,
-                                  tsttd.date_out
+                                  tsttd.date_out,
+                                  tsttd.status
                   FROM temp_sb_tms_tmsentry_details tsttd
                            JOIN
                        temp_hr_tmsentry_summary thts ON tsttd.tmsentry_id = thts.id
@@ -192,7 +193,8 @@ begin
         approved_by_ca   = t.approved_by_ca,
         is_edited        = t.is_edited,
         date_in          = t.date_in,
-        date_out         = t.date_out
+        date_out         = t.date_out,
+        status           = t.status
     from temp t,
          hr_tmsentry_summary hts
     where sttd.employee_id = t.employee_id
