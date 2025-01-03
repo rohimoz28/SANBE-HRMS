@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
-                <field name="workingday" />
+                <!-- <field name="workingday" /> -->
             </xpath>
         </field>
     </record>
