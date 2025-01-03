@@ -1100,6 +1100,7 @@ begin
                                           0::int) AS time_out
                            FROM hr_tmsentry_summary hts
                                     JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
+									                  join hr_working_days hwd on sttd.workingday_id = hwd.id --tambahan
                                     JOIN hr_employee he ON hts.employee_id = he.id
                            WHERE /*hts.employee_id = 48051
                              AND*/ hts.periode_id = period
@@ -1107,7 +1108,9 @@ begin
                              AND he.branch_id = branch
                              and he.allowance_night_shift is true
                              and sttd.empgroup_id is not null
-                             and sttd.workingday_id is not null),
+                             and sttd.workingday_id is not null
+							               and hwd.type_hari = 'shift' --tambahan
+                             and hwd.code like '%2%'), --tambahan
          summary as (SELECT t.*,
                             sa.area_id      as area,
                             sad.code,
@@ -1125,7 +1128,7 @@ begin
                               JOIN tmsentry_data t ON sa.area_id = t.area_id
                      WHERE sa.area_id = l_area
                        AND sad.code = 'ans1'
-                       AND (t.time_in <= make_time(
+                       AND ((t.time_in <= make_time(
                              floor(sad.time_from)::int,
                              round((sad.time_from - floor(sad.time_from)) * 60)::int,
                              0::int)::time
@@ -1133,6 +1136,13 @@ begin
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
                                  0::int)::time OR time_out >= '21:00:00')
+                            OR (t.time_in <= make_time( --tambahan
+                                            floor(sad.time_from)::int, --tambahan
+                                            round((sad.time_from - floor(sad.time_from)) * 60)::int, --tambahan
+                                            0::int)::time --tambahan
+                                            and t.time_out > '00:00:00' --tambahan
+                                            and t.date_out > t.date_in) --tambahan
+                            )
                      ORDER BY t.details_date)
     update sb_tms_tmsentry_details s
     set night_shift = summary.night_shift
@@ -1254,6 +1264,7 @@ begin
                                           0::int) AS time_out
                            FROM hr_tmsentry_summary hts
                                     JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
+									                  join hr_working_days hwd on sttd.workingday_id = hwd.id --tambahan
                                     JOIN hr_employee he ON hts.employee_id = he.id
                            WHERE /*hts.employee_id = 48066
                              AND*/ hts.periode_id = period
@@ -1262,6 +1273,8 @@ begin
                              and he.allowance_night_shift is true
                              and sttd.empgroup_id is not null
                              and sttd.workingday_id is not null
+							               and hwd.type_hari = 'shift' --tambahan
+                             and hwd.code like '%3%' --tambahan
                              and sttd.date_in != sttd.date_out),
          summary as (SELECT t.*,
                             sa.area_id      as area,
