@@ -26,6 +26,7 @@
                 sequence="2"
                 parent="hr_menu_tms_root"
                 action="action_hr_tmsentry_summary"
+                groups="module_sub_category_tmsentry_summary_manager,module_sub_category_tmsentry_summary_supervisor"
         />
 
         <!-- <menuitem id="menu_hr_tms_entry_summary"
@@ -51,6 +52,7 @@
                 parent="sanbe_hr_tms.hr_menu_tms_administration"
                 sequence="10"
                 action="action_hr_employeegroup"
+                groups="module_sub_category_employee_group_manager,module_sub_category_employee_group_supervisor,module_sub_category_employee_group_staff"
         />
 
         <menuitem
@@ -59,6 +61,7 @@
                 sequence="20"
                 parent="sanbe_hr_tms.hr_menu_tms_administration"
                 action="action_hr_overtime_planning"
+                groups="module_sub_category_overtime_request_manager,module_sub_category_overtime_request_supervisor,module_sub_category_overtime_request_staff"
         />
 
         <menuitem
@@ -67,6 +70,7 @@
                 sequence="30"
                 parent="sanbe_hr_tms.hr_menu_tms_administration"
                 action="action_hr_permission_entry"
+                groups="module_sub_category_permission_manager,module_sub_category_permission_supervisor,module_sub_category_permission_staff"
         />
 
         <menuitem
@@ -75,6 +79,7 @@
                 sequence="50"
                 parent="sanbe_hr_tms.hr_menu_tms_administration"
                 action="action_sb_adjustment_requests"
+                groups="module_sub_category_adjusment_request_manager,module_sub_category_adjusment_request_supervisor"
         />
         <!-- END ADMINISTRATION -->
 
@@ -120,6 +125,7 @@
                 sequence="12"
                 parent="sanbe_hr_tms.hr_menu_tms_processing"
                 action="action_hr_tmsentry_sync"
+                groups="module_sub_category_upload_data_absen_manager,module_sub_category_upload_data_absen_supervisor"
         />
 
         <!-- END UPLOAD -->
@@ -139,6 +145,7 @@
                 sequence="10"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_incomplete_attendances"
+                groups="module_sub_category_data_absen_tidak_lengkap_manager,module_sub_category_data_absen_tidak_lengkap_supervisor"
         />
 
         <menuitem
@@ -147,6 +154,7 @@
                 sequence="12"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_attendance_corrections"
+                groups="module_sub_category_koreksi_absen_manager,module_sub_category_koreksi_absen_supervisor"
         />
 
         <menuitem
@@ -155,6 +163,7 @@
                 sequence="13"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_employee_attendance"
+                groups="module_sub_category_monitor_kehadiran_manager,module_sub_category_monitor_kehadiran_supervisor,module_sub_category_monitor_kehadiran_staff"
         />
 
         <menuitem
@@ -163,6 +172,7 @@
                 sequence="14"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_overtime_attendance"
+                groups="module_sub_category_request_vs_realization_manager,module_sub_category_request_vs_realization_supervisor"
         />
         <!-- END UPLOAD -->
 
@@ -188,6 +198,7 @@
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 sequence="20"
                 action="action_hr_workingdays"
+                groups="module_sub_category_working_day_manager,module_sub_category_working_day_supervisor"
         />
         <menuitem
                 id="hr_holidays_public_time_off_menu_configuration"
@@ -195,14 +206,14 @@
                 sequence="30"
                 action="sanbe_hr_tms.hr_opens_public_holiday"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
-                groups="sanbe_hr_tms.module_sub_category_calendar_day_manager"
+                groups="module_sub_category_calendar_day_manager,module_sub_category_calendar_day_supervisor"
         />
         <menuitem
                 id="hr_holidays_status_menu_configuration_ext"
                 action="hr_holidays.open_view_holiday_status"
                 name="Permission Code"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
-                groups="sanbe_hr_tms.module_sub_category_permission_code_manager"
+                groups="module_sub_category_permission_code_manager,module_sub_category_permission_code_supervisor"
                 sequence="40"
         />
         <menuitem id="hr_tms_overtime_setting_menu_configuration"
@@ -210,6 +221,7 @@
                   action="sanbe_hr_tms.action_hr_overtime_setting"
                   name="Overtime Setting"
                   sequence="50"
+                  groups="module_sub_category_overtime_setting_supervisor,module_sub_category_overtime_setting_manager"
         />
         <menuitem
                 id="menu_sb_allowances"
@@ -217,6 +229,7 @@
                 sequence="55"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 action="action_sb_allowances"
+                groups="module_sub_category_allowance_setting_manager,module_sub_category_allowance_setting_supervisor"
         />
 
         <!-- END SETTING -->
@@ -253,6 +266,7 @@
                 parent="hr_menu_tms_root"
                 sequence="7"
                 action="action_hr_openin_closing"
+                groups="group_processing_period_manager,group_processing_period_supervisor"
         />
         <!-- END PROCESSING AND PERIOD -->
 
