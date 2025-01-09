@@ -17,6 +17,7 @@ chari = {'0':6,'1':0,'2':1,'3':2,'4':3,'5':4,'6':5}
 class HREmpGroupSetting(models.Model):
     _name = "hr.empgroup"
     _description = 'HR Employee Group Setting'
+    _inherit = ['portal.mixin', 'product.catalog.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
 
     #Function For Filter Branch in Area
     @api.depends('area_id')
@@ -42,19 +43,19 @@ class HREmpGroupSetting(models.Model):
     # name = fields.Char('Code', copy=True,required=True)
     name = fields.Char(string='Code',default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
-    description = fields.Char('Description', copy=True)
+    description = fields.Char('Description', copy=True, tracking=True)
     #wdcode_ids = fields.Many2many('hr.working.days','wd_emp_rel',string='WD Code All', copy=True,compute='_isi_department_branch', store=False)
     #wdcode = fields.Many2one('hr.working.days',domain="[('id','in',wdcode_ids)]",string='WD Code', copy=True,index=True, required=True)
-    area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True)
-    branch_ids = fields.Many2many('res.branch', 'res_branch_emp_rel', string='AllBranch', copy=True, compute='_isi_semua_branch', store=False)
-    is_active = fields.Boolean('Active', copy=True)
-    is_inactive = fields.Boolean('In Active', copy=True)
+    area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True, tracking=True)
+    branch_ids = fields.Many2many('res.branch', 'res_branch_emp_rel', string='AllBranch', copy=True, compute='_isi_semua_branch', store=False, tracking=True)
+    is_active = fields.Boolean('Active', copy=True,tracking=True)
+    is_inactive = fields.Boolean('In Active', copy=True,tracking=True)
     islabelstate = fields.Char('Status', copy=True)
-    branch_id = fields.Many2one('res.branch',string='Bisnis Unit', copy=True,index=True,domain="[('id','in',branch_ids)]")
+    branch_id = fields.Many2one('res.branch',string='Bisnis Unit', copy=True,index=True,domain="[('id','in',branch_ids)]",tracking=True)
     area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True, required=True)
-    alldepartment = fields.Many2many('hr.department','hr_department_emp_set_rel', string='All Department', copy=True,compute='_isi_department_branch',store=False)
-    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]", copy=True,string='Sub Department')
-    state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], default='draft', copy=True)
+    alldepartment = fields.Many2many('hr.department','hr_department_emp_set_rel', string='All Department', copy=True,compute='_isi_department_branch',store=False, tracking=True)
+    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]", copy=True,string='Sub Department',tracking=True)
+    state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], default='draft', copy=True, tracking=True)
     #valid_from = fields.Date('Valid From', required=True, copy=True)
     #valid_to = fields.Date('To', required=True, copy=True)
     summary_details_id = fields.Many2one('sb.tms.tmsentry.details', string='details')
@@ -63,7 +64,7 @@ class HREmpGroupSetting(models.Model):
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True,
                                   ondelete='cascade', index=True)
     # employee_ids = fields.One2many('hr.employee', 'emp_group_id', string='employee')
-    empgroup_ids = fields.One2many('hr.empgroup.details','empgroup_id',auto_join=True,string='Employee Group Setting Details', copy=True)
+    empgroup_ids = fields.One2many('hr.empgroup.details','empgroup_id',auto_join=True,string='Employee Group Setting Details', copy=True,tracking=True)
     # periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
 
     @api.depends('value_id')
@@ -429,6 +430,7 @@ class ValueGroup(models.TransientModel):
 class HREmpGroupSettingDetails(models.Model):
     _name = "hr.empgroup.details"
     _description = 'HR Employee Group Setting Details'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     @api.depends('area_id')
     def _isi_semua_branch(self):
@@ -450,21 +452,21 @@ class HREmpGroupSettingDetails(models.Model):
             allwds = self.env['hr.working.days'].sudo().search([('area_id','=',allrecs.area_id.id),('available_for','in',allrecs.branch_id.ids),('is_active','=',True)])
             allrecs.wdcode_ids = [Command.set(allwds.ids)]
 
-    empgroup_id = fields.Many2one('hr.empgroup',string='Employee Group Setting ID', index=True)
-    empgroup_name = fields.Char(string='Empgroup Name', required=False)
-    branch_ids = fields.Many2many('res.branch', 'res_branch_emp_detail_rel', string='AllBranch', copy=True, compute='_isi_semua_branch', store=False)
-    branch_id = fields.Many2one('res.branch',string='Bisnis Unit', copy=True,index=True,domain="[('id','in',branch_ids)]")
-    area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True)
-    alldepartment = fields.Many2many('hr.department','hr_department_emp_detail_set_rel', string='All Department', copy=True,compute='_isi_department_branch',store=False)
-    department_id = fields.Many2one('hr.department',string='Sub Department',copy=True,index=True,domain="[('id','in',alldepartment)]")
-    wdcode_ids = fields.Many2many('hr.working.days','wd_emp_detail_rel',string='WD Code All', copy=True,compute='_isi_department_branch', store=False)
-    wdcode = fields.Many2one('hr.working.days',domain="[('id','in',wdcode_ids)]",string='WD Code', copy=True,index=True)
-    wdcode_name = fields.Char(string='WD Code Name', required=False)
-    employee_id = fields.Many2one('hr.employee',string='Employee Name',index=True,domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
-    nik = fields.Char('NIK')
-    job_id = fields.Many2one('hr.job',string='Job Position',index=True)
-    valid_from = fields.Date('Valid From', required=True, copy=True)
-    valid_to = fields.Date('To', required=True, copy=True)
+    empgroup_id = fields.Many2one('hr.empgroup',string='Employee Group Setting ID', index=True,tracking=True)
+    empgroup_name = fields.Char(string='Empgroup Name', required=False,tracking=True)
+    branch_ids = fields.Many2many('res.branch', 'res_branch_emp_detail_rel', string='AllBranch', copy=True, compute='_isi_semua_branch', store=False,tracking=True)
+    branch_id = fields.Many2one('res.branch',string='Bisnis Unit', copy=True,index=True,domain="[('id','in',branch_ids)]",tracking=True)
+    area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True,tracking=True)
+    alldepartment = fields.Many2many('hr.department','hr_department_emp_detail_set_rel', string='All Department', copy=True,compute='_isi_department_branch',store=False,tracking=True)
+    department_id = fields.Many2one('hr.department',string='Sub Department',copy=True,index=True,domain="[('id','in',alldepartment)]",tracking=True)
+    wdcode_ids = fields.Many2many('hr.working.days','wd_emp_detail_rel',string='WD Code All', copy=True,compute='_isi_department_branch', store=False,tracking=True)
+    wdcode = fields.Many2one('hr.working.days',domain="[('id','in',wdcode_ids)]",string='WD Code', copy=True,index=True,tracking=True)
+    wdcode_name = fields.Char(string='WD Code Name', required=False,tracking=True)
+    employee_id = fields.Many2one('hr.employee',string='Employee Name',index=True,domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]",tracking=True)
+    nik = fields.Char('NIK',tracking=True)
+    job_id = fields.Many2one('hr.job',string='Job Position',index=True,tracking=True)
+    valid_from = fields.Date('Valid From', required=True, copy=True,tracking=True)
+    valid_to = fields.Date('To', required=True, copy=True,tracking=True)
     emp_status = fields.Selection([('probation','Probation'),
                                    ('confirmed','Confirmed'),
                                    ('probation', 'Probation'),
@@ -472,9 +474,14 @@ class HREmpGroupSettingDetails(models.Model):
                                    ('resigned', 'Resigned'),
                                    ('retired', 'Retired'),
                                    ('terminated', 'Terminated'),
-                                   ],string='Employment Status',related='employee_id.emp_status',store=False)
+                                   ],string='Employment Status',related='employee_id.emp_status',store=False,tracking=True)
     #periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
-    state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], string='State',related='empgroup_id.state',store=True)
+    state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], string='State',related='empgroup_id.state',store=True,tracking=True)
+
+    def _message_log(self, body='', subject=False, message_type='notification', **kwargs):
+        print(body, subject, message_type, kwargs)
+        body = "Employee Name: %s, WD Code: %s %s" %(self.employee_id.name, self.wdcode.code, body)
+        self.empgroup_id._message_log(body=body, subject=subject, message_type=message_type, **kwargs)
 
     #Function For Autofill Employee data based on Employee_id
     def btn_clear(self):
