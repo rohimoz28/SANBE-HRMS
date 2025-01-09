@@ -9,6 +9,9 @@
             <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
                 <!-- <field name="workingday" /> -->
             </xpath>
+            <xpath expr="//field[@name='ptkp']" position="replace">
+                <field name="ptkp" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
         </field>
     </record>
 </odoo>
