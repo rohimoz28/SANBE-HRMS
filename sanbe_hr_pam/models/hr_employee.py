@@ -17,6 +17,7 @@ class HrEmployee(models.Model):
                                         ('K2', "K2"),
                                         ('K3', "K3"),],
                                     string="PTKP", default='TK0')
+    exp_sim_no = fields.Date('License Expiration Date')
 
     _sql_constraints = [
         # ('nik_uniq', 'check(1=1)', "The NIK  must be unique, this one is already assigned to another employee."),
