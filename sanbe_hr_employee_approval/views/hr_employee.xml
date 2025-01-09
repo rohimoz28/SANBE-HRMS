@@ -111,9 +111,9 @@
                 <xpath expr="//field[@name='join_date']" position="attributes">
                     <attribute name="readonly">state == 'approved'</attribute>
                 </xpath>
-                <!--                <xpath expr="//field[@name='emp_status']" position="attributes">-->
-                <!--                    <attribute name="readonly">state == 'approved'</attribute>-->
-                <!--                </xpath>-->
+                <xpath expr="//field[@name='emp_status']" position="replace">
+                    <field name="emp_status" readonly="emp_status not in ['probation','confirmed'] or state in ['approved']"/>
+                </xpath>
                 <xpath expr="//field[@name='employee_group1']" position="attributes">
                     <attribute name="readonly">state == 'approved'</attribute>
                 </xpath>
