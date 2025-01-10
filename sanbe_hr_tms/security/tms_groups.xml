@@ -36,6 +36,7 @@
 
         <record model="res.groups" id="module_sub_category_tmsentry_summary_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_tmsentry_summary"/>
         </record>
 
@@ -60,6 +61,7 @@
 
         <record model="res.groups" id="module_sub_category_employee_group_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_employee_group"/>
         </record>
 
@@ -84,6 +86,7 @@
 
         <record model="res.groups" id="module_sub_category_overtime_request_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_overtime_request"/>
         </record>
 
@@ -108,6 +111,7 @@
 
         <record model="res.groups" id="module_sub_category_permission_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_permission"/>
         </record>
 
@@ -132,6 +136,7 @@
 
         <record model="res.groups" id="module_sub_category_adjusment_request_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_adjusment_request"/>
         </record>
 
@@ -156,6 +161,7 @@
 
         <record model="res.groups" id="module_sub_category_upload_data_absen_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_upload_data_absen"/>
         </record>
 
@@ -180,6 +186,7 @@
 
         <record model="res.groups" id="module_sub_category_result_upload_data_absen_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_result_upload_data_absen"/>
         </record>
 
@@ -204,6 +211,7 @@
 
         <record model="res.groups" id="module_sub_category_data_absen_tidak_lengkap_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_data_absen_tidak_lengkap"/>
         </record>
 
@@ -228,6 +236,7 @@
 
         <record model="res.groups" id="module_sub_category_koreksi_absen_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_koreksi_absen"/>
         </record>
 
@@ -252,6 +261,7 @@
 
         <record model="res.groups" id="module_sub_category_monitor_kehadiran_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_monitor_kehadiran"/>
         </record>
 
@@ -276,6 +286,7 @@
 
         <record model="res.groups" id="module_sub_category_request_vs_realization_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_request_vs_realization"/>
         </record>
 
@@ -300,6 +311,7 @@
 
         <record model="res.groups" id="module_sub_category_working_day_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_working_day"/>
         </record>
 
@@ -324,6 +336,7 @@
 
         <record model="res.groups" id="module_sub_category_calendar_day_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_calendar_day"/>
         </record>
 
@@ -348,6 +361,7 @@
 
         <record model="res.groups" id="module_sub_category_permission_code_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_permission_code"/>
         </record>
 
@@ -372,6 +386,7 @@
 
         <record model="res.groups" id="module_sub_category_overtime_setting_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_overtime_setting"/>
         </record>
 
@@ -396,6 +411,7 @@
 
         <record model="res.groups" id="module_sub_category_allowance_setting_staff" >
             <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_allowance_setting"/>
         </record>
 
@@ -412,27 +428,28 @@
         </record>
 
         <!-- TMS Processing and Period -->
-        <record model="ir.module.category" id="module_sub_category_processing_period">
+        <record model="ir.module.category" id="group_processing_period">
             <field name="name">Processing and Period</field>
             <field name="parent_id" ref="sanbe_hr_tms.module_category_time_management_system"/>
             <field name="description">Access Right for menu Processing and Period under Processing Period</field>
         </record>
 
-        <record model="res.groups" id="module_sub_category_processing_period_staff" >
+        <record model="res.groups" id="group_processing_period_staff" >
             <field name="name">Staff</field>
-            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_processing_period"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+            <field name="category_id" ref="sanbe_hr_tms.group_processing_period"/>
         </record>
 
-        <record model="res.groups" id="module_sub_category_processing_period_supervisor" >
+        <record model="res.groups" id="group_processing_period_supervisor" >
             <field name="name">Supervisor</field>
-            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.module_sub_category_processing_period_staff'))]"/>
-            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_processing_period"/>
+            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.group_processing_period_staff'))]"/>
+            <field name="category_id" ref="sanbe_hr_tms.group_processing_period"/>
         </record>
 
-        <record model="res.groups" id="module_sub_category_processing_period_manager">
+        <record model="res.groups" id="group_processing_period_manager">
             <field name="name">Manager</field>
-            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.module_sub_category_processing_period_supervisor'))]"/>
-            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_processing_period"/>
+            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.group_processing_period_supervisor'))]"/>
+            <field name="category_id" ref="sanbe_hr_tms.group_processing_period"/>
         </record>
 
         <!-- END Time Management System -->
