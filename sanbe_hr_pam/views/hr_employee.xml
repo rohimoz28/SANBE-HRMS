@@ -12,6 +12,9 @@
             <xpath expr="//field[@name='ptkp']" position="replace">
                 <field name="ptkp" widget="radio" options="{'horizontal': true}"/>
             </xpath>
+            <xpath expr="//field[@name='no_sim']" position="after">
+                <field name="exp_sim_no"/>
+            </xpath>
         </field>
     </record>
 </odoo>
