@@ -1,59 +1,58 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_tmsentry_users,access.hr.tmsentry.users,model_hr_tmsentry_summary,sanbe_hr_tms.module_sub_category_tmsentry_summary_supervisor,1,1,1,1
+access_hr_tmsentry_users,access.hr.tmsentry.users,model_hr_tmsentry_summary,base.group_user,1,1,1,1
 
-access_hr_employeegroup_users,access.hr.employeegroup.users,model_hr_empgroup,sanbe_hr_tms.module_sub_category_employee_group_staff,1,1,1,1
-access_hr_employeegroup_details_users,access.hr.employeegroup.details.users,model_hr_empgroup_details,sanbe_hr_tms.module_sub_category_employee_group_staff,1,1,1,1
+access_hr_employeegroup_users,access.hr.employeegroup.users,model_hr_empgroup,base.group_user,1,1,1,1
+access_hr_employeegroup_details_users,access.hr.employeegroup.details.users,model_hr_empgroup_details,base.group_user,1,1,1,1
 
-access_hr_overtime_request_planning_users,access.hr.request.planning.users,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_staff,1,1,1,1
-access_hr_overtime_employees_users,access.hr.overtime.employees.users,model_hr_overtime_employees,sanbe_hr_tms.module_sub_category_overtime_request_staff,1,1,1,1
+access_hr_overtime_request_planning_users,access.hr.request.planning.users,model_hr_overtime_planning,base.group_user,1,1,1,1
+access_hr_overtime_employees_users,access.hr.overtime.employees.users,model_hr_overtime_employees,base.group_user,1,1,1,1
 
-access_hr_permission_entry_users,access.hr.permission.entry.users,model_hr_permission_entry,sanbe_hr_tms.module_sub_category_permission_staff,1,1,1,1
+access_hr_permission_entry_users,access.hr.permission.entry.users,model_hr_permission_entry,base.group_user,1,1,1,1
 
-access_sb_adjusment_requests,access.sb.adjusment.requests,model_sb_adjustment_requests,sanbe_hr_tms.module_sub_category_adjusment_request_supervisor,1,1,1,1
-access_sb_adjusment_request_details,access.sb.adjusment.request.details,model_sb_adjusment_request_details,sanbe_hr_tms.module_sub_category_adjusment_request_supervisor,1,1,1,1
+access_sb_adjusment_requests,access.sb.adjusment.requests,model_sb_adjustment_requests,base.group_user,1,1,1,1
+access_sb_adjusment_request_details,access.sb.adjusment.request.details,model_sb_adjusment_request_details,base.group_user,1,1,1,1
 
-access_hr_tms_processing_users,access.hr.tms.processing.users,model_hr_tms_processing,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_machine_setting_users,access.hr.machine.setting.users,model_hr_machine_setting,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_machine_details,access.hr.machine.details.users,model_hr_machine_details,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_data_dbf,access.data.dbf.users,model_data_dbf,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_data_dbf_checkinout,access.data.dbf.checkinout.users,model_data_dbf_checkinout,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_data_dbf_userinfo,access.data.dbf.userinfo.users,model_data_dbf_userinfo,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_tmsentry_premicode_users,access.hr.tmsentry.premicode.users,model_hr_tmsentry_premicode,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_tms_entry_users,access.hr.tms.entry.users,model_hr_tms_entry,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_sb_tms_tmsentry_details,access.sb.tms.tmsentry.details,model_sb_tms_tmsentry_details,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_tmsentry_sync_users,access.hr.tmsentry.sync.users,model_hr_tms_syncmachine,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
-access_hr_tms_entry_import_users,access.hr.tms.entry.import.users,model_hr_tmsimport_wiz,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,1
+access_hr_tms_processing_users,access.hr.tms.processing.users,model_hr_tms_processing,base.group_user,1,1,1,1
+access_hr_machine_setting_users,access.hr.machine.setting.users,model_hr_machine_setting,base.group_user,1,1,1,1
+access_hr_machine_details,access.hr.machine.details.users,model_hr_machine_details,base.group_user,1,1,1,1
+access_data_dbf,access.data.dbf.users,model_data_dbf,base.group_user,1,1,1,1
+access_data_dbf_checkinout,access.data.dbf.checkinout.users,model_data_dbf_checkinout,base.group_user,1,1,1,1
+access_data_dbf_userinfo,access.data.dbf.userinfo.users,model_data_dbf_userinfo,base.group_user,1,1,1,1
+access_hr_tmsentry_premicode_users,access.hr.tmsentry.premicode.users,model_hr_tmsentry_premicode,base.group_user,1,1,1,1
+access_hr_tms_entry_users,access.hr.tms.entry.users,model_hr_tms_entry,base.group_user,1,1,1,1
+access_sb_tms_tmsentry_details,access.sb.tms.tmsentry.details,model_sb_tms_tmsentry_details,base.group_user,1,1,1,1
+access_hr_tmsentry_sync_users,access.hr.tmsentry.sync.users,model_hr_tms_syncmachine,base.group_user,1,1,1,1
+access_hr_tms_entry_import_users,access.hr.tms.entry.import.users,model_hr_tmsimport_wiz,base.group_user,1,1,1,1
 
-access_data_upload_attendance,access.data.upload.attendance,model_data_upload_attendance,sanbe_hr_tms.module_sub_category_result_upload_data_absen_supervisor,1,1,1,1
+access_data_upload_attendance,access.data.upload.attendance,model_data_upload_attendance,base.group_user,1,1,1,1
 
-access_sb_incomplete_attendances,access.sb.incomplete.attendances,model_sb_incomplete_attendances,sanbe_hr_tms.module_sub_category_data_absen_tidak_lengkap_supervisor,1,1,1,1
-access_sb_incomplete_attendance_details,access.sb.incomplete.attendance.details,model_sb_incomplete_attendance_details,sanbe_hr_tms.module_sub_category_data_absen_tidak_lengkap_supervisor,1,1,1,1
+access_sb_incomplete_attendances,access.sb.incomplete.attendances,model_sb_incomplete_attendances,base.group_user,1,1,1,1
+access_sb_incomplete_attendance_details,access.sb.incomplete.attendance.details,model_sb_incomplete_attendance_details,base.group_user,1,1,1,1
 
-access_sb_attendance_corrections,access.sb.attendance.corrections,model_sb_attendance_corrections,sanbe_hr_tms.module_sub_category_koreksi_absen_supervisor,1,1,1,1
-access_sb_attendance_correction_details,access.sb.attendance.correction.details,model_sb_attendance_correction_details,sanbe_hr_tms.module_sub_category_koreksi_absen_supervisor,1,1,1,1
+access_sb_attendance_corrections,access.sb.attendance.corrections,model_sb_attendance_corrections,base.group_user,1,1,1,1
+access_sb_attendance_correction_details,access.sb.attendance.correction.details,model_sb_attendance_correction_details,base.group_user,1,1,1,1
 
-access_sb_employee_attendance,access.sb.employee.attendance,model_sb_employee_attendance,sanbe_hr_tms.module_sub_category_monitor_kehadiran_staff,1,1,1,1
+access_sb_employee_attendance,access.sb.employee.attendance,model_sb_employee_attendance,base.group_user,1,1,1,1
 
-access_sb_overtime_attendance,access.sb.overtime.attendance,model_sb_overtime_attendance,sanbe_hr_tms.module_sub_category_request_vs_realization_supervisor,1,1,1,1
+access_sb_overtime_attendance,access.sb.overtime.attendance,model_sb_overtime_attendance,base.group_user,1,1,1,1
 
-access_hr_workingday_users,access.hr.working.days.users,model_hr_working_days,sanbe_hr_tms.module_sub_category_working_day_manager,1,1,1,1
+access_hr_workingday_users,access.hr.working.days.users,model_hr_working_days,base.group_user,1,1,1,1
 
-access_hr_hr.overtime.setting,access.hr.overtime.setting,model_hr_overtime_setting,sanbe_hr_tms.module_sub_category_overtime_setting_manager,1,1,1,0
+access_hr_hr.overtime.setting,access.hr.overtime.setting,model_hr_overtime_setting,base.group_user,1,1,1,0
 
-access_sb_allowances,access.sb.allowances,model_sb_allowances,sanbe_hr_tms.module_sub_category_allowance_setting_manager,1,1,1,1
-access_sb_allowance_details,access.sb.allowance.details,model_sb_allowance_details,sanbe_hr_tms.module_sub_category_allowance_setting_manager,1,1,1,1
-access_hr_allowance_list_users,access.hr.allowance.list.users,model_hr_allowance_list,sanbe_hr_tms.module_sub_category_allowance_setting_manager,1,1,1,1
+access_sb_allowances,access.sb.allowances,model_sb_allowances,base.group_user,1,1,1,1
+access_sb_allowance_details,access.sb.allowance.details,model_sb_allowance_details,base.group_user,1,1,1,1
+access_hr_allowance_list_users,access.hr.allowance.list.users,model_hr_allowance_list,base.group_user,1,1,1,1
 
-access_hr_open_closing_periode_manager,access.hr.open.closing.periode.manager,model_hr_opening_closing,sanbe_hr_tms.module_sub_category_processing_period_manager,1,1,1,1
-access_hr_open_closing_periode_supervisor,access.hr.open.closing.periode.supervisor,model_hr_opening_closing,sanbe_hr_tms.module_sub_category_processing_period_supervisor,1,1,0,1
+access_hr_open_closing_periode,access.hr.open.closing.periode,model_hr_opening_closing,base.group_user,1,1,1,1
 
-access_hr_holidays_status_employee,hr_holidays.hr.leave.type,model_hr_leave_type,sanbe_hr_tms.module_sub_category_permission_code_manager,1,1,1,1
-hr_holidays.access_hr_holidays_status_manager,hr.holidays.status manager,model_hr_leave_type,sanbe_hr_tms.module_sub_category_permission_code_manager,1,1,1,1
-hr_holidays.access_mail_activity_type_holidays_manager,mail.activity.type.holidays.manager,mail.model_mail_activity_type,sanbe_hr_tms.module_sub_category_permission_code_manager,1,1,1,1
-hr_holidays.access_hr_leave_mandatory_day_manager,access_hr_holidays_mandatory_day_manager,hr_holidays.model_hr_leave_mandatory_day,sanbe_hr_tms.module_sub_category_permission_code_manager,1,1,1,1
+access_hr_holidays_status_employee,hr_holidays.hr.leave.type,model_hr_leave_type,base.group_user,1,1,1,1
+hr_holidays.access_hr_holidays_status_manager,hr.holidays.status manager,model_hr_leave_type,base.group_user,1,1,1,1
+hr_holidays.access_mail_activity_type_holidays_manager,mail.activity.type.holidays.manager,mail.model_mail_activity_type,base.group_user,1,1,1,1
+hr_holidays.access_hr_leave_mandatory_day_manager,access_hr_holidays_mandatory_day_manager,hr_holidays.model_hr_leave_mandatory_day,base.group_user,1,1,1,1
 
-hr_holidays.access_calendar_event_type_manager,calendar.event.type.manager,calendar.model_calendar_event_type,sanbe_hr_tms.module_sub_category_calendar_day_manager,1,1,1,1
-access_resource_calendar_leaves_user,resource.resource.calendar.leaves,model_resource_calendar_leaves,sanbe_hr_tms.module_sub_category_calendar_day_manager,1,1,1,1
+hr_holidays.access_calendar_event_type_manager,calendar.event.type.manager,calendar.model_calendar_event_type,base.group_user,1,1,1,1
+access_resource_calendar_leaves_user,resource.resource.calendar.leaves,model_resource_calendar_leaves,base.group_user,1,1,1,1
 
 
 access_hr_overtime_list_users,access.hr.overtime.list.users,model_hr_overtime_list,base.group_user,1,1,1,1
@@ -69,4 +68,4 @@ access_hr_tmsentry_recap_users,access.hr.tmsentry.recap.users,model_hr_tms_recap
 access_export_excel_tms,sanbe_hr_tms.export.excel.tms,model_export_excel_tms,base.group_user,1,1,1,1
 access_value_group,sanbe_hr_tms.value.group,model_value_group,base.group_user,1,1,1,1
 
-access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_absent,sanbe_hr_tms.module_sub_category_upload_data_absen_manager,1,1,1,1
+access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_absent,base.group_user,1,1,1,1
