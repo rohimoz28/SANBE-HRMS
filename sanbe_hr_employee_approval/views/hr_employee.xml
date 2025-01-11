@@ -112,7 +112,9 @@
                     <attribute name="readonly">state == 'approved'</attribute>
                 </xpath>
                 <xpath expr="//field[@name='emp_status']" position="replace">
-                    <field name="emp_status" readonly="state in ['approved']"/>
+                    <!-- <field name="emp_status" readonly="state in ['approved']"/> -->
+                    <field name="status" invisible="1"/>
+                    <field name="emp_status_id" readonly="state in ['approved']" domain="[('status', '=', job_status)]" string="Employment Status"/>
                 </xpath>
                 <xpath expr="//field[@name='employee_group1']" position="attributes">
                     <attribute name="readonly">state == 'approved'</attribute>
