@@ -141,9 +141,9 @@ class HrEmployeeMutation(models.Model):
         # for rec in self:
         #     if rec.service_end == False:
         #         raise UserError('Effective Date To Still Empty')
-
+        self._update_employee_status()
         self.env['hr.employment.log'].sudo().create({'employee_id': self.employee_id.id,
-                                                     'service_type': self.service_type,
+                                                     'service_type': self.service_type.upper(),
                                                      'start_date': self.service_start,
                                                      'end_date': self.service_end,
                                                      'bisnis_unit': self.service_bisnisunit.id,
@@ -207,6 +207,14 @@ class HrEmployeeMutation(models.Model):
 
     def pencarian_data(self):
         return
+    
+    def _update_employee_status(self):
+        for record in self:
+            if record.emp_status and record.employee_id:
+                record.service_employementstatus = self.emp_status
+                new_emp_status_id = self.env['hr.emp.status'].sudo().search([('emp_status', '=', self.emp_status),('status', '=', False)])
+                if new_emp_status_id:
+                    record.employee_id.sudo().write({'emp_status_id': new_emp_status_id.id})
 
     def write(self, vals):
         res = super(HrEmployeeMutation, self).write(vals)
