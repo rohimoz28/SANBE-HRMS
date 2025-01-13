@@ -25,6 +25,7 @@ class HrEmployementlog(models.Model):
     _order = 'create_date desc, id desc'
 
     employee_id = fields.Many2one('hr.employee', string='Employee ID', index=True)
+    contract_id = fields.Many2one(related="employee_id.contract_id", string="Contract", store=True)
     service_type = fields.Char('Service Type')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End date')

@@ -52,11 +52,11 @@
                             <field name="emp_nos_ids" invisible="1"/>
                         </h1>
                         <label for="resignation_type"/>
-                        <h1>
+                        <!-- <h1> -->
                             <field name="resignation_type" string="Type" required="1"
                                    groups="hr.group_hr_user"
                                    readonly="state in ['approved']"/>
-                        </h1>
+                        <!-- </h1> -->
                     </div>
                 </xpath>
                 <xpath expr="//field[@name='employee_id']" position="before">

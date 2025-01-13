@@ -45,6 +45,7 @@
                         <field name="nik"/>
                         <field name="job_title"/>
                         <field name="job_status"/>
+                        <field name="contract_id"/>
                         <field name="emp_status"/>
                         <field name="masa_jabatan"/>
                         <field name="employee_group1"/>
