@@ -6,8 +6,8 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
-                <!-- <field name="workingday" /> -->
+            <xpath expr="//field[@name='allowance_ot']" position="after">
+                <field name="allowance_ot_flat" />
             </xpath>
             <xpath expr="//field[@name='ptkp']" position="replace">
                 <field name="ptkp" widget="radio" options="{'horizontal': true}"/>
