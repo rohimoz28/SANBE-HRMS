@@ -54,9 +54,14 @@ class TmsentryDetails(models.Model):
         string='Employee Group',
         required=False
     )
-    employee_id = fields.Integer(
+    employee_id = fields.Many2one(
+        'hr.employee',
         string='Employee ID',
         required=False
+    )
+    emp_id = fields.Char(
+        'Employee ID', 
+        related='employee_id.employee_id'
     )
     approval_ot_from = fields.Float(string='Appv OT Fr')
     approval_ot_to = fields.Float(string='Appv OT To')

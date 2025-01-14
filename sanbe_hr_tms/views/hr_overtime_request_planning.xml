@@ -74,10 +74,14 @@
                                     <field name="nik" readonly="1" force_save="1"/>
                                     <field name="plann_date_from" widget="date"/>
                                     <field name="plann_date_to" widget="date"/>
-                                    <field name="ot_plann_from" widget="easy_timepicker"/>
+                                    <!-- <field name="ot_plann_from" widget="easy_timepicker"/>
                                     <field name="ot_plann_to" widget="easy_timepicker"/>
                                     <field name="approve_time_from" widget="easy_timepicker"/>
-                                    <field name="approve_time_to" widget="easy_timepicker"/>
+                                    <field name="approve_time_to" widget="easy_timepicker"/> -->
+                                    <field name="ot_plann_from" widget="float_time"/>
+                                    <field name="ot_plann_to" widget="float_time"/>
+                                    <field name="approve_time_from" widget="float_time"/>
+                                    <field name="approve_time_to" widget="float_time"/>
                                     <field name="machine"/>
                                     <field name="work_plann"/>
                                     <field name="output_plann"/>
