@@ -23,11 +23,11 @@
                                 <field name="status_attendee" readonly="1"/>
                                 <field name="delay" readonly="1"/>
                                 <field name="status" readonly="1"/>
-                                <field name="employee_id" readonly="1"/>
+                                <field name="emp_id" readonly="1"/>
                                 <field name="approval_ot_from" readonly="1" />
                                 <field name="approval_ot_to" readonly="1"/>
-                                <field name="edited_time_in" widget="easy_timepicker"/>
-                                <field name="edited_time_out" widget="easy_timepicker"/>
+                                <field name="edited_time_in" widget="float_time"/>
+                                <field name="edited_time_out" widget="float_time"/>
                                 <field name="remark_edit_attn" required="edited_time_in or edited_time_out"/>
                             </group>
                             <group>

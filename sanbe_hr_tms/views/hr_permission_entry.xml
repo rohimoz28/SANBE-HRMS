@@ -67,12 +67,12 @@
                             <group>
                                 <!-- permition time_from is mandatory -->
                                 <field name="permission_time_from" readonly="permission_status == 'done'"
-                                       widget="easy_timepicker" required="True"/>
+                                       widget="float_time" required="True"/>
                             </group>
                             <group>
                                 <!-- permition time_to is mandatory -->
                                 <field name="permission_time_to" readonly="permission_status == 'done'"
-                                       widget="easy_timepicker" required="True"/>
+                                       widget="float_time" required="True"/>
                             </group>
                             <group>
                                 <label for="time_days" readonly="permission_status == 'done'" />
