@@ -158,6 +158,27 @@ begin
       and hts.area_id = l_area
       and hts.branch_id = branch;
 
+    --update hr_tms_summary from temp
+    with temp_hts as (
+      select 
+      employee_id, 
+      area_id, 
+      branch_id, 
+      periode_id, 
+      completed_hrd, 
+      completed_ca, 
+      task_hrd, 
+      task_ca 
+    from temp_hr_tmsentry_summary
+    )
+    update hr_tmsentry_summary hts
+    set task_ca = th.task_ca, task_hrd = th.task_hrd, completed_ca = th.completed_ca, completed_hrd = th.completed_hrd
+    from temp_hts th
+    where hts.employee_id = th.employee_id
+    and hts.area_id = th.area_id
+    and hts.branch_id = th.branch_id
+    and hts.periode_id = th.periode_id;
+
     --update sb_tms_tmsentry_details edited
     WITH temp AS (SELECT distinct tsttd.employee_id,
                                   tsttd.workingday_id,
