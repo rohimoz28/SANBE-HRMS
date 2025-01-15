@@ -38,6 +38,15 @@ RESIGNATION_TYPES = [
     ('LOIL', 'Long Illness')
 ]
 
+EMP_STATUS = {
+    'RESG': 'resigned',
+    'TERM': 'terminated',
+    'EOCT': 'end_contract',
+    'RETR': 'retired',
+    'TFTG': 'transfer_to_group',
+    'PSAW': 'pass_away',
+    'LOIL': 'long_illness',
+}
 
 class HrResignation(models.Model):
     """
@@ -160,7 +169,23 @@ class HrResignation(models.Model):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code(
                 'hr.resignation') or _('New')
-        return super(HrResignation, self).create(vals)
+
+        record = super(HrResignation, self).create(vals)
+        # record._update_employee_status()
+
+        return record
+
+    # def write(self, vals):
+    #     res = super(HrResignation, self).write(vals)
+    #     self._update_employee_status()
+    #     return res
+
+    # def _update_employee_status(self):
+    #     for record in self:
+    #         if record.resignation_type and record.employee_id:
+    #             new_status = EMP_STATUS.get(record.resignation_type)
+    #             if new_status:
+    #                 record.employee_id.sudo().write({'emp_status': new_status})
 
     def action_confirm_resignation(self):
         """
@@ -214,6 +239,12 @@ class HrResignation(models.Model):
                approve the resignation.
         """
         for resignation in self:
+            
+            if resignation.resignation_type and resignation.employee_id:
+                new_status = EMP_STATUS.get(resignation.resignation_type)
+                if new_status:
+                    resignation.employee_id.sudo().write({'emp_status': new_status})
+
             if (resignation.expected_revealing_date and
                     resignation.resign_confirm_date):
                 employee_contract = self.env['hr.contract'].search(

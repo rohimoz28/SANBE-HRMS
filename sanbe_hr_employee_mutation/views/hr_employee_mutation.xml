@@ -106,6 +106,7 @@
                     <group name="emp_service_det" string="Mutation Details" readonly="state in ['approved']">
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
+                            <field name="emp_status" invisible="service_type != 'corr'" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employee_levels" readonly="state in ['approved']" 
                             invisible="service_type != 'prom'" required="service_type == 'prom'"
                             options="{'no_create': True,'no_quick_create': True}" />
