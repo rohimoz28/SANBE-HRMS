@@ -935,7 +935,9 @@ begin
         aot4 = last.ot4
     FROM last
     WHERE s.id = last.sttd_id
-      AND s.workingday_id IS NULL;
+      AND s.workingday_id IS NULL
+      AND s.approval_ot_from notnull
+      AND s.approval_ot_to notnull;
 
     -- time allowance - premi holiday
     WITH tmsentry_data AS (SELECT sttd.id         as sttd_id,
