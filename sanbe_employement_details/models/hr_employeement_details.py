@@ -80,5 +80,7 @@ class HREmployeeAssets(models.Model):
     asset_number = fields.Char('Asset/Benefit Number')
     uom = fields.Many2one('uom.uom',string='UOM')
     asset_qty = fields.Float('QTY')
+    received_date = fields.Date('Tanggal Diterima')
+    returned_date = fields.Date('Tanggal Dikembalikan')
     keterangan = fields.Text('Keterangan')
 

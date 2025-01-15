@@ -31,6 +31,7 @@ class HrEmployee(models.Model):
     exp_sim_no = fields.Date('License Expiration Date')
     emp_status_id = fields.Many2one('hr.emp.status', string='Employment Status', domain=lambda self: self._get_domain_emp_status_id())
     status = fields.Char(related='emp_status_id.status')
+    allowance_ot_flat = fields.Boolean('OT Flat')
 
     _sql_constraints = [
         # ('nik_uniq', 'check(1=1)', "The NIK  must be unique, this one is already assigned to another employee."),
