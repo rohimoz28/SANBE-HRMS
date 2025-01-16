@@ -17,6 +17,9 @@
                         <field name="country_id" nolabel='1' options="{'no_create': True, 'no_open': True}" invisible="not country_id"/>
                     </div>
             </xpath>
+            <xpath expr="//field[@name='workingday']" position="replace">
+                <field name="workingday" />
+            </xpath>
             <xpath expr="//field[@name='allowance_ot']" position="after">
                 <field name="allowance_ot_flat" />
             </xpath>
