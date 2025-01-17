@@ -1,8 +1,11 @@
 ## v0.0.1 (2025-01-16)
 
 ### Production Release
-- TMS : Perbaiki OT Holiday yang masuk tanpa approval 61b43c55
-- PAM : Field Workingday Menghilang 61b43c55
+
+### Bug fixes
+- TMS : Perbaiki OT Holiday yang masuk tanpa approval 7176a623
+- PAM : Field Workingday Menghilang 7176a623
+- PAM : Issue kurang library '_' 41045dd0
 
 ---
 
