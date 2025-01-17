@@ -94,7 +94,7 @@ class HrEmployeeMutation(models.Model):
     service_status = fields.Char('Mutation Status')
     service_nik = fields.Char('NIK')
     service_employee_id = fields.Char('Employee ID', default='New')
-    service_no_npwp = fields.Char('No NPWP')
+    service_no_npwp = fields.Char('NO NPWP')
     service_no_ktp = fields.Char('NO KTP')
     service_area = fields.Many2one('res.territory', string='Area')
     service_bisnisunit = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Units')
@@ -186,11 +186,15 @@ class HrEmployeeMutation(models.Model):
         if self.service_identification != self.employee_id.identification_id:
             self.employee_id.write({'identification_id': self.service_identification})
         if self.service_nik != self.employee_id.nik:
+            self.employee_id.write({'nik_lama': self.employee_id.nik})
             self.employee_id.write({'nik': self.service_nik})
+            self.nik_lama = self.employee_id.nik_lama
+            self.service_nik_lama = self.employee_id.nik_lama
+            self.nik = self.employee_id.nik
         if self.service_employee_levels != self.employee_id.employee_levels:
             self.employee_id.write({'employee_levels': self.service_employee_levels})
-        if self.service_nik_lama != self.employee_id.nik_lama:
-            self.employee_id.write({'nik_lama': self.service_nik_lama})
+        # if self.service_nik_lama != self.employee_id.nik_lama:
+        #     self.employee_id.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
         self.employee_id.write({'state': 'approved'})
 
@@ -251,6 +255,7 @@ class HrEmployeeMutation(models.Model):
             existing.employee_group1 = myemp.employee_group1
             existing.service_nik = str(str(myemp.nik).replace("('", '')).replace("')", "")
             existing.service_nik_lama = str(str(myemp.nik_lama).replace("('", '')).replace("')", "")
+            existing.nik_lama = existing.service_nik_lama
             existing.service_area = myemp.area.id
             existing.service_bisnisunit = myemp.department_id.branch_id.id or myemp.branch_id.id
             existing.service_departmentid = myemp.department_id.id
