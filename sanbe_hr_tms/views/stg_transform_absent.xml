@@ -19,6 +19,7 @@
                     <field name="logtime" />
                     <field name="terminal" />
                     <field name="status" />
+                    <field name="employee_id" readonly="1"/>
                 </search>
             </field>
         </record>
@@ -46,6 +47,7 @@
                                 <field name="in_out" readonly="1"/> -->
                                 <field name="terminal" readonly="1" />
                                 <field name="status" readonly="1"/>
+                                <field name="employee_id" readonly="1"/>
                             </group>
                         </group>
                     </sheet>
@@ -69,6 +71,7 @@
                     <field name="logtime" readonly="1" />
                     <field name="terminal" readonly="1" />
                     <field name="status" readonly="1"/>
+                    <field name="employee_id" readonly="1"/>
                 </tree>
             </field>
         </record>
