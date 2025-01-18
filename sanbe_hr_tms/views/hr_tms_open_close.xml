@@ -14,8 +14,8 @@
                         <button name="action_reproses" string="Proses"
                                 type="object" class="btn-primary"
                                 invisible="state_process != 'running'"/>
-                        <button name="action_closing_periode" invisible="isopen == False" string="Close" type="object"
-                                class="btn-primary" groups="sanbe_hr_tms.module_sub_category_processing_period_manager"/>
+                        <button name="action_closing_periode" invisible="state_process != 'running'" string="Close" type="object"
+                                class="btn-primary" groups="sanbe_hr_tms.group_processing_period_manager"/>
                         <button name="transfer_payroll" type="object" data-hotkey="shift+g"
                                 string="Transfer To Payroll" class="oe_highlight" invisible="state_process != 'done'"/>
                         <field name="state_process" widget="statusbar"
@@ -34,10 +34,12 @@
                         </group>
                         <group col="2">
                             <group>
-                                <field name="open_periode_from" readonly="isopen == True" string="Date From"/>
-                            </group>
-                            <group>
-                                <field name="open_periode_to" readonly="isopen == True" string="Date To"/>
+                                <group>
+                                    <field name="open_periode_from" readonly="isopen == True" string="Date From"/>
+                                </group>
+                                <group>
+                                    <field name="open_periode_to" readonly="isopen == True" string="Date To"/>
+                                </group>
                             </group>
                         </group>
                         <div class="oe_chatter">
