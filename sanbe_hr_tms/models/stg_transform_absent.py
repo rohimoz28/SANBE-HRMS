@@ -25,3 +25,4 @@ class StgTransformAbsent (models.Model):
     logtime = fields.Datetime('Log time')
     terminal = fields.Char('Terminal')
     status = fields.Char('Status')
+    employee_id = fields.Many2one('hr.employee', string='Employee')
