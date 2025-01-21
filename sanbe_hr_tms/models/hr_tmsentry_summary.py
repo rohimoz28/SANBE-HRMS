@@ -286,24 +286,51 @@ class HRTMSEntrySummary(models.Model):
         selected_records = self.env['hr.tmsentry.summary'].browse(selected_ids)
         attendance_records = self.env['sb.tms.tmsentry.details'].sudo().search([('tmsentry_id', 'in', selected_records.ids)])
         approval_type = self.env.context.get('approval_type')
+        not_approved_hrd = attendance_records.filtered(lambda r: not r.approved)
+        not_approved_ca = attendance_records.filtered(lambda r: not r.approved_by_ca)
+
         for record in self:
             if approval_type == 'hrd':
                 for rec in attendance_records:
                     rec.approved = True
-                record.hrd_approved = True
+                # record.hrd_approved = True
+                self._task_progress_approval()
                 self.env.cr.commit()
             elif approval_type == 'checker':
-                if not record.hrd_approved:
-                    raise ValidationError("HRD Not Approved")
+                # if not record.hrd_approved:
+                #     raise ValidationError("HRD Not Approved")
+                # not_approved_h = attendance_records.filtered(lambda r: not r.approved)
+                
+                # if not_approved_hrd:
+                #     raise ValidationError("HRD Not Approved")
+                
                 for rec in attendance_records:
                     rec.approved_by_ca = True
-                record.checker_approved = True
+                # record.checker_approved = True
+                self._task_progress_approval()
                 self.env.cr.commit()
             elif approval_type == 'approved':
-                if not record.hrd_approved or not record.checker_approved:
+                # if not record.hrd_approved or not record.checker_approved:
+                #     raise ValidationError("HRD & CA Not Approved")
+                # for rec in attendance_records:
+                #     if rec.approved is False:
+                #         raise ValidationError("HRD Not Approved")
+                #     if rec.approved_by_ca is False:
+                #         raise ValidationError("CA Not Approved")
+                #     if rec.approved is False and rec.approved_by_ca is False:
+                #         raise ValidationError("HRD & CA Not Approved")
+                    # rec.state = 'approved'
+                
+                # not_approved_h = attendance_records.filtered(lambda r: not r.approved)
+                # not_approved_ca = attendance_records.filtered(lambda r: not r.approved_by_ca)
+
+                if not_approved_hrd and not_approved_ca:
                     raise ValidationError("HRD & CA Not Approved")
-                for rec in attendance_records:
-                    rec.status = 'approved'
+                elif not_approved_hrd:
+                    raise ValidationError("HRD Not Approved")
+                elif not_approved_ca:
+                    raise ValidationError("CA Not Approved")
+                
                 record.state = 'approved'
                 self.env.cr.commit()
 
