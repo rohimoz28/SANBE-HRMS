@@ -167,7 +167,25 @@ class HRTMSEntrySummary(models.Model):
         string="Progress HRD Approved",
         compute="_compute_progress_approval_hrd"
     )
+    ot = fields.Boolean(compute='_compute_ot', store=True)
+    ot_flat = fields.Boolean(compute='_compute_ot_flat', store=True)
+    night_shift = fields.Boolean(compute='_compute_night_shift', store=True)
 
+    @api.depends('employee_id.allowance_ot')
+    def _compute_ot(self):
+        for record in self:
+            record.ot = record.employee_id.allowance_ot
+    
+    @api.depends('employee_id.allowance_ot_flat')
+    def _compute_ot_flat(self):
+        for record in self:
+            record.ot_flat = record.employee_id.allowance_ot_flat
+    
+    @api.depends('employee_id.allowance_night_shift')
+    def _compute_night_shift(self):
+        for record in self:
+            record.night_shift = record.employee_id.allowance_night_shift
+    
     def btn_export_to_excel(self):
         print('ieu')
 

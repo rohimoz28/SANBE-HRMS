@@ -339,6 +339,12 @@
                             context="{'group_by':'periode_id'}"/>
                     <filter string="Employee" name="employee_id"
                             context="{'group_by':'employee_id'}"/>
+                    <filter string="OT" name="ot"
+                            context="{'group_by':'ot'}"/>
+                    <filter string="OT Flat" name="ot_flat"
+                            context="{'group_by':'ot_flat'}"/>
+                    <filter string="Night Shift" name="night_shift"
+                            context="{'group_by':'night_shift'}"/>
                 </search>
             </field>
         </record>
