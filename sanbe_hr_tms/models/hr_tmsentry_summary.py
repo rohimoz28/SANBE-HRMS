@@ -167,6 +167,9 @@ class HRTMSEntrySummary(models.Model):
         string="Progress HRD Approved",
         compute="_compute_progress_approval_hrd"
     )
+    ot = fields.Boolean(related='employee_id.allowance_ot')
+    ot_flat = fields.Boolean(related='employee_id.allowance_ot_flat')
+    night_shift = fields.Boolean(related='employee_id.allowance_night_shift')
 
     def btn_export_to_excel(self):
         print('ieu')
