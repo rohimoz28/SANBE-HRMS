@@ -48,6 +48,7 @@
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <form string="HR Mutation Type">
+                <sheet>
                     <header>
                         <button string="Approve" name="button_approve" type="object"
                             class="oe_highlight"
@@ -89,18 +90,18 @@
                             <field name="employee_name" readonly="1" force_save="1" />
                             <field name="nik" readonly="1" force_save="1" />
                             <field name="nik_lama" readonly="1" force_save="1" />
+                            <field name="emp_status"
+                                readonly="service_type != 'conf'" force_save="1" />
                             <field name="employee_levels" readonly="1" force_save="1" />
-                            <field name="area" readonly="1" force_save="1" />
-                            <field name="bisnis_unit" readonly="1" force_save="1" />
-                            <field name="departmentid" readonly="1" force_save="1" />
+                            <field name="employee_group1" readonly="1" force_save="1" />
 
                         </group>
                         <group>
+                            <field name="area" readonly="1" force_save="1" />
+                            <field name="bisnis_unit" readonly="1" force_save="1" />
+                            <field name="departmentid" readonly="1" force_save="1" />
                             <field name="job_status" readonly="1" force_save="1" />
-                            <field name="emp_status"
-                                readonly="service_type != 'conf'" force_save="1" />
                             <field name="job_title" readonly="1" force_save="1" />
-                            <field name="employee_group1" readonly="1" force_save="1" />
                         </group>
                     </group>
                     <group name="emp_service_det" string="Mutation Details" readonly="state in ['approved']">
@@ -113,17 +114,21 @@
                             <!--field name="employee_level" readonly="state in ['approved']" invisible="service_type != 'prom'" required="service_type == 'prom'"/-->
                             <field name="service_identification" readonly="state in ['approved']"/>
                             <field name="service_nik" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_nik_lama" readonly="state in ['approved']" force_save="1" />
+                            <field name="service_nik_lama" readonly="1" force_save="1" />
                             <field name="service_no_npwp" readonly="state in ['approved']" force_save="1" />
                             <field name="service_no_ktp" readonly="state in ['approved']" force_save="1" />
+                            <field name="remarks" readonly="state in ['approved']" />
+                            <field name="image" readonly="state in ['approved']" widget="many2many_binary" />
+                        </group>
+                        <group>
+                            <field name="service_date" readonly="state in ['approved']" force_save="1" />
+                            <field name="service_start" readonly="state in ['approved']" required="True"/>
+                            <field name="service_end" readonly="state in ['approved']" />
+                            <!-- <field name="service_status" readonly="state in ['approved']" force_save="1" /> -->
                             <field name="service_area" readonly="state in ['approved']" force_save="1" />
                             <field name="branch_ids" invisible="1"/>
                             <field name="service_bisnisunit" readonly="state in ['approved']" force_save="1" />
                             <field name="service_departmentid" readonly="state in ['approved']" force_save="1" />
-                        </group>
-                        <group>
-                            <field name="service_date" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_status" readonly="state in ['approved']" force_save="1" />
                             <field name="service_jobstatus" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employementstatus" readonly="state in ['approved']" 
                                 invisible="job_status !='permanent'" force_save="1" />
@@ -135,13 +140,8 @@
                             <field name="contract_from" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
                             <field name="contract_to" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
                         </group>
-                        <group>
-                            <field name="service_start" readonly="state in ['approved']" required="True"/>
-                            <field name="service_end" readonly="state in ['approved']" />
-                            <field name="remarks" readonly="state in ['approved']" />
-                            <field name="image" readonly="state in ['approved']" widget="many2many_binary" />
-                        </group>
                     </group>
+                </sheet>
                 </form>
             </field>
         </record>
