@@ -19,35 +19,35 @@
                     <sheet>
                         <group string="TMS Entry - Summary" name="entry_summary">
                             <group>
-                                <field name="state" readonly="True"/>
-                                <field name="area_id"
-                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                       required="1" readonly="True"/>
-                                <field name="branch_ids" invisible="1"/>
-                                <field name="department_id"
-                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                       required="1" readonly="True"/>
-
-                            </group>
-                            <group>
-                                <field name="branch_id"
-                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                       required="1" readonly="True"/>
-                                <field name="job_id"
-                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                       required="1" readonly="True"/>
+                                <!-- <field name="state" readonly="True"/> -->
+                                <field name="nik" required="1" readonly="True"/>
+                                <field name="employee_id" required="1" readonly="True"/>
                                 <field name="periode_id"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        readonly="True"/>
                                 <field name="date_from" required="1" readonly="True" force_save="1"/>
                                 <field name="date_to" required="1" readonly="True" force_save="1"/>
+                                <field name="branch_ids" invisible="1"/>
+
+                            </group>
+                            <group>
+                                <field name="area_id"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       required="1" readonly="True"/>
+                                <field name="branch_id"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       required="1" readonly="True"/>
+                                <field name="department_id"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       required="1" readonly="True"/>
+                                <field name="job_id"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       required="1" readonly="True"/>
                                 <field name="employee_group1" required="1" readonly="True" force_save="1"/>
                             </group>
                         </group>
-                        <group>
-                            <field name="nik" required="1" readonly="True"/>
-                            <field name="employee_id" required="1" readonly="True"/>
-                        </group>
+                        <!-- <group>
+                        </group> -->
                         <notebook>
                             <page name="tmsentry_details_id" string="TMS Entry Details">
                                 <field name="tmsentry_details_ids">
