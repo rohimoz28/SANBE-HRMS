@@ -38,6 +38,7 @@
         'views/sb_attendance_correction_details.xml',
         'views/sb_allowances.xml',
         'views/sb_allowance_details.xml',
+        'views/sb_leave_allocation.xml',
         'views/stg_transform_absent.xml',
         'views/hr_public_holiday.xml',
         'views/hr_workingday_setting.xml',
@@ -60,20 +61,20 @@
         # 'views/hr_transfer_to_payroll.xml',
         'views/hr_employee.xml',
         'views/data_upload_attendance.xml',
-        'security/ir.model.access.csv',
         'security/tms_branch_security.xml',
         'security/tms_groups.xml',
         'views/hr_tms_overtime_Setting.xml',
         'views/tms_menu.xml',
         'data/tms_seq_number.xml',
         'db/calculate_tms.sql',
+        'db/function_calculate_leave_alloc.sql',
+        'db/procedure_leave_alloc.sql',
         'db/generate_empgroup.sql',
         'db/generate_ot_request.sql',
         'db/temporary_table.sql',
         'db/functions.sql',
-        
         'views/tmsentry_details.xml',
-        
+        'security/ir.model.access.csv',
     ],
     'assets': {
             'web.assets_backend': [
