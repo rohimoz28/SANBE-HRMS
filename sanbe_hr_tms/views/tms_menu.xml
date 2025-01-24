@@ -232,6 +232,13 @@
                 groups="module_sub_category_allowance_setting_manager,module_sub_category_allowance_setting_supervisor"
         />
 
+        <menuitem
+                id="menu_sb_leave_allocation"
+                name="Leave Allocation"
+                sequence="65"
+                parent="sanbe_hr_tms.hr_menu_tms_setting"
+                action="sanbe_hr_tms.action_sb_leave_allocation"
+        />
         <!-- END SETTING -->
 
         <!-- CONFIGURATION -->
