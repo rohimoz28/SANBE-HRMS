@@ -1,3 +1,30 @@
+
+
+## v2.0.0 (2025-01-25)
+
+### Production Release
+
+### Fix
+- b1e48e0 [TMS] Fix button Mass Approve HRD, Mass Approve CA dan Mass Approve TMS Summary
+- a854d8e [PAM] NIK ke replace dengan yang terbaru ketika ada transaksi di Mutation
+
+---
+
+### Main branch - Development 
+
+### New
+- eb62df9 [TMS] adding new feature leave allocation
+- 09326d1 [TMS] Menambahkan field OT, OT Flat, dan Night Shift pada header TMS Entry Summary
+
+### Improvement
+- d6758ec [TMS] Mengubah susunan field pada form Adjustment Request
+- 28f3d44 [TMS] Mengubah susunan field pada form Overtime Request
+- 88ec98f [TMS] Mengubah susunan field pada form TMS Entry Summary
+- 3d4f04e [TMS] Menukar posisi field Rel Time dengan App Time di OT Attendances
+
+### Fix
+-  6eb1f10 [TMS] Fix button Mass Approve HRD, Mass Approve CA dan Mass Approve TMS Summary
+
 ## v1.0.0 (2025-01-18)
 
 ### Production Release
