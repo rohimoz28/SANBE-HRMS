@@ -8,14 +8,14 @@
             <xpath expr="//notebook/page[@name='sb_adjument_request_id']" position="inside">
                 <field name="sb_adjument_request_ids">
                     <tree editable="bottom" widget='one2many_delete'>
-                        <field name="revision_component" string="Revision Component"/>
-                        <field name="start_qty" string="QTY Awal"/>
-                        <field name="start_uom" string="UOM Awal"/>
-                        <field name="end_qty" string="QTY Rev"/>
-                        <field name="end_uom" string="UOM Akhir"/>
-                        <field name="variance" string="Variance"/>
-                        <field name="uom" string="UOM"/>
-                        <field name="code" string="Code"/>
+                        <field name="revision_component" string="Revision Component" optional="show"/>
+                        <field name="start_qty" string="Initial Qty" optional="show"/>
+                        <field name="start_uom" string="Initial Uom" optional="show"/>
+                        <field name="end_qty" string="Qty Revision" optional="show"/>
+                        <field name="end_uom" string="Final Uom" optional="show"/>
+                        <field name="variance" string="Variance" optional="show"/>
+                        <field name="uom" string="Uom" optional="show"/>
+                        <field name="code" string="Code" optional="show"/>
                     </tree>
                 </field>
             </xpath>
