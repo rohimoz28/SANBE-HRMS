@@ -44,6 +44,9 @@
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        required="1" readonly="True"/>
                                 <field name="employee_group1" required="1" readonly="True" force_save="1"/>
+                                <field name="ot" readonly="True" string="OT"/>
+                                <field name="ot_flat" readonly="True" string="OT 2"/>
+                                <field name="night_shift" readonly="True" string="Night Shift"/>
                             </group>
                         </group>
                         <!-- <group>
