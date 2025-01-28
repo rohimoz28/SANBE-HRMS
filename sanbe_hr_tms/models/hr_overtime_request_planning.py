@@ -76,6 +76,10 @@ class HREmpOvertimeRequest(models.Model):
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
+    company_id = fields.Many2one('res.company', string="Company Name", index=True)
+    request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
+    count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
+
 
     @api.onchange('periode_id')
     def _onchange_periode_id(self):
@@ -206,6 +210,19 @@ class HREmpOvertimeRequest(models.Model):
     def btn_backdraft(self):
         for rec in self:
             rec.state = 'draft'
+
+    def btn_print_pdf(self):
+        return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
+
+    
+    def get_dynamic_numbers(self):
+        """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
+        numbering = {}
+        counter = 1
+        for record in self:
+            numbering[record.id] = list(range(counter, counter + len(record.hr_ot_planning_ids))) #perbaikan disini
+            counter += len(record.hr_ot_planning_ids)
+        return numbering        
             
     def action_search_employee(self):
         #if self.department_id:
@@ -238,6 +255,19 @@ class HREmpOvertimeRequest(models.Model):
             _logger.error("Error calling stored procedure: %s", str(e))
             raise UserError("Error executing the function: %s" % str(e))
 
+    @api.depends('request_date')
+    def _compute_req_day_name(self):
+        for record in self:
+            if record.request_date:
+                record.request_day_name = record.request_date.strftime('%A')
+            else:
+                record.request_day_name = False
+
+    @api.depends('hr_ot_planning_ids')
+    def _compute_record_employees(self):
+        for record in self:
+            record.count_record_employees = len(record.hr_ot_planning_ids)   
+            
     
 class HREmpOvertimeRequestEmployee(models.Model):
     _name = "hr.overtime.employees"

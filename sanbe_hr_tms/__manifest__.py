@@ -49,6 +49,7 @@
         'views/hr_tms_sync_machine.xml',
         'views/hr_tms_processing.xml',
         'views/hr_overtime_request_planning.xml',
+        'report/hr_overtime_request_report_pdf.xml',
         'views/tms_entry.xml',
         'views/hr_tms_open_close.xml',
         'views/hr_tms_machine_setting.xml',
