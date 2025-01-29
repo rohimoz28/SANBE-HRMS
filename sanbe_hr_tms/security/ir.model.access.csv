@@ -66,6 +66,7 @@ access_hr_employeelist_users,access.hr.employeelist.users,model_hr_employeelist_
 access_hr_employeelist_details_users,access.hr.employeelist.details.users,model_hr_employeelist_schedule_details,base.group_user,1,1,1,1
 access_hr_tmsentry_recap_users,access.hr.tmsentry.recap.users,model_hr_tms_recap,base.group_user,1,1,1,1
 access_export_excel_tms,sanbe_hr_tms.export.excel.tms,model_export_excel_tms,base.group_user,1,1,1,1
+access_export_excel_ot_attendance,sanbe_hr_tms.export.excel.ot.attendance,model_export_excel_ot_attendance,base.group_user,1,1,1,1
 access_value_group,sanbe_hr_tms.value.group,model_value_group,base.group_user,1,1,1,1
 
 access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_absent,base.group_user,1,1,1,1

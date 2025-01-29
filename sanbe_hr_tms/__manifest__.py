@@ -55,7 +55,10 @@
         'views/hr_tms_machine_setting.xml',
         'report/report_kehadiran_templates.xml',
         'report/report_kehadiran_html.xml',
+        'report/report_ot_attendance_html.xml',
+        'report/report_ot_attendance_excel.xml',
         'wizards/export_excel_tms.xml',
+        'wizards/export_excel_ot_attendance.xml',
         'wizards/cari_employee_department.xml',
         'wizards/hr_tmsimport_data_entry.xml',
         # 'wizards/hr_list_employee_scheduled.xml',
@@ -81,7 +84,9 @@
             'web.assets_backend': [
                 'hr_holidays/static/src/**/*',
                 'sanbe_hr_tms/static/src/xml/export_button.xml',
+                'sanbe_hr_tms/static/src/xml/export_button_ot_attendance.xml',
                 'sanbe_hr_tms/static/src/js/export_button.js',
+                'sanbe_hr_tms/static/src/js/export_button_ot_attendance.js',
                 'sanbe_hr_tms/static/src/js/report_esm.js',
                 'sanbe_hr_tms/static/src/js/report_action.js'
                 
