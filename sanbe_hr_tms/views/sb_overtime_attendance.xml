@@ -24,6 +24,18 @@
             </field>
         </record>
 
+         <record id="sb_overtime_attendance_tree_ext" model="ir.ui.view">
+            <field name="name">sb.overtime.attendance.tree.ext</field>
+            <field name="model">sb.overtime.attendance</field>
+            <field name="inherit_id" ref="sanbe_hr_tms.sb_overtime_attendance_tree_view"/>
+            <field name="mode">extension</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                        <attribute name="js_class">owl_list_controller_ot_attendance</attribute>
+                    </xpath>
+            </field>
+        </record>
+
         <record id="sb_overtime_attendance_view_search" model="ir.ui.view">
             <field name="name">sb.overtime.attendance.view.search</field>
             <field name="model">sb.overtime.attendance</field>
