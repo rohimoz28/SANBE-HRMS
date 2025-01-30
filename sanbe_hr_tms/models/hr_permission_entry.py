@@ -42,10 +42,10 @@ class HRPermissionEntry(models.Model):
             allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
             allrecs.alldepartment = [Command.set(allbranch.ids)]
 
-    area_id = fields.Many2one('res.territory', string='Area ID', index=True)
+    area_id = fields.Many2one('res.territory', string='Area', index=True)
     branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
     alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
-    branch_id = fields.Many2one('res.branch',string='Bussines Unit',domain="[('id','in',branch_ids)]",tracking=True,)
+    branch_id = fields.Many2one('res.branch',string='Business Unit',domain="[('id','in',branch_ids)]",tracking=True,)
     department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
     employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]",string='Employee Name', index=True,tracking=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
@@ -64,7 +64,7 @@ class HRPermissionEntry(models.Model):
     # time_days = fields.Integer(string='Time',compute='_get_days_duration',store=False)
     time_days = fields.Float(string='Time') # re-create to accomodate table sb_leave_allocation
     time_hour = fields.Float(string='Hours',compute='_total_jam_ijin',store=False)
-    handled_temp_to = fields.Many2one('hr.employee',string='Handled Temp To')
+    handled_temp_to = fields.Many2one('hr.employee',string='Handled By')
     back_to_office = fields.Date(string='Back To Office')
     back_tooffice_time = fields.Float(string='Time')
     remarks = fields.Text(string='Remarks')
@@ -96,7 +96,7 @@ class HRPermissionEntry(models.Model):
         # ]""",
         tracking=True)
     nik = fields.Char(related='employee_id.nik')
-    periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
+    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
 
     @api.depends('permission_date_from','permission_date_To')
     def _get_days_duration(self):
