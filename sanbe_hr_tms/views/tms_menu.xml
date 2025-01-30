@@ -66,7 +66,7 @@
 
         <menuitem
                 id="menu_hr_permission_entry"
-                name="Permission"
+                name="Permission Entry"
                 sequence="30"
                 parent="sanbe_hr_tms.hr_menu_tms_administration"
                 action="action_hr_permission_entry"
