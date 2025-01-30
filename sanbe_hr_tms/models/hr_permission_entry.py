@@ -1,10 +1,4 @@
 # -*- coding : utf-8 -*-
-#################################################################################
-# Author    => Albertus Restiyanto Pramayudha
-# email     => xabre0010@gmail.com
-# linkedin  => https://www.linkedin.com/in/albertus-restiyanto-pramayudha-470261a8/
-# youtube   => https://www.youtube.com/channel/UCCtgLDIfqehJ1R8cohMeTXA
-#################################################################################
 
 from odoo import fields, models, api, _, Command
 from odoo.exceptions import ValidationError,UserError
@@ -13,11 +7,6 @@ from pytz import timezone, UTC
 from datetime import datetime, timedelta, time
 from odoo.tools.misc import format_date
 
-TMS_PERMITION_ENTRY_STATE = [
-    ('draft', 'Draft'),
-    ('approved', "Approved"),
-    ('done','Close'),
-]
 
 class HRPermissionEntry(models.Model):
     _name = "hr.permission.entry"
@@ -25,7 +14,6 @@ class HRPermissionEntry(models.Model):
     _description = 'HR Permission Entry'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
 
-    #Function FOr Filtter Branch Based On Area ID
     @api.depends('area_id')
     def _isi_semua_branch(self):
         for allrecs in self:
@@ -35,6 +23,7 @@ class HRPermissionEntry(models.Model):
                 databranch.append(mybranch.id)
             allbranch = self.env['res.branch'].sudo().search([('id','in', databranch)])
             allrecs.branch_ids =[Command.set(allbranch.ids)]
+
     @api.depends('area_id', 'branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
@@ -44,33 +33,31 @@ class HRPermissionEntry(models.Model):
 
     area_id = fields.Many2one('res.territory', string='Area', index=True)
     branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
-    alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
-    branch_id = fields.Many2one('res.branch',string='Business Unit',domain="[('id','in',branch_ids)]",tracking=True,)
-    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
-    employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]",string='Employee Name', index=True,tracking=True)
+    alldepartment = fields.Many2many('hr.department', 'hr_employeelist_schedule_rel', string='All Department', compute='_isi_department_branch', store=False)
+    branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True,)
+    department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
+    employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]", string='Employee Name', index=True, tracking=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
-    #permission_code = fields.Char(string='Permission Code')
-    permission_date_from = fields.Date(string='Permision From')
-    permission_date_To = fields.Date(string='Permision To')
-    permission_status =  fields.Selection(
-        selection=TMS_PERMITION_ENTRY_STATE,
-        string="Status",
-        readonly=True, copy=False, index=True,
-        tracking=3,
-        default='draft')
+    permission_date_from = fields.Date('Permission From')
+    permission_date_To = fields.Date('Permission To')
+    permission_status = fields.Selection(selection=[('draft', 'Draft'),
+                                                    ('approved', "Approved"),
+                                                    ('close','Close'),
+                                                    ('cancel','Cancel by System')],
+                                        string="Status", readonly=True, copy=False,
+                                        index=True, tracking=3, default='draft')
 
-    permission_time_from = fields.Float(string='Time From')
-    permission_time_to = fields.Float(string='Time To')
-    # time_days = fields.Integer(string='Time',compute='_get_days_duration',store=False)
-    time_days = fields.Float(string='Time') # re-create to accomodate table sb_leave_allocation
-    time_hour = fields.Float(string='Hours',compute='_total_jam_ijin',store=False)
-    handled_temp_to = fields.Many2one('hr.employee',string='Handled By')
-    back_to_office = fields.Date(string='Back To Office')
-    back_tooffice_time = fields.Float(string='Time')
-    remarks = fields.Text(string='Remarks')
-    doc_number = fields.Char(string='Ref Doc Number')
-    trans_number = fields.Char(string='Transaction Number' ,default=lambda self: _('New'),
-       copy=False, readonly=True, tracking=True, requirement=True)
+    permission_time_from = fields.Float('Time From')
+    permission_time_to = fields.Float('Time To')
+    time_days = fields.Float('Time') # re-create to accomodate table sb_leave_allocation
+    time_hour = fields.Float('Hours',compute='_total_jam_ijin',store=False)
+    handled_temp_to = fields.Many2one('hr.employee', string='Handled By')
+    back_to_office = fields.Date('Back To Office')
+    back_tooffice_time = fields.Float('Time')
+    remarks = fields.Text('Remarks')
+    doc_number = fields.Char('Ref Doc Number')
+    trans_number = fields.Char('Transaction Number', default=lambda self: _('New'),
+                               copy=False, readonly=True, tracking=True, requirement=True)
     approve1_by = fields.Many2one('hr.employee', string='Approved 1 By')
     approve1_job_title = fields.Many2one('hr.job', string='Job Title')
     approve2_by = fields.Many2one('hr.employee', string='Approved 2 By')
@@ -78,23 +65,14 @@ class HRPermissionEntry(models.Model):
     approve3_by = fields.Many2one('hr.employee', string='Approved 3 By')
     approve3_job_title = fields.Many2one('hr.job', string='Job Title')
     is_holiday = fields.Boolean('Is Holiday', default=False)
-    leave_id = fields.Many2one('hr.leave',string='Leaves ID',index=True)
+    leave_id = fields.Many2one('hr.leave', string='Leaves ID',index=True)
     employee_company_id = fields.Many2one(related='employee_id.company_id', string="Employee Company", store=True)
-    is_approved = fields.Boolean(default=False,string='is Approved')
-    approved1 = fields.Boolean(default=False,string='Approved1')
-    approved2 = fields.Boolean(default=False,string='Approved2')
-    approved3 = fields.Boolean(default=False,string='Approved3')
-    holiday_status_id = fields.Many2one(
-        "hr.leave.type",
-        store=True, string="Permission Code",
-        required=True, readonly=False,
-        # domain="""[
-        #     ('company_id', 'in', [employee_company_id, False]),
-        #     '|',
-        #         ('requires_allocation', '=', 'no'),
-        #         ('has_valid_allocation', '=', True),
-        # ]""",
-        tracking=True)
+    is_approved = fields.Boolean(default=False, string='is Approved')
+    approved1 = fields.Boolean(default=False, string='Approved1')
+    approved2 = fields.Boolean(default=False, string='Approved2')
+    approved3 = fields.Boolean(default=False, string='Approved3')
+    holiday_status_id = fields.Many2one("hr.leave.type", store=True, string="Permission Code",
+                                        required=True, readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
 
@@ -114,32 +92,12 @@ class HRPermissionEntry(models.Model):
     @api.depends('permission_time_from','permission_time_to')
     def _total_jam_ijin(self):
         for allrec in self:
-            #We only fill hour if there is exist time_in and time_out
             if allrec.permission_time_from and allrec.permission_time_to:
-                #count hour from time_in and time_out
-                #timein1 = str(allrec.permission_time_from).split(':')[0]
-                #timein2 = str(allrec.permission_time_from).split(':')[1]
-                #timein3 =str(allrec.permission_time_from).split(':')[2]
-                #timeins = time(int(timein1),int(timein2),int(timein3))
-                #timeout1 = str(allrec.permission_time_to).split(':')[0]
-                #timeout2 = str(allrec.permission_time_to).split(':')[1]
-                #timeout3 =str(allrec.permission_time_to).split(':')[2]
-                #timeouts = time(int(timeout1),int(timeout2),int(timeout3))
-                #timesins = datetime.strptime(str(timeins), '%H:%M:%S')
-                #timesouts = datetime.strptime(str(timeouts), '%H:%M:%S')
                 mytime = allrec.permission_time_to - allrec.permission_time_from
                 allrec.time_hour = mytime
-                #if str(mytime).find('day') != -1:
-                #    allrec.time_hour = int(str(str(mytime).split(":")[0]).split(',')[1])
-                #else:
-                #    allrec.time_hour = int(str(mytime).split(':')[0])
-
             else:
-                #if no time_in and time_out then fill it with 0
                 allrec.time_hour = 0
 
-
-    #Function FOr AutoFill EMployee based On employee_id
     @api.onchange('employee_id')
     def isi_job_post(self):
         for recs in self:
@@ -156,7 +114,6 @@ class HRPermissionEntry(models.Model):
             if not leave_alloc or leave_alloc.leave_remaining < time_days:
                 raise ValidationError('Employee Has No Leave Allocation.\nPlease choose Leave Type: Unpaid Leave.')
 
-    # Function For Create Data
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -241,28 +198,6 @@ class HRPermissionEntry(models.Model):
     def btn_close(self):
         for rec in self:
             rec.permission_status = 'done'
-            
-    #@api.onchange('ot1_approve')
-    #def change_status1(self):
-    #        for allrec in self:
-    #            if not allrec.ot1_approve:
-    #                return
-    #            allrec.permission_status = 'approved1'
-#
-    #@api.onchange('ot2_approve')
-    #def change_status2(self):
-    #        for allrec in self:
-    #            if not allrec.ot2_approve:
-    #                return
-    #            allrec.permission_status = 'approved2'
-#
-#
-    #@api.onchange('ot3_approve')
-    #def change_status3(self):
-    #    for allrec in self:
-    #        if not allrec.ot3_approve:
-    #            return
-    #        allrec.permission_status = 'approved3'
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
@@ -288,7 +223,6 @@ class HolidaysRequest(models.Model):
 
     permition_id = fields.Many2one('hr.permission.entry',string='Permission ID', index=True)
     is_permition = fields.Boolean('Is From Permition', default=False)
-
 
     #Function to create data permition
     @api.model_create_multi
