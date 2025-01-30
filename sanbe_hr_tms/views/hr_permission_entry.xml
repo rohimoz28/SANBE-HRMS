@@ -68,9 +68,9 @@
                             </group>
                             <group>
                                 <field name="is_approved" invisible="1"/>
-                                <field name="approve1_job_title" readonly="approved1==True or permission_status != 'draft'" />
-                                <field name="approve2_job_title" readonly="approved2==True or permission_status != 'draft'"/>
-                                <field name="approve3_job_title" readonly="approved3==True or permission_status != 'draft'"/>
+                                <field name="approve1_job_title" readonly="approved1==True or permission_status == 'done'" />
+                                <field name="approve2_job_title" readonly="approved2==True or permission_status == 'done'"/>
+                                <field name="approve3_job_title" readonly="approved3==True or permission_status == 'done'"/>
                             </group>
                         </group>
                     </sheet>
