@@ -83,4 +83,6 @@ class HREmployeeAssets(models.Model):
     received_date = fields.Date('Tanggal Diterima')
     returned_date = fields.Date('Tanggal Dikembalikan')
     keterangan = fields.Text('Keterangan')
-
+    brand = fields.Char(string = 'Merek / Model')
+    serial_number = fields.Char(string = 'Serial Number')
+    no_ref = fields.Char(string = 'No Ref (No TTU)')

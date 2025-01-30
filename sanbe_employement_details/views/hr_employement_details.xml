@@ -82,9 +82,12 @@
                                          <field name="employee_id" column_invisible="True"/>
                                         <field name="asset_name"/>
                                         <field name="asset_number"/>
-                                        <field name="uom"/>
+                                        <field name="brand"/>
+                                        <field name="serial_number"/>
                                         <field name="asset_qty"/>
+                                        <field name="uom"/>
                                         <field name="received_date"/>
+                                        <field name="no_ref"/>
                                         <field name="returned_date"/>
                                         <field name="keterangan"/>
                                      </tree>
