@@ -28,7 +28,7 @@
                             <field name="area_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                    required="1"
-                                   readonly="1"  />
+                                   readonly="state == 'approved' or state == 'done'"  />
                             <field name="branch_ids" invisible="1"/>
                             <field name="alldepartment" invisible="1"/>
                             <!-- <field name="branch_id"
@@ -36,7 +36,7 @@
                                    readonly="state == 'approved' or state == 'done'" /> -->
                             <field name="branch_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="1" />
+                                   readonly="state == 'approved' or state == 'done'" />
                             <field name="department_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                    readonly="state == 'approved' or state == 'done'"/>
