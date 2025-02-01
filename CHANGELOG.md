@@ -1,3 +1,30 @@
+## v3.0.0 (2025-02-01)
+
+### Production Release
+
+### New
+- f735197 TMS : Report Overtime Attendances (Request vs Realization)
+- 2bf0f6c PAM : Menambahkan fields employment details di personal admin
+- b9a517e TMS : Report PDF dan Excel Overtime Request 2
+- 8e9538e TMS : Mengubah susunan field pada form TMS Entry Summary
+- 5c4a113 TMS : Menukar posisi field Rel Time dengan App Time di OT Attendances
+- 3c914b3 TMS : Menambahkan field OT, OT Flat, dan Night Shift pada header TMS Entry Summary
+
+### Improvement
+- 11113c5 TMS : Mengubah susunan field pada form Permission Entry
+- 8f6138f TMS : Mengubah susunan field pada form Overtime Request
+- d070a11 TMS : Mengubah susunan field pada form Adjustment Request
+
+### Fix
+- 05ae2aa TMS : Fix field Sub Department yang terfilter karena Area & BU readonly di Overtime Request
+
+---
+### Main branch - Development 
+
+### Improvement
+- 23576d6 PAM: Link tabel Employment Details dengan tabel Product
+- 1b966ec PAM : Menambah field Employment Status untuk Mutasi dengan Service Type ACTV
+- 3b9c27c TMS: Menambah State Cancel by System di form Permission Entry
 
 
 ## v2.0.0 (2025-01-25)
