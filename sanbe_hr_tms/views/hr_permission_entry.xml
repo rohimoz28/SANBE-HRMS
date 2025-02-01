@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Permission">
                     <sheet>
+<<<<<<< HEAD
                         <header>
                             <button name="btn_approve" type="object" data-hotkey="shift+g" string="Approved" class="oe_highlight" invisible="permission_status != 'draft'"/>
                             <button name="btn_draft" type="object" data-hotkey="shift+g" string="Draft" class="oe_highlight" invisible="permission_status != 'approved'"/>
@@ -36,6 +37,61 @@
                                 <field name="permission_time_from" readonly="permission_status != 'draft'" widget="float_time" required="True"/>
                                 <field name="permission_time_to" readonly="permission_status != 'draft'" widget="float_time" required="True"/>
                                 <label for="time_days" readonly="permission_status != 'draft'" />
+=======
+                    <header>
+                        <button name="btn_approve" type="object" data-hotkey="shift+g"
+                           string="Approved" class="oe_highlight" invisible="permission_status != 'draft'"/>
+                        <!-- <button name="btn_close" type="object" data-hotkey="shift+g"
+                           string="Close" class="oe_highlight" invisible="permission_status != 'approved'"/> -->
+                        <button name="btn_draft" type="object" data-hotkey="shift+g"
+                           string="Draft" class="oe_highlight" invisible="permission_status != 'approved'"/>
+                        <field name="permission_status" widget="statusbar" statusbar_visible="draft,approved,done" force_save="1"/>
+                    </header>
+                        <group string="PERMISSION ENTRY" name="permission_entry">
+                            <group>
+                                <field name="employee_id" readonly="permission_status == 'done'"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
+                                <!-- Area_id is mandatory -->
+                                <field name="area_id" readonly="permission_status == 'done'"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
+                                <field name="branch_ids" invisible="1" />
+                                 <!-- branch_id is mandatory and filtered by area_id branch -->
+                                <field name="branch_id" readonly="permission_status == 'done'"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True" />
+                                <field name="alldepartment" invisible="1"/>
+                                <!-- department_id is mandatory if employee_id != False -->
+                                <field name="department_id" readonly="1" force_save="1"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}"  required="employee_id !=False"/>
+                                <!-- employee_id is mandatory -->
+                                <!-- job_id is mandatory if employee_id != False -->
+                                <field name="job_id" readonly="1" force_save="1"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
+                                <field name="handled_temp_to" readonly="permission_status == 'done'" />
+                                <field name="remarks" readonly="permission_status == 'done'" />
+                            </group>
+                            <group>
+                                <field name="trans_number" readonly="permission_status == 'done'"/>
+                                <field name="doc_number" readonly="permission_status == 'done'"/>
+                                <field name="periode_id" readonly="permission_status == 'done'"/>
+                                <!-- permition code  -->
+                                <!--field name="permission_code" /-->
+                                <field name="employee_company_id" invisible="1"/>
+                                <field name="holiday_status_id" readonly="permission_status == 'done'"
+                                    options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
+                                <!-- permition date_from is mandatory -->
+                                <field name="permission_date_from" readonly="permission_status == 'done'"
+                                    required="True"/>
+                                <!-- permition date_to is mandatory -->
+                                <field name="permission_date_To" readonly="permission_status == 'done'"
+                                    required="True"/>
+                                <!-- permition time_from is mandatory -->
+                                <field name="permission_time_from" readonly="permission_status == 'done'"
+                                       widget="float_time" required="True"/>
+                                <!-- permition time_to is mandatory -->
+                                <field name="permission_time_to" readonly="permission_status == 'done'"
+                                       widget="float_time" required="True"/>
+                                <label for="time_days" readonly="permission_status == 'done'" />
+>>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
                                 <div class="o_row">
                                     <div class="column">
                                         <field name="time_days" readonly="permission_status != 'draft'" />
@@ -44,9 +100,20 @@
                                         <field name="time_hour" readonly="permission_status != 'draft'" />
                                     </div>
                                 </div>
+<<<<<<< HEAD
                                 <field name="back_to_office" readonly="permission_status != 'draft'" widget="easy_timepicker"/>
                             </group>
                         </group>
+=======
+                                <field name="back_to_office" readonly="permission_status == 'done'"
+                                       widget="easy_timepicker"/>
+                            </group>
+                            <!-- <group>
+                            </group> -->
+                        </group>
+                        <!-- <group>
+                        </group> -->
+>>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
                         <br></br>
                         <group>
                             <group>
@@ -65,14 +132,70 @@
                                     <field name="approved3" readonly="id==False or permission_status != 'draft'" class="mr8 oe_inline"/>
                                     <field name="approve3_by" readonly="approved3==True or permission_status != 'draft'" class="mr8 oe_inline"/>
                                 </div>
+<<<<<<< HEAD
+=======
+                                <label for="approve2_by" string="Approval 2 By"/>
+                                <div class="mr8 oe_inline">
+                                    <field name="approved2" readonly="id==False or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                    <field name="approve2_by" readonly="approved2==True or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                </div>
+                                <label for="approve3_by" string="Approval 3 By "/>
+                                <div class="mr8 oe_inline">
+                                    <field name="approved3" readonly="id==False or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                    <field name="approve3_by" readonly="approved3==True or permission_status == 'done'"
+                                           class="mr8 oe_inline"/>
+                                </div>
+>>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
                             </group>
                             <group>
                                 <field name="is_approved" invisible="1"/>
-                                <field name="approve1_job_title" readonly="approved1==True or permission_status != 'draft'" />
-                                <field name="approve2_job_title" readonly="approved2==True or permission_status != 'draft'"/>
-                                <field name="approve3_job_title" readonly="approved3==True or permission_status != 'draft'"/>
+                                <field name="approve1_job_title" readonly="approved1==True or permission_status == 'done'" />
+                                <field name="approve2_job_title" readonly="approved2==True or permission_status == 'done'"/>
+                                <field name="approve3_job_title" readonly="approved3==True or permission_status == 'done'"/>
                             </group>
                         </group>
+<<<<<<< HEAD
+=======
+                        <!-- <group col="3">
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                        <group col="2">
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                        <group>
+                        </group>
+                        <group col="2">
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                        </group> -->
+
+                        <!-- <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div> -->
+>>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
@@ -97,6 +220,10 @@
                     <field name="permission_date_To" optional="show" />
                     <field name="periode_id" optional="show" />
                     <field name="permission_status" string="Status" optional="show" />
+<<<<<<< HEAD
+=======
+                    <!-- <field name="employee_id" /> -->
+>>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
                 </tree>
             </field>
         </record>
