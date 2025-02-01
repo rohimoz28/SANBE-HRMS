@@ -33,17 +33,10 @@ class HRPermissionEntry(models.Model):
 
     area_id = fields.Many2one('res.territory', string='Area', index=True)
     branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
-<<<<<<< HEAD
     alldepartment = fields.Many2many('hr.department', 'hr_employeelist_schedule_rel', string='All Department', compute='_isi_department_branch', store=False)
     branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True,)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
     employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]", string='Employee Name', index=True, tracking=True)
-=======
-    alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
-    branch_id = fields.Many2one('res.branch',string='Business Unit',domain="[('id','in',branch_ids)]",tracking=True,)
-    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
-    employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]",string='Employee Name', index=True,tracking=True)
->>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
     permission_date_from = fields.Date('Permission From')
     permission_date_To = fields.Date('Permission To')
@@ -54,7 +47,6 @@ class HRPermissionEntry(models.Model):
                                         string="Status", readonly=True, copy=False,
                                         index=True, tracking=3, default='draft')
 
-<<<<<<< HEAD
     permission_time_from = fields.Float('Time From')
     permission_time_to = fields.Float('Time To')
     time_days = fields.Float('Time') # re-create to accomodate table sb_leave_allocation
@@ -66,20 +58,6 @@ class HRPermissionEntry(models.Model):
     doc_number = fields.Char('Ref Doc Number')
     trans_number = fields.Char('Transaction Number', default=lambda self: _('New'),
                                copy=False, readonly=True, tracking=True, requirement=True)
-=======
-    permission_time_from = fields.Float(string='Time From')
-    permission_time_to = fields.Float(string='Time To')
-    # time_days = fields.Integer(string='Time',compute='_get_days_duration',store=False)
-    time_days = fields.Float(string='Time') # re-create to accomodate table sb_leave_allocation
-    time_hour = fields.Float(string='Hours',compute='_total_jam_ijin',store=False)
-    handled_temp_to = fields.Many2one('hr.employee',string='Handled By')
-    back_to_office = fields.Date(string='Back To Office')
-    back_tooffice_time = fields.Float(string='Time')
-    remarks = fields.Text(string='Remarks')
-    doc_number = fields.Char(string='Ref Doc Number')
-    trans_number = fields.Char(string='Transaction Number' ,default=lambda self: _('New'),
-       copy=False, readonly=True, tracking=True, requirement=True)
->>>>>>> 56d8793 ([IMP] TMS : Mengubah susunan field pada form Permission Entry)
     approve1_by = fields.Many2one('hr.employee', string='Approved 1 By')
     approve1_job_title = fields.Many2one('hr.job', string='Job Title')
     approve2_by = fields.Many2one('hr.employee', string='Approved 2 By')
