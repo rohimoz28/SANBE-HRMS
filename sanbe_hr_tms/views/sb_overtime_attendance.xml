@@ -6,21 +6,33 @@
             <field name="model">sb.overtime.attendance</field>
             <field name="arch" type="xml">
                 <tree string="Overtime Attendances" create="0">
-                    <field name="branch_id" string="BU"/>
-                    <field name="department_id" string="Department"/>
-                    <field name="no_request" string="No. Request"/>
-                    <field name="req_date"/>
-                    <field name="employee_id" string="Nama"/>
-                    <field name="nik"/>
-                    <field name="req_time_fr"/>
-                    <field name="req_time_to"/>
-                    <field name="rlz_time_fr"/>
-                    <field name="rlz_time_to"/>
-                    <field name="approve_time_from"/>
-                    <field name="approve_time_to"/>
-                    <field name="state"/>
-                    <field name="periode_id"/>
+                    <field name="branch_id" optional="show" string="BU"/>
+                    <field name="department_id" optional="show" string="Department"/>
+                    <field name="no_request" optional="show" string="No. Request"/>
+                    <field name="req_date" optional="show"/>
+                    <field name="employee_id" optional="show" string="Nama"/>
+                    <field name="nik" optional="show"/>
+                    <field name="req_time_fr" optional="show"/>
+                    <field name="req_time_to" optional="show"/>
+                    <field name="approve_time_from" optional="show"/>
+                    <field name="approve_time_to" optional="show"/>
+                    <field name="rlz_time_fr" optional="show"/>
+                    <field name="rlz_time_to" optional="show"/>
+                    <field name="state" optional="show"/>
+                    <field name="periode_id" optional="show"/>
                 </tree>
+            </field>
+        </record>
+
+         <record id="sb_overtime_attendance_tree_ext" model="ir.ui.view">
+            <field name="name">sb.overtime.attendance.tree.ext</field>
+            <field name="model">sb.overtime.attendance</field>
+            <field name="inherit_id" ref="sanbe_hr_tms.sb_overtime_attendance_tree_view"/>
+            <field name="mode">extension</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                        <attribute name="js_class">owl_list_controller_ot_attendance</attribute>
+                    </xpath>
             </field>
         </record>
 

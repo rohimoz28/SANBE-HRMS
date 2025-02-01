@@ -19,7 +19,7 @@
         <menuitem id="purchase.menu_purchase_root"
                   active="False"/>
         <menuitem id="stock.menu_stock_root"
-                  active="False"/>
+                  active="True"/>
         <menuitem id="account.menu_finance"
                   active="False"/>
         <menuitem id="event.event_main_menu"

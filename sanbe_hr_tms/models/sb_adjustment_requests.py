@@ -31,20 +31,20 @@ class SbAdjusmentRequests(models.Model):
             allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
             allrecs.alldepartment = [Command.set(allbranch.ids)]
 
-    name = fields.Char(string='Trx No')
+    name = fields.Char(string='Transaction Number')
     area_id = fields.Many2one('res.territory', index=True, string='Area')
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch')
     branch_id = fields.Many2one('res.branch',
         string='Business Unit',
         index=True,
         domain="[('id','in',branch_ids)]")
-    request_no = fields.Integer(string='Request No',required=False)
+    request_no = fields.Integer(string='Request Number',required=False)
     request_date = fields.Date(string='Request Date', required=False)
     alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
     employee_id = fields.Many2one('hr.employee', string='Employee')
     aplicant = fields.Selection(
-        string='Aplicant',
+        string='Applicant',
         selection=[('employee', 'Employee'),
                    ('personalia', 'Personalia'), ],
         required=False, default='employee',)
@@ -52,7 +52,7 @@ class SbAdjusmentRequests(models.Model):
     state = fields.Selection(string='Status', selection=ADJ_REQ_STATE, required=False, default='draft')
     revision_period_from = fields.Date(string='Revision Period From', required=False)
     revision_period_to = fields.Date(string='Revision Period To', required=False)
-    trx_date = fields.Date(string='Trx_date', required=False, default=datetime.today())
+    trx_date = fields.Date(string='Transaction Date', required=False, default=datetime.today())
     manager_approved = fields.Boolean(
         string='Manager Approved',
         required=False)
@@ -67,6 +67,7 @@ class SbAdjusmentRequests(models.Model):
         inverse_name='adjusment_request_id',
         string='Adjusment Request Details',
         required=False)
+    chronology = fields.Text(string="Chronology", required=False)
 
     @api.model
     def create(self, vals):

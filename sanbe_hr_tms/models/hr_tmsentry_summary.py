@@ -60,10 +60,10 @@ class HRTMSEntrySummary(models.Model):
         mycari = self.env['hr.opening.closing'].sudo().search([('isopen', '=', True)], limit=1)
         return mycari.open_periode_to or False
 
-    periode_id = fields.Many2one('hr.opening.closing', string='Periode ID', index=True)
+    periode_id = fields.Many2one('hr.opening.closing', string='Periode', index=True)
     employee_id = fields.Many2one('hr.employee', string="Employee", default=_default_employee, required=True,
                                   ondelete='cascade', index=True, readonly="state =='done'")
-    area_id = fields.Many2one('res.territory', string='Area ID', index=True, readonly="state =='done'")
+    area_id = fields.Many2one('res.territory', string='Area', index=True, readonly="state =='done'")
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
                                   store=False)
     branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]",
@@ -170,7 +170,7 @@ class HRTMSEntrySummary(models.Model):
     ot = fields.Boolean(compute='_compute_ot', store=True)
     ot_flat = fields.Boolean(compute='_compute_ot_flat', store=True)
     night_shift = fields.Boolean(compute='_compute_night_shift', store=True)
-
+    
     @api.depends('employee_id.allowance_ot')
     def _compute_ot(self):
         for record in self:

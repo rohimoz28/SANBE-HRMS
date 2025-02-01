@@ -20,17 +20,6 @@
                         <group string="TMS Entry - Summary" name="entry_summary">
                             <group>
                                 <!-- <field name="state" readonly="True"/> -->
-                                <field name="nik" required="1" readonly="True"/>
-                                <field name="employee_id" required="1" readonly="True"/>
-                                <field name="periode_id"
-                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                       readonly="True"/>
-                                <field name="date_from" required="1" readonly="True" force_save="1"/>
-                                <field name="date_to" required="1" readonly="True" force_save="1"/>
-                                <field name="branch_ids" invisible="1"/>
-
-                            </group>
-                            <group>
                                 <field name="area_id"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        required="1" readonly="True"/>
@@ -40,10 +29,28 @@
                                 <field name="department_id"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        required="1" readonly="True"/>
+                                <field name="branch_ids" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="periode_id"
+                                       options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                       readonly="True"/>
+                                <field name="date_from" required="1" readonly="True" force_save="1"/>
+                                <field name="date_to" required="1" readonly="True" force_save="1"/>
+                            </group>
+                        </group>
+                        <br></br>
+                        <group>
+                            <group>
+                                <field name="nik" required="1" readonly="True"/>
+                                <field name="employee_id" required="1" readonly="True"/>
                                 <field name="job_id"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        required="1" readonly="True"/>
                                 <field name="employee_group1" required="1" readonly="True" force_save="1"/>
+                                <field name="ot" readonly="True" string="OT"/>
+                                <field name="ot_flat" readonly="True" string="OT Flat"/>
+                                <field name="night_shift" readonly="True" string="Night Shift"/>
                             </group>
                         </group>
                         <!-- <group>

@@ -46,6 +46,7 @@ class HREmployee(models.Model):
     resign_notice = fields.Integer('Resign Notice')
     asset_ids = fields.One2many('hr.employee.assets','employee_id',auto_join=True,string='Asset Details')
 
+
     @api.depends('join_date','periode_probation')
     def hitung_confirmation(self):
         for allrec in self:
@@ -83,4 +84,10 @@ class HREmployeeAssets(models.Model):
     received_date = fields.Date('Tanggal Diterima')
     returned_date = fields.Date('Tanggal Dikembalikan')
     keterangan = fields.Text('Keterangan')
+    brand = fields.Char(string = 'Merek / Model')
+    serial_number = fields.Char(string = 'Serial Number')
+    no_ref = fields.Char(string = 'No Ref (No TTU)')
+    product_id = fields.Many2one('product.product', string="Product", related="product_template_id.product_variant_id", store=True)
+    stock_lot_id = fields.Many2one(comodel_name="stock.lot", string="stock lot")
+    product_template_id = fields.Many2one(comodel_name="product.template", string="product template")
 

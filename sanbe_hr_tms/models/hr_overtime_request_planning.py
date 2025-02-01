@@ -52,30 +52,34 @@ class HREmpOvertimeRequest(models.Model):
             allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
             allrecs.alldepartment =[Command.set(allbranch.ids)]
 
-    name = fields.Char('Planning Request #',default=lambda self: _('New'),
+    name = fields.Char('Planning Request',default=lambda self: _('New'),
        copy=False, readonly=True, tracking=True, requirement=True)
     request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
-    area_id = fields.Many2one('res.territory', string='Area ID', index=True, required=True)
+    area_id = fields.Many2one('res.territory', string='Area', index=True, required=True)
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
                                   store=False)
 
-    branch_id = fields.Many2one('res.branch', string='Bisnis Unit', index=True, domain="[('id','in',branch_ids)]")
+    branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]")
     alldepartment = fields.Many2many('hr.department','hr_department_plan_ot_rel', string='All Department',compute='_isi_department_branch',store=False)
     department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
-    periode_from = fields.Date('Periode From',default=_get_active_periode_from)
-    periode_to = fields.Date('Periode To',default=_get_active_periode_to)
-    approve1 = fields.Boolean('Supervisor Departement',default=False)
-    approve2 = fields.Boolean('Manager Departement',default=False)
-    approve3 = fields.Boolean('HMC Departement',default=False)
+    periode_from = fields.Date('Period From',default=_get_active_periode_from)
+    periode_to = fields.Date('Period To',default=_get_active_periode_to)
+    approve1 = fields.Boolean('Supervisor Department',default=False)
+    approve2 = fields.Boolean('Manager Department',default=False)
+    approve3 = fields.Boolean('HCM Department',default=False)
     state = fields.Selection(
         selection=TMS_OVERTIME_STATE,
         string="TMS Overtime Status",
         readonly=True, copy=False, index=True,
         tracking=3,
         default='draft')
-    periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
+    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
+    company_id = fields.Many2one('res.company', string="Company Name", index=True)
+    request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
+    count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
+
 
     @api.onchange('periode_id')
     def _onchange_periode_id(self):
@@ -206,6 +210,19 @@ class HREmpOvertimeRequest(models.Model):
     def btn_backdraft(self):
         for rec in self:
             rec.state = 'draft'
+
+    def btn_print_pdf(self):
+        return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
+
+    
+    def get_dynamic_numbers(self):
+        """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
+        numbering = {}
+        counter = 1
+        for record in self:
+            numbering[record.id] = list(range(counter, counter + len(record.hr_ot_planning_ids))) #perbaikan disini
+            counter += len(record.hr_ot_planning_ids)
+        return numbering        
             
     def action_search_employee(self):
         #if self.department_id:
@@ -238,6 +255,19 @@ class HREmpOvertimeRequest(models.Model):
             _logger.error("Error calling stored procedure: %s", str(e))
             raise UserError("Error executing the function: %s" % str(e))
 
+    @api.depends('request_date')
+    def _compute_req_day_name(self):
+        for record in self:
+            if record.request_date:
+                record.request_day_name = record.request_date.strftime('%A')
+            else:
+                record.request_day_name = False
+
+    @api.depends('hr_ot_planning_ids')
+    def _compute_record_employees(self):
+        for record in self:
+            record.count_record_employees = len(record.hr_ot_planning_ids)   
+            
     
 class HREmpOvertimeRequestEmployee(models.Model):
     _name = "hr.overtime.employees"
@@ -275,7 +305,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
     planning_id = fields.Many2one('hr.overtime.planning',string='HR Overtime Request Planning',index=True)
     areah_id = fields.Many2one('res.territory', string='Area ID Header', related='planning_id.area_id',index=True, readonly=True)
-    area_id = fields.Many2one('res.territory', string='Area ID',index=True)
+    area_id = fields.Many2one('res.territory', string='Area',index=True)
     branchh_id = fields.Many2one('res.branch', related='planning_id.branch_id',string='Bisnis Unit Header', index=True, readonly=True)
     departmenth_id = fields.Many2one('hr.department', related='planning_id.department_id',string='Department ID Header', index=True, readonly=True)
     nik = fields.Char('Employee NIK',index=True)
@@ -288,14 +318,14 @@ class HREmpOvertimeRequestEmployee(models.Model):
     approve_time_from = fields.Float('OT App From')
     approve_time_to = fields.Float('OT App To')
     machine = fields.Char('Machine')
-    work_plann = fields.Char('Work Plann')
-    output_plann = fields.Char('Output Plann')
-    branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Bisnis Unit', index=True)
-    department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Department ID')
+    work_plann = fields.Char('Work Plan')
+    output_plann = fields.Char('Output Plan')
+    branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Unit', index=True)
+    department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
     transport = fields.Boolean('Transport')
     meals = fields.Boolean(string='Meal Dine In')
     meals_cash = fields.Boolean(string='Meal Cash')
-    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT type')
+    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT Type')
     planning_req_name = fields.Char(string='Planning Request Name',required=False)
 
     @api.onchange('employee_id')

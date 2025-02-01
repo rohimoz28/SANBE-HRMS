@@ -82,11 +82,15 @@
                                          <field name="employee_id" column_invisible="True"/>
                                         <field name="asset_name"/>
                                         <field name="asset_number"/>
-                                        <field name="uom"/>
+                                        <field name="product_template_id"/>
+                                        <field name="stock_lot_id" domain="[('product_id', '=', product_id)]"/>
                                         <field name="asset_qty"/>
+                                        <field name="uom"/>
                                         <field name="received_date"/>
+                                        <field name="no_ref"/>
                                         <field name="returned_date"/>
                                         <field name="keterangan"/>
+                                        <field name="product_id" invisible="1"/>
                                      </tree>
                                  </field>
                              </page>
