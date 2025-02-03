@@ -1424,6 +1424,16 @@ begin
     from ff
     where s.id = ff.sttd_id;
 
+    -- update delay status attendance half day leave = 0
+    update sb_tms_tmsentry_details s
+    set delay = 0
+    from hr_tmsentry_summary hts
+    where s.status_attendance like '%Half Day Leave%'
+      and hts.id = s.tmsentry_id
+      and hts.periode_id = period
+      and hts.area_id = l_area
+      and hts.branch_id = branch;
+
     --update total summary detail (footer) || code ini harus selalu paling bawah
     WITH flag AS (SELECT he.name,
                          he.employee_levels,
