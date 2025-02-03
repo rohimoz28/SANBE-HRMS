@@ -1,7 +1,8 @@
+-- DROP PROCEDURE public.calculate_tms(int4, int4, int4);
+
 CREATE OR REPLACE PROCEDURE public.calculate_tms(period integer, l_area integer, branch integer)
-    LANGUAGE plpgsql
-AS
-$procedure$
+ LANGUAGE plpgsql
+AS $procedure$
 begin
 
     ALTER TABLE hr_tmsentry_summary
@@ -356,6 +357,41 @@ begin
     --     hitung delay level1 dan level 2
 --     delay level1 adalah delay > 5 min dan < 10 min
 --     delay level2 adalah delay > 10 min
+     
+  
+-- read permission
+    WITH permission_dates AS (SELECT he.name,
+                                     hpe.employee_id,
+                                     hlt.name ->> 'en_US'                    AS leave_type,
+                                     generate_series(hpe.permission_date_from::date, hpe."permission_date_To"::date,
+                                                     interval '1 day')::date AS permission_date
+                              FROM hr_permission_entry hpe
+                                       JOIN hr_employee he ON hpe.employee_id = he.id
+                                       JOIN hr_leave_type hlt ON hpe.holiday_status_id = hlt.id
+                              WHERE hpe.area_id = l_area
+                                AND hpe.branch_id = branch
+                                AND hpe.permission_status = 'approved'),
+         flag as (SELECT pd.*,
+                         hts.area_id,
+                         hts.branch_id,
+                         hts.periode_id
+                  FROM permission_dates pd
+                           JOIN hr_opening_closing hoc ON hoc.id = period
+                           JOIN hr_tmsentry_summary hts ON hts.periode_id = hoc.id
+                      AND hts.area_id = l_area
+                      AND hts.branch_id = branch
+                      AND hts.employee_id = pd.employee_id
+                  WHERE pd.permission_date BETWEEN hoc.open_periode_from AND hoc.open_periode_to)
+    update sb_tms_tmsentry_details sttd
+    set status_attendance = flag.leave_type, delay = 0
+    from flag,
+         hr_tmsentry_summary hts2
+    where sttd.details_date::date = flag.permission_date::date
+      and sttd.employee_id = flag.employee_id
+      and hts2.periode_id = period
+      and hts2.area_id = l_area
+      and hts2.branch_id = branch;
+     
     with aa as (select hts.employee_id,
                        hts.periode_id,
                        hts.area_id,
@@ -372,7 +408,7 @@ begin
                   /*and hts.employee_id = 48067*/),
          bb as (select aa.*,
                        case when aa.delay > 10 then 1 end                  as delay_level2,
-                       case when aa.delay > 5 and aa.delay < 10 then 1 end as delay_level1
+                       case when aa.delay > 0 and aa.delay <= 10 then 1 end as delay_level1
                 from aa)
     update sb_tms_tmsentry_details s
     set delay_level1 = bb.delay_level1,
@@ -413,38 +449,6 @@ begin
     --      AND sttd.date_in = f.plann_date_from
 --      AND sttd.date_out = f.plann_date_to;
 
--- read permission
-    WITH permission_dates AS (SELECT he.name,
-                                     hpe.employee_id,
-                                     hlt.name ->> 'en_US'                    AS leave_type,
-                                     generate_series(hpe.permission_date_from::date, hpe."permission_date_To"::date,
-                                                     interval '1 day')::date AS permission_date
-                              FROM hr_permission_entry hpe
-                                       JOIN hr_employee he ON hpe.employee_id = he.id
-                                       JOIN hr_leave_type hlt ON hpe.holiday_status_id = hlt.id
-                              WHERE hpe.area_id = l_area
-                                AND hpe.branch_id = branch
-                                AND hpe.permission_status = 'approved'),
-         flag as (SELECT pd.*,
-                         hts.area_id,
-                         hts.branch_id,
-                         hts.periode_id
-                  FROM permission_dates pd
-                           JOIN hr_opening_closing hoc ON hoc.id = period
-                           JOIN hr_tmsentry_summary hts ON hts.periode_id = hoc.id
-                      AND hts.area_id = l_area
-                      AND hts.branch_id = branch
-                      AND hts.employee_id = pd.employee_id
-                  WHERE pd.permission_date BETWEEN hoc.open_periode_from AND hoc.open_periode_to)
-    update sb_tms_tmsentry_details sttd
-    set status_attendance = flag.leave_type
-    from flag,
-         hr_tmsentry_summary hts2
-    where sttd.details_date::date = flag.permission_date::date
-      and sttd.employee_id = flag.employee_id
-      and hts2.periode_id = period
-      and hts2.area_id = l_area
-      and hts2.branch_id = branch;
 
     --tes new update aot1
     update sb_tms_tmsentry_details sttd
@@ -1433,6 +1437,36 @@ begin
       and hts.periode_id = period
       and hts.area_id = l_area
       and hts.branch_id = branch;
+
+	--update deduction
+	with flag as (
+    SELECT 
+        sttd.employee_id,
+        sttd.tmsentry_id,
+        COUNT(CASE WHEN sttd.delay > hwd.delay_allow THEN 1 END) AS count_delay,
+        SUM(sttd.delay) AS sum_delay,
+        CASE 
+            WHEN FLOOR(COUNT(CASE WHEN sttd.delay > hwd.delay_allow THEN 1 END) / 5) > FLOOR(SUM(sttd.delay) / 50) THEN FLOOR(COUNT(CASE WHEN sttd.delay > hwd.delay_allow THEN 1 END) / 5)
+            ELSE FLOOR(SUM(sttd.delay) / 50)
+        END AS total_deduction
+    FROM sb_tms_tmsentry_details sttd
+    JOIN hr_working_days hwd ON sttd.workingday_id = hwd.id
+    WHERE sttd.delay > 0
+    GROUP BY sttd.employee_id, sttd.tmsentry_id
+    )
+    update hr_tmsentry_summary hts
+    set is_deduction = 
+        case 
+          when f.total_deduction > 0 then true
+          else false
+        end,
+      total_deduction = f.total_deduction
+    from flag f
+    where f.tmsentry_id = hts.id
+    and f.employee_id = hts.employee_id 
+    and hts.area_id = l_area
+    and hts.branch_id = branch
+    and hts.periode_id = period;
 
     --update total summary detail (footer) || code ini harus selalu paling bawah
     WITH flag AS (SELECT he.name,
