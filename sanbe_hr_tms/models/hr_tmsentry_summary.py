@@ -115,7 +115,7 @@ class HRTMSEntrySummary(models.Model):
     nightshift_count = fields.Integer(string='Night Shift')
     nightshift2_count = fields.Integer(string='Night Shift')
     meal_count = fields.Integer(string='Meal')
-    is_deduction = fields.Boolean('Deducton', default=False,compute='_calculate_deduction')
+    is_deduction = fields.Boolean('Deducton', default=False)
     deduction = fields.Integer('total deductions (days)', default=0)
     total_deduction = fields.Float(
         string='Total Deduction',
@@ -220,16 +220,16 @@ class HRTMSEntrySummary(models.Model):
         last_even = number if number % 2 == 0 else number - 1
         return last_even // 2
 
-    @api.depends('tmsentry_details_ids')
-    def _calculate_deduction(self):
-        for rec in self:
-            rec.is_deduction = bool(rec.delay_count and rec.delay_total)
-            total_delay_level1 = sum(rec.tmsentry_details_ids.mapped('delay_level1'))
-            total_delay_level2 = sum(rec.tmsentry_details_ids.mapped('delay_level2'))
-            calculate_total_delay_level1 = self.last_even_divided_by_2(total_delay_level1) * 0.5
-            calculate_total_delay_level2 = total_delay_level2 * 0.5
-            total = calculate_total_delay_level1 + calculate_total_delay_level2
-            rec.total_deduction = total
+    # @api.depends('tmsentry_details_ids')
+    # def _calculate_deduction(self):
+    #     for rec in self:
+    #         rec.is_deduction = bool(rec.delay_count and rec.delay_total)
+    #         total_delay_level1 = sum(rec.tmsentry_details_ids.mapped('delay_level1'))
+    #         total_delay_level2 = sum(rec.tmsentry_details_ids.mapped('delay_level2'))
+    #         calculate_total_delay_level1 = self.last_even_divided_by_2(total_delay_level1) * 0.5
+    #         calculate_total_delay_level2 = total_delay_level2 * 0.5
+    #         total = calculate_total_delay_level1 + calculate_total_delay_level2
+    #         rec.total_deduction = total
 
     def _getwaktu(self, waktu):
         ret = timedelta()

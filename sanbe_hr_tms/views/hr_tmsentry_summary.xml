@@ -228,7 +228,7 @@
                                             <div class="o_row">
                                                 <label for="is_deduction" string="Potongan?"/>
                                                 <div class="o_row">
-                                                    <field name="is_deduction"/>
+                                                    <field name="is_deduction" readonly="1"/>
                                                 </div>
                                             </div>
                                         </group>
