@@ -10,6 +10,7 @@
                     <sheet>
                         <group>
                             <field name="employee_id"/>
+                            <field name="date"/>
                             <field name="area_id"/>
                             <field name="branch_id"/>
                             <field name="department_id"/>
@@ -17,6 +18,8 @@
                             <field name="leave_allocation"/>
                             <field name="leave_used"/>
                             <field name="leave_remaining"/>
+                            <field name="remarks"/>
+                            <field name="description"/>
                         </group>
                     </sheet>
                 </form>
@@ -29,6 +32,7 @@
             <field name="arch" type="xml">
                 <tree string="Leave Allocation">
                     <field name="employee_id"/>
+                    <field name="date"/>
                     <field name="area_id"/>
                     <field name="branch_id"/>
                     <field name="department_id"/>
@@ -36,6 +40,8 @@
                     <field name="leave_allocation"/>
                     <field name="leave_used"/>
                     <field name="leave_remaining"/>
+                    <field name="remarks"/>
+                    <field name="description"/> 
                 </tree>
             </field>
         </record>
