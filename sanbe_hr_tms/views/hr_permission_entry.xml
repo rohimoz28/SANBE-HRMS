@@ -24,6 +24,7 @@
                                 <field name="job_id" readonly="1" force_save="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
                                 <field name="handled_temp_to" readonly="permission_status != 'draft'" />
                                 <field name="remarks" readonly="permission_status != 'draft'" />
+                                <field name="leave_allocation" invisible="holiday_status_id not in [6,7]"/>
                             </group>
                             <group>
                                 <field name="trans_number" readonly="permission_status != 'draft'"/>
