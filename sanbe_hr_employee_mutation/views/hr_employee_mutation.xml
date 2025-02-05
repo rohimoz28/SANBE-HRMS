@@ -8,35 +8,35 @@
             <field name="priority">1000</field>
             <field name="arch" type="xml">
                 <tree string="HR Mutation ">
-                    <field name="name"/>
-                    <field name="letter_no"/>
+                    <field name="name" optional="show" />
+                    <field name="letter_no" optional="show" />
                     <field name="emp_nos" options="{'no_create': True,'no_create_edit': True}"
-                                        context="{'search_by': 'No','search_by_name': False}" />
-                    <field name="nik" />
-                    <field name="nik_lama" />
-                    <field name="employee_name" />
-                    <field name="service_type" />
-                    <field name="service_date" />
-                    <field name="service_status" />
-                    <field name="service_nik" />
-                    <field name="service_nik_lama" />
-                    <field name="service_area" />
-                    <field name="service_bisnisunit" />
-                    <field name="service_departmentid" />
-                    <field name="service_jobstatus" />
-                    <field name="service_employementstatus" />
-                    <field name="service_employee_levels" />
-                    <field name="job_status" />
+                                        context="{'search_by': 'No','search_by_name': False}" optional="show" />
+                    <field name="nik" optional="show" />
+                    <field name="nik_lama" optional="show" />
+                    <field name="employee_name" optional="show" />
+                    <field name="service_type" optional="show" />
+                    <field name="service_date" optional="show" />
+                    <field name="service_status" optional="show"/>
+                    <field name="service_nik" optional="show" />
+                    <field name="service_nik_lama" optional="show" />
+                    <field name="service_area" optional="show" />
+                    <field name="service_bisnisunit" optional="show" />
+                    <field name="service_departmentid" optional="show" />
+                    <field name="service_jobstatus" optional="show" />
+                    <field name="service_employementstatus" optional="show" />
+                    <field name="service_employee_levels" optional="show" />
+                    <field name="job_status" optional="show" />
                     <!--field name="employee_group1" invisible="job_status !='permanent'"
                            force_save="1" /-->
-                    <field name="employee_group1" force_save="1" />
-                    <field name="service_jobtitle" />
+                    <field name="employee_group1" force_save="1" optional="show" />
+                    <field name="service_jobtitle" optional="show" />
                     <field name="service_empgroup1" invisible="service_jobstatus !='permanent'"
-                        readonly="1" force_save="1" />
-                    <field name="service_start" required="1" />
-                    <field name="service_end" />
-                    <field name="remarks" />
-                    <field name="image" />
+                        readonly="1" force_save="1" optional="show" />
+                    <field name="service_start" required="1" optional="show" />
+                    <field name="service_end" optional="show" />
+                    <field name="remarks" optional="show" />
+                    <field name="image" optional="show" />
                 </tree>
             </field>
         </record>
@@ -63,18 +63,20 @@
                             statusbar_visible="draft,intransfer,accept,approved"
                             invisible="service_type != 'muta'" />
                     </header>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h2>
-                            <field name="name" readonly="1" placeholder="Transaction Number"/>
-                        </h2>
-                         <label for="letter_no"/>
-                        <h1>
-                            <field name="letter_no" placeholder="Refference Number"/>
-                        </h1>
-                    </div>
+                    <group name="emp_mutation" string="Employee Mutation">
+                        <!-- <div class="oe_title"> -->
+                            <!-- <label for="name"/> -->
+                            <!-- <h2> -->
+                                <field name="name" readonly="1" placeholder="Transaction Number"/>
+                            <!-- </h2> -->
+                            <!-- <label for="letter_no"/> -->
+                            <!-- <h1> -->
+                                <field name="letter_no" placeholder="Refference Number"/>
+                            <!-- </h1> -->
+                        <!-- </div> -->
+                    </group>
                     <group name="emp_det" string="Employee Details">
-                        <div class="input-group mb-1">
+                        <!-- <div class="input-group mb-1">
                             <label for="emp_nos" />
                             <div class="row">
                                 <div class="col-9">
@@ -83,8 +85,11 @@
                                         context="{'search_by': 'No','search_by_name': False}" />
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <group>
+                            <field name="emp_nos"
+                                options="{'no_create': True,'no_create_edit': True}"
+                                context="{'search_by': 'No','search_by_name': False}" />
                             <field name="emp_nos_ids" invisible="1"/>
                             <field name="employee_id" invisible="1" />
                             <field name="employee_name" readonly="1" force_save="1" />
@@ -107,7 +112,9 @@
                     <group name="emp_service_det" string="Mutation Details" readonly="state in ['approved']">
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
-                            <field name="emp_status" invisible="service_type != 'corr'" readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status_actv" invisible="service_type not in ['actv']" readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status_other" invisible="service_type in ['actv','corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employee_levels" readonly="state in ['approved']" 
                             invisible="service_type != 'prom'" required="service_type == 'prom'"
                             options="{'no_create': True,'no_quick_create': True}" />
