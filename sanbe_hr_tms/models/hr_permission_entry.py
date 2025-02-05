@@ -49,7 +49,7 @@ class HRPermissionEntry(models.Model):
 
     permission_time_from = fields.Float('Time From')
     permission_time_to = fields.Float('Time To')
-    time_days = fields.Float('Time') # re-create to accomodate table sb_leave_allocation
+    time_days = fields.Float('Time', compute='_get_days_duration') # re-create to accomodate table sb_leave_allocation
     time_hour = fields.Float('Hours',compute='_total_jam_ijin',store=False)
     handled_temp_to = fields.Many2one('hr.employee', string='Handled By')
     back_to_office = fields.Date('Back To Office')
@@ -99,7 +99,9 @@ class HRPermissionEntry(models.Model):
                 ganti2 = rec.permission_date_from.strftime(date_format)
                 tgl1 = datetime.strptime(ganti1, date_format)
                 tgl2 = datetime.strptime(ganti2, date_format)
-                rec.time_days = (tgl1 - tgl2).days
+                total_days = (tgl1 - tgl2).days
+                rec.time_days = total_days + 1
+                #rec.time_days = (tgl1 - tgl2).days
             else:
                 rec.time_days = 0
 
