@@ -9,7 +9,7 @@ class SbOvertimeAttendance(models.Model):
         string='No Request',
         required=False)
     req_date = fields.Date(
-        string='Tanggal Request',
+        string='Request Date',
         required=False)
     employee_id = fields.Many2one('hr.employee', string='Employee')
     nik = fields.Char(
@@ -36,7 +36,7 @@ class SbOvertimeAttendance(models.Model):
     area_id = fields.Many2one('res.territory', string='Area ID', index=True)
     branch_id = fields.Many2one('res.branch', string='Bisnis Unit', index=True, domain="[('id','in',branch_ids)]")
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department', index=True)
-    periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
+    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
     state = fields.Char(
         string='State',
         required=False)
