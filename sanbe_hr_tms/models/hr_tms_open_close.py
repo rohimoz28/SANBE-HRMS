@@ -148,6 +148,7 @@ class HRTmsOpenClose(models.Model):
             try:
                 self.env.cr.execute("CALL calculate_tms(%s, %s, %s)", (period_id, area_id.id, branch_id.id))
                 self.env.cr.commit()
+                self.recompute_tms_summary()
                 _logger.info("Stored procedure executed successfully for period_id: %s", period_id)
             except Exception as e:
                 _logger.error("Error calling stored procedure: %s", str(e))
@@ -156,6 +157,28 @@ class HRTmsOpenClose(models.Model):
             data.isopen = True
             data.state_process = "running"
 
+    def recompute_tms_summary(self):
+        for rec in self:
+            tms_summary_data = self.env['hr.tmsentry.summary'].sudo().search([
+                ('periode_id', '=', rec.id),
+                ('area_id', '=', rec.area_id.id),
+                ('branch_id', '=', rec.branch_id.id)
+            ])
+
+            employee_ids = tms_summary_data.mapped('employee_id.id')
+
+            hr_employee_data = self.env['hr.employee'].sudo().search([
+                ('id', 'in', employee_ids)
+            ])
+
+            employee_dict = {emp.id: emp for emp in hr_employee_data}
+            
+            for tsd in tms_summary_data:
+                employee = employee_dict.get(tsd.employee_id.id)
+                if employee:
+                    tsd.ot = employee.allowance_ot
+                    tsd.ot_flat = employee.allowance_ot_flat
+                    tsd.night_shift = employee.allowance_night_shift
 
     def action_opening_periode(self):
         for data in self:
