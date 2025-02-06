@@ -17,6 +17,8 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
         domain=lambda self: self._get_departments_domain(),
         options="{'no_create': True}"
     )
+    start_date = fields.Date(string='Start Date')
+    end_date = fields.Date(string='End Date')
 
     def _get_departments_domain(self):
         """
@@ -32,7 +34,11 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
         ot_attendance_domain = []
         if self.department_id:
             ot_attendance_domain.append(('department_id', '=', self.department_id.id))
-        
+        if self.start_date:
+            ot_attendance_domain.append(('req_date', '>=', self.start_date))
+        if self.end_date:
+            ot_attendance_domain.append(('req_date', '<=', self.end_date))
+
         ot_attendance = self.env['sb.overtime.attendance'].search(ot_attendance_domain)
         
         if not ot_attendance:
@@ -55,6 +61,10 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
         ot_attendance_domain = []
         if self.department_id:
             ot_attendance_domain.append(('department_id', '=', self.department_id.id))
+        if self.start_date:
+            ot_attendance_domain.append(('req_date', '>=', self.start_date))
+        if self.end_date:
+            ot_attendance_domain.append(('req_date', '<=', self.end_date))
         
         ot_attendance = self.env['sb.overtime.attendance'].search(ot_attendance_domain)
         
