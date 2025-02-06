@@ -42,14 +42,9 @@
                         
                         <notebook>
                             <page name="Attendee" string="Attendee">
-                                <field name="tmsentry_details_ids">
-                                    <tree default_order='details_date'
-                                          decoration-info="type == 'H'"
-                                          decoration-danger="status_attendance in ['Absent']"
-                                          decoration-warning="status_attendance not in ['Absent', 'Attendee'] and status_attendance"
-                                          create="False"
-                                          delete="False"
-                                          editable="tmsentry_id.state != 'transfer_payroll'">
+                                <field name="tmsentry_details_10_ids">
+                                    <tree>
+                                        <field name="flag" readonly="0"/>
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
                                         <field name="type" readonly="1"/>
@@ -183,8 +178,6 @@
                                                 <label for="meal_count" string="Minutes"/>
                                             </div>
                                         </group>
-                                        <!-- <field name="outstation_count" colspan="1" readonly="1"/> -->
-                                        <!-- <field name="ot_auto_totalx"  colspan="1" readonly="1"/> -->
                                     </group>
                                     <group colspan="8">
                                         <group style="width:65%">
@@ -214,7 +207,7 @@
                             </page>
 
                             <page name="Permission" string="Permission">
-                            <field name="tmsentry_details_ids">
+                            <field name="tmsentry_details_20_ids">
                                     <tree default_order='details_date'
                                           decoration-info="type == 'H'"
                                           decoration-danger="status_attendance in ['Absent']"
@@ -222,6 +215,8 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
+                                        <field name="flag" readonly="0"/>
+
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
                                         <field name="type" readonly="1"/>
@@ -347,8 +342,6 @@
                                                 <label for="meal_count" string="Minutes"/>
                                             </div>
                                         </group>
-                                        <!-- <field name="outstation_count" colspan="1" readonly="1"/> -->
-                                        <!-- <field name="ot_auto_totalx"  colspan="1" readonly="1"/> -->
                                     </group>
                                     <group colspan="8">
                                         <group style="width:65%">
@@ -378,7 +371,7 @@
                             </page>
 
                             <page name="Overtime" string="Overtime">
-                            <field name="tmsentry_details_ids">
+                            <field name="tmsentry_details_30_ids">
                                     <tree default_order='details_date'
                                           decoration-info="type == 'H'"
                                           decoration-danger="status_attendance in ['Absent']"
@@ -387,8 +380,7 @@
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
 
-                                        <!-- <field name="date_from" readonly="1"/>
-                                        <field name="date_to" readonly="1"/> -->
+                                        <field name="flag" readonly="0"/>
 
                                         <field name="approval_ot_from" widget="float_time" readonly="1"
                                                optional="show"/>
@@ -400,8 +392,6 @@
                                         <field name="status" column_invisible="1" width="100px" style="max-width:200px"/>
                                         <button name="action_view_tms_details" type="object" string="Detail"
                                                 class="fa fa-check" invisible="status == 'done'"/>
-                                        <!--                                        <button name="btn_reject" type="object" string="Reject" class="fa fa-ban" readonly="tmsentry_status=='transfer_payroll'"/>-->
-                                        <!--                                        button name="ambil_view" type="object" string="Edit" class="fa fa-edit" readonly="tmsentry_status=='transfer_payroll'"/-->
                                     </tree>
                                 </field>
                                 <group name="note_group" col="12" class="mt-4 mt-md-0">
@@ -516,8 +506,6 @@
                                                 <label for="meal_count" string="Minutes"/>
                                             </div>
                                         </group>
-                                        <!-- <field name="outstation_count" colspan="1" readonly="1"/> -->
-                                        <!-- <field name="ot_auto_totalx"  colspan="1" readonly="1"/> -->
                                     </group>
                                     <group colspan="8">
                                         <group style="width:65%">
@@ -542,19 +530,12 @@
                                             </div>
                                         </group>
                                     </group>
-
-                                    <!-- <div class="mr8 oe_inline"> -->
-                                    <!--     &lt;!&ndash; <field name="is_deduction" class="mr8 oe_inline"/> &ndash;&gt; -->
-                                    <!--     <field name="is_deduction_desc" string="Jumlah PG" -->
-                                    <!--            readonly="is_deduction != True" class="mr8 oe_inline"/> -->
-                                    <!-- </div> -->
-
                                     <div class="clearfix"/>
                                 </group>
                             </page>
 
                             <page name="Night Shift" string="Night Shift">
-                            <field name="tmsentry_details_ids">
+                            <field name="tmsentry_details_40_ids">
                                     <tree default_order='details_date'
                                           decoration-info="type == 'H'"
                                           decoration-danger="status_attendance in ['Absent']"
@@ -562,6 +543,8 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
+                                        <field name="flag" readonly="0"/>
+
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
                                         <field name="type" readonly="1"/>
@@ -576,8 +559,6 @@
                                        
                                         <button name="action_view_tms_details" type="object" string="Detail"
                                                 class="fa fa-check" invisible="status == 'done'"/>
-                                        <!--                                        <button name="btn_reject" type="object" string="Reject" class="fa fa-ban" readonly="tmsentry_status=='transfer_payroll'"/>-->
-                                        <!--                                        button name="ambil_view" type="object" string="Edit" class="fa fa-edit" readonly="tmsentry_status=='transfer_payroll'"/-->
                                     </tree>
                                 </field>
                                 <group name="note_group" col="12" class="mt-4 mt-md-0">
@@ -692,8 +673,6 @@
                                                 <label for="meal_count" string="Minutes"/>
                                             </div>
                                         </group>
-                                        <!-- <field name="outstation_count" colspan="1" readonly="1"/> -->
-                                        <!-- <field name="ot_auto_totalx"  colspan="1" readonly="1"/> -->
                                     </group>
                                     <group colspan="8">
                                         <group style="width:65%">
@@ -718,13 +697,6 @@
                                             </div>
                                         </group>
                                     </group>
-
-                                    <!-- <div class="mr8 oe_inline"> -->
-                                    <!--     &lt;!&ndash; <field name="is_deduction" class="mr8 oe_inline"/> &ndash;&gt; -->
-                                    <!--     <field name="is_deduction_desc" string="Jumlah PG" -->
-                                    <!--            readonly="is_deduction != True" class="mr8 oe_inline"/> -->
-                                    <!-- </div> -->
-
                                     <div class="clearfix"/>
                                 </group>
                             </page>
@@ -738,6 +710,8 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
+                                        <field name="flag" readonly="0"/>
+
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
                                         <field name="type" readonly="1"/>
@@ -747,13 +721,11 @@
                                         <field name="schedule_time_in" widget="float_time" readonly="1"
                                                optional="hide"/>
                                         <field name="time_in" widget="float_time" readonly="1"/>
-                                        <!-- <field name="edited_time_in" widget="easy_timepicker" optional="hide"/> -->
                                         <field name="edited_time_in" widget="float_time" readonly="1"/>
                                         <field name="date_out" readonly="1"/>
                                         <field name="schedule_time_out" widget="float_time" readonly="1"
                                                optional="hide"/>
                                         <field name="time_out" widget="float_time" readonly="1"/>
-                                        <!-- <field name="edited_time_out" widget="easy_timepicker" optional="hide"/> -->
                                         <field name="edited_time_out" widget="float_time" readonly="1"/>
                                         <field name="status_attendance" readonly="1" width="170px" style="max-width:200px"
                                                decoration-danger="status_attendance in ['absent']"/>
@@ -777,8 +749,6 @@
                                         <field name="approved_by_ca" readonly="status == 'done'"/>
                                         <button name="action_view_tms_details" type="object" string="Detail"
                                                 class="fa fa-check" invisible="status == 'done'"/>
-                                        <!--                                        <button name="btn_reject" type="object" string="Reject" class="fa fa-ban" readonly="tmsentry_status=='transfer_payroll'"/>-->
-                                        <!--                                        button name="ambil_view" type="object" string="Edit" class="fa fa-edit" readonly="tmsentry_status=='transfer_payroll'"/-->
                                     </tree>
                                 </field>
                                 <group name="note_group" col="12" class="mt-4 mt-md-0">
@@ -893,8 +863,6 @@
                                                 <label for="meal_count" string="Minutes"/>
                                             </div>
                                         </group>
-                                        <!-- <field name="outstation_count" colspan="1" readonly="1"/> -->
-                                        <!-- <field name="ot_auto_totalx"  colspan="1" readonly="1"/> -->
                                     </group>
                                     <group colspan="8">
                                         <group style="width:65%">
@@ -919,13 +887,6 @@
                                             </div>
                                         </group>
                                     </group>
-
-                                    <!-- <div class="mr8 oe_inline"> -->
-                                    <!--     &lt;!&ndash; <field name="is_deduction" class="mr8 oe_inline"/> &ndash;&gt; -->
-                                    <!--     <field name="is_deduction_desc" string="Jumlah PG" -->
-                                    <!--            readonly="is_deduction != True" class="mr8 oe_inline"/> -->
-                                    <!-- </div> -->
-
                                     <div class="clearfix"/>
                                 </group>
                             </page>
