@@ -125,6 +125,33 @@ class HRTMSEntrySummary(models.Model):
         inverse_name='tmsentry_id',
         string='TMS Summary Details',
         required=False)
+
+    #untuk domain pada pages di tms
+    tmsentry_details_10_ids = fields.One2many(
+        comodel_name='sb.tms.tmsentry.details',
+        inverse_name='tmsentry_id',
+        domain=[('flag', 'ilike', '10')],
+        string='TMS Summary Details',
+        required=False)
+    tmsentry_details_20_ids = fields.One2many(
+        comodel_name='sb.tms.tmsentry.details',
+        inverse_name='tmsentry_id',
+        domain=[('flag', 'ilike', '20')],
+        string='TMS Summary Details',
+        required=False)
+    tmsentry_details_30_ids = fields.One2many(
+        comodel_name='sb.tms.tmsentry.details',
+        inverse_name='tmsentry_id',
+        domain=[('flag', 'ilike', '30')],
+        string='TMS Summary Details',
+        required=False)
+    tmsentry_details_40_ids = fields.One2many(
+        comodel_name='sb.tms.tmsentry.details',
+        inverse_name='tmsentry_id',
+        domain=[('flag', 'ilike', '40')],
+        string='TMS Summary Details',
+        required=False)
+
     is_deduction_desc = fields.Text(
         string="Keterangan PG",
         required=False)
