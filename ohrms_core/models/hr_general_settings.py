@@ -61,6 +61,7 @@ class OHRMSConfiguration(models.TransientModel):
         help='Helps you to manage Biometric Device Integration.\n'
              '- This installs the module Biometric Device Integration.')
     test_module_hr_custody = fields.Boolean(default=False, invisible=True)
+    hr_expense_alias_domain_id = fields.Integer()
     test_oh_employee_check_list = fields.Boolean(default=False, invisible=True)
     test_module_hr_employee_shift = fields.Boolean(default=False,
                                                    invisible=True)
