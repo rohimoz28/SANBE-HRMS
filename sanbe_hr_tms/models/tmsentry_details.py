@@ -24,6 +24,7 @@ class TmsentryDetails(models.Model):
         string='WD'
     )
     date_in = fields.Date(string='Date In')
+    flag = fields.Char()
     time_in = fields.Float(string='Actual Time In')
     date_out = fields.Date(string='Date Out')
     time_out = fields.Float(string='Actual Time Out')
