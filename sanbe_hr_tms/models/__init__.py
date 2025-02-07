@@ -34,6 +34,7 @@ from . import sb_allowances
 from . import sb_allowance_details
 from . import sb_employee_attendance
 from . import sb_overtime_attendance
+from . import sb_overtime_bundling
 from . import stg_transform_absent
 from . import sb_leave_allocation
 #from . import idris

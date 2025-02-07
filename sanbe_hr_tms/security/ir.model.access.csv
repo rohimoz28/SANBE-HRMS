@@ -36,6 +36,8 @@ access_sb_employee_attendance,access.sb.employee.attendance,model_sb_employee_at
 
 access_sb_overtime_attendance,access.sb.overtime.attendance,model_sb_overtime_attendance,base.group_user,1,1,1,1
 
+access_sb_overtime_bundling,access.sb.overtime.bundling,model_sb_overtime_bundling,base.group_user,1,1,1,1
+
 access_hr_workingday_users,access.hr.working.days.users,model_hr_working_days,base.group_user,1,1,1,1
 
 access_hr_hr.overtime.setting,access.hr.overtime.setting,model_hr_overtime_setting,base.group_user,1,1,1,0

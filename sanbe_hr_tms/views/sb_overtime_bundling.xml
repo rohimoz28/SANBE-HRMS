@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <record id="sb_overtime_attendance_tree_view" model="ir.ui.view">
-            <field name="name">sb.overtime.attendance.tree</field>
-            <field name="model">sb.overtime.attendance</field>
+        <record id="sb_overtime_bundling_tree_view" model="ir.ui.view">
+            <field name="name">sb.overtime.bundling.tree</field>
+            <field name="model">sb.overtime.bundling</field>
             <field name="arch" type="xml">
-                <tree string="Overtime Attendances" create="0">
+                <tree string="Overtime Bundling">
                     <field name="branch_id" optional="show" string="Business Unit"/>
                     <field name="department_id" optional="show" string="Sub Department"/>
                     <field name="no_request" optional="show" string="Request Number"/>
@@ -18,29 +18,20 @@
                     <field name="approve_time_to" optional="show" widget="float_time"/>
                     <field name="rlz_time_fr" optional="show" widget="float_time"/>
                     <field name="rlz_time_to" optional="show" widget="float_time"/>
+                    <field name="sequence" optional="show"/>
+                    <field name="realtime_bundling_from" optional="show"/>
+                    <field name="realtime_bundling_to" optional="show"/>
                     <field name="state" optional="show"/>
-                    <field name="periode_id" optional="show"/>
+                    <field name="periode_id" optional="show"/>        
                 </tree>
-            </field>
+            </field>  
         </record>
 
-         <record id="sb_overtime_attendance_tree_ext" model="ir.ui.view">
-            <field name="name">sb.overtime.attendance.tree.ext</field>
-            <field name="model">sb.overtime.attendance</field>
-            <field name="inherit_id" ref="sanbe_hr_tms.sb_overtime_attendance_tree_view"/>
-            <field name="mode">extension</field>
+        <record id="sb_overtime_bundling_view_search" model="ir.ui.view">
+            <field name="name">sb.overtime.bundling.view.search</field>
+            <field name="model">sb.overtime.bundling</field>
             <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                        <attribute name="js_class">owl_list_controller_ot_attendance</attribute>
-                    </xpath>
-            </field>
-        </record>
-
-        <record id="sb_overtime_attendance_view_search" model="ir.ui.view">
-            <field name="name">sb.overtime.attendance.view.search</field>
-            <field name="model">sb.overtime.attendance</field>
-            <field name="arch" type="xml">
-                <search string="Overtime Attendances">
+                <search string="Overtime Bundling">
                     <filter string="Business Unit" name="branch_id"
                             context="{'group_by':'branch_id'}"/>
                     <filter string="Department" name="department_id"
@@ -49,26 +40,22 @@
             </field>
         </record>
 
-        <record id="action_sb_overtime_attendance" model="ir.actions.act_window">
-            <field name="name">Overtime Attendances</field>
+        <record id="action_sb_overtime_bundling" model="ir.actions.act_window">
+            <field name="name">Overtime Bundling</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">sb.overtime.attendance</field>
-            <!-- <field name="view_type">form</field> -->
+            <field name="res_model">sb.overtime.bundling</field>
             <field name="view_mode">tree</field>
             <field name="context">
                 {'search_default_branch_id':1, 'search_default_department_id':1}
             </field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No Report Overtime Attendances
+                    No Report Overtime Bundling
                 </p>
                 <p>
-                    Create New Overtime Attendances
+                    Create New Overtime Bundling
                 </p>
-            </field>
+            </field>    
         </record>
-
-        <!-- <menuitem name="ModelTitle" id="ModelName_menu" parent="your_root_menu" action="ModelName_act_window"/> -->
-
     </data>
 </odoo>
