@@ -322,6 +322,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     output_plann = fields.Char('Output Plan')
     branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Unit', index=True)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
+    bundling_ot = fields.Boolean(string="Bundling OT")
     transport = fields.Boolean('Transport')
     meals = fields.Boolean(string='Meal Dine In')
     meals_cash = fields.Boolean(string='Meal Cash')
