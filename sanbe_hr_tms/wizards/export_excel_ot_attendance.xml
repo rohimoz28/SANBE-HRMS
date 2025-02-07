@@ -11,6 +11,8 @@
                 <sheet>
                     <group>
                         <field name="department_id" no_close="1" readonly="0" options="{'no_create': True, 'no_close': True}"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
                     </group>
                     <!-- <field name="allowed_department_ids" invisible="1" /> -->
                 </sheet>

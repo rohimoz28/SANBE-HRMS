@@ -41,9 +41,9 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
 
             # Headers
             headers = [
-                'No', 'BU', 'Department', 'No. Request', 'Tanggal Request', 'Nama', 
+                'No', 'Business Unit', 'Sub Department', 'Request Number', 'Request Date', 'Employee Name', 
                 'NIK', 'Req Time Fr', 'Req Time To', 'App Time Fr', 
-                'App Time To', 'Rel Time Fr', 'Rel Time To', 'State', 'Periode ID' 
+                'App Time To', 'Rel Time Fr', 'Rel Time To', 'State', 'Period' 
                 # 'Total Delay', 'Total Times Delay'
             ]
 
