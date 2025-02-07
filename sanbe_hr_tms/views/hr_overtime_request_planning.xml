@@ -6,7 +6,7 @@
             <field name="model">hr.overtime.planning</field>
             <field name="arch" type="xml">
                 <form string="Overtime Request" create="0">
-                <sheet>
+                <!-- <sheet> -->
                     <header>
                         <button string="Approved By HCM" name="btn_approved" type="object" class="oe_highlight" invisible="state != 'approved_pmr'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Draft" name="btn_backdraft" type="object" invisible="state in ('draft', 'approved_mgr', 'approved_pmr')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
@@ -69,7 +69,7 @@
                     <notebook>
                         <page string="Request" name="overtime_request">
                             <field name="hr_ot_planning_ids" readonly="state == 'approved' or state == 'done'"
-                                   context="{'default_area_id': area_id,'default_branch_id': branch_id,'default_department_id': department_id}">
+                                   context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}">
                                 <tree editable="bottom">
                                     <field name="ot_type" optional="show"/>
                                     <field name="planning_id" column_invisible="1"/>
@@ -114,6 +114,7 @@
                                     <field name="department_id" context="{'default_department_id': department_id}"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                            force_save="1" optional="show"/>
+                                    <field name="bundling_ot" optional="show"/>
                                     <field name="transport" optional="show"/>
                                     <field name="meals" optional="show"/>
                                     <field name="meals_cash" optional="show"/>
@@ -121,13 +122,13 @@
                             </field>
                         </page>
                     </notebook>
-                    <!--                    </sheet>-->
-                </sheet>
-                <div class="oe_chatter">
+                    <!--</sheet>-->
+                    <div class="oe_chatter">
                         <field name="message_follower_ids"/>
                         <field name="activity_ids"/>
                         <field name="message_ids"/>
-                </div>
+                    </div>
+                <!-- </sheet> -->
                 </form>
             </field>
         </record>
