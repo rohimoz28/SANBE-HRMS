@@ -174,6 +174,15 @@
                 action="action_sb_overtime_attendance"
                 groups="module_sub_category_request_vs_realization_manager,module_sub_category_request_vs_realization_supervisor"
         />
+
+        <menuitem
+                id="menu_sb_overtime_bundling"
+                name="Overtime Bundling"
+                sequence="15"
+                parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
+                action="action_sb_overtime_bundling"
+                groups="module_sub_category_request_vs_realization_manager,module_sub_category_request_vs_realization_supervisor"
+        />
         <!-- END UPLOAD -->
 
         <!-- SETTING -->
@@ -211,7 +220,7 @@
         <menuitem
                 id="hr_holidays_status_menu_configuration_ext"
                 action="hr_holidays.open_view_holiday_status"
-                name="Permission Code"
+                name="Permission Code"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 groups="module_sub_category_permission_code_manager,module_sub_category_permission_code_supervisor"
                 sequence="40"

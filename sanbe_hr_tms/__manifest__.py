@@ -30,6 +30,7 @@
         'views/hr_disable_others.xml',
         'views/sb_employee_attendance.xml',
         'views/sb_overtime_attendance.xml',
+        'views/sb_overtime_bundling.xml',
         'views/sb_adjusment_requests.xml',
         'views/sb_adjusment_request_details.xml',
         'views/sb_incomplete_attendances.xml',
