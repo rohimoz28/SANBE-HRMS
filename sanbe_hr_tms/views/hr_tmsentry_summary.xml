@@ -44,7 +44,7 @@
                             <page name="Attendee" string="Attendee">
                                 <field name="tmsentry_details_10_ids">
                                     <tree>
-                                        <field name="flag" readonly="0"/>
+                                        <field name="flag" readonly="0" optional='hide'/>
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
                                         <field name="type" readonly="1"/>
@@ -215,7 +215,7 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
-                                        <field name="flag" readonly="0"/>
+                                        <field name="flag" readonly="0" optional='hide'/>
 
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
@@ -380,7 +380,7 @@
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
 
-                                        <field name="flag" readonly="0"/>
+                                        <field name="flag" readonly="0" optional='hide'/>
 
                                         <field name="approval_ot_from" widget="float_time" readonly="1"
                                                optional="show"/>
@@ -543,7 +543,7 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
-                                        <field name="flag" readonly="0"/>
+                                        <field name="flag" readonly="0" optional='hide'/>
 
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
@@ -710,7 +710,7 @@
                                           create="False"
                                           delete="False"
                                           editable="tmsentry_id.state != 'transfer_payroll'">
-                                        <field name="flag" readonly="0"/>
+                                        <field name="flag" readonly="0" optional='hide'/>
 
                                         <field name="dayname" readonly="1"/>
                                         <field name="details_date" readonly="1"/>
