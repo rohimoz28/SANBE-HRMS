@@ -37,10 +37,10 @@
                     <attribute name="invisible">True</attribute>
                 </xpath>
                 <xpath expr="//field[@name='department_id']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='job_id']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
             </field>
         </record>
@@ -50,22 +50,22 @@
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='area']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='branch_id']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='no_ktp']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='no_npwp']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='area']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='branch_id']" position="attributes">
-                    <attribute name="readonly">state =='approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
             </field>
         </record>
@@ -81,7 +81,7 @@
                     <attribute name="readonly">0</attribute>
                 </xpath>
                 <xpath expr="//field[@name='pension_date']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='service_from']" position="attributes">
                     <attribute name="readonly">0</attribute>
@@ -96,7 +96,7 @@
                     <attribute name="readonly">0</attribute>
                 </xpath>
                 <xpath expr="//field[@name='pinalty_amount']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='resign_notice']" position="attributes">
                     <attribute name="readonly">0</attribute>
@@ -109,7 +109,7 @@
             <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='join_date']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='emp_status']" position="replace">
                     <!-- <field name="emp_status" readonly="state in ['approved']"/> -->
@@ -117,43 +117,43 @@
                     <field name="emp_status_id" readonly="state in ['approved']" domain="[('status', '=', job_status)]" options="{'no_create': True, 'no_open': True}" string="Employment Status"/>
                 </xpath>
                 <xpath expr="//field[@name='employee_group1']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='identification_id']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='nik']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='no_ktp']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='no_npwp']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='marital']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='birthday']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='gender']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='religion']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='job_status']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='department_id']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='job_id']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='employee_levels']" position="attributes">
-                    <attribute name="readonly">state == 'approved'</attribute>
+                    <attribute name="readonly">state in ['approved','hold']</attribute>
                 </xpath>
             </field>
         </record>
