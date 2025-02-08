@@ -102,7 +102,7 @@ class HrEmployeeMutation(models.Model):
     service_no_ktp = fields.Char('KTP Number')
     service_area = fields.Many2one('res.territory', string='Area')
     service_bisnisunit = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Units')
-    service_departmentid = fields.Many2one('hr.department', string='Sub Department')
+    service_departmentid = fields.Many2one('hr.department', domain="[('branch_id','=',service_bisnisunit)]", string='Sub Department')
     service_identification = fields.Char('Identification Number')
     service_jobstatus = fields.Selection([('permanent', 'Permanent'),
                                           ('contract', 'Contract'),
@@ -116,7 +116,7 @@ class HrEmployeeMutation(models.Model):
                                                   ('retired', 'Retired'),
                                                   ('terminated', 'Terminated')],
                                                  string='Employment Status')
-    service_jobtitle = fields.Many2one('hr.job', string='Job Position', index=True)
+    service_jobtitle = fields.Many2one('hr.job', domain="[('department_id','=',service_departmentid)]", string='Job Position', index=True)
     service_empgroup1 = fields.Selection(selection=[('Group1', 'Group 1 - Harian(pak Deni)'),
                                                     ('Group2', 'Group 2 - bulanan pabrik(bu Felisca)'),
                                                     ('Group3', 'Group 3 - Apoteker and Mgt(pak Ryadi)'),
