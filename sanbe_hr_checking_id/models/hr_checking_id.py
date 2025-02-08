@@ -34,6 +34,7 @@ class HRCheckingID(models.Model):
     jobtitle = fields.Char('Job Title')
     empgroup = fields.Char('Employee P Group')
     blacklist= fields.Boolean('Blacklist',default=False)
+    end_of_contract = fields.Boolean('End Of Contract', default=False)
 
 
     def pencarian_data(self):
@@ -65,6 +66,7 @@ class HRCheckingID(models.Model):
     def _isi_data(self):
         for allrec in self:
             dataemp = False
+            # datatracking = False
             if allrec.noktp and not allrec.nonpwp and not allrec.nonik and not allrec.nonik_lama:
                 dataemp = self.env['hr.employee'].sudo().search([('no_ktp', '=', allrec.noktp)], limit=1)
             elif not allrec.noktp  and allrec.nonpwp and not allrec.nonik and not allrec.nonik_lama:
@@ -75,6 +77,9 @@ class HRCheckingID(models.Model):
                 dataemp = self.env['hr.employee'].sudo().search([('nik', '=', allrec.nonik)], limit=1)
             else:
                 dataemp = self.env['hr.employee'].sudo().search([('no_npwp', '=', allrec.nonpwp), ('no_ktp', '=', allrec.noktp ), ('nik', '=', allrec.nonik ), ('nik_lama', '=', allrec.nonik_lama )], limit=1)
+
+            datatracking = self.env['hr.employment.log'].sudo().search([('employee_id', '=', dataemp.id)], order='create_date desc', limit=1)
+            
             if dataemp:
                 datahr = {}
                 empgroup =dataemp.employee_group1
@@ -90,6 +95,10 @@ class HRCheckingID(models.Model):
                 allrec.employementstatus = dataemp.emp_status
                 allrec.jobtitle = dataemp.job_id.name
                 allrec.empgroup = empgroup
+                if datatracking and datatracking.emp_status == 'end_contract':
+                    allrec.end_of_contract = True
+                else:
+                    allrec.end_of_contract = False
             else:
                 allrec.emp_no = ''
                 allrec.employee_id = False
