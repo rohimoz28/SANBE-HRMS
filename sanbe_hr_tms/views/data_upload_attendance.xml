@@ -83,6 +83,18 @@
             <field name="model">data.upload.attendance</field>
             <field name="arch" type="xml">
                 <search string="TMS Entry">
+                    <field name="employee_id"/>
+                    <field name="tgl"/>
+                    <field name="area_id"/>
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
+                    <field name="nik"/>
+                    <field name="tgl_masuk"/>
+                    <field name="time_in"/>
+                    <field name="tgl_keluar"/>
+                    <field name="time_out"/>
+                    <field name="attendence_status"/>
+                    <field name="state"/>
                     <!-- <field name="branch_id" filter_domain="[('area_id', 'child_of', area_id)]"/> -->
                     <!-- <field name="nik" string="NIK"/> -->
                     <!-- <filter string="Branch" name="branch_id" -->
