@@ -57,6 +57,10 @@ class HRTmsMachineDetails(models.Model):
 
     name = fields.Char('Badges Number')
     employee_id = fields.Many2one('hr.employee',string='Employee Name',index=True)
+    nik = fields.Char('NIK', compute='_compute_nik', store=True)
+    job_id = fields.Many2one('hr.job',string='Job Position',compute='_compute_job_id',store=True,index=True)
+    department_id = fields.Many2one('hr.department',string='Sub Department',compute='_compute_department_id',store=True,index=True)
+    branch_id = fields.Many2one('res.branch',string='Branch',compute='_compute_branch_id',store=True,index=True)
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -65,3 +69,23 @@ class HRTmsMachineDetails(models.Model):
                 vals['employee_id'] = myemp.id
         employees = super().create(vals_list)
         return employees
+
+    @api.depends('employee_id.nik')
+    def _compute_nik(self):
+        for record in self:
+            record.nik = record.employee_id.nik
+    
+    @api.depends('employee_id.job_id')
+    def _compute_job_id(self):
+        for record in self:
+            record.job_id = record.employee_id.job_id
+    
+    @api.depends('employee_id.department_id')
+    def _compute_department_id(self):
+        for record in self:
+            record.department_id = record.employee_id.department_id
+
+    @api.depends('employee_id.branch_id')
+    def _compute_branch_id(self):
+        for record in self:
+            record.branch_id = record.employee_id.branch_id
