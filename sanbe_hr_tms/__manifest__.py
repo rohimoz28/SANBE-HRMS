@@ -58,8 +58,11 @@
         'report/report_kehadiran_html.xml',
         'report/report_ot_attendance_html.xml',
         'report/report_ot_attendance_excel.xml',
+        'report/report_ot_bundling_html.xml',
+        'report/report_ot_bundling_excel.xml',
         'wizards/export_excel_tms.xml',
         'wizards/export_excel_ot_attendance.xml',
+        'wizards/export_excel_ot_bundling_wizard.xml',
         'wizards/cari_employee_department.xml',
         'wizards/hr_tmsimport_data_entry.xml',
         # 'wizards/hr_list_employee_scheduled.xml',
@@ -86,8 +89,10 @@
                 'hr_holidays/static/src/**/*',
                 'sanbe_hr_tms/static/src/xml/export_button.xml',
                 'sanbe_hr_tms/static/src/xml/export_button_ot_attendance.xml',
+                'sanbe_hr_tms/static/src/xml/export_button_ot_bundling.xml',
                 'sanbe_hr_tms/static/src/js/export_button.js',
                 'sanbe_hr_tms/static/src/js/export_button_ot_attendance.js',
+                'sanbe_hr_tms/static/src/js/export_button_ot_bundling.js',
                 'sanbe_hr_tms/static/src/js/report_esm.js',
                 'sanbe_hr_tms/static/src/js/report_action.js'
                 

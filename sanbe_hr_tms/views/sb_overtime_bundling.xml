@@ -5,7 +5,7 @@
             <field name="name">sb.overtime.bundling.tree</field>
             <field name="model">sb.overtime.bundling</field>
             <field name="arch" type="xml">
-                <tree string="Overtime Bundling">
+                <tree string="Overtime Bundling" create="0">
                     <field name="branch_id" optional="show" string="Business Unit"/>
                     <field name="department_id" optional="show" string="Sub Department"/>
                     <field name="no_request" optional="show" string="Request Number"/>
@@ -56,6 +56,18 @@
                     Create New Overtime Bundling
                 </p>
             </field>    
+        </record>
+
+        <record id="sb_overtime_bundling_extension" model="ir.ui.view">
+            <field name="name">sb.overtime.bundling.extension</field>  
+            <field name="model">sb.overtime.bundling</field>  
+            <field name="inherit_id" ref="sanbe_hr_tms.sb_overtime_bundling_tree_view"/>
+            <field name="mode">extension</field>  
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="js_class">owl_list_controller_ot_bundling</attribute>
+                </xpath>
+            </field>
         </record>
     </data>
 </odoo>
