@@ -49,7 +49,7 @@ class HRPermissionEntry(models.Model):
 
     permission_time_from = fields.Float('Time From')
     permission_time_to = fields.Float('Time To')
-    time_days = fields.Float('Time', compute='_get_days_duration') # re-create to accomodate table sb_leave_allocation
+    time_days = fields.Float('Time') # re-create to accomodate table sb_leave_allocation
     time_hour = fields.Float('Hours',compute='_total_jam_ijin',store=False)
     handled_temp_to = fields.Many2one('hr.employee', string='Handled By')
     back_to_office = fields.Date('Back To Office')
@@ -75,20 +75,6 @@ class HRPermissionEntry(models.Model):
                                         required=True, readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
-    leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
-    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_allocation', 
-                                    readonly=True, store=True)
-
-    @api.depends('employee_id')
-    def _compute_leave_allocation_id(self):
-        for record in self:
-            if record.employee_id:
-                leave_allocation = self.env['sb.leave.allocation'].search([
-                    ('employee_id', '=', record.employee_id.id)
-                ], limit=1)
-                record.leave_allocation_id = leave_allocation
-            else:
-                record.leave_allocation_id = False
 
     @api.depends('permission_date_from','permission_date_To')
     def _get_days_duration(self):
@@ -99,9 +85,7 @@ class HRPermissionEntry(models.Model):
                 ganti2 = rec.permission_date_from.strftime(date_format)
                 tgl1 = datetime.strptime(ganti1, date_format)
                 tgl2 = datetime.strptime(ganti2, date_format)
-                total_days = (tgl1 - tgl2).days
-                rec.time_days = total_days + 1
-                #rec.time_days = (tgl1 - tgl2).days
+                rec.time_days = (tgl1 - tgl2).days
             else:
                 rec.time_days = 0
 
@@ -132,40 +116,61 @@ class HRPermissionEntry(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        #CHP = Area Cimahi
+        #CMP = Area Cimareme
+        #TSP = Area Taman Sari
+        #CHP24000001
+        
         for vals in vals_list:
-            # validation fullday leave
-            employee = self.env['hr.employee'].browse(vals['employee_id'])
-            holiday_status_id = vals['holiday_status_id']
-            time_days = vals['time_days']
-            self._validate_leave_alloc(employee.id,holiday_status_id,time_days)
-            # END validation fullday leave
-
             if vals.get('trans_number', _('New')) == _('New'):
                 if 'area_id' in vals:
                     area = vals.get('area_id')
                     department = vals.get('department_id')
                     branch_id = vals.get('branch_id')
-                    dt_area = self.env['res.territory'].sudo().search([('id', '=', int(area))], limit=1)
-                    dept = self.env['hr.department'].sudo().search([('id', '=', int(department))], limit=1)
+                    dt_area = self.env['res.territory'].sudo().search([('id','=',int(area))],limit=1)
+                    dept = self.env['hr.department'].sudo().search([('id','=',int(department))],limit=1)
                     department_code = dept.department_code
-                    branch = self.env['res.branch'].sudo().search([('id', '=', int(branch_id))], limit=1)
+                    branch = self.env['res.branch'].sudo().search([('id','=',int(branch_id))],limit=1)
                     branch_unit_id = branch.unit_id
                     if dt_area:
+                        # if dt_area.area_code == 'TSR':
+                        #     cdo = 'TSP'
+                        # if dt_area.area_code == 'CMH':
+                        #     cdo = 'CHP'
+                        # if dt_area.area_code == 'CMR':
+                        #     cdo = 'CMP'
+                        # if dt_area.area_code == 'SBF':
+                        #     cdo = 'SBP'
                         tgl = fields.Date.today()
                         tahun = str(tgl.year)[2:]
                         bulan = str(tgl.month)
+                        # vals['trans_number'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.permission.entry'))
                         vals['trans_number'] = f"{tahun}/{bulan}/{branch_unit_id}/PE/{department_code}/{self.env['ir.sequence'].next_by_code('hr.permission.entry')}"
-        return super(HRPermissionEntry, self).create(vals_list)
+        res = super(HRPermissionEntry,self).create(vals_list)
 
-    @api.model_create_multi
-    def write(self, vals_list):
-        for vals in vals_list:
-            # validation fullday leave
-            if vals.get('holiday_status_id') == 1:
-                self._validate_leave_alloc(self.employee_id.id, vals['holiday_status_id'], self.time_days)
-            # END validation fullday leave
-        return super(HRPermissionEntry, self).write(vals)
-
+        for alldata in res:
+            #Search if data is holiday based on tmsentry data
+            if not alldata.is_holiday:
+                #Search if employee data already exist
+                myleave = self.env['hr.leave'].sudo().search([('permition_id','=',alldata.id)])
+                if not myleave:
+                    #IF Hr Leave no Data Permition Id than created it
+                    myleave = self.env['hr.leave'].sudo().create({'employee_id': alldata.employee_id.id,
+                                                                  'date_from': alldata.permission_date_from,
+                                                                  'date_to': alldata.permission_date_To,
+                                                                  'holiday_type': 'company',
+                                                                  'request_date_from': alldata.permission_date_from,
+                                                                  'request_date_to': alldata.permission_date_To,
+                                                                  'number_of_days_display': alldata.permission_date_To - alldata.permission_date_from,
+                                                                  'is_permition': True,
+                                                                  'holiday_type': 'employee',
+                                                                  'department_id': alldata.employee_id.department_id.id,
+                                                                  'company_id': self.env.company.id,
+                                                                  'holiday_status_id': alldata.holiday_status_id.id,
+                                                                  'permition_id': alldata.id or alldata._origin.id})
+                    alldata.leave_id = myleave.id
+        return res
+    
     @api.onchange('approved1','approved2','approved3')
     def set_approved_status(self):
         for allrec in self:
@@ -204,18 +209,6 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             if rec.is_approved == True:
                 rec.permission_status = 'approved'
-
-                if rec.permission_date_from and rec.permission_date_To:
-                    days_permission = (rec.permission_date_To - rec.permission_date_from).days
-
-                    if rec.holiday_status_id.id == 6:
-                        if rec.leave_allocation_id:
-                            rec.leave_allocation_id.leave_allocation -= days_permission + 1
-                    elif rec.holiday_status_id.id == 7: 
-                        if rec.leave_allocation_id:
-                            rec.leave_allocation_id.leave_allocation -= 0.5
-                    else:
-                        pass
             else:
                 raise UserError('Need 2 Approver check List')
             

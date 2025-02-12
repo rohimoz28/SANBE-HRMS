@@ -24,7 +24,6 @@
                                 <field name="job_id" readonly="1" force_save="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
                                 <field name="handled_temp_to" readonly="permission_status != 'draft'" />
                                 <field name="remarks" readonly="permission_status != 'draft'" />
-                                <field name="leave_allocation" invisible="holiday_status_id not in [6,7]"/>
                             </group>
                             <group>
                                 <field name="trans_number" readonly="permission_status != 'draft'"/>
@@ -69,9 +68,9 @@
                             </group>
                             <group>
                                 <field name="is_approved" invisible="1"/>
-                                <field name="approve1_job_title" readonly="approved1==True or permission_status == 'done'" />
-                                <field name="approve2_job_title" readonly="approved2==True or permission_status == 'done'"/>
-                                <field name="approve3_job_title" readonly="approved3==True or permission_status == 'done'"/>
+                                <field name="approve1_job_title" readonly="approved1==True or permission_status != 'draft'" />
+                                <field name="approve2_job_title" readonly="approved2==True or permission_status != 'draft'"/>
+                                <field name="approve3_job_title" readonly="approved3==True or permission_status != 'draft'"/>
                             </group>
                         </group>
                     </sheet>
