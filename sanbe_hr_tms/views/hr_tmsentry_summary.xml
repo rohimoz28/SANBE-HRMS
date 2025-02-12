@@ -382,6 +382,7 @@
 
                                         <field name="flag" readonly="0" optional='hide'/>
 
+                                        <field name="details_date" optional='show'/>
                                         <field name="approval_ot_from" widget="float_time" readonly="1"
                                                optional="show"/>
                                         <field name="approval_ot_to" widget="float_time" readonly="1" optional="show"/>
