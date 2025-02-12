@@ -1422,6 +1422,48 @@ begin
     and hts.branch_id = branch
     and hts.periode_id = period;
 
+    --update sheet atendee, permission, overtime dan night shift
+    with xx as(
+      select
+      sttd.employee_id,
+      sttd.workingday_id,
+      hwd.code,
+      sttd.details_date,
+      sttd.status_attendance,
+      sttd.approval_ot_from,
+      sttd.approval_ot_to,
+      sttd.details_date as d_date,
+      TRIM(BOTH '.' FROM CONCAT(
+            CASE 
+                WHEN sttd.status_attendance = 'Attendee' THEN '10' 
+                ELSE '' 
+            END,
+            CASE 
+                WHEN sttd.status_attendance NOT IN ('Attendee', 'Absent') AND sttd.status_attendance IS NOT NULL THEN '.20' 
+                ELSE '' 
+            END,
+            CASE 
+                WHEN sttd.approval_ot_from IS NOT NULL OR sttd.approval_ot_to IS NOT NULL THEN '.30' 
+                ELSE '' 
+            END,
+            CASE 
+                WHEN hwd.code LIKE '%2%' OR hwd.code LIKE '%3%' THEN '.40' 
+                ELSE '' 
+            END
+        )) AS flag
+    from sb_tms_tmsentry_details sttd 
+    left join hr_working_days hwd on sttd.workingday_id = hwd.id
+    )
+    update sb_tms_tmsentry_details sttd
+    set flag = xx.flag
+    from xx, hr_tmsentry_summary hts
+    where sttd.employee_id = xx.employee_id
+    and sttd.tmsentry_id = hts.id
+    and sttd.details_date = xx.d_date
+    and hts.periode_id = period
+    and hts.area_id = l_area
+    and hts.branch_id = branch;
+
     --update total summary detail (footer) || code ini harus selalu paling bawah
     WITH flag AS (SELECT he.name,
                          he.employee_levels,
