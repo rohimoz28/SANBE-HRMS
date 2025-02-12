@@ -76,7 +76,7 @@ class HRPermissionEntry(models.Model):
     nik = fields.Char(related='employee_id.nik')
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
-    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_allocation', 
+    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_allocation',
                                     readonly=True, store=True)
 
     @api.depends('employee_id')
@@ -232,7 +232,7 @@ class HRPermissionEntry(models.Model):
                     if rec.holiday_status_id.id == 6:
                         if rec.leave_allocation_id:
                             rec.leave_allocation_id.leave_allocation -= days_permission + 1
-                    elif rec.holiday_status_id.id == 7: 
+                    elif rec.holiday_status_id.id == 7:
                         if rec.leave_allocation_id:
                             rec.leave_allocation_id.leave_allocation -= 0.5
                     else:
