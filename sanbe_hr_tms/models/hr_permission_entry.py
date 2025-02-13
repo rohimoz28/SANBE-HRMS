@@ -49,7 +49,7 @@ class HRPermissionEntry(models.Model):
 
     permission_time_from = fields.Float('Time From')
     permission_time_to = fields.Float('Time To')
-    time_days = fields.Float('Time') # re-create to accomodate table sb_leave_allocation
+    time_days = fields.Float('Time', compute='_get_days_duration') # re-create to accomodate table sb_leave_allocation
     time_hour = fields.Float('Hours',compute='_total_jam_ijin',store=False)
     handled_temp_to = fields.Many2one('hr.employee', string='Handled By')
     back_to_office = fields.Date('Back To Office')
@@ -75,6 +75,20 @@ class HRPermissionEntry(models.Model):
                                         required=True, readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
+    leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
+    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_allocation', 
+                                    readonly=True, store=True)
+
+    @api.depends('employee_id')
+    def _compute_leave_allocation_id(self):
+        for record in self:
+            if record.employee_id:
+                leave_allocation = self.env['sb.leave.allocation'].search([
+                    ('employee_id', '=', record.employee_id.id)
+                ], limit=1)
+                record.leave_allocation_id = leave_allocation
+            else:
+                record.leave_allocation_id = False
 
     @api.depends('permission_date_from','permission_date_To')
     def _get_days_duration(self):
@@ -85,7 +99,9 @@ class HRPermissionEntry(models.Model):
                 ganti2 = rec.permission_date_from.strftime(date_format)
                 tgl1 = datetime.strptime(ganti1, date_format)
                 tgl2 = datetime.strptime(ganti2, date_format)
-                rec.time_days = (tgl1 - tgl2).days
+                total_days = (tgl1 - tgl2).days
+                rec.time_days = total_days + 1
+                #rec.time_days = (tgl1 - tgl2).days
             else:
                 rec.time_days = 0
 
@@ -209,6 +225,18 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             if rec.is_approved == True:
                 rec.permission_status = 'approved'
+
+                if rec.permission_date_from and rec.permission_date_To:
+                    days_permission = (rec.permission_date_To - rec.permission_date_from).days
+
+                    if rec.holiday_status_id.id == 6:
+                        if rec.leave_allocation_id:
+                            rec.leave_allocation_id.leave_allocation -= days_permission + 1
+                    elif rec.holiday_status_id.id == 7: 
+                        if rec.leave_allocation_id:
+                            rec.leave_allocation_id.leave_allocation -= 0.5
+                    else:
+                        pass
             else:
                 raise UserError('Need 2 Approver check List')
             
