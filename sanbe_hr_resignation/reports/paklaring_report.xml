@@ -142,16 +142,17 @@
                                 <div class="col-12">
                                     <br />
                                     <br />
-                                    <h2 style="line-height: 1; font-size:21px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                    <h2 style="line-height: 1; font-size:21px; font-family: 'Tahoma', Trebuchet MS, sans-serif; text-align: center; margin-bottom: 0;">
                                         <strong>
-                                            <u>
-                                                <center>SURAT KETERANGAN</center>
-                                            </u>
+                                            <center>SURAT KETERANGAN</center>
                                         </strong>
                                     </h2>
-                                    <p style="font-size:12px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                        <center style="line-height: 0.1;">
-                                        <strong><t t-esc="doc.letter_no" /></strong>
+                                    <div style="width: 227px; border-bottom: 2px solid black; margin: -4px auto;"></div>
+                                    <p style="font-size:10px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                        <center style="line-height: 1; padding: 0; margin-top: -4px;">
+                                            <strong>
+                                                NO. .../PERS/......../..../REF/VI/2022
+                                            </strong>
                                         </center>
                                     </p>
                                 </div>
@@ -160,11 +161,11 @@
                             <br />
                             <div class="row" id="hash_header">
                                 <div class="col-12">
-                                    <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Yang bertanda tangan dibawah ini : </p>
+                                    <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: 48px;"> Yang bertanda tangan dibawah ini : </p>
                                 </div>
                             </div>
                             <div class="oe_structure" />
-                            <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 48px; border-collapse: collapse;">
+                            <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 92px; border-collapse: collapse;">
                                 <tr style="height: 10px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">Nama</p>
@@ -191,10 +192,10 @@
                             <br />
                             <div class="row" id="hash_header">
                                 <div class="col-12">
-                                    <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Menerangkan Bahwa : </p>
+                                    <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: 48px;"> Menerangkan Bahwa : </p>
                                 </div>
                             </div>
-                            <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 48px; border-collapse: collapse;">
+                            <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 92px; border-collapse: collapse;">
                                 <tr style="height: 10px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">Nama</p>
@@ -243,49 +244,50 @@
                             <br />
                             <div class="row" id="info_inggris">
                                 <div class="col-12">
-                                    <p style="line-height: 1; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> 
+                                    <p style="line-height: 1.2; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: 48px; margin-right: 48px;"> 
                                         Adalah benar pernah bekerja pada <span t-field="company.name" /> dari tanggal 
                                         <t t-if="doc.emp_nos.job_status == 'permanent'">
                                             <t t-if="doc.joined_date">
                                                 <t t-esc="doc.joined_date.strftime('%d-%m-%Y')" /></t>
-                                            <t t-else="">.....</t>
+                                            <t t-else="">..........</t>
                                         </t>
                                         <t t-elif="doc.emp_nos.job_status == 'contract'">
                                             <t t-if="doc.emp_nos.contract_datefrom">
                                                 <t t-esc="doc.emp_nos.contract_datefrom.strftime('%d-%m-%Y')" /></t>
-                                            <t t-else="">.....</t>
+                                            <t t-else="">..........</t>
                                         </t>
-                                        <t t-else="">.....</t> 
-                                        dan <br />terhitung tanggal 
+                                        <t t-else="">..........</t> 
+                                        dan terhitung tanggal <br/> 
                                         <t t-if="doc.effective_date">
                                             <t t-esc="doc.effective_date.strftime('%d-%m-%Y')" /></t>
-                                        <t t-else="">.....</t> telah mengundurkan diri atas permintaannya sendiri. 
+                                        <t t-else="">..........</t> telah mengundurkan diri atas permintaannya sendiri. 
                                     </p>
-                                    <p style="line-height: 1; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Demikian surat keterangan ini kami <br />buat untuk dapat dipergunakan sebagaimana mestinya. </p>
+                                    <p style="line-height: 1; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: 48px; margin-right: 48px;">
+                                        Demikian surat keterangan ini kami buat untuk dapat dipergunakan sebagaimana mestinya.
+                                    </p>
                                 </div>
                             </div>
                             <br />
                             <div class="row mt-12 mb-1" id="tandata_tangan">
-                                <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" style="font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                    <span t-esc="doc.area.name" />, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
-                                    <br />
-                                    <span>Hormat Kami,</span>
+                                <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" style="font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: 48px;">
+                                    <span t-esc="doc.area.name"/>, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
                                     <br />
                                     <br />
-                                    <br />
+                                    <p>Hormat Kami,</p>
                                     <br />
                                     <br />
                                     <br />
                                     <br />
-                                    <p> (...................................................)</p>
-                                    <br/>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <p style="line-height: 1; margin: 0; padding: 0; display: block;">..............................................................</p>
+                                    <p style="margin-top: -2px; padding: 0; border-top: 1px solid black; width: 275px; display: block;"></p>
                                     <t t-if="doc.branch_id.id == 1">
-                                        <p>Personnel &amp; General Affairs</p>    
-                                        <p>Asep Rohman</p>
+                                        <strong><p style="line-height: 0.1;">Personnel &amp; General Affairs Manager</p></strong>   
+                                        <!-- <strong><p style="line-height: 0.1;">Asep Rohman</p></strong> -->
                                     </t>
-                                    <t t-else="">
-                                        
-                                    </t>
+                                    <t t-else=""></t>
                                 </div>
                             </div>
                         </div>
