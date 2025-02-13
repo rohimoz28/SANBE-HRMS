@@ -76,7 +76,7 @@ class HRPermissionEntry(models.Model):
     nik = fields.Char(related='employee_id.nik')
     periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
-    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_allocation',
+    leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_remaining',
                                     readonly=True, store=True)
 
     @api.depends('employee_id')
@@ -85,7 +85,7 @@ class HRPermissionEntry(models.Model):
             if record.employee_id:
                 leave_allocation = self.env['sb.leave.allocation'].search([
                     ('employee_id', '=', record.employee_id.id)
-                ], limit=1)
+                ], order='create_date desc', limit=1)
                 record.leave_allocation_id = leave_allocation
             else:
                 record.leave_allocation_id = False
@@ -227,14 +227,39 @@ class HRPermissionEntry(models.Model):
                 rec.permission_status = 'approved'
 
                 if rec.permission_date_from and rec.permission_date_To:
-                    days_permission = (rec.permission_date_To - rec.permission_date_from).days
-
+                    # days_permission = (rec.permission_date_To - rec.permission_date_from).days
+                    full_day_leave = rec.leave_allocation_id.leave_remaining - rec.time_days
+                    half_day_leave = rec.leave_allocation_id.leave_remaining - 0.5
                     if rec.holiday_status_id.id == 6:
                         if rec.leave_allocation_id:
-                            rec.leave_allocation_id.leave_allocation -= days_permission + 1
-                    elif rec.holiday_status_id.id == 7:
+                            # rec.leave_allocation_id.leave_allocation -= days_permission + 1
+                            new_leave_allocation = self.env['sb.leave.allocation'].create({'employee_id': rec.employee_id.id,
+                                                                    'date': rec.permission_date_from,
+                                                                    'area_id': rec.area_id.id,
+                                                                    'branch_id': rec.branch_id.id,
+                                                                    'job_id': rec.job_id.id,
+                                                                    'department_id': rec.department_id.id,
+                                                                    'leave_allocation': 0,
+                                                                    'leave_used': rec.time_days,
+                                                                    'leave_remaining': full_day_leave,
+                                                                    'remarks': rec.remarks
+                                                                    })
+                            rec.leave_allocation_id = new_leave_allocation.id
+                    elif rec.holiday_status_id.id == 7: 
                         if rec.leave_allocation_id:
-                            rec.leave_allocation_id.leave_allocation -= 0.5
+                            # rec.leave_allocation_id.leave_allocation -= 0.5
+                            new_leave_allocation = self.env['sb.leave.allocation'].create({'employee_id': rec.employee_id.id,
+                                                                    'date': rec.permission_date_from,
+                                                                    'area_id': rec.area_id.id,
+                                                                    'branch_id': rec.branch_id.id,
+                                                                    'job_id': rec.job_id.id,
+                                                                    'department_id': rec.department_id.id,
+                                                                    'leave_allocation': 0,
+                                                                    'leave_used': 0.5,
+                                                                    'leave_remaining': half_day_leave,
+                                                                    'remarks': rec.remarks
+                                                                    })
+                            rec.leave_allocation_id = new_leave_allocation.id
                     else:
                         pass
             else:
