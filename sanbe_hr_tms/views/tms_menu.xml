@@ -120,9 +120,17 @@
         />
 
         <menuitem
+                id="menu_hr_machine_details"
+                name="PinCode"
+                sequence="12"
+                parent="sanbe_hr_tms.hr_menu_tms_processing"
+                action="action_hr_machine_details"
+        />
+
+        <menuitem
                 id="menu_hr_tms_entry_sync"
                 name="Upload Data Absen"
-                sequence="12"
+                sequence="13"
                 parent="sanbe_hr_tms.hr_menu_tms_processing"
                 action="action_hr_tmsentry_sync"
                 groups="module_sub_category_upload_data_absen_manager,module_sub_category_upload_data_absen_supervisor"
