@@ -11,3 +11,4 @@ from . import hr_tmsimport_data_entry
 from . import hr_list_employee_scheduled
 from . import export_excel_tms
 from . import export_excel_ot_attendance
+from . import export_excel_ot_bundling_wizard
