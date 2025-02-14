@@ -391,7 +391,17 @@ begin
       and hts2.periode_id = period
       and hts2.area_id = l_area
       and hts2.branch_id = branch;
-     
+
+    -- update delay status attendance half day leave dan delay in = 0
+    update sb_tms_tmsentry_details s
+    set delay = 0
+    from hr_tmsentry_summary hts
+    where (s.status_attendance LIKE '%Half Day Leave%' OR s.status_attendance LIKE '%Delay In%')
+      and hts.id = s.tmsentry_id
+      and hts.periode_id = period
+      and hts.area_id = l_area
+      and hts.branch_id = branch;
+
     with aa as (select hts.employee_id,
                        hts.periode_id,
                        hts.area_id,
@@ -1371,14 +1381,14 @@ begin
     where s.id = ff.sttd_id;
 
     -- update delay status attendance half day leave = 0
-    update sb_tms_tmsentry_details s
-    set delay = 0
-    from hr_tmsentry_summary hts
-    where s.status_attendance like '%Half Day Leave%'
-      and hts.id = s.tmsentry_id
-      and hts.periode_id = period
-      and hts.area_id = l_area
-      and hts.branch_id = branch;
+    -- update sb_tms_tmsentry_details s
+    -- set delay = 0
+    -- from hr_tmsentry_summary hts
+    -- where s.status_attendance like '%Half Day Leave%'
+    --   and hts.id = s.tmsentry_id
+    --   and hts.periode_id = period
+    --   and hts.area_id = l_area
+    --   and hts.branch_id = branch;
 
 	--update deduction
 	with flag as (
