@@ -6,7 +6,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">5</field>
-            <field name="margin_bottom">17.5</field>
+            <field name="margin_bottom">15</field>
             <field name="margin_left">25.4</field>
             <field name="margin_right">25.4</field>
             <field name="header_line" eval="False" />
@@ -94,21 +94,19 @@
                                     <center>
                                     <img
                                         src="/sanbe_hr_resignation/static/src/img/header_paklaring_steril.png"
-                                        style="width: 100%; height: auto; max-width: 210mm; max-height: 297mm;"
+                                        style="width: 100%; height: auto; max-width: 180mm; max-height: 200mm;"
                                     />
                                     </center>
                                 </div>
                             </div>
                         </div>
                         <br />
-                        <br />
                         <div class="page">
                             <div class="oe_structure" />
                             <div class="row" id="hash_header">
                                 <div class="col-12">
                                     <br />
-                                    <br />
-                                    <h2 style="line-height: 1; font-size:21px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                    <h2 style="line-height: 1; font-size:20px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <strong>
                                             <u>
                                                 <center>CERTIFICATE OF EMPLOYEMENT</center>
@@ -125,58 +123,57 @@
                                     </p>
                                 </div>
                             </div>
-                            <br />
-                            <br />
+                            <br />                           
                             <div class="row" id="hash_header">
                                 <div class="col-12">
-                                    <p style="line-height: 0.1; margin-left: 48px; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> <i>On behalf of the Management PT. Sanbe Farma we here by inform that:</i></p>
-                                    <p style="line-height: 0.1; margin-left: 48px; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Atas nama manajemen PT Sanbe Farma, dengan ini menerangkan bahwa:</p>
+                                    <p style="line-height: 0.1; margin-left: 48px; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> <i>On behalf of the Management PT. Sanbe Farma we here by inform that:</i></p>
+                                    <p style="line-height: 0.1; margin-left: 48px; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Atas nama manajemen PT Sanbe Farma, dengan ini menerangkan bahwa:</p>
                                 </div>
                             </div>
                             <div class="oe_structure" />
                             <table class="table table-sm o_main_table table-borderless mt-4" style="margin-left: 48px; border-collapse: collapse;">
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"><u><i>NAME</i></u></p>
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">NAMA</p>
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"><u><i>NAME</i></u></p>
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">NAMA</p>
                                     </td>
-                                    <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
-                                    <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                    <td style="width: 15px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
+                                    <td style="width: 300px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <t t-if="doc.emp_nos.name">
                                             <t t-esc="doc.emp_nos.name" />
                                         </t>
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                             <u><i>UPDATE PHOTO</i></u>
                                         </p>
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">FOTO TERKINI</p>
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">FOTO TERKINI</p>
                                     </td>
-                                    <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
-                                    <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                    <td style="width: 15px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
+                                    <td style="width: 300px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <t t-if="doc.emp_nos.image_1920">
                                             <t t-if="doc.emp_nos.image_1920">
                                                 <img t-att-src="image_data_uri(doc.emp_nos.image_1920)"
-                                                    style="max-height:300px; width: 150px;" alt="Employee Image" />
+                                                    style="max-height:200px; width: 100px;" alt="Employee Image" />
                                             </t>
                                         </t>
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"><u><i>ADDRESS</i></u></p>
-                                        <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">ALAMAT</p>
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"><u><i>ADDRESS</i></u></p>
+                                        <p style="line-height: 0.1; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">ALAMAT</p>
                                     </td>
-                                    <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
-                                    <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                    <td style="width: 15px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
+                                    <td style="width: 300px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <t t-if="doc.emp_nos.private_street">
                                             <t t-esc="doc.emp_nos.private_street" />
                                         </t>
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1;">
                                             <u><i>EMPLOYEE NO.</i></u>
@@ -188,7 +185,7 @@
                                         <t t-esc="doc.emp_nos.nik" />
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1;">
                                             <u><i>BEGINNING CLASIFICATION</i></u>
@@ -200,7 +197,7 @@
                                         <t t-esc="doc.emp_nos.job_id.name" />
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 150px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1;">
                                             <u><i>FINAL CLASIFICATION</i></u>
@@ -212,7 +209,7 @@
                                         <t t-esc="doc.emp_nos.job_id.name" />
                                     </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 300px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1;">
                                             <u><i>PERIOD OF SERVICE</i></u>
@@ -224,7 +221,7 @@
                                             t-esc="doc.emp_nos.ws_month" /> Month <t
                                             t-esc="doc.emp_nos.ws_day" /> Day </td>
                                 </tr>
-                                <tr style="height: 10px;">
+                                <tr style="height: 2.5px;">
                                     <td style="width: 300px; padding: 0; margin: 0;">
                                         <p style="line-height: 0.1;">
                                             <u><i>REASON OF LEAVING</i></u>
@@ -238,55 +235,35 @@
                                 </tr>
                             </table>
                             <br />
-                            <div class="row" id="info_inggris">
-                                <div class="col-12" style="margin-left: 48px; text-align: justify;">
-                                    <div style="line-height: 0.1;">
-                                        <p>
-                                            <i>During his/her service in our company, he/she has shown his/her
-                                                good work performance. We take this</i>
-                                        </p>
-                                        <p>
-                                            <i>moment to thank his/her for his/her past effort and dedication.
-                                                So, this information letter has been made</i>
-                                        </p>
-                                        <p>
-                                            <i>for use as necessary.</i>
-                                        </p>
+                            <div class="text-paragraph" style="margin-left: 48px; margin-right: 48px;">
+                                <p style="font-style: italic;">
+                                    During his/her service in our company, he/she has shown his/her good work performance.
+                                    We take this moment to thank his/her for his/her past effort and dedication.
+                                    So, this information letter has been made for use as necessary.
+                                </p>
+                                <p>
+                                    Selama bekerja di perusahaan kami, yang bersangkutan telah menunjukkan kinerja yang baik.
+                                    Pada kesempatan ini kami mengucapkan terima kasih atas karya dan dedikasinya selama masa tugas tersebut.
+                                    Demikian surat keterangan ini dibuat untuk digunakan sebagaimana mestinya.
+                                </p>
+                                <!-- <br/> -->
+                                <div class="row mt-12 mb-1" id="tandata_tangan">
+                                    <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" style="font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; float: right; text-align: left;">
+                                        <span t-esc="doc.area.name" />, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <t t-if="doc.branch_id.id == 1">
+                                            <p><u><b>Personnel &amp; General Affairs</b></u></p>    
+                                            <p>Asep Rohman</p>
+                                        </t>
+                                        <t t-else="">
+                                            <p style="line-height: 0.1; margin-left: 20px;"><u><b>(.........................)</b></u></p>    
+                                            <p style="line-height: 0.1; margin-left: 20px;">(.........................)</p>
+                                        </t>
                                     </div>
-                                    <br/>
-                                    <div style="line-height: 0.1;">
-                                        <p>
-                                            Selama bekerja di perusahaan kami,
-                                            yang bersangkutan telah menunjukkan kinerja yang baik. Pada
-                                        </p>
-                                        <p>
-                                            kesempatan ini kami mengucapkan terima kasih atas karya dan 
-                                            dedikasinya selama masa tugas tersebut.
-                                        </p>
-                                        <p>
-                                            Demikian surat keterangan ini dibuat untuk digunakan sebagaimana mestinya.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row mt-12 mb-1" id="tandata_tangan">
-                                <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" style="font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; margin-left: auto;">
-                                    <span t-esc="doc.area.name" />, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <t t-if="doc.branch_id.id == 1">
-                                        <p><u><b>Personnel &amp; General Affairs</b></u></p>    
-                                        <p>Asep Rohman</p>
-                                    </t>
-                                    <t t-else="">
-                                        <p style="line-height: 0.1;"><u><b>Nama Penjabat</b></u></p>    
-                                        <p style="line-height: 0.1;">Nama Jabatan</p>
-                                    </t>
                                 </div>
                             </div>
                             <div class="footer">
