@@ -692,14 +692,14 @@ begin
     -- calculate OT holiday
     WITH date_series AS (SELECT aa.*,
                                 CASE
-                                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) < aa.approve_time_from
+                                    WHEN COALESCE(NULLIF(sttd.edited_time_in, 0), NULLIF(sttd.time_in, 0)) < aa.approve_time_from + 0.08333 --toleransi 5 menit
                                         THEN aa.approve_time_from
-                                    ELSE COALESCE(sttd.edited_time_in, sttd.time_in)
+                                    ELSE COALESCE(NULLIF(sttd.edited_time_in, 0), NULLIF(sttd.time_in, 0))
                                     END AS ot_time_in,
                                 CASE
-                                    WHEN COALESCE(sttd.edited_time_out, sttd.time_out) > aa.approve_time_to
+                                    WHEN COALESCE(NULLIF(sttd.edited_time_out, 0), NULLIF(sttd.time_out, 0)) > aa.approve_time_to
                                         THEN aa.approve_time_to
-                                    ELSE COALESCE(sttd.edited_time_out, sttd.time_out)
+                                    ELSE COALESCE(NULLIF(sttd.edited_time_out, 0), NULLIF(sttd.time_out, 0))
                                     END AS ot_time_out
                          FROM (SELECT hoe.employee_id,
                                       generate_series(hoe.plann_date_from::date, hoe.plann_date_to::date,
