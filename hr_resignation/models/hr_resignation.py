@@ -103,6 +103,12 @@ class HrResignation(models.Model):
                                           " to change the employee")
     employee_contract = fields.Char(String="Contract")
 
+    @api.constrains('resignation_type', 'employee_id')
+    def _validate_resignation_type(self):
+        for rec in self:
+            if rec.resignation_type == 'EOCT' and rec.employee_id.job_status != 'contract':
+                raise ValidationError('Employee job status is not contract')
+
     @api.depends('employee_id')
     def _compute_change_employee(self):
         """ Check whether the user

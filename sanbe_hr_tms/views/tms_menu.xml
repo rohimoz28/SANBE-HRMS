@@ -121,7 +121,7 @@
 
         <menuitem
                 id="menu_hr_machine_details"
-                name="PinCode"
+                name="Mapping PinCode"
                 sequence="12"
                 parent="sanbe_hr_tms.hr_menu_tms_processing"
                 action="action_hr_machine_details"
