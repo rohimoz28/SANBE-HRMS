@@ -28,7 +28,7 @@ class HrEmployee(models.Model):
     ],
         string="Status",
         readonly=True, copy=False, index=True,
-        tracking=3,store=True,
+        tracking=3,
         default='draft')
 
     def request_for_approval(self):
