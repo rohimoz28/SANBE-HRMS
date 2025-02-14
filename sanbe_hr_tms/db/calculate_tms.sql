@@ -339,9 +339,11 @@ begin
                            when
                                bb.time_in > bb.schd_in
                                then case
-                                        when abs(trunc(
-                                                EXTRACT(EPOCH FROM (bb.delay_tolerance::time - bb.time_in::time)) /
-                                                60)) < bb.delay_allow
+                                        -- when abs(trunc(
+                                        --         EXTRACT(EPOCH FROM (bb.delay_tolerance::time - bb.time_in::time)) /
+                                        --         60)) < bb.delay_allow
+                                        --     then 0
+                                        when bb.time_in <= bb.delay_tolerance
                                             then 0
                                         else
                                             abs(trunc(EXTRACT(EPOCH FROM (bb.time_in::time - bb.schd_in::time)) / 60)) end
