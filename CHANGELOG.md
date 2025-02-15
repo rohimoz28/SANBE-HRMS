@@ -1,6 +1,73 @@
+## v5.0.0 (2025-02-15)
+
+### Production Release
+
+### New
+- 3e7cc66 purchase_request: Install Module Purchase Request
+- 093c0fb TMS : View Mapping PinCode
+- 2c6adde PAM : Hide field Contract Type yang berada sebelum field Contract Time
+- 752fd1b TMS : setting action button function
+- 272717d TMS: Create new model Overtime Bundling
+- b21875b PAM: Printout Paklaring format Taman Sari
+- c527469 TMS: Report Excel, PDF, dan View di Overtime Bundling
+
+### Improvement
+- 06f6acf TMS : Menampilkan field detail Date di sheet Overtime TMS Entry Summary
+- bab5e8b PAM : Field Overtime dibuat radio button di Personal Admin
+- 8b0d5e9 TMS : Filtering TMS Summary
+- 76bd427 TMS : Menampilkan saldo Cuti di transaksi Permission Entry
+- 00997dc TMS : Filter search di Data Upload Attendance
+- ecd9dbc PAM : Menambah field boolean End of Contract di Checking ID
+- 094ab41 TMS : flag dibuat optional hide di tms
+- 23c5d4c PAM : Readonly Field ketika state Hold (samakan dengan state Approved)
+- 9469ab4 PAM : Domain Filter Sub Department dan Job Position di Employee Mutation
+- cc18643 TMS : Perhitungan Keterlambatan
+
+### Fix
+- 124826b TMS : Fix Perhitungan Keterlambatan (10 min)
+- 4918fe4 PAM : Fix Printout Parklaring format Cimareme
+- 4f644bd TMS : recompute periode from to di tms summary
+- e7f7795 TMS : Fix Perhitungan OT Holiday
+- 5e81724 TMS : Fix delay status attendance = Delay In
+- c15bf25 TMS : TMS Summary Move notes dibawah and UI fix bug line
+- a4dfa4c TMS : Fix Perhitungan waktu cuti di Permission Entry
+
+---
+
+### Main branch - Development 
+
+### New
+- 41406b2 purchase_request: Install Module Purchase Request
+- ee14732 PAM: Printout Paklaring format Taman Sari
+- 0d7cc6b PAM : Hide field Contract Type yang berada sebelum field Contract Time
+- 8c32164 PAC : Hide field Contract Type
+- 29e38ee TMS : View Mapping PinCode
+- 92b227d TMS: Report Excel, PDF, dan View di Overtime Bundling
+
+### Improvement
+- 133dff8 PAM : Menampilkan field join date & marital status untuk Mutasi Correction
+- 389ec81 PAM : Set readonly field ketika state bukan Draft
+- c088658 TMS : Leave Allocation kebuat record baru berdasarkan tanggal
+- 7f5b023 TMS : Menampilkan field detail Date di sheet Overtime TMS Entry Summary
+- 45b0cbc TMS : Menampilkan saldo Cuti di transaksi Permission Entry
+- 3161dee TMS : Filtering TMS Summary
+- 05e474c PAM : Field Overtime dibuat radio button di Personal Admin
+- 199d57e PAM : Menambah field boolean End of Contract di Checking ID
+
+### Fix
+- 2b78c51 TMS : Fix Perhitungan waktu cuti di Permission Entry
+- 224e554 PAM : Fix Printout Parklaring format Cimareme
+- 263b8fa TMS : TMS Summary Move notes dibawah and UI fix bug line
+- 5dd0b0a TMS : Fix Perhitungan Keterlambatan (10 min)
+- 94970bb TMS : Fix delay status attendance = Delay In
+- 675c81a TMS : Fix Perhitungan OT Holiday
+- 8596049 TMS : recompute periode from to di tms summary
+
 ## v4.0.0 (2025-02-08)
 
 ### Production Release
+
+### Improvement
 
 ### New
 - 7deffa6 default filter pages besides all
