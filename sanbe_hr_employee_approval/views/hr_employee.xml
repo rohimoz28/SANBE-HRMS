@@ -33,6 +33,24 @@
                            statusbar_visible="draft,req_approval,approved,inactive,hold"
                            invisible="state != 'inactive'"/>
                 </xpath>
+                <xpath expr="//page[@name='public']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
+                <xpath expr="//page[@name='hr_settings']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
+                <xpath expr="//page[@name='list_address']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
+                <xpath expr="//page[@name='skills_resume']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
+                <xpath expr="//page[@name='skills_resume']" position="attributes">
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                </xpath>
                 <xpath expr="//field[@name='job_id']" position="after">
                     <field name="state" invisible="1"/>
                     <field name="status" invisible="1"/>
