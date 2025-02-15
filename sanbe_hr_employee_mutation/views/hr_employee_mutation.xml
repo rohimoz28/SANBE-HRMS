@@ -113,6 +113,8 @@
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
                             <field name="emp_status" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
+                            <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
                             <field name="emp_status_actv" invisible="service_type not in ['actv']" readonly="state in ['approved']" force_save="1" />
                             <field name="emp_status_other" invisible="service_type in ['actv','corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employee_levels" readonly="state in ['approved']" 
@@ -142,7 +144,7 @@
                             <field name="service_jobtitle" readonly="state in ['approved']" />
                             <field name="service_empgroup1" readonly="state in ['approved']" force_save="1" />
                             <field name="company_id" invisible="1"/>
-                            <field name="join_date" invisible="service_type not in [('corr','actv')]" />
+                            <!-- <field name="join_date" /> -->
                             <field name="contract_no" invisible="service_type not in [('corr','actv')]" required="job_status =='Permanent'"/>
                             <field name="contract_from" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
                             <field name="contract_to" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
