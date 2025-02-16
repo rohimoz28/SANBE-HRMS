@@ -319,8 +319,16 @@ begin
                        hts.area_id,
                        hts.branch_id,
                        sttd.details_date,
-                       float_to_time(coalesce(sttd.edited_time_in, sttd.time_in))   as time_in,
-                       float_to_time(coalesce(sttd.edited_time_out, sttd.time_out)) as time_out,
+                    --    float_to_time(coalesce(sttd.edited_time_in, sttd.time_in))   as time_in,
+                       make_time(
+                           floor(coalesce(sttd.edited_time_in, sttd.time_in))::int, -- Hour part
+                           round((coalesce(sttd.edited_time_in, sttd.time_in) - floor(coalesce(sttd.edited_time_in, sttd.time_in))) * 60)::int, -- Minute part
+                           0::int) as time_in, -- Second part
+                    --    float_to_time(coalesce(sttd.edited_time_out, sttd.time_out)) as time_out,
+                       make_time(
+                           floor(coalesce(sttd.edited_time_out, sttd.time_out))::int, -- Hour part
+                           round((coalesce(sttd.edited_time_out, sttd.time_out) - floor(coalesce(sttd.edited_time_out, sttd.time_out))) * 60)::int, -- Minute part
+                           0::int) as time_out,
                        sttd.status_attendance
                 from hr_tmsentry_summary hts
                          join sb_tms_tmsentry_details sttd on hts.id = sttd.tmsentry_id
@@ -329,9 +337,21 @@ begin
                   and hts.branch_id = branch),
          bb as (select aa.*,
                        hwd.delay_allow,
-                       float_to_time(hwd.fullday_from)                                         as schd_in,
-                       float_to_time(hwd.fullday_to)                                           as schd_out,
-                       float_to_time(hwd.fullday_from) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
+                    --    float_to_time(hwd.fullday_from)                                         as schd_in,
+                       make_time(
+                           floor(hwd.fullday_from)::int, -- Hour part
+                           round((hwd.fullday_from - floor(hwd.fullday_from)) * 60)::int, -- Minute part
+                           0::int) as schd_in, -- Second part
+                    --    float_to_time(hwd.fullday_to)                                           as schd_out,
+                       make_time(
+                           floor(hwd.fullday_to)::int, -- Hour part
+                           round((hwd.fullday_to - floor(hwd.fullday_to)) * 60)::int, -- Minute part
+                           0::int) as schd_out, -- Second part
+                    --    float_to_time(hwd.fullday_from) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
+                       make_time(
+                           floor(hwd.fullday_from)::int, -- Hour part
+                           round((hwd.fullday_from - floor(hwd.fullday_from)) * 60)::int, -- Minute part
+                           0::int) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
                 from aa
                          join hr_working_days hwd on aa.workingday_id = hwd.id),
          cc as (select bb.*,
