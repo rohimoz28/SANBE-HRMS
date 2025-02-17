@@ -17,7 +17,7 @@
                             <field name="job_id"/>
                             <field name="leave_allocation"/>
                             <field name="leave_used"/>
-                            <field name="leave_remaining"/>
+                            <field name="leave_remaining" readonly="1"/>
                             <field name="remarks"/>
                             <field name="description"/>
                         </group>
