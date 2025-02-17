@@ -133,6 +133,11 @@ class HrEmployeeMutation(models.Model):
     employee_levels = fields.Many2one('employee.level', string='Employee Level')
     service_employee_levels = fields.Many2one('employee.level', string='Employee Level')
     join_date = fields.Date('Join Date')
+    marital = fields.Selection([('single', 'Single'),
+                                ('married', 'Married'),
+                                ('cohabitant', 'Legal Cohabitant'),
+                                ('widower', 'Widower'),
+                                ('divorced', 'Divorced')], string='Marital Status')
     contract_no = fields.Many2one('hr.contract', related='employee_id.contract_id', readonly=False)
     contract_from = fields.Date('Contract Date From', related='employee_id.contract_datefrom', readonly=False)
     contract_to = fields.Date('Contract Date To', related='employee_id.contract_dateto', readonly=False)
@@ -195,6 +200,10 @@ class HrEmployeeMutation(models.Model):
             self.nik_lama = self.employee_id.nik_lama
             self.service_nik_lama = self.employee_id.nik_lama
             self.nik = self.employee_id.nik
+        if self.join_date != self.employee_id.join_date:
+            self.employee_id.write({'join_date': self.join_date})
+        if self.marital != self.employee_id.marital:
+            self.employee_id.write({'marital': self.marital})
         if self.service_employee_levels != self.employee_id.employee_levels:
             self.employee_id.write({'employee_levels': self.service_employee_levels})
         # if self.service_nik_lama != self.employee_id.nik_lama:
@@ -286,6 +295,8 @@ class HrEmployeeMutation(models.Model):
             existing.service_employee_id = myemp.employee_id
             existing.service_no_npwp = myemp.no_npwp
             existing.service_no_ktp = myemp.no_ktp
+            existing.join_date = myemp.join_date
+            existing.marital = myemp.marital
 
             existing.service_status = 'Draft'
 

@@ -38,6 +38,9 @@ class HrEmployee(models.Model):
                                     ('allowance_ot1', "OT 1"),
                                     ('none', "None"),],
                                     string="Overtime")
+    leave_calculation = fields.Selection(selection=[('contract_based', "Contract Based"),
+                                    ('first_month', "First Month"),],
+                                    string="Leave Calc")
 
     _sql_constraints = [
         # ('nik_uniq', 'check(1=1)', "The NIK  must be unique, this one is already assigned to another employee."),

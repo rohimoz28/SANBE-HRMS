@@ -79,7 +79,35 @@
                     </group>
                 </xpath>
                 <xpath expr="//div[hasclass('oe_title')]" position="replace">
-                        <div class="oe_title pe-0 w-100 mw-100" name="title">
+
+                    <div class="row justify-content-between position-relative w-100 m-0 mb-5">
+                        <div class="oe_title mw-75 ps-0 pe-2">
+                            <h1 class="d-flex flex-row align-items-center">
+                                <field name="name" class="text-truncate"  placeholder="Contract Reference" required="True" style="font-size: min(4vw, 2.6rem);"/>
+                                <field name="kanban_state"
+                                    class="d-flex align-items-center"
+                                    groups="!hr_contract.group_hr_contract_manager"
+                                    widget="state_selection" readonly="1"/>
+                                <field name="kanban_state"
+                                    class="d-flex align-items-center"
+                                    groups="hr_contract.group_hr_contract_manager"
+                                    widget="state_selection" readonly="0"/>
+                            </h1>
+                            <h2>
+                                <field name="contract_type_id" placeholder="Contract Type" nolabel="1"/>
+                                <field name="number" placeholder="Contract Numbet" nolabel="1"/>
+                            </h2>
+                            <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                        </div>
+                        <div class="o_employee_avatar m-0 p-0">
+                            
+                        </div>
+                    </div>
+
+                        
+
+
+                        <!-- <div class="oe_title pe-0 w-100 mw-100" name="title">
                             <h1 class="d-flex flex-row justify-content-between">
                                 <field name="name" class="text-truncate" placeholder="Contract Reference"/>
 
@@ -99,7 +127,7 @@
                                 <field name="company_id" groups="base.group_multi_company" invisible="1"/>
                             </h2>
 
-                        </div>
+                        </div> -->
                 </xpath>
                 <xpath expr="//field[@name='department_id']" position="replace">
                     <field name="depart_id" readonly="state in ['open','close']"/>
