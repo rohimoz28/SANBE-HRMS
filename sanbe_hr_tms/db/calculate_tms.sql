@@ -1465,7 +1465,7 @@ begin
                 ELSE '' 
             END,
             CASE 
-                WHEN sttd.approval_ot_from IS NOT NULL OR sttd.approval_ot_to IS NOT NULL THEN '.30' 
+                WHEN sttd.aot1 IS NOT NULL OR sttd.aot2 IS NOT NULL THEN '.30' 
                 ELSE '' 
             END,
             CASE 
