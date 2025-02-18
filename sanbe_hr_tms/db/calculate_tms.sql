@@ -319,16 +319,8 @@ begin
                        hts.area_id,
                        hts.branch_id,
                        sttd.details_date,
-                    --    float_to_time(coalesce(sttd.edited_time_in, sttd.time_in))   as time_in,
-                       make_time(
-                           floor(coalesce(sttd.edited_time_in, sttd.time_in))::int, -- Hour part
-                           round((coalesce(sttd.edited_time_in, sttd.time_in) - floor(coalesce(sttd.edited_time_in, sttd.time_in))) * 60)::int, -- Minute part
-                           0::int) as time_in, -- Second part
-                    --    float_to_time(coalesce(sttd.edited_time_out, sttd.time_out)) as time_out,
-                       make_time(
-                           floor(coalesce(sttd.edited_time_out, sttd.time_out))::int, -- Hour part
-                           round((coalesce(sttd.edited_time_out, sttd.time_out) - floor(coalesce(sttd.edited_time_out, sttd.time_out))) * 60)::int, -- Minute part
-                           0::int) as time_out,
+                       float_to_time(coalesce(sttd.edited_time_in, sttd.time_in))   as time_in,
+                       float_to_time(coalesce(sttd.edited_time_out, sttd.time_out)) as time_out,
                        sttd.status_attendance
                 from hr_tmsentry_summary hts
                          join sb_tms_tmsentry_details sttd on hts.id = sttd.tmsentry_id
@@ -337,21 +329,9 @@ begin
                   and hts.branch_id = branch),
          bb as (select aa.*,
                        hwd.delay_allow,
-                    --    float_to_time(hwd.fullday_from)                                         as schd_in,
-                       make_time(
-                           floor(hwd.fullday_from)::int, -- Hour part
-                           round((hwd.fullday_from - floor(hwd.fullday_from)) * 60)::int, -- Minute part
-                           0::int) as schd_in, -- Second part
-                    --    float_to_time(hwd.fullday_to)                                           as schd_out,
-                       make_time(
-                           floor(hwd.fullday_to)::int, -- Hour part
-                           round((hwd.fullday_to - floor(hwd.fullday_to)) * 60)::int, -- Minute part
-                           0::int) as schd_out, -- Second part
-                    --    float_to_time(hwd.fullday_from) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
-                       make_time(
-                           floor(hwd.fullday_from)::int, -- Hour part
-                           round((hwd.fullday_from - floor(hwd.fullday_from)) * 60)::int, -- Minute part
-                           0::int) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
+                       float_to_time(hwd.fullday_from)                                         as schd_in,
+                       float_to_time(hwd.fullday_to)                                           as schd_out,
+                       float_to_time(hwd.fullday_from) + INTERVAL '1 minute' * hwd.delay_allow AS delay_tolerance
                 from aa
                          join hr_working_days hwd on aa.workingday_id = hwd.id),
          cc as (select bb.*,
@@ -482,201 +462,376 @@ begin
 --      AND sttd.date_out = f.plann_date_to;
 
 
-    --tes new update aot1
-    update sb_tms_tmsentry_details sttd
-    set aot1 =
-            /*case
-                when sttd.date_in = sttd.date_out then -- tidak pergantian hari
-                    case
-                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float 
-                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        else null
-                        end
-                when sttd.date_in < sttd.date_out then -- pergantian hari
-                    case
-                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to and sttd.approval_ot_from < sttd.approval_ot_to and (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 < sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to and sttd.approval_ot_from < sttd.approval_ot_to and (sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        when sttd.time_in > sttd.approval_ot_from and  sttd.time_out + 24 < sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.time_out - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
-                        else null
-                        end
-                else null
-                end*/
-            CASE
-                WHEN sttd.date_in = sttd.date_out THEN
-                    CASE
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
-                             (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
-                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
-                             (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
-                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
-                             (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
-                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
-                             (COALESCE(sttd.edited_time_out, sttd.time_out) -
-                              COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
-                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        ELSE NULL
-                        END
-                WHEN sttd.date_in < sttd.date_out THEN
-                    CASE
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                             sttd.approval_ot_from < sttd.approval_ot_to AND
-                             (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
-                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                             sttd.approval_ot_from > sttd.approval_ot_to AND
-                             (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
-                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                             sttd.approval_ot_from > sttd.approval_ot_to AND
-                             (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
-                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                             sttd.approval_ot_from < sttd.approval_ot_to AND
-                             (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
-                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                             sttd.approval_ot_from > sttd.approval_ot_to AND
-                             (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
-                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                             sttd.approval_ot_from > sttd.approval_ot_to AND
-                             (24 + COALESCE(sttd.edited_time_out, sttd.time_out) -
-                              COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
-                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
-                        ELSE NULL
-                        END
-                ELSE NULL
-                END
-    from hr_overtime_setting hos
-    where sttd.approval_ot_from notnull
-      and sttd.approval_ot_to notnull
-      and sttd.workingday_id notnull
-      and hos.name = 'AOT1'
-      and hos.type = 'reguler';
-    --   and (sttd.delay <= 0 or sttd.delay is null)
+--    --tes new update aot1
+--    update sb_tms_tmsentry_details sttd
+--    set aot1 =
+--            /*case
+--                when sttd.date_in = sttd.date_out then -- tidak pergantian hari
+--                    case
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float 
+--                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        else null
+--                        end
+--                when sttd.date_in < sttd.date_out then -- pergantian hari
+--                    case
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to and sttd.approval_ot_from < sttd.approval_ot_to and (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out + 24 < sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to and sttd.approval_ot_from < sttd.approval_ot_to and (sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out + 24 > sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        when sttd.time_in > sttd.approval_ot_from and  sttd.time_out + 24 < sttd.approval_ot_to + 24 and sttd.approval_ot_from > sttd.approval_ot_to and (24 + sttd.time_out - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
+--                        else null
+--                        end
+--                else null
+--                end*/
+--            CASE
+--                WHEN sttd.date_in = sttd.date_out THEN
+--                    CASE
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+--                             (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+--                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+--                             (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
+--                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+--                             (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+--                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+--                             (COALESCE(sttd.edited_time_out, sttd.time_out) -
+--                              COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
+--                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        ELSE NULL
+--                        END
+--                WHEN sttd.date_in < sttd.date_out THEN
+--                    CASE
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                             sttd.approval_ot_from < sttd.approval_ot_to AND
+--                             (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+--                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                             sttd.approval_ot_from > sttd.approval_ot_to AND
+--                             (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+--                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                             sttd.approval_ot_from > sttd.approval_ot_to AND
+--                             (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
+--                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                             sttd.approval_ot_from < sttd.approval_ot_to AND
+--                             (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+--                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                             sttd.approval_ot_from > sttd.approval_ot_to AND
+--                             (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+--                             (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                             COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                             sttd.approval_ot_from > sttd.approval_ot_to AND
+--                             (24 + COALESCE(sttd.edited_time_out, sttd.time_out) -
+--                              COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
+--                            THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+--                        ELSE NULL
+--                        END
+--                ELSE NULL
+--                END
+--    from hr_overtime_setting hos
+--    where sttd.approval_ot_from notnull
+--      and sttd.approval_ot_to notnull
+--      and sttd.workingday_id notnull
+--      and hos.name = 'AOT1'
+--      and hos.type = 'reguler';
+--    --   and (sttd.delay <= 0 or sttd.delay is null)
 
-    -- tes new update aot2
-    UPDATE sb_tms_tmsentry_details sttd
-    SET aot2 =
-        CASE
-            WHEN sttd.date_in = sttd.date_out THEN -- tidak pergantian hari
-                CASE
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - sttd.approval_ot_from) > 1 AND
-                        (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
-                        (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) > 1 AND
-                        (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
-                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
-                        (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
-                        (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
-                    ELSE NULL
-                END
-            WHEN sttd.date_in < sttd.date_out THEN -- pergantian hari
-                CASE
-                    -- durasi absen lebih dari durasi overtime setting OT 2
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                        sttd.approval_ot_from < sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                        sttd.approval_ot_from < sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
-    
-                    -- durasi absen kurang dari durasi overtime setting OT 2
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                        sttd.approval_ot_from < sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((24 + sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
-                        sttd.approval_ot_from < sttd.approval_ot_to AND
-                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((24 + sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
-                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
-                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
-                        sttd.approval_ot_from > sttd.approval_ot_to AND
-                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
-                        GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
-                    ELSE NULL
-                END
-            ELSE NULL
-        END
-    FROM hr_overtime_setting hos
-    WHERE sttd.approval_ot_from IS NOT NULL
-      AND sttd.approval_ot_to IS NOT NULL
-      AND sttd.workingday_id IS NOT NULL
-      AND hos.name = 'AOT2'
-      AND hos.type = 'reguler';
-    --   and (sttd.delay <= 0 or sttd.delay is null)
+--    -- tes new update aot2
+--    UPDATE sb_tms_tmsentry_details sttd
+--    SET aot2 =
+--        CASE
+--            WHEN sttd.date_in = sttd.date_out THEN -- tidak pergantian hari
+--                CASE
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - sttd.approval_ot_from) > 1 AND
+--                        (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+--                        (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) > 1 AND
+--                        (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
+--                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+--                        (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
+--                        (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+--                    ELSE NULL
+--                END
+--            WHEN sttd.date_in < sttd.date_out THEN -- pergantian hari
+--                CASE
+--                    -- durasi absen lebih dari durasi overtime setting OT 2
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                        sttd.approval_ot_from < sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                        sttd.approval_ot_from < sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+--    
+--                    -- durasi absen kurang dari durasi overtime setting OT 2
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                        sttd.approval_ot_from < sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((24 + sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+--                        sttd.approval_ot_from < sttd.approval_ot_to AND
+--                        (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((24 + sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+--                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from AND
+--                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+--                        sttd.approval_ot_from > sttd.approval_ot_to AND
+--                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+--                        GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+--                    ELSE NULL
+--                END
+--            ELSE NULL
+--        END
+--    FROM hr_overtime_setting hos
+--    WHERE sttd.approval_ot_from IS NOT NULL
+--      AND sttd.approval_ot_to IS NOT NULL
+--      AND sttd.workingday_id IS NOT NULL
+--      AND hos.name = 'AOT2'
+--      AND hos.type = 'reguler';
+--    --   and (sttd.delay <= 0 or sttd.delay is null)
+	
+	-- tes new update aot 1 dengan toleransi 5 menit (+ 0.08333)
+	UPDATE sb_tms_tmsentry_details sttd
+	SET aot1 =
+	    CASE
+	        WHEN sttd.date_in = sttd.date_out THEN
+	            CASE
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+	                     (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+	                    THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+	                     (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
+	                     (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+	                     (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+	                     (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+	                     (COALESCE(sttd.edited_time_out, sttd.time_out) -
+	                      COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
+	                    THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                ELSE NULL
+	            END
+	        WHEN sttd.date_in < sttd.date_out THEN
+	            CASE
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                     sttd.approval_ot_from < sttd.approval_ot_to AND
+	                     (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+	                    THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                     sttd.approval_ot_from > sttd.approval_ot_to AND
+	                     (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from)
+	                    THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                     sttd.approval_ot_from > sttd.approval_ot_to AND
+	                     (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >=
+	                     (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                     sttd.approval_ot_from < sttd.approval_ot_to AND
+	                     (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+	                     (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                     sttd.approval_ot_from > sttd.approval_ot_to AND
+	                     (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >=
+	                     (hos.aot_to - hos.aot_from) THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > (sttd.approval_ot_from + 0.08333) AND
+	                     COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                     sttd.approval_ot_from > sttd.approval_ot_to AND
+	                     (24 + COALESCE(sttd.edited_time_out, sttd.time_out) -
+	                      COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from)
+	                    THEN FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2
+	                ELSE NULL
+	            END
+	        ELSE NULL
+	    END
+	FROM hr_overtime_setting hos
+	WHERE sttd.approval_ot_from IS NOT NULL
+	  AND sttd.approval_ot_to IS NOT NULL
+	  AND sttd.workingday_id IS NOT NULL
+	  AND hos.name = 'AOT1'
+	  AND hos.type = 'reguler';
+
+	
+	-- tes new update aot 2 dengan toleransi 5 menit (+ 0.08333)
+	UPDATE sb_tms_tmsentry_details sttd
+	SET aot2 =
+	    CASE
+	        WHEN sttd.date_in = sttd.date_out THEN -- tidak pergantian hari
+	            CASE
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - sttd.approval_ot_from) > 1 AND
+	                    (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+	                    (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) > 1 AND
+	                    (COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) >= sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
+	                    (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) < sttd.approval_ot_to AND
+	                    (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) > 1 AND
+	                    (COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+	                ELSE NULL
+	            END
+	        WHEN sttd.date_in < sttd.date_out THEN -- pergantian hari
+	            CASE
+	                -- durasi absen lebih dari durasi overtime setting OT 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                    sttd.approval_ot_from < sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                    sttd.approval_ot_from < sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
+	    
+	                -- durasi absen kurang dari durasi overtime setting OT 2
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                    sttd.approval_ot_from < sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + sttd.approval_ot_to - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((24 + sttd.approval_ot_to - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - sttd.approval_ot_from) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (sttd.approval_ot_from + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
+	                    sttd.approval_ot_from < sttd.approval_ot_to AND
+	                    (sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + sttd.approval_ot_to - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((24 + sttd.approval_ot_to - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+	                WHEN COALESCE(sttd.edited_time_in, sttd.time_in) > sttd.approval_ot_from + 0.08333 AND
+	                    COALESCE(sttd.edited_time_out, sttd.time_out) + 24 < sttd.approval_ot_to + 24 AND
+	                    sttd.approval_ot_from > sttd.approval_ot_to AND
+	                    (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) < (hos.aot_to - hos.aot_from) THEN
+	                    GREATEST(FLOOR((24 + COALESCE(sttd.edited_time_out, sttd.time_out) - (COALESCE(sttd.edited_time_in, sttd.time_in) + 1)::float) * 2) / 2, 0)
+	                ELSE NULL
+	            END
+	        ELSE NULL
+	    END
+	FROM hr_overtime_setting hos
+	WHERE sttd.approval_ot_from IS NOT NULL
+	  AND sttd.approval_ot_to IS NOT NULL
+	  AND sttd.workingday_id IS NOT NULL
+	  AND hos.name = 'AOT2'
+	  AND hos.type = 'reguler';
+
 
     -- update aot1 aot2 - delay
     with xx as (select employee_id,
@@ -1136,7 +1291,7 @@ begin
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
-                                 0::int)::time OR time_out >= '21:00:00')
+                                 0::int)::time /*OR time_out >= '21:00:00'*/)
                             OR (t.time_in <= make_time( --tambahan
                                             floor(sad.time_from)::int, --tambahan
                                             round((sad.time_from - floor(sad.time_from)) * 60)::int, --tambahan
@@ -1214,7 +1369,7 @@ begin
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
-                                 0::int)::time OR time_out >= '21:00:00')
+                                 0::int)::time /*OR time_out >= '21:00:00'*/)
                      ORDER BY t.details_date),
          ff as (select sttd_id,
                        name,
@@ -1301,7 +1456,7 @@ begin
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
-                                 0::int)::time OR time_out >= '02:00:00')
+                                 0::int)::time /*OR time_out >= '02:00:00'*/)
                      ORDER BY t.details_date)
     update sb_tms_tmsentry_details s
     set night_shift2 = summary.night_shift
@@ -1374,7 +1529,7 @@ begin
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
-                                 0::int)::time OR time_out >= '02:00:00')
+                                 0::int)::time /*OR time_out >= '02:00:00'*/)
                      ORDER BY t.details_date),
          ff as (select sttd_id,
                        name,
