@@ -467,7 +467,9 @@ begin
                     AND hop.approve3 = true)
     UPDATE sb_tms_tmsentry_details sttd
     SET approval_ot_from = f.approve_time_from,
-        approval_ot_to   = f.approve_time_to
+        approval_ot_to   = f.approve_time_to,
+        plann_date_from = f.plann_date_from,
+        plann_date_to = f.plann_date_to
     FROM hr_tmsentry_summary hts,
          flag f
     WHERE f.employee_id = hts.employee_id
