@@ -13,16 +13,16 @@
                     <attribute name="string">
                         Job Information
                     </attribute>
-                    <attribute name="readonly">states not in ['draft']</attribute>
+                    <!-- <attribute name="readonly">states not in ['draft']</attribute> -->
                 </xpath>
                 <xpath expr="//page[@name='public']" position="attributes">
                     <attribute name="string">
                         Address Information
                     </attribute>
                 </xpath>
-                <xpath expr="//page[@name='personal_information']" position="before">
+                <!-- <xpath expr="//page[@name='personal_information']" position="before">
                     <field name="states" invisible="1"/>
-                </xpath>
+                </xpath> -->
                 <xpath expr="//div[@id='o_work_employee_main']/group[4]" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
