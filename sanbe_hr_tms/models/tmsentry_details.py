@@ -64,6 +64,8 @@ class TmsentryDetails(models.Model):
         'Employee ID', 
         related='employee_id.employee_id'
     )
+    plann_date_from = fields.Date(string='Approval Date From')
+    plann_date_to = fields.Date(string='Approval Date To')
     approval_ot_from = fields.Float(string='Appv OT Fr')
     approval_ot_to = fields.Float(string='Appv OT To')
     aot1 = fields.Float(string='AOT1')
