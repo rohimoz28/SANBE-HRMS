@@ -51,7 +51,8 @@ class HrEmployementlog(models.Model):
     model_id = fields.Integer(string="Model Id")
     trx_number = fields.Char(string="Transaction Number")
     doc_number = fields.Char(string="Document Number")
-    end_contract = fields.Boolean(string="Flag End of Contract", default=False)
+    # end_contract = fields.Boolean(string="Flag End of Contract", default=False)
+    end_contract = fields.Boolean(string="Rehire", default=False)
     label = fields.Char(default="Open View")
 
     def ambil_view(self):
