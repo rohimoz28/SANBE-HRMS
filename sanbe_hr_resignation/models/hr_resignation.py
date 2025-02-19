@@ -15,16 +15,19 @@ date_format = "%Y-%m-%d"
 class HrResignation(models.Model):
     _inherit = 'hr.resignation'
     _order = 'create_date desc'
-    
+
+
+    def action_print_fkpd(self):
+        """ Print report FKPD """
+        return self.env.ref('sanbe_hr_resignation.fkpd_report').report_action(self)
+
     @api.onchange('name')
     @api.depends('name')
     def _isi_emps(self):
         context = self._context
         current_uid = context.get('uid')
         user = self.env['res.users'].browse(current_uid)
-        # print('222222222222222222222222')
         # print(user.branch_id.name)
-        # print('222222222222222222222222')
         for allrecs in self:
             allemps = self.env['hr.employee'].sudo().search(
                 [('state', '=', 'approved'), ('active', '=', True), ('branch_id','=',user.branch_id.id)])

@@ -26,6 +26,7 @@
         # 'reports/rpt_paklaring.xml',
         'reports/paklaring_report.xml',
         'reports/paklaring_report_steril.xml',
+        'reports/FKPD_report.xml',
         'security/ir.model.access.csv',
     ],
     'assets': {
