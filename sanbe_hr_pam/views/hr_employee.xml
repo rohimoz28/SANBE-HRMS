@@ -6,7 +6,7 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='address_id']" position="replace">
+            <xpath expr="//field[@name='address_id']" position="after">
                 <label for="street" string="Work Address"/>
                     <div class="o_address_format">
                         <field name="street" nolabel='1' invisible="not street"/>
@@ -16,6 +16,9 @@
                         <field name="zip" nolabel='1' invisible="not zip"/>
                         <field name="country_id" nolabel='1' options="{'no_create': True, 'no_open': True}" invisible="not country_id"/>
                     </div>
+            </xpath>
+            <xpath expr="//field[@name='address_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
                 <field name="workingday" />
