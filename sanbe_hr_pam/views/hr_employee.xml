@@ -38,6 +38,9 @@
             <xpath expr="//field[@name='allowance_ot1']" position="after">
                 <field name="overtime" widget="radio" options="{'horizontal': true}"/>
             </xpath>
+            <xpath expr="//field[@name='overtime']" position="after">
+                <field name="leave_calculation" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
         </field>
     </record>
 </odoo>
