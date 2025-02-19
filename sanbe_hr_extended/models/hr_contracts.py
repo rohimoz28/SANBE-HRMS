@@ -28,6 +28,7 @@ class HrContract(models.Model):
 
     attachment_contract =  fields.Many2many('ir.attachment', 'hr_contract_rel',string='Contract Document',
                                           help="You may attach files to with this")
+    number = fields.Char('Contract Number')
     area = fields.Many2one('res.territory',string='Area',tracking=True,readonly=False)
     branch_ids = fields.Many2many('res.branch','res_branch_rel',string='AllBranch',compute='_isi_semua_branch',store=False)
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True, tracking=True, domain="[('state','not in',['hold'])]", index=True)
