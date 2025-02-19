@@ -104,7 +104,8 @@ class HrResignation(models.Model):
     cs_month = fields.Integer('Contract Service Month', compute='hitung_masa_contract',readonly=True,store=False)
     cs_year  = fields.Integer('Contract Service Year', compute='hitung_masa_contract',readonly=True,store=False)
     cs_day = fields.Integer('Contract Service Day', compute='hitung_masa_contract',readonly=True,store=False)
-    end_contract = fields.Boolean(string="Flag End of Contract", default=False)
+    # end_contract = fields.Boolean(string="Flag End of Contract", default=False)
+    end_contract = fields.Boolean(string="Rehire", default=False)
 
     @api.depends('employee_contract','state','employee_id','job_status')
     def hitung_masa_contract(self):
@@ -143,7 +144,7 @@ class HrResignation(models.Model):
             self.notice_period = self.employee_id.resign_notice
             self.bondservice_to = self.employee_id.service_to
             self.bondservice_from = self.employee_id.service_from
-            self.joined_date = self.employee_id.join_date
+            self.joined_date = self.employee_id.join_date or self.emp_nos.joining_date
 
         return res
 
@@ -166,6 +167,7 @@ class HrResignation(models.Model):
 
     def button_cari_data(self):
         return True
+    
     @api.constrains('joined_date')
     def _check_joined_date(self):
         for resignation in self:
@@ -224,6 +226,27 @@ class HrResignation(models.Model):
                    for node in arch.xpath("//button"):
                           node.set('invisible', 'True')
         return arch, view
+    
+    # def action_approve_resignation(self):
+    #     res = super(HrResignation,self).action_approve_resignation()
+    #     self.env['hr.employment.log'].sudo().create({'employee_id': self.emp_nos.id,
+    #                                                  'service_type': self.resignation_type[1].upper(),
+    #                                                  'start_date': self.trans_date or fields.Datetime.today(),
+    #                                                  'end_date': self.approved_revealing_date or fields.Datetime.today(),
+    #                                                  'bisnis_unit': self.branch_id.id,
+    #                                                  'department_id': self.emp_nos.department_id.id,
+    #                                                  'job_title': self.emp_nos.job_id.name,
+    #                                                  'job_status': self.emp_nos.jobs_tatus,
+    #                                                  'emp_status': self.emp_nos.emp_status,
+    #                                                  'model_name': 'hr.resignation',
+    #                                                  'model_id': self.id,
+    #                                                  'trx_number': self.name,
+    #                                                  'doc_number': self.name,
+    #                                                  'end_contract': self.end_contract,
+    #                                                  })
+    #     self.emp_nos.write({'state': 'hold'})
+    #     return res
+            
     
     def init(self):
         mycari = self.env['hr.resignation'].sudo().search([('effective_date','=',False)])
