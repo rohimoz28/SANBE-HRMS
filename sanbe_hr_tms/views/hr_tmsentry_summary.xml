@@ -522,8 +522,8 @@
 
                                     <field name="status_attendance" column_invisible="1" width="170px" style="max-width:200px" decoration-danger="status_attendance in ['absent']"/>
                                     <field name="status" column_invisible="1" width="100px" style="max-width:200px"/>
-                                    <field name="night_shift" optional="hide" readonly="1" string="ANS1"/>
-                                    <field name="night_shift2" optional="hide" readonly="1" string="ANS2"/>
+                                    <field name="night_shift" optional="show" readonly="1" string="ANS1"/>
+                                    <field name="night_shift2" optional="show" readonly="1" string="ANS2"/>
 
                                     <button name="action_view_tms_details" type="object" string="Detail" class="fa fa-check" invisible="status == 'done'"/>
                                 </tree>
