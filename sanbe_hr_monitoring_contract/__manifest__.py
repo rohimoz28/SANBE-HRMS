@@ -18,10 +18,12 @@
     'currency': 'USD',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr','base_territory','sanbe_employement_details'],
+    'depends': ['base', 'hr','hr_skills','hr_skills_survey','hr_presence','base_territory','sanbe_employement_details'],
     'data': [
         'security/ir.model.access.csv',
         'wizards/hr_monitoring_contract.xml',
+        'views/employee_monitoring.xml',
+        'views/hr_employee_contract_monitoring_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
