@@ -36,34 +36,18 @@
                     <filter string="Rehire" name="rehire" domain="[('rehire','=',True)]"/>
                     <filter string="Late"  domain="[('time_limit','&lt;',0)]" name="late" help="Late Re-Newal Contract"/>
                     <separator/>
-                    
+                
+                    <group expand="0" string="Group By...">
+                        <filter string="Branch"  name="branch_id" domain="[]" />    
+                        <filter string="Area"  name="area" domain="[]" />
+                        <filter string="Sub Department"  name="department_id" domain="[]" />
+                        <filter string="Job Position"  name="job_id" domain="[]" />
+                        <filter string="Rehire"  name="rehire" domain="[]" />
+                    </group>
+                        
                 </search>
         </field>
     </record>
-<!-- 
-
-    <record id="view_contract_monitoring_filter" model="ir.ui.view">
-        <field name="name">contract.monitoring.select</field>
-        <field name="model">hr.employee.contract.monitoring</field>
-        <field name="arch" type="xml">
-            <search string="Search Production">
-                <field name="employee_name" string="Name" filter_domain="['|','|','|','|',('employee_name','ilike',self),('nik_employee','ilike',self),('territory_name','ilike',self),('department_name','ilike',self),('branch_name','ilike',self)]"/>
-                 <filter string="To Do" name="todo" domain="[('time_limit','&lt;',14),('rehire','=',True)]"
-                    help="Plese Check Employee Contract."/>
-                <separator/>
-                <filter string="Rehire" name="rehire" domain="[('rehire','=',True)]"/>
-                <filter string="Late"  domain="[('time_limit','&lt;',0)]" name="late" help="Late Re-Newal Contract"/>
-                <separator/>
-                <group expand="0" string="Group By...">
-                    <filter string="Branch" domain="[]" context="{'group_by':'branch_id'}"/>
-                    <filter string="Area" domain="[]" context="{'group_by':'territory_id'}"/>
-                    <filter string="StaSub Department" domain="[]" context="{'group_by':'department_id'}"/>
-                    <filter string="Job Position" domain="[]" context="{'group_by':'job_id'}"/>
-                    <filter string="Rehire" domain="[]" context="{'group_by':'rehire'}"/>
-                </group>
-            </search>
-        </field>
-    </record> -->
 
 
     <!-- Action hr.employee.contract.monitoring -->
@@ -72,6 +56,8 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hr.employee.contract.monitoring</field>
         <field name="view_mode">tree</field>
+        <field name="context">{'search_default_tocheck': True}</field>
+        <field name="domain">[('rehire', '=', True)]</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 There is no examples click here to add new Hr Employee Contract Monitoring.
