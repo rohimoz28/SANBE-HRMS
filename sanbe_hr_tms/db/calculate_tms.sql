@@ -1642,7 +1642,7 @@ begin
                 ELSE '' 
             END,
             CASE 
-                WHEN hwd.code LIKE '%2%' OR hwd.code LIKE '%3%' THEN '.40' 
+                WHEN sttd.night_shift IS NOT NULL OR sttd.night_shift2 IS NOT NULL THEN '.40' 
                 ELSE '' 
             END
         )) AS flag
