@@ -483,6 +483,94 @@ begin
     --      AND sttd.date_in = f.plann_date_from
 --      AND sttd.date_out = f.plann_date_to;
 
+    --update data longshift
+	with xx as(
+		--row atas
+		select 
+			he."name", 
+			sttd.employee_id,
+			sttd.workingday_id,
+			hwd.code workingday,
+			sttd.details_date, 
+			sttd.date_in, 
+			sttd.date_out, 
+			sttd.schedule_time_in ,
+			sttd.schedule_time_out ,
+			sttd.time_in, 
+			sttd.time_out,
+			sttd.approval_ot_from,
+			sttd.approval_ot_to
+		from sb_tms_tmsentry_details sttd 
+		join sb_tms_tmsentry_details sttd2 on sttd.employee_id = sttd2.employee_id
+		join hr_employee he on sttd.employee_id = he.id
+		left join hr_working_days hwd on sttd.workingday_id = hwd.id
+		where sttd.time_out = sttd2.time_out 
+		and sttd2.time_in is null 
+		and sttd2.details_date = sttd.details_date + interval '1 day'
+		and sttd.date_out > sttd.date_in
+		order by he."name"
+	),
+	yy as(
+		--row bawah
+		select 
+			he."name", 
+			sttd2.employee_id,
+			sttd2.workingday_id,
+			hwd.code workingday,
+			sttd2.details_date, 
+			sttd2.date_in, 
+			sttd2.date_out, 
+			sttd2.schedule_time_in ,
+			sttd2.schedule_time_out ,
+			sttd2.time_in, 
+			sttd2.time_out,
+			sttd2.approval_ot_from,
+			sttd2.approval_ot_to
+		from sb_tms_tmsentry_details sttd 
+		join sb_tms_tmsentry_details sttd2 on sttd.employee_id = sttd2.employee_id
+		join hr_employee he on sttd2.employee_id = he.id
+		left join hr_working_days hwd on sttd2.workingday_id = hwd.id
+		where sttd.time_out = sttd2.time_out 
+		and sttd2.time_in is null 
+		and sttd2.details_date = sttd.details_date + interval '1 day'
+		and sttd.date_out > sttd.date_in
+		order by he."name"
+	),
+	zz as (
+	select
+	distinct
+		he."name",
+		sttd.employee_id,
+		sttd.workingday_id,
+		sttd.details_date, 
+		sttd.date_in, 
+		sttd.date_out, 
+		sttd.schedule_time_in ,
+		sttd.schedule_time_out ,
+	--	sttd.time_in, 
+	--	sttd.time_out,
+		case
+			when sttd.workingday_id is not null and sttd.employee_id = xx.employee_id and sttd.details_date = xx.details_date then xx.schedule_time_out
+			when sttd.workingday_id is null and sttd.employee_id = xx.employee_id and sttd.details_date = xx.details_date then xx.approval_ot_to
+			else sttd.time_out 
+		end as time_out,
+		case
+			when sttd.workingday_id is not null and sttd.employee_id = yy.employee_id and sttd.details_date = yy.details_date then yy.schedule_time_in
+			when sttd.workingday_id is null and sttd.employee_id = yy.employee_id and sttd.details_date = yy.details_date then yy.approval_ot_from
+			else sttd.time_in
+		end as time_in,
+		sttd.approval_ot_from,
+		sttd.approval_ot_to
+	from sb_tms_tmsentry_details sttd 
+	join xx on sttd.employee_id = xx.employee_id
+	join yy on sttd.employee_id = yy.employee_id 
+	join hr_employee he on sttd.employee_id = he.id
+	where sttd.employee_id in (xx.employee_id, yy.employee_id) and sttd.details_date in (xx.details_date, yy.details_date)
+	)
+	update sb_tms_tmsentry_details sttd 
+	set time_in = zz.time_in, time_out = zz.time_out, remark_edit_attn = 'update long shift'
+	from zz
+	where sttd.employee_id = zz.employee_id and sttd.details_date = zz.details_date;
 
 --    --tes new update aot1
 --    update sb_tms_tmsentry_details sttd

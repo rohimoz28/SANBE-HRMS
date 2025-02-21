@@ -713,6 +713,7 @@
                                     <field name="is_edited" readonly="1" />
                                     <field name="approved" readonly="status == 'done'"/>
                                     <field name="approved_by_ca" readonly="status == 'done'"/>
+                                    <field name="remark_edit_attn" readonly="1" optional="hide"/>
                                     <button name="action_view_tms_details" type="object" string="Detail" class="fa fa-check" invisible="status == 'done'"/>
                                 </tree>
                             </field>
