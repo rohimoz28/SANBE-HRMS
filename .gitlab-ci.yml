@@ -132,8 +132,9 @@ success_notif_scheduled:
     - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Deployment Successful!" "Success" 3066993 "Development" "$WEBHOOK_URL"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
-  dependencies:
-    - restart_apps_scheduled
+  needs:
+    - job: restart_apps_scheduled
+      optional: false # Ensures this notification only runs if the manual deployment runs
   when: on_success
 
 failure_notification_scheduled:
@@ -166,8 +167,9 @@ failure_notification_scheduled:
     - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "Development" "$WEBHOOK_URL"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
-  dependencies:
-    - restart_apps_scheduled
+  needs:
+    - job: restart_apps_scheduled
+      optional: false # Ensures this notification only runs if the manual deployment runs
   when: on_failure
 
 restart_apps_manual:
