@@ -1,24 +1,39 @@
 from odoo import fields, models, api
 import logging
+from datetime import datetime
 
 
 class SbLeaveAllocation(models.Model):
     _name = 'sb.leave.allocation'
     _description = 'Table For Populating Employee Leave Allocation'
 
-    leave_allocation = fields.Float(string='Leave Allocation', required=False, default=0)
-    leave_remaining= fields.Float(string='Remaining Leave', compute='_compute_leave_remaining', store=True)
+    leave_allocation = fields.Float(string='Leave Adjustment', required=False, default=0)
+    leave_remaining= fields.Float(string='Remaining Leave', store=True)
     leave_used= fields.Float(string='Leave Used', required=False, default=0)
-    area_id = fields.Many2one('res.territory', string='Area', index=True)
-    branch_id = fields.Many2one('res.branch',string='Business Unit', tracking=True)
-    department_id = fields.Many2one('hr.department', string='Sub Department', index=True)
-    job_id = fields.Many2one('hr.job', string='Job Position', index=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee Name', index=True, tracking=True)
-    date = fields.Date(string='Date', tracking=True)
+    area_id = fields.Many2one('res.territory', string='Area', index=True, required=True)
+    branch_id = fields.Many2one('res.branch',string='Business Unit', tracking=True, required=True)
+    department_id = fields.Many2one('hr.department', string='Sub Department', index=True, required=True)
+    job_id = fields.Many2one('hr.job', string='Job Position', index=True, required=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee Name', index=True, tracking=True, required=True)
+    date = fields.Date(string='Date', tracking=True, default=datetime.today(), required=True)
     remarks = fields.Char(string='Remarks', tracking=True)
     description = fields.Text(string='Description', tracking=True)
 
-    @api.depends('employee_id', 'leave_allocation', 'leave_used')
+    @api.onchange('employee_id',)
+    def get_employee_data(self):
+        for rec in self:
+            if rec.employee_id:
+                rec.area_id = rec.employee_id.area
+                rec.branch_id = rec.employee_id.branch_id
+                rec.department_id = rec.employee_id.department_id
+                rec.job_id = rec.employee_id.job_id
+            else:
+                rec.area_id = False
+                rec.branch_id = False
+                rec.department_id = False
+                rec.job_id = False
+
+    @api.onchange('employee_id', 'leave_allocation', 'leave_used')
     def _compute_leave_remaining(self):
         for rec in self:
             if rec.employee_id:
