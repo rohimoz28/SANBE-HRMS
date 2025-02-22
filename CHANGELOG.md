@@ -1,3 +1,62 @@
+## v6.0.0 (2025-02-22)
+
+### Production Release
+
+### New
+- f5cda10 TMS : View Mapping PinCode (0658631f)
+- b0a574b PAM: Printout Form Konfirmasi Pengunduran Diri (FKPD)
+- 093c0fb TMS : View Mapping PinCode
+- 2c6adde PAM : Hide field Contract Type yang berada sebelum field Contract Time
+- b21875b PAM: Printout Paklaring format Taman Sari
+- c527469 TMS : Report Excel, PDF, dan View di Overtime Bundling
+
+### Improvement
+- a81f266 TMS: Tambahan UI untuk Tampilan Kolom di TMS Summary (2)
+- ea487ba PAM : Set readonly field ketika state bukan Draft
+- b6c59dd PAM : Mengubah Flag EOC -> Rehire di Employee Exit & Mutation
+- 976c88c PAM : Menambahkan field Contract Number di bawah field Contract Type
+- ecf0b58 PAM : Menambah Field Leave Calc di Benefit/Allowance
+- 2cd72bd TMS : (Update SP) Leave Allocation kebuat record baru berdasarkan tanggal
+- 7020131 PAM : Menampilkan field join date & marital status untuk Mutasi Correction
+- 06f6acf TMS : Menampilkan field detail Date di sheet Overtime TMS Entry Summary
+- bab5e8b PAM : Field Overtime dibuat radio button di Personal Admin
+- 4036ea9 TMS : Leave Allocation kebuat record baru berdasarkan tanggal
+
+### Fix
+- 1d23bb0 PAM: Fix HRMS Address
+- e2c63da TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
+- 761bb16 TMS : OT Reguler delay nya belum diberi toleransi, fix perhitungan OT & ANS
+- 99200bc TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
+- 124826b TMS : Fix Perhitungan Keterlambatan (10 min)
+- 4918fe4 PAM: Fix Printout Parklaring format Cimareme
+- 4f644bd recompute periode from to di tms summary
+- e7f7795 Fix Perhitungan OT Holiday
+- 5e81724 TMS : Fix delay status attendance = Delay In
+---
+
+### Main branch - Development 
+
+### New
+- 5091fa5 PA:Read Only When not Draft
+- 5a72022 PAM:Monitoring Off Contract
+- 6694183 PAM: Printout Form Konfirmasi Pengunduran Diri (FKPD)
+
+### Improvement
+- 447b39c TMS: Mengganti field status menjadi field status_attendance
+- b2e89eb TMS : Perhitungan absen long shift
+- 6cd67d1 PAM : Mengubah Flag EOC -> Rehire di Employee Exit & Mutation
+- 342c383 TMS : (Update SP) Leave Allocation kebuat record baru berdasarkan tanggal
+- 89bb39a PAM : Set readonly field ketika state bukan Draft
+- 8ac78b0 PAM : Menambah Field Leave Calc di Benefit/Allowance
+- c17e70e PAM:Menambahkan field Contract Number di bawah field Contract Type
+- e0174b2 TMS : menambah yang kurang pada task Tambahan UI untuk Tampilan Kolom di TMS Summary (1) (53e8e913)
+- 133dff8 PAM : Menampilkan field join date & marital status untuk Mutasi Correction
+
+### Fix
+- 25a5dad PAM: Fix HRMS Address
+- 8bbe7e9 TMS : OT Reguler delay nya belum diberi toleransi, fix perhitungan OT & ANS
+- 48a6c24 TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
+
 ## v5.0.0 (2025-02-15)
 
 ### Production Release
