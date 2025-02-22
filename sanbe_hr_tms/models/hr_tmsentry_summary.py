@@ -151,6 +151,12 @@ class HRTMSEntrySummary(models.Model):
         domain=[('flag', 'ilike', '40')],
         string='TMS Summary Details',
         required=False)
+    tmsentry_details_50_ids = fields.One2many(
+        comodel_name='sb.tms.tmsentry.details',
+        inverse_name='tmsentry_id',
+        domain=[('flag', 'ilike', '50')],
+        string='TMS Summary Details',
+        required=False)
 
     is_deduction_desc = fields.Text(
         string="Keterangan PG",
