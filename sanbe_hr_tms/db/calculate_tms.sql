@@ -257,12 +257,14 @@ begin
                                              0::int -- Second part (set to 0)
                                      )       AS time_out,
                                      CASE
-                                         WHEN (coalesce(edited_time_in, time_in) != 0 OR
-                                               coalesce(edited_time_in, time_in) IS NOT NULL) OR
-                                              (coalesce(edited_time_out, time_out) != 0 OR
-                                               coalesce(edited_time_out, time_out) IS NOT NULL) THEN 'Attendee'
+                                         WHEN (coalesce(edited_time_in, time_in) > 0 /*!= 0 OR
+                                               coalesce(edited_time_in, time_in) IS NOT NULL*/) AND /*OR*/
+                                              (coalesce(edited_time_out, time_out) > 0 /*!= 0 OR
+                                               coalesce(edited_time_out, time_out) IS NOT NULL*/) THEN 'Attendee'
                                          WHEN type = 'W' AND (time_in = 0 OR time_in IS NULL) AND
                                               (time_out = 0 OR time_out IS NULL) THEN 'Absent'
+                                         WHEN type = 'W' AND ((time_in = 0 OR time_in IS NULL) OR
+                                              (time_out = 0 OR time_out IS NULL)) THEN 'Alpha 1/2'
                                          ELSE sttd2.status_attendance -- Default status in case no condition matches
                                          END AS status
                               --  EXTRACT(EPOCH FROM (
@@ -1707,7 +1709,7 @@ begin
     and hts.branch_id = branch
     and hts.periode_id = period;
 
-    --update sheet atendee, permission, overtime dan night shift
+    --update sheet atendee, permission, overtime, night shift dan absent
     with xx as(
       select
       sttd.employee_id,
@@ -1733,6 +1735,10 @@ begin
             END,
             CASE 
                 WHEN sttd.night_shift IS NOT NULL OR sttd.night_shift2 IS NOT NULL THEN '.40' 
+                ELSE '' 
+            END,
+            CASE 
+                WHEN sttd.status_attendance IN ('Absent', 'Alpha 1/2') THEN '.50' 
                 ELSE '' 
             END
         )) AS flag
