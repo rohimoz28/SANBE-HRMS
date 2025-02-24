@@ -44,13 +44,12 @@
                                     <field name="workingday_id" readonly="1"/>
                                     <field name="date_in" readonly="1"/>
                                     <field name="schedule_time_in" widget="float_time" readonly="1" optional="hide"/>
-                                    <field name="status_attendance" readonly="1" width="170px" style="max-width:200px" column_invisible='1'/>
+                                    <field name="status" readonly="1" width="170px" style="max-width:200px" column_invisible='1'/>
                                     <field name="time_in" widget="float_time" readonly="1"/>
                                     <field name="date_out" readonly="1"/>
                                     <field name="schedule_time_out" widget="float_time" readonly="1" optional="hide"/>
                                     <field name="time_out" widget="float_time" readonly="1"/>
-
-                                    <field name="status" readonly="1" width="100px" style="max-width:200px"/>
+                                    <field name="status_attendance" readonly="1" width="100px" style="max-width:200px"/>
                                     <field name="tmsentry_id" column_invisible="1" readonly="1"/>
 
                                     <button name="action_view_tms_details" type="object" string="Detail" class="fa fa-check" invisible="status == 'done'"/>
