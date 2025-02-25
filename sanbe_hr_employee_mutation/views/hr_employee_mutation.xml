@@ -57,6 +57,8 @@
                             invisible="service_type != 'muta' or state != 'draft'" />
                         <button string="Accept" name="button_accept" type="object"
                             invisible="service_type != 'muta' or state != 'intransfer'" />
+                        <button string="Print FKPM" name="print_fkpm_action_button" 
+                                groups="base.group_user" type="object" class="btn btn-primary" icon="fa-print"/>     
                         <field name="state" widget="statusbar"
                             statusbar_visible="draft,approved" invisible="service_type == 'muta'" />
                         <field name="state" widget="statusbar"
@@ -71,7 +73,7 @@
                             <!-- </h2> -->
                             <!-- <label for="letter_no"/> -->
                             <!-- <h1> -->
-                                <field name="letter_no" placeholder="Refference Number"/>
+                                <field name="letter_no" placeholder="Reference Number"/>
                             <!-- </h1> -->
                         <!-- </div> -->
                     </group>
