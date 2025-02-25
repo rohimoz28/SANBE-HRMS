@@ -73,7 +73,7 @@ class HREmpOvertimeRequest(models.Model):
         readonly=True, copy=False, index=True,
         tracking=3,
         default='draft')
-    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
+    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
     company_id = fields.Many2one('res.company', string="Company Name", index=True)
