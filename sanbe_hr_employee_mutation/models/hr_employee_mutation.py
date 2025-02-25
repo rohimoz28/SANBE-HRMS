@@ -101,7 +101,7 @@ class HrEmployeeMutation(models.Model):
     service_no_npwp = fields.Char('NPWP Number')
     service_no_ktp = fields.Char('KTP Number')
     service_area = fields.Many2one('res.territory', string='Area')
-    service_bisnisunit = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Units')
+    service_bisnisunit = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Unit')
     service_departmentid = fields.Many2one('hr.department', domain="[('branch_id','=',service_bisnisunit)]", string='Sub Department')
     service_identification = fields.Char('Identification Number')
     service_jobstatus = fields.Selection([('permanent', 'Permanent'),
@@ -143,7 +143,7 @@ class HrEmployeeMutation(models.Model):
     contract_to = fields.Date('Contract Date To', related='employee_id.contract_dateto', readonly=False)
     company_id = fields.Many2one('res.company', required=True, readonly=True, default=lambda self: self.env.company)
     nik_lama = fields.Char('Previous NIK')
-    service_nik_lama = fields.Char('NIK Lama')
+    service_nik_lama = fields.Char('Previous NIK')
 
     def button_approve(self):
         self.ensure_one()
@@ -221,6 +221,11 @@ class HrEmployeeMutation(models.Model):
     def button_accept(self):
         self.write({'state': 'accept'})
         return True
+    
+    def print_fkpm_action_button(self):
+        """ Print report FKPM """
+        return self.env.ref('sanbe_hr_employee_mutation.fkpm_report').report_action(self)
+
 
     def pencarian_data(self):
         return

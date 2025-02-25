@@ -16,6 +16,8 @@
 		'views/hr_employee_mutation.xml',
 		'data/cron_hr_check_mutation.xml',
 		'data/mutation_seq_number.xml',
+        # report
+        'reports/FKPM_report.xml',
 	],
 	'images': [
 		'static/src/img/main_screenshot.png'
