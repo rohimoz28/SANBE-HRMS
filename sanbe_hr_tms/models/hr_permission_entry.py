@@ -74,7 +74,7 @@ class HRPermissionEntry(models.Model):
     holiday_status_id = fields.Many2one("hr.leave.type", store=True, string="Permission Code",
                                         required=True, readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
-    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True)
+    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
     leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_remaining',
                                     readonly=True, store=True)
