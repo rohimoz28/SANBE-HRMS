@@ -1,3 +1,35 @@
+## v7.0.0 (2025-03-01)
+
+### Production Release
+
+### New
+- 5b8d2de [FEAT] PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM) ~ Fix outdate commit
+- d86c513 [FEAT] TMS: Payroll Summary
+- bfa2e80 [FEAT] PAM: Monitoring Off Contract
+
+### Improvement
+- c673211 [IMP] TMS : Mandatory field Period pada Permission Entry dan Overtime Request
+- e16c084 [IMP] TMS : Tambahan UI untuk Tampilan Kolom di TMS Summary (1)
+- 32dce51 [IMP] TMS : Menambah page Absent pada TMS Entry Summary
+- b46252e [IMP] TMS : Mengganti field status menjadi field status_attendance
+- 44fd6e7 [IMP] TMS : Perhitungan absen long shift
+
+---
+
+### Main branch - Development 
+
+### New
+- b81b567 [FEAT]PAM : Monitoring Contract
+- a9412d6 [FEAT] PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM)
+- b7336ba [FEAT] TMS: Payroll Summary
+
+### Improvement
+- ee9a76d [IMP] TMS : Mandatory field Period pada Permission Entry dan Overtime Request
+- 220a9e1 [IMP] TMS : Menambah page Absent pada TMS Entry Summary
+
+### Fix
+- eae683f [FIX] TMS : Update fungsi button Close di Period
+
 ## v6.0.0 (2025-02-22)
 
 ### Production Release
