@@ -19,6 +19,7 @@
         <menuitem id="purchase.menu_purchase_root"
                   active="False"/>
         <menuitem id="stock.menu_stock_root"
+                  name="Inventory"
                   active="True"/>
         <menuitem id="account.menu_finance"
                   active="False"/>
