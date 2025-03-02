@@ -18,12 +18,16 @@
     'currency': 'USD',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr','hr_skills','hr_skills_survey','hr_presence','base_territory','sanbe_employement_details'],
-    'data': [
-        'security/ir.model.access.csv',
-        'wizards/hr_monitoring_contract.xml',
-        'views/employee_monitoring.xml',
-        'views/hr_employee_contract_monitoring_views.xml',
+    'depends': ['base', 'hr','hr_skills','hr_resignation','hr_skills_survey','hr_presence','base_territory','sanbe_employement_details'],
+    "data": [
+        "security/contract_monitoring_rule.xml",
+        "security/ir.model.access.csv",
+        "data/generate_contract_reminder_cron.xml",
+        "data/mail_template.xml",
+        "wizards/hr_monitoring_contract.xml",
+        "views/employee_monitoring.xml",
+        "views/hr_employee_contract_monitoring_views.xml",
+        "views/hr_mail_config_views.xml"
     ],
     'assets': {
         'web.assets_backend': [
