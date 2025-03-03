@@ -75,11 +75,15 @@ BEGIN
 	),
 	last_record AS (
 	    SELECT
-	        employee_id,
-	        leave_remaining
-	    FROM sb_leave_allocation
-	--    where employee_id = 48066
-	    ORDER BY id DESC  -- Mengambil record dengan ID tertinggi (terbaru)
+		    id,
+		    employee_id,
+		    leave_remaining
+		FROM sb_leave_allocation
+		where /*employee_id = 478968 and*/ id IN (
+		    SELECT MAX(id)
+		    FROM sb_leave_allocation
+		    GROUP BY employee_id
+		)    -- Mengambil record dengan ID tertinggi (terbaru)
 	)
 	select
 	aa.area,
