@@ -77,3 +77,7 @@ class SbLeaveAllocation(models.Model):
         except Exception as e:
             self.env.cr.rollback()
             _logger.error("Error running Cron for Populate Leave Allocation: %s", str(e))
+
+
+    def unlink(self):
+        return super(SbLeaveAllocation, self).unlink()
