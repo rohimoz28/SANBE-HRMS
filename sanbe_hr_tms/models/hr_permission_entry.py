@@ -136,6 +136,29 @@ class HRPermissionEntry(models.Model):
             if not leave_alloc or leave_alloc.leave_remaining < time_days:
                 raise ValidationError('Employee Has No Leave Allocation.\nPlease choose Leave Type: Unpaid Leave.')
 
+    @api.constrains('permission_date_from')
+    def _validate_date_periode(self):
+        for rec in self:
+            get_periode = self.env['hr.opening.closing'].sudo().search([
+                ('id', '=', rec.periode_id.id),
+                ('open_periode_from','<=',rec.permission_date_from),
+                ('open_periode_to','>=',rec.permission_date_from),
+                ('state_process','=','running')], limit=1)
+            if not get_periode:
+                raise ValidationError('This period is already closed.')
+
+    @api.onchange('permission_date_from')
+    def _get_periode_id(self):
+        for rec in self:
+            get_periode = self.env['hr.opening.closing'].sudo().search([
+                # ('id', '=', rec.periode_id.id),
+                ('open_periode_from','<=',rec.permission_date_from),
+                ('open_periode_to','>=',rec.permission_date_from)], limit=1)
+            if get_periode:
+                rec.periode_id = get_periode.id
+            else:
+                rec.periode_id = False
+
     @api.model_create_multi
     def create(self, vals_list):
         #CHP = Area Cimahi

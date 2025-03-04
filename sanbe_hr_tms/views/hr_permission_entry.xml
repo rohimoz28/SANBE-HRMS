@@ -29,7 +29,7 @@
                             <group>
                                 <field name="trans_number" readonly="permission_status != 'draft'"/>
                                 <field name="doc_number" readonly="permission_status != 'draft'"/>
-                                <field name="periode_id" readonly="permission_status != 'draft'"/>
+                                <field name="periode_id" readonly="1" force_save="True"/>
                                 <field name="employee_company_id" invisible="1"/>
                                 <field name="holiday_status_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
                                 <field name="permission_date_from" readonly="permission_status != 'draft'" required="True"/>
