@@ -507,7 +507,7 @@ begin
 		join hr_employee he on sttd.employee_id = he.id
 		left join hr_working_days hwd on sttd.workingday_id = hwd.id
 		where sttd.time_out = sttd2.time_out 
-		and sttd2.time_in is null 
+		and (sttd2.time_in is null or sttd2.time_in = 0) 
 		and sttd2.details_date = sttd.details_date + interval '1 day'
 		and sttd.date_out > sttd.date_in
 		order by he."name"
@@ -533,7 +533,7 @@ begin
 		join hr_employee he on sttd2.employee_id = he.id
 		left join hr_working_days hwd on sttd2.workingday_id = hwd.id
 		where sttd.time_out = sttd2.time_out 
-		and sttd2.time_in is null 
+		and (sttd2.time_in is null or sttd2.time_in = 0) 
 		and sttd2.details_date = sttd.details_date + interval '1 day'
 		and sttd.date_out > sttd.date_in
 		order by he."name"
@@ -570,7 +570,7 @@ begin
 	where sttd.employee_id in (xx.employee_id, yy.employee_id) and sttd.details_date in (xx.details_date, yy.details_date)
 	)
 	update sb_tms_tmsentry_details sttd 
-	set time_in = zz.time_in, time_out = zz.time_out, remark_edit_attn = 'update long shift'
+	set time_in = zz.time_in, time_out = zz.time_out, remark_edit_attn = 'update long shift', status_attendance = 'Attendee'
 	from zz
 	where sttd.employee_id = zz.employee_id and sttd.details_date = zz.details_date;
 
