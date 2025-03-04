@@ -238,7 +238,8 @@ class HRTmsOpenClose(models.Model):
                     attn.write({'status': 'done'})
                 permissions = self.env['hr.permission.entry'].search([('periode_id','=',record.periode_id.id)])
                 for perm in permissions:
-                    perm.write({'permission_status': 'done'})
+                    # perm.write({'permission_status': 'done'})
+                    perm.write({'permission_status': 'close'})
                 overtime = self.env['hr.overtime.planning'].search([('periode_id','=',data.id)])
                 for ot in overtime:
                     ot.write({'state': 'done'})
