@@ -11,7 +11,7 @@
                         <field name="isopen" invisible="1"/>
                         <button name="action_opening_periode" invisible="isopen == True or state_process == 'done'"
                                 string="Open" type="object" class="btn-primary"/>
-                        <button name="action_reproses" string="Proses"
+                        <button name="action_reproses" string="Process"
                                 type="object" class="btn-primary"
                                 invisible="state_process != 'running'"/>
                         <button name="action_closing_periode" invisible="state_process != 'running'" string="Close" type="object"
