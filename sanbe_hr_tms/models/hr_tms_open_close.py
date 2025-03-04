@@ -31,28 +31,28 @@ class HRTmsOpenClose(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id DESC'
 
-    # @api.depends('area_id')
-    # def _isi_semua_branch(self):
-    #     for allrecs in self:
-    #         databranch = []
-    #         for allrec in allrecs.area_id.branch_id:
-    #             mybranch = self.env['res.branch'].search([('name','=', allrec.name)], limit=1)
-    #             databranch.append(mybranch.id)
-    #         allbranch = self.env['res.branch'].sudo().search([('id','in', databranch)])
-    #         allrecs.branch_ids=[Command.set(allbranch.ids)]
-
-    @api.depends('branch_id')
+    @api.depends('area_id')
     def _isi_semua_branch(self):
-        for record in self:
-            resbranch = self.env['res.branch'].sudo().search([])
-            branch = resbranch.filtered(lambda p: p.id == record.branch_id)
-            record.branch_ids = branch.id
+        for allrecs in self:
+            databranch = []
+            for allrec in allrecs.area_id.branch_id:
+                mybranch = self.env['res.branch'].search([('name','=', allrec.name)], limit=1)
+                databranch.append(mybranch.id)
+            allbranch = self.env['res.branch'].sudo().search([('id','in', databranch)])
+            allrecs.branch_ids=[Command.set(allbranch.ids)]
 
-    name = fields.Char('Periode Name')
-    area_id = fields.Many2one('res.territory',string='Area ID', index=True )
+    # @api.depends('branch_id')
+    # def _isi_semua_branch(self):
+    #     for record in self:
+    #         resbranch = self.env['res.branch'].sudo().search([])
+    #         branch = resbranch.filtered(lambda p: p.id == record.branch_id)
+    #         record.branch_ids = branch.id
+
+    name = fields.Char('Period Name')
+    area_id = fields.Many2one('res.territory',string='Area', index=True )
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
                                   store=False)
-    branch_id = fields.Many2one('res.branch',string='Bisnis Unit',index=True,domain="[('id','in',branch_ids)]")
+    branch_id = fields.Many2one('res.branch',string='Business Unit',index=True,domain="[('id','in',branch_ids)]")
     open_periode_from = fields.Date('Opening Periode From')
     open_periode_to = fields.Date('Opening Periode To')
     close_periode_from = fields.Date('Closing Periode From')
