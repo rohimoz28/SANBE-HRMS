@@ -20,7 +20,7 @@ before_script:
   - chmod 700 ~/.ssh
   - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
   - mkdir -p /tmp/scripts
-  - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+  - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
   - |
     if [ -f "/tmp/scripts/send_notification.sh" ]; then
     echo "File successfully copied."
@@ -70,7 +70,7 @@ restart_apps_scheduled:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
       echo "File successfully copied."
@@ -117,7 +117,7 @@ success_notif_scheduled:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
         echo "File successfully copied."
@@ -152,7 +152,7 @@ failure_notification_scheduled:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
         echo "File successfully copied."
@@ -188,7 +188,7 @@ restart_apps_manual:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
         echo "✅ File successfully copied."
@@ -240,7 +240,7 @@ success_notif_manual:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
         echo "✅ File successfully copied."
@@ -282,7 +282,7 @@ failure_notification_manual:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
     - mkdir -p /tmp/scripts
-    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
+    - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/sanbe-odoo/script/send_notification.sh /tmp/scripts/
     - |
       if [ -f "/tmp/scripts/send_notification.sh" ]; then
         echo "File successfully copied."
