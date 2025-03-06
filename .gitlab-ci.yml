@@ -41,9 +41,9 @@ update_project:
       ssh -i /tmp/deploy_key $SSH_USER@$DEPLOY_SERVER "
       if [ -d '$PROJECT_DIR' ]; then
         echo 'Project directory exists. Pulling latest changes...';
-        cd '$PROJECT_DIR' && git pull origin main
+        cd '$PROJECT_DIR' && git pull origin staging
         if [ $? -ne 0 ]; then # Check the exit code of the git pull command
-          echo 'Error: Failed to pull from origin/main'
+          echo 'Error: Failed to pull from origin/staging'
           exit 1
         fi
         echo 'Success to pull newest project';
