@@ -54,7 +54,7 @@ update_project:
       fi
       "
   only:
-    - main
+    - staging
 
 restart_apps_scheduled:
   stage: deploy
@@ -220,7 +220,7 @@ restart_apps_manual:
       fi
       "
   only:
-    - main
+    - staging
   when: manual
 
 success_notif_manual:
@@ -262,7 +262,7 @@ success_notif_manual:
     - job: restart_apps_manual
       optional: false # Ensures this notification only runs if the manual deployment runs
   only:
-    - main
+    - staging
   when: on_success
 
 failure_notification_manual:
