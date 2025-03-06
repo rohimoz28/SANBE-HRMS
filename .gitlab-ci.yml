@@ -129,7 +129,7 @@ success_notif_scheduled:
       fi
   script:
     - echo "Executing notification script..."
-    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Deployment Successful!" "Success" 3066993 "Development" "$WEBHOOK_URL"
+    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Deployment Successful!" "Success" 3066993 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
   needs:
@@ -164,7 +164,7 @@ failure_notification_scheduled:
       fi
   script:
     - echo "Executing notification script..."
-    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "Development" "$WEBHOOK_URL"
+    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
   needs:
@@ -257,7 +257,7 @@ success_notif_manual:
     - echo "📢 Sending notification to Discord..."
     - ls -lah /tmp/scripts/
     - cat -A /tmp/scripts/send_notification.sh # Debug script content
-    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Manual Deployment Successful!" "Success" 3066993 "Development" "$WEBHOOK_URL"
+    - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Manual Deployment Successful!" "Success" 3066993 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   needs:
     - job: restart_apps_manual
       optional: false # Ensures this notification only runs if the manual deployment runs
@@ -294,7 +294,7 @@ failure_notification_manual:
       fi
   script:
     - echo "Executing notification script..."
-    - /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "Development" "$WEBHOOK_URL"
+    - /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main"'
   dependencies:
