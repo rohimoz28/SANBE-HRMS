@@ -570,7 +570,7 @@ begin
 	where sttd.employee_id in (xx.employee_id, yy.employee_id) and sttd.details_date in (xx.details_date, yy.details_date)
 	)
 	update sb_tms_tmsentry_details sttd 
-	set time_in = zz.time_in, time_out = zz.time_out, remark_edit_attn = 'update long shift', status_attendance = 'Attendee'
+	set time_in = zz.time_in, time_out = zz.time_out, date_in = sttd.details_date, remark_edit_attn = 'update long shift', status_attendance = 'Attendee'
 	from zz
 	where sttd.employee_id = zz.employee_id and sttd.details_date = zz.details_date;
 
