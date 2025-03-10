@@ -14,6 +14,7 @@ update_project:
     - test4
   image: alpine:latest
   before_script:
+    - echo "Deploying latest updates via SSH..."
     - apk add --no-cache tzdata # Add this line
     - ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime # Set the timezone
     - apk add --no-cache curl wget jq dos2unix bash openssh-client
