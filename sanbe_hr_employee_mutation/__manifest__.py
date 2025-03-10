@@ -13,6 +13,7 @@
 	'currency': 'EUR',
 	'data': [
 		'security/ir.model.access.csv',
+		'security/ir.security.rules.xml',
 		'views/hr_employee_mutation.xml',
 		'data/cron_hr_check_mutation.xml',
 		'data/mutation_seq_number.xml',
