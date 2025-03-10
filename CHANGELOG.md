@@ -1,3 +1,16 @@
+## v7.1.1 (2025-03-08)
+
+_Starting with this version, we will be using a single branch. The main and production branches are now synchronized._
+
+### Improvement
+- 94af4fb [IMP] PAM : Urutkan Sub Menuitem Monitoring Personal Adm
+
+### Fix
+- 36369fd [FIX] TMS : Update fungsi button Close di Period
+- 365b676 [FIX] TMS : Fix Create Processing and Period
+- a9bb47d [FIX] TMS : Fix longshift dengan value nol
+- 0d41ce8 [FIX] TMS : Fix unlink sb.leave.allocation
+
 ## v7.0.0 (2025-03-01)
 
 ### Production Release
