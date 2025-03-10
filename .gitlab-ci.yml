@@ -11,11 +11,11 @@ variables:
 image: alpine:latest
 
 before_script:
-  - apk add --no-cache openssh-client curl wget
+  - apk add --no-cache tzdata # Add this line
+  - ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime # Set the timezone
+  - apk add --no-cache curl wget jq dos2unix bash openssh-client
   - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY"
   - echo "$SSH_PRIVATE_KEY" > /tmp/deploy_key
-  - ssh-keygen -lf /tmp/deploy_key
   - chmod 600 /tmp/deploy_key
   - ssh-add /tmp/deploy_key
   - mkdir -p ~/.ssh
@@ -25,12 +25,12 @@ before_script:
   - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
   - |
     if [ -f "/tmp/scripts/send_notification.sh" ]; then
-    echo "File successfully copied."
-    chmod +x /tmp/scripts/send_notification.sh
-    dos2unix /tmp/scripts/send_notification.sh
+      echo "File successfully copied."
+      chmod +x /tmp/scripts/send_notification.sh
+      dos2unix /tmp/scripts/send_notification.sh
     else
-    echo "Error: /tmp/scripts/send_notification.sh not found!"
-    exit 1
+      echo "Error: /tmp/scripts/send_notification.sh not found!"
+      exit 1
     fi
 
 update_project:
