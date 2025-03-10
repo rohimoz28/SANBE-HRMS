@@ -65,6 +65,7 @@ restart_apps_scheduled:
     - apk add --no-cache openssh-client curl wget
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" > /tmp/deploy_key
+    - echo "Checking SSH_PRIVATE_KEY length= $SSH_PRIVATE_KEY"
     - chmod 600 /tmp/deploy_key
     - ssh-add /tmp/deploy_key
     - mkdir -p ~/.ssh
