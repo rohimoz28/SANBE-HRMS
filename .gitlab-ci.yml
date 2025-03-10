@@ -12,7 +12,6 @@ update_project:
   stage: build
   tags:
     - test4
-  image: alpine:latest
   before_script:
     - echo "Deploying latest updates via SSH..."
     - apk add --no-cache tzdata # Add this line
