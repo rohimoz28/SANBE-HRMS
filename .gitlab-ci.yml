@@ -54,7 +54,7 @@ update_project:
       fi
       "
   only:
-    - staging
+    - main
 
 restart_apps_scheduled:
   stage: deploy
