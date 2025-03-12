@@ -175,7 +175,10 @@ class HrEmployeeMutation(models.Model):
         if self.service_area.id != self.employee_id.area.id:
             self.employee_id.write({'area': self.service_area.id})
         if self.service_bisnisunit.id != self.employee_id.branch_id.id:
-            self.employee_id.write({'branch_id': self.service_bisnisunit.id})
+            query = """ update hr_employee set branch_id = %s where id = %s"""
+            
+            self.env.cr.execute((query)%(self.service_bisnisunit.id,self.id))
+            # self.employee_id.sudo().write({'branch_id': self.service_bisnisunit.id})
         if self.service_departmentid.id != self.employee_id.department_id.parent_id.id:
             self.employee_id.write({'department_id': self.service_departmentid.id})
         if self.service_jobstatus != self.employee_id.job_status:

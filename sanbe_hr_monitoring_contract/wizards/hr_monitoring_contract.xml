@@ -99,7 +99,7 @@
         <menuitem
             id="hr_menu_hr_monitoring_contract"
             name="Monitoring Contract - Pension and Certification"
-                  parent="hr.menu_hr_employee_payroll"
-                  sequence="4"
+                  parent="hr.hr_menu_hr_reports"
+                  sequence="23"
             action="action_view_hr_monitoring_contract"/>
 </odoo>
