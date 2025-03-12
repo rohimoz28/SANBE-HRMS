@@ -12,6 +12,7 @@ update_project:
   stage: build
   tags:
     - test4
+  image: alpine:latest
   before_script:
     - apk add --no-cache openssh-client curl wget
     - eval $(ssh-agent -s)
