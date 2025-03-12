@@ -23,12 +23,12 @@ before_script:
   - scp -o StrictHostKeyChecking=no $SSH_USER@$DEPLOY_SERVER:/home/albert/script/send_notification.sh /tmp/scripts/
   - |
     if [ -f "/tmp/scripts/send_notification.sh" ]; then
-    echo "File successfully copied."
-    chmod +x /tmp/scripts/send_notification.sh
-    dos2unix /tmp/scripts/send_notification.sh
+      echo "File successfully copied."
+      chmod +x /tmp/scripts/send_notification.sh
+      dos2unix /tmp/scripts/send_notification.sh
     else
-    echo "Error: /tmp/scripts/send_notification.sh not found!"
-    exit 1
+      echo "Error /tmp/scripts/send_notification.sh not found!"
+      exit 1
     fi
 update_project:
   stage: build
