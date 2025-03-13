@@ -114,11 +114,11 @@
                     <group name="emp_service_det" string="Mutation Details" readonly="state in ['approved']">
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
-                            <field name="emp_status" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status_to_pam" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
                             <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
-                            <field name="emp_status_actv" invisible="service_type not in ['actv']" readonly="state in ['approved']" force_save="1" />
-                            <field name="emp_status_other" invisible="service_type in ['actv','corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status_actv" invisible="service_type not in ['actv']" required="service_type in ['actv']"  readonly="state in ['approved']" force_save="1" />
+                            <field name="emp_status_other" invisible="service_type in ['actv','corr']" required="service_type not in ['actv','corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employee_levels" readonly="state in ['approved']" 
                             invisible="service_type != 'prom'" required="service_type == 'prom'"
                             options="{'no_create': True,'no_quick_create': True}" />
@@ -153,6 +153,11 @@
                         </group>
                     </group>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
                 </form>
             </field>
         </record>
