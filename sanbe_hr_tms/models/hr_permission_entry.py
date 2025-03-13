@@ -91,7 +91,7 @@ class HRPermissionEntry(models.Model):
             if record.employee_id:
                 leave_allocation = self.env['sb.leave.allocation'].search([
                     ('employee_id', '=', record.employee_id.id)
-                ], order='create_date desc', limit=1)
+                ], order='id desc', limit=1)
                 record.leave_allocation_id = leave_allocation
             else:
                 record.leave_allocation_id = False
