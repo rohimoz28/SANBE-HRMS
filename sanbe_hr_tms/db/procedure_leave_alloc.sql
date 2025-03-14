@@ -64,7 +64,8 @@ BEGIN
 		    he.id as employee_id,
 		    CASE 
 		        WHEN leave_calculation = 'first_month' THEN 1  -- Mengambil tanggal 1
-		        WHEN leave_calculation = 'contract_based' THEN EXTRACT(DAY FROM join_date)::INT  -- Mengambil tanggal (day) dari join_date
+		        WHEN leave_calculation = 'contract_based' AND job_status = 'contract' THEN EXTRACT(DAY FROM contract_datefrom)::INT  -- Mengambil tanggal (day) dari tanggal muali kontrak
+				WHEN leave_calculation = 'contract_based' AND job_status = 'permanent' THEN EXTRACT(DAY FROM join_date)::INT  -- Mengambil tanggal (day) dari join_date
 		        ELSE NULL
 		    END AS leave_allocation_date,
 		    he.leave_calculation
