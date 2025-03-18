@@ -6,7 +6,18 @@
         <field name="name">view.hr.employee.contract.monitoring.tree</field>
         <field name="model">hr.employee.contract.monitoring</field>
         <field name="arch" type="xml">
-            <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id">
+            <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id" decoration-danger="date_end &lt; current_date">
+                <header>
+                    <button name="act_deactive_employee" type="object" string="Deactive Employee" 
+                    invisible="1"
+                    />
+                    <button name="mail_send_hr" type="object" string="mail HR" 
+                    invisible="1"
+                    />
+                    <button name="mail_send_mentor" type="object" string="mail Mentor" 
+                    invisible="1"
+                    />
+                </header> 
                 <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
                 <field name="department_id" string="Sub Department"/>
@@ -17,17 +28,21 @@
                 <field name="notice_days" string="Notice"/>
                 <field name="date_end" string="End Date"/>
                 <field name="rehire"/>
-                <field name="time_limit"/>
+                <field name="time_limit" column_invisible="1" />
+                <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
+                <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/>
             </tree>
         </field>
     </record>
 
-    <record id="view_hr_employee_contract_monitoring_filter" model="ir.ui.view">
+
+    <record id="view_hr_employee_expired_contract_monitoring_filter" model="ir.ui.view">
         <field name="name">hr.employee.contract.monitoring.select</field>
         <field name="model">hr.employee.contract.monitoring</field>
         <field name="arch" type="xml">
             <search string="Search Employee">
-                <filter string="To Check" name="tocheck" domain="[('time_limit','&lt;',14),('rehire','=',True)]" help="Plese Check Employee Contract."/>
+                <!-- <filter string="To Check" name="tocheck" domain="[('time_limit','&lt;',14),('rehire','=',True)]" help="Plese Check Employee Contract."/> -->
+                <filter string="to Check" name="tocheck" domain="[('time_limit','&lt;', 30),('time_limit','=', 0),('rehire','=',True)]" help="to Expired contracts eligible for rehire"/>
                 <field name="employee_name" string="Name" filter_domain="['|','|','|','|',('employee_name','ilike',self),('nik_employee','ilike',self),('territory_name','ilike',self),('department_name','ilike',self),('branch_name','ilike',self)]"/>
                 <field name="branch_id" string="Business Units"/>
                 <field name="territory_id" string="Area"/>
@@ -35,6 +50,7 @@
                 <separator/>
                 <filter string="Rehire" name="rehire" domain="[('rehire','=',True)]"/>
                 <filter string="Late" domain="[('time_limit','&lt;',0)]" name="late" help="Late Re-Newal Contract"/>
+                <filter string="To Expire" domain="[('time_limit','&lt;',30),('time_limit','&gt;',0)]" name="to_expire" help="Late Re-Newal Contract"/>
                 <separator/>
             </search>
         </field>
@@ -43,11 +59,12 @@
 
     <!-- Action hr.employee.contract.monitoring -->
     <record id="action_hr_employee_contract_monitoring" model="ir.actions.act_window">
-        <field name="name">Monitoring Expired Contract</field>
+        <field name="name">Monitoring Contract</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hr.employee.contract.monitoring</field>
         <field name="view_mode">tree</field>
         <field name="context">{'search_default_tocheck': True}</field>
+        <field name="search_view_id" ref="view_hr_employee_expired_contract_monitoring_filter" />
         <field name="domain">[]</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
@@ -56,8 +73,7 @@
         </field>
     </record>
 
-    <menuitem id="hr_employee_contract_monitoring" name="Monitoring Expired Contracts" action="action_hr_employee_contract_monitoring" parent="hr.hr_menu_hr_reports" sequence="25"/>
-
+    <menuitem id="hr_employee_contract_monitoring" name="Monitoring Contracts" action="action_hr_employee_contract_monitoring" parent="hr.hr_menu_hr_reports" sequence="21"/>
 
 
 
@@ -161,15 +177,15 @@
         <field name="model">hr.contract.monitoring</field>
         <field name="arch" type="xml">
             <search string="Search Employee">
-                <filter string="To Check" name="tocheck" domain="[('is_done','=','waiting')]" help="Plese Check Employee Contract."/>
+                <filter string="To Check" name="tocheck" domain="[('is_done','=','waiting')]" help="Please Check Employee Contract."/>
                 <field name="employee_name" string="Name" filter_domain="['|','|','|','|',('employee_name','ilike',self),('nik_employee','ilike',self),('territory_name','ilike',self),('department_name','ilike',self),('branch_name','ilike',self)]"/>
                 <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
                 <field name="department_id" string="Sub Department"/>
                 <separator/>
                 <filter string="Rehire" name="rehire" domain="[('rehire','=',True)]"/>
-                <filter string="Late" domain="[('date_end','&lt;',current_date),('is_done','=','waiting')]" name="late" help="Late Re-Newal Contract"/>
-                <filter string="Done" domain="[('is_done','!=','waiting')]" name="late" help="Contract was Porccess"/>
+                <filter string="Late" domain="[('date_end','&lt;',current_date),('is_done','=','waiting')]" name="late" help="Late Renewal Contract"/>
+                <filter string="Done" domain="[('is_done','!=','waiting')]" name="done" help="Contract was Processed"/>
                 <separator/>
             </search>
         </field>
@@ -183,6 +199,7 @@
         <field name="res_model">hr.contract.monitoring</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'search_default_tocheck': True}</field>
+        <field name="search_view_id" ref="view_hr_employee_contract_monitoring_filter" />
         <field name="domain">[]</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
@@ -191,6 +208,6 @@
         </field>
     </record>
 
-    <menuitem id="hr_contract_monitoring" name="Monitoring Contract" action="action_hr_contract_monitoring" parent="hr.hr_menu_hr_reports" sequence="21"/>
+    <!-- <menuitem id="hr_contract_monitoring" name="Monitoring Contract" action="action_hr_contract_monitoring" parent="hr.hr_menu_hr_reports" sequence="21"/> -->
 
 </odoo>
