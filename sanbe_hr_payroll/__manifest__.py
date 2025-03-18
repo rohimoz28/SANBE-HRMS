@@ -32,6 +32,7 @@
         'views/sb_payroll_entry_detail.xml',
         'views/sb_employee_profile.xml',
         'views/sb_compensation.xml',
+        'views/sb_payroll_employee.xml',
         'views/hr_payroll_menu.xml',
         'security/ir.model.access.csv',
     ],
