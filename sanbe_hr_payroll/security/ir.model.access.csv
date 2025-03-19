@@ -10,3 +10,5 @@ access_sb_payroll_summary_detail,access.sb.payroll.summary.detail,model_sb_payro
 access_sb_employee_profile,access.sb.employee.profile.users,model_sb_employee_profile,base.group_user,1,1,1,1
 access_sb_compensation,access.sb.compensation.users,model_sb_compensation,base.group_user,1,1,1,1
 access_sb_insurance_setting,access.sb.insurance.setting.users,model_sb_insurance_setting,base.group_user,1,1,1,1
+access_sb_payroll_employee,access.sb.payroll.employee.users,model_sb_payroll_employee,base.group_user,1,1,1,1
+access_sb_payroll_employee_details,access.sb.payroll.employee.details.users,model_sb_payroll_employee_details,base.group_user,1,1,1,1
