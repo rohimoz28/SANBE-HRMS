@@ -66,6 +66,14 @@
         />
 
         <menuitem
+                id="menu_sb_tax_setting"
+                name="Tax Setting - TER"
+                parent="menu_payroll_setting_parameter"
+                sequence="9"
+                action="action_sb_tax_setting"
+        />
+
+        <menuitem
                 id="menu_hr_payroll_employee_profile"
                 name="Employee Profile"
                 parent="menu_payroll_setting_parameter"
