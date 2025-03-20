@@ -10,7 +10,7 @@
                     <group name="tax_setting" string="Tax Setting - TER">
                         <group>
                             <field name="ed_from" />
-                            <field name="ter_name" />
+                            <field name="ter_names" />
                             <field name="ptkp" string="Available for PTKP" />
                             <field name="status" />
                         </group>
@@ -35,7 +35,7 @@
             <field name="model">sb.tax.setting</field>
             <field name="arch" type="xml">
                 <tree string="Tax Setting - TER">
-                    <field name="ter_name" />
+                    <field name="ter_names" />
                     <field name="ed_from" />
                     <field name="ptkp" />
                     <field name="status" />
@@ -48,7 +48,7 @@
             <field name="model">sb.tax.setting</field>
             <field name="arch" type="xml">
                 <search string="Tax Setting">
-                    <field name="ter_name" />
+                    <field name="ter_names" />
                     <field name="ed_from" />
                     <field name="ptkp" />
                     <field name="status" />

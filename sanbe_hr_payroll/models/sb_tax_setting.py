@@ -5,11 +5,12 @@ class SbTaxSetting (models.Model):
     _description = 'Tax Setting'
 
     ts_details_ids = fields.One2many('sb.tax.setting.details', 'tax_setting_id', string='Tax Setting Details IDs')
-    ter_name = fields.Selection([
-                                ('TER_A', 'TER A'),
-                                ('TER_B', 'TER B'),
-                                ('TER_C', 'TER C')
-                                ], string='TER Name')
+    # ter_name = fields.Selection([
+    #                             ('TER_A', 'TER A'),
+    #                             ('TER_B', 'TER B'),
+    #                             ('TER_C', 'TER C')
+    #                             ], string='TER Name')
+    ter_names = fields.Char('TER Name')
     ed_from = fields.Date('Effective Date From')
     ptkp = fields.Selection([
                             ('TK/0', 'TK/0'),
