@@ -7,6 +7,9 @@
             <field name="model">sb.employee.profile</field>
             <field name="arch" type="xml">
                 <form string="Employee Profile">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
                         <group>
                             <group>
@@ -14,12 +17,11 @@
                                 <field name="employee_id"/>
                                 <field name="nik_new" readonly="1"/>
                                 <field name="department_id" readonly="1"/>
-                                <field name="job_id" readonly="1" invisible="1"/>
+                                <field name="job_id" readonly="1"/>
                                 <field name="area_id" readonly="1" invisible="1"/>
-                                <field name="branch_id" readonly="1"/>
+                                <!-- <field name="branch_id" readonly="1"/> -->
                             </group>
                             <group>
-                                <field name="state" widget="radio" options="{'horizontal': true}"/>
                                 <field name="npwp" readonly="1"/>
                                 <field name="employement_status" readonly="1"/>
                                 <field name="job_status" readonly="1"/>
@@ -27,25 +29,57 @@
                                 <field name="nik_old" readonly="1"/>
                             </group>
                             <notebook>
-                                <page name="sb_employee_profile_details_id" string="Employee Profile Details">
+                                <page name="sb_employee_profile_details_id" string="Employee Details">
                                     <group>
                                         <group>
                                             <field name="pay_type"/>
                                             <field name="pay_period"/>
                                             <field name="effective_date"/>
                                             <field name="bank_account"/>
-                                            <field name="basic_salary"/>
+                                            <field name="basic_salary" invisible="1"/>
                                         </group>
                                         <group>
                                             <field name="status_ptkp"/>
                                             <field name="type_ter"/>
+                                            <field name="tax_method" invisible="1"/>
                                             <field name="bpjs_no"/>
                                             <field name="jamsostek_no"/>
                                         </group>
                                     </group>
                                 </page>
-                                <page name="sb_compensation_id" string="Allowance n Deduction">
-                                    <!-- override by view sb_bank_transfer_summary_detail -->
+                                <page name="allowance_and_deductions_id" string="Allowance and Deduction">
+                                    <group>
+                                        <!-- header -->
+                                        <group>                                            
+                                            <field name="pay_code"/>
+                                            <field name="amount"/>
+                                            <field name="times"/>
+                                            <field name="remarks"/>
+                                            <field name="selected_detail_id" invisible="1"/>                                         
+                                        </group>
+                                        <group>
+                                            <field name="pct_from_bs" />
+                                            <field name="formula"/>
+                                            <field name="start_date"/>
+                                            <!-- <button name="btn_add" string="Add" type="object" class="btn-primary"/> -->
+                                            <button name="btn_save" string="Save" type="object" class="btn-primary"/>  
+                                        </group>
+                                    </group>
+                                    <field name="allowance_ids">
+                                        <tree editable="bottom" create="0">
+                                            <field name="pay_code" optional='show'/>
+                                            <field name="amount" optional='show'/>
+                                            <field name="formula" optional='show'/>
+                                            <field name="times" optional='show'/>
+                                            <field name="start_date" optional='show'/>
+                                            <field name="taxed" optional='show'/>
+                                            <field name="remarks" optional='show'/>
+                                            <button name="btn_edit" type="object" string="Edit"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page name="sb_compensation_id" string="Allowance and Deduction">
+                                    
                                 </page>
                             </notebook>
                         </group>
@@ -61,8 +95,8 @@
                 <tree string="Employee Profile">
                     <field name="employee_group1"/>
                     <field name="area_id" string="Area"/>
-                    <field name="branch_id" string="BU"/>
-                    <field name="department_id" string="Dept"/>
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
                     <field name="employee_id" string="Employee Name"/>
                     <field name="job_status" string="Job Status"/>
                     <field name="employement_status"/>
