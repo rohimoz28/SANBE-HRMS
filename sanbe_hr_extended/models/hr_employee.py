@@ -482,23 +482,41 @@ class HrEmployee(models.Model):
                 raise UserError('Cannot Delete Employee not in draft')
         return super().unlink()
 
-    @api.depends('name', "employee_id")
+    @api.depends('employee_id','name')
     def _compute_display_name(self):
-        for account in self:
-            myctx = self._context.get('search_by')
-            sbn = self._context.get('search_by_name')
-            if myctx and sbn == False:
-                if myctx == 'No':
-                    account.display_name = f"{account.employee_id}"
-                else:
-                    account.display_name = f"{account.name}"
-            else:
-                account.display_name = f"{account.name}"
+        for emp in self:
+            name = ''
+            if emp.employee_id and emp.name:
+                name = '[' + emp.employee_id + '] ' + emp.name 
+            emp.display_name = name
+
+
+    # @api.depends('name', "employee_id")
+    # def _compute_display_name(self):
+    #     for account in self:
+    #         myctx = self._context.get('search_by')
+    #         sbn = self._context.get('search_by_name')
+    #         if myctx and sbn == False:
+    #             if myctx == 'No':
+    #                 account.display_name = f"{account.employee_id}"
+    #             else:
+    #                 account.display_name = f"{account.name}"
+    #         else:
+    #             account.display_name = f"{account.name}"
 
     @api.model
     def _name_search(self, name, domain=None, operator='ilike', limit=None, order=None):
         # domain = domain or []
-        # if name:
+        parts = name.split('] ')
+        if name:
+            if len(parts) == 2:
+                emp_id = parts[0][1:]
+                emp_name = parts[1]
+                name_domain = ['|',('employee_id', operator, emp_id), ('name', operator, emp_name)]
+                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
+            else:
+                name_domain = ['|',('employee_id', operator, name), ('name', operator, name)]
+                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
         #    # mybranch = self.env['res.branch'].sudo().search([('branch_code','=','BU3')])
         #    mybranch = self.env.user.branch_id
         #    if name=='Hendra Setiawan':
