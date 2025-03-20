@@ -15,3 +15,5 @@ from . import sb_payroll_summary
 from . import sb_employee_profile
 from . import sb_compensation
 from . import sb_insurance_setting
+from . import sb_tax_setting
+from . import sb_payroll_employee
