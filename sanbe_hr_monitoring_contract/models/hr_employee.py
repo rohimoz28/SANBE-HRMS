@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
     
-    end_date = fields.Date('End Date',related='contract_id.date_end')
+    end_date = fields.Date('End Date', related='contract_id.date_end')
     contract_id = fields.Many2one('hr.contract')
 
 class HrContract(models.Model):
