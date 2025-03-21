@@ -66,6 +66,14 @@
         />
 
         <menuitem
+                id="menu_sb_allowance_deduction"
+                name="Allowance Deduction"
+                parent="menu_payroll_setting_parameter"
+                sequence="8"
+                action="action_sb_allowance_deduction"
+        />
+
+        <menuitem
                 id="menu_sb_tax_setting"
                 name="Tax Setting - TER"
                 parent="menu_payroll_setting_parameter"
