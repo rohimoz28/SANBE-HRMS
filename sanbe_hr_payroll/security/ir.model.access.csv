@@ -16,3 +16,6 @@ access_sb_tax_setting_details,access.sb.tax.setting.details.users,model_sb_tax_s
 access_sb_payroll_employee,access.sb.payroll.employee.users,model_sb_payroll_employee,base.group_user,1,1,1,1
 access_sb_payroll_employee_details,access.sb.payroll.employee.details.users,model_sb_payroll_employee_details,base.group_user,1,1,1,1
 access_sb_allowance_deduction,access.sb.allowance.deduction.users,model_sb_allowance_deduction,base.group_user,1,1,1,1
+access_sb_tax_yearly,access.sb.tax.yearly.users,model_sb_tax_yearly,base.group_user,1,1,1,1
+access_sb_tax_statutory,access.sb.tax.statutory.users,model_sb_tax_statutory,base.group_user,1,1,1,1
+access_sb_tax_formula,access.sb.tax.formula.users,model_sb_tax_formula,base.group_user,1,1,1,1

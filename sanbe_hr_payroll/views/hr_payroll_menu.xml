@@ -82,17 +82,25 @@
         />
 
         <menuitem
+                id="menu_sb_tax_yearly"
+                name="Tax Setting - Yearly"
+                parent="menu_payroll_setting_parameter"
+                sequence="10"
+                action="action_sb_tax_yearly"
+        />
+
+        <menuitem
                 id="menu_hr_payroll_employee_profile"
                 name="Employee Profile"
                 parent="menu_payroll_setting_parameter"
-                sequence="10"
+                sequence="11"
                 action="action_payroll_employee_profile"
         />
         <menuitem
                 id="menu_hr_payroll_insurance_setting"
                 name="Insurance Setting"
                 parent="menu_payroll_setting_parameter"
-                sequence="11"
+                sequence="12"
                 action="action_payroll_insurance_setting"
         />
     </data>

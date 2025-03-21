@@ -18,3 +18,4 @@ from . import sb_insurance_setting
 from . import sb_tax_setting
 from . import sb_payroll_employee
 from . import sb_allowance_deduction
+from . import sb_tax_yearly
