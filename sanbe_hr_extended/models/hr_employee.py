@@ -424,34 +424,6 @@ class HrEmployee(models.Model):
             if vals.get('employee_id', _("New")) == _("New"):
                 vals['employee_id'] = self.env['ir.sequence'].next_by_code(
                     'hr.employee.sequence') or _("New")
-            # if vals.get('nik', _("New")) == _("New"):
-            #     mycomp = self.env['res.company'].browse(vals.get('company_id'))
-            #     dcomp = False
-            #     bcode = False
-            #     if mycomp.name=="PT.Sanbe Farma":
-            #         dcomp='1'
-            #         mybranch = self.env['res.branch'].sudo().browse(vals.get('branch_id'))
-            #         if mybranch.branch_code == 'BU1':
-            #             bcode= '01'
-            #         elif mybranch.branch_code == 'BU2':
-            #             bcode= '02'
-            #         elif mybranch.branch_code=='RND':
-            #             bcode= '03'
-            #         elif mybranch.branch_code=='CWH':
-            #             bcode= '04'
-            #         elif mybranch.branch_code== 'BU3':
-            #             bcode= '05'
-            #         elif mybranch.branch_code =='BU4':
-            #             bcode= '06'
-            #         elif mybranch.branch_code == 'BU5':
-            #             bcode= '07'
-            #         elif mybranch.branch_code =='BU6':
-            #             bcode= '08'
-            #         elif mybranch.branch_code =='SBE':
-            #             bcode='09'
-            #         elif mybranch.branch_code == 'CWC':
-            #             bcode = 10
-
             if vals.get('job_status'):
                 if vals.get('job_status') == 'contract':
                     vals['retire_age'] = 0
@@ -481,7 +453,7 @@ class HrEmployee(models.Model):
             if allrec.state not in ['draft', 'req_approval']:
                 raise UserError('Cannot Delete Employee not in draft')
         return super().unlink()
-
+        
     @api.depends('employee_id','name')
     def _compute_display_name(self):
         for emp in self:
@@ -489,54 +461,6 @@ class HrEmployee(models.Model):
             if emp.employee_id and emp.name:
                 name = '[' + emp.employee_id + '] ' + emp.name 
             emp.display_name = name
-
-
-    # @api.depends('name', "employee_id")
-    # def _compute_display_name(self):
-    #     for account in self:
-    #         myctx = self._context.get('search_by')
-    #         sbn = self._context.get('search_by_name')
-    #         if myctx and sbn == False:
-    #             if myctx == 'No':
-    #                 account.display_name = f"{account.employee_id}"
-    #             else:
-    #                 account.display_name = f"{account.name}"
-    #         else:
-    #             account.display_name = f"{account.name}"
-
-    @api.model
-    def _name_search(self, name, domain=None, operator='ilike', limit=None, order=None):
-        # domain = domain or []
-        parts = name.split('] ')
-        if name:
-            if len(parts) == 2:
-                emp_id = parts[0][1:]
-                emp_name = parts[1]
-                name_domain = ['|',('employee_id', operator, emp_id), ('name', operator, emp_name)]
-                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
-            else:
-                name_domain = ['|',('employee_id', operator, name), ('name', operator, name)]
-                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
-        #    # mybranch = self.env['res.branch'].sudo().search([('branch_code','=','BU3')])
-        #    mybranch = self.env.user.branch_id
-        #    if name=='Hendra Setiawan':
-        #        mybranch = self.env['res.branch'].sudo().search([('branch_code', '=', 'BU1')])
-        #    elif name=='Agus Soepriadi':
-        #        mybranch = self.env['res.branch'].sudo().search([('branch_code', '=', 'BU3')])
-        #    elif name=='Edi Mulyana Ssi':
-        #        mybranch = self.env['res.branch'].sudo().search([('branch_code', '=', 'BU2')])
-        #    search_domain = []
-        #    if str(name).find('#') != -1:
-        #        nik = str(name).split('#')[0]
-        #        nama = str(name).split('#')[1]
-        #        search_domain = [('nik','=',nik),('branch_id','=',mybranch.id),'|',('name', operator, nama), ('branch_id', '=', mybranch.id)]
-        #    else:
-        #        search_domain = [('name', operator, name),('branch_id','=',mybranch.id)]
-        #    # search_domain = [('name', operator, name),('branch_id','=',mybranch.id)]
-        #    user_ids = self._search(search_domain + domain, limit=limit, order=order)
-        #    return user_ids
-        # else:
-        return super()._name_search(name, domain, operator, limit, order)
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
@@ -549,6 +473,20 @@ class HrEmployee(models.Model):
                 for node in arch.xpath("//button"):
                     node.set('invisible', 'True')
         return arch, view
+
+    @api.model
+    def _name_search(self, name, domain=None, operator='ilike', limit=None, order=None):
+        parts = name.split('] ')
+        if name:
+            if len(parts) == 2:
+                emp_id = parts[0][1:]
+                emp_name = parts[1]
+                name_domain = ['|',('employee_id', operator, emp_id), ('name', operator, emp_name)]
+                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
+            else:
+                name_domain = ['|',('employee_id', operator, name), ('name', operator, name)]
+                return self._search(expression.AND([name_domain, domain]), limit=limit, order=order)
+        return super()._name_search(name, domain, operator, limit, order)
 
     def _compute_hours_last_month(self):
         """
