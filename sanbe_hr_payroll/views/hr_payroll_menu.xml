@@ -84,8 +84,8 @@
         <menuitem
                 id="menu_hr_payroll_employee_profile"
                 name="Employee Profile"
-                parent="menu_payroll_setting_parameter"
-                sequence="11"
+                parent="menu_sanbe_hr_payroll_root"
+                sequence="3"
                 action="action_payroll_employee_profile"
         />
         <menuitem
