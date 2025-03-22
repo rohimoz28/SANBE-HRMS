@@ -25,7 +25,7 @@ __pycache__/
 status
 # odoo filestore
 odoo/filestore
-
+web_responsive/
 odoo/addons/__pycache__
 # maintenance migration scripts
 odoo/addons/base/maintenance

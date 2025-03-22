@@ -1,47 +1,65 @@
+## v8.0.0 (2025-03-22)
+
+### Feat
+- 344c00e PAY : Task Setting - Yearly
+- 7167eda PAY : Insurance Setting
+- 1eecad9 PAY : Employee Profile Payroll
+- aba7a23 PAY : Tax Setting - TER
+- 5475536 PAM : Employee Certifications
+- 9705db6 PAY : Payroll Summary Details
+
+### Improvement
+- 970b04c PAM : Merging Monitoring Contract & Monitoring Expired Contract
+- c03fa93 PAM : Perubahan pada Employee Mutation
+
+### Fix
+- 0c77f73 PAM : fix create employee & filter contract monitor by BU
+- 96eaf9b TMS : Fix function Leave Allocation, ambil dari remaining leave terakhir
+
 ## v7.1.1 (2025-03-08)
 
 _Starting with this version, we will be using a single branch. The main and production branches are now synchronized._
 
 ### Improvement
-- 94af4fb [IMP] PAM : Urutkan Sub Menuitem Monitoring Personal Adm
+- 94af4fb PAM : Urutkan Sub Menuitem Monitoring Personal Adm
 
 ### Fix
-- 36369fd [FIX] TMS : Update fungsi button Close di Period
-- 365b676 [FIX] TMS : Fix Create Processing and Period
-- a9bb47d [FIX] TMS : Fix longshift dengan value nol
-- 0d41ce8 [FIX] TMS : Fix unlink sb.leave.allocation
+- 36369fd TMS : Update fungsi button Close di Period
+- 365b676 TMS : Fix Create Processing and Period
+- a9bb47d TMS : Fix longshift dengan value nol
+- 0d41ce8 TMS : Fix unlink sb.leave.allocation
 
 ## v7.0.0 (2025-03-01)
 
 ### Production Release
 
 ### New
-- 5b8d2de [FEAT] PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM) ~ Fix outdate commit
-- d86c513 [FEAT] TMS: Payroll Summary
-- bfa2e80 [FEAT] PAM: Monitoring Off Contract
+- 5b8d2de PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM) ~ Fix outdate commit
+- d86c513 TMS: Payroll Summary
+- bfa2e80 PAM: Monitoring Off Contract
 
 ### Improvement
-- c673211 [IMP] TMS : Mandatory field Period pada Permission Entry dan Overtime Request
-- e16c084 [IMP] TMS : Tambahan UI untuk Tampilan Kolom di TMS Summary (1)
-- 32dce51 [IMP] TMS : Menambah page Absent pada TMS Entry Summary
-- b46252e [IMP] TMS : Mengganti field status menjadi field status_attendance
-- 44fd6e7 [IMP] TMS : Perhitungan absen long shift
+- c673211 TMS : Mandatory field Period pada Permission Entry dan Overtime Request
+- e16c084 TMS : Tambahan UI untuk Tampilan Kolom di TMS Summary (1)
+- 32dce51 TMS : Menambah page Absent pada TMS Entry Summary
+- b46252e TMS : Mengganti field status menjadi field status_attendance
+- 44fd6e7 TMS : Perhitungan absen long shift
 
 ---
 
 ### Main branch - Development 
 
 ### New
-- b81b567 [FEAT]PAM : Monitoring Contract
-- a9412d6 [FEAT] PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM)
-- b7336ba [FEAT] TMS: Payroll Summary
+- b81b567 PAM : Monitoring Contract
+- a9412d6 PAM: Printout Form Konfirmasi Promosi Mutasi (FKPM)
+- b7336ba TMS: Payroll Summary
 
 ### Improvement
-- ee9a76d [IMP] TMS : Mandatory field Period pada Permission Entry dan Overtime Request
-- 220a9e1 [IMP] TMS : Menambah page Absent pada TMS Entry Summary
+- ee9a76d TMS : Mandatory field Period pada Permission Entry dan Overtime Request
+- 220a9e1 TMS : Menambah page Absent pada TMS Entry Summary
 
 ### Fix
-- eae683f [FIX] TMS : Update fungsi button Close di Period
+- eae683f TMS : Update fungsi button Close di Period
 
 ## v6.0.0 (2025-02-22)
 
@@ -49,14 +67,14 @@ _Starting with this version, we will be using a single branch. The main and prod
 
 ### New
 - f5cda10 TMS : View Mapping PinCode (0658631f)
-- b0a574b PAM: Printout Form Konfirmasi Pengunduran Diri (FKPD)
+- b0a574b PAM : Printout Form Konfirmasi Pengunduran Diri (FKPD)
 - 093c0fb TMS : View Mapping PinCode
 - 2c6adde PAM : Hide field Contract Type yang berada sebelum field Contract Time
-- b21875b PAM: Printout Paklaring format Taman Sari
+- b21875b PAM : Printout Paklaring format Taman Sari
 - c527469 TMS : Report Excel, PDF, dan View di Overtime Bundling
 
 ### Improvement
-- a81f266 TMS: Tambahan UI untuk Tampilan Kolom di TMS Summary (2)
+- a81f266 TMS : Tambahan UI untuk Tampilan Kolom di TMS Summary (2)
 - ea487ba PAM : Set readonly field ketika state bukan Draft
 - b6c59dd PAM : Mengubah Flag EOC -> Rehire di Employee Exit & Mutation
 - 976c88c PAM : Menambahkan field Contract Number di bawah field Contract Type
@@ -68,12 +86,12 @@ _Starting with this version, we will be using a single branch. The main and prod
 - 4036ea9 TMS : Leave Allocation kebuat record baru berdasarkan tanggal
 
 ### Fix
-- 1d23bb0 PAM: Fix HRMS Address
+- 1d23bb0 PAM : Fix HRMS Address
 - e2c63da TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
 - 761bb16 TMS : OT Reguler delay nya belum diberi toleransi, fix perhitungan OT & ANS
 - 99200bc TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
 - 124826b TMS : Fix Perhitungan Keterlambatan (10 min)
-- 4918fe4 PAM: Fix Printout Parklaring format Cimareme
+- 4918fe4 PAM : Fix Printout Parklaring format Cimareme
 - 4f644bd recompute periode from to di tms summary
 - e7f7795 Fix Perhitungan OT Holiday
 - 5e81724 TMS : Fix delay status attendance = Delay In
@@ -82,23 +100,23 @@ _Starting with this version, we will be using a single branch. The main and prod
 ### Main branch - Development 
 
 ### New
-- 5091fa5 PA:Read Only When not Draft
+- 5091fa5 PAM:Read Only When not Draft
 - 5a72022 PAM:Monitoring Off Contract
 - 6694183 PAM: Printout Form Konfirmasi Pengunduran Diri (FKPD)
 
 ### Improvement
-- 447b39c TMS: Mengganti field status menjadi field status_attendance
+- 447b39c TMS : Mengganti field status menjadi field status_attendance
 - b2e89eb TMS : Perhitungan absen long shift
 - 6cd67d1 PAM : Mengubah Flag EOC -> Rehire di Employee Exit & Mutation
 - 342c383 TMS : (Update SP) Leave Allocation kebuat record baru berdasarkan tanggal
 - 89bb39a PAM : Set readonly field ketika state bukan Draft
 - 8ac78b0 PAM : Menambah Field Leave Calc di Benefit/Allowance
-- c17e70e PAM:Menambahkan field Contract Number di bawah field Contract Type
+- c17e70e PAM : Menambahkan field Contract Number di bawah field Contract Type
 - e0174b2 TMS : menambah yang kurang pada task Tambahan UI untuk Tampilan Kolom di TMS Summary (1) (53e8e913)
 - 133dff8 PAM : Menampilkan field join date & marital status untuk Mutasi Correction
 
 ### Fix
-- 25a5dad PAM: Fix HRMS Address
+- 25a5dad PAM : Fix HRMS Address
 - 8bbe7e9 TMS : OT Reguler delay nya belum diberi toleransi, fix perhitungan OT & ANS
 - 48a6c24 TMS : Memperbaiki Delay 10 jadi 9, 8 jadi 7 TMS Entry Summary
 
