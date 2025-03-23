@@ -6,17 +6,12 @@
         <field name="name">view.hr.employee.contract.monitoring.tree</field>
         <field name="model">hr.employee.contract.monitoring</field>
         <field name="arch" type="xml">
+        
             <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id" decoration-danger="date_end &lt; current_date">
                 <header>
-                    <button name="act_deactive_employee" type="object" string="Deactive Employee" 
-                    invisible="1"
-                    />
-                    <button name="mail_send_hr" type="object" string="mail HR" 
-                    invisible="1"
-                    />
-                    <button name="mail_send_mentor" type="object" string="mail Mentor" 
-                    invisible="1"
-                    />
+                    <button name="act_deactive_employee" type="object" string="Deactive Employee" invisible="1" />
+                    <button name="mail_send_hr" type="object" string="mail HR" invisible="1" />
+                    <button name="mail_send_mentor" type="object" string="mail Mentor" invisible="1"/>
                 </header> 
                 <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
@@ -29,6 +24,8 @@
                 <field name="date_end" string="End Date"/>
                 <field name="rehire"/>
                 <field name="time_limit" column_invisible="1" />
+                <!-- <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
+                <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/> -->
                 <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
                 <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/>
             </tree>

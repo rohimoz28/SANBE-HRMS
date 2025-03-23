@@ -55,14 +55,12 @@ class HrEmployeeContractMonitoring(models.Model):
     _order = 'time_limit, start_notice'
     _inherit =['mail.thread']
 
+
     id = fields.Integer('ID', required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
     employee_name = fields.Char('Employee Name', required=True)
     nik_employee = fields.Char('Employee NIK', required=True)
     nik_lama = fields.Char('Old NIK', required=True)
-    coach_id = fields.Many2one('hr.employee', string='Coach', required=True)
-    coach_name = fields.Char('Coach Name', required=True)
-    coach_email = fields.Char('Coach Email', required=True)
     employee_address = fields.Char('Address', required=True)
     status_employee = fields.Char(string='Employee Status', required=True)
     company_id = fields.Many2one('res.company', string='Company', required=True)
@@ -85,7 +83,335 @@ class HrEmployeeContractMonitoring(models.Model):
     notice_days = fields.Integer('Notice Days', required=True)
     start_notice = fields.Date('Start of Notice Period')
     rehire = fields.Boolean('Rehire', default=False)
+    coach_id = fields.Many2one('hr.employee', string='Coach', required=True)
+    coach_name = fields.Char('Coach Name', required=True)
+    coach_email = fields.Char('Coach Email', required=True)
     
+    # def init(self):
+    #     tools.drop_view_if_exists(self.env.cr, self._table)
+    #     self.env.cr.execute("""
+    #         CREATE OR REPLACE VIEW %s AS (
+    #             SELECT
+    #                 ROW_NUMBER() OVER (
+    #                     ORDER BY time_limit, employee_id, date_end, contract_id
+    #                 ) AS id,
+    #                 employee_id,
+    #                 mobile_phone,
+    #                 nik_employee,
+    #                 coach_email,
+    #                 coach_id,
+    #                 coach_name,
+    #                 nik_lama,
+    #                 employee_name,
+    #                 status_employee,
+    #                 employee_address,
+    #                 company_id,
+    #                 company_name,
+    #                 branch_id,
+    #                 branch_name,
+    #                 territory_id,
+    #                 territory_name,
+    #                 department_id,
+    #                 department_name,
+    #                 job_id,
+    #                 job_name,
+    #                 contract_id,
+    #                 contract_name,
+    #                 contract_number,
+    #                 date_start,
+    #                 date_end,
+    #                 time_limit,
+    #                 notice_days,
+    #                 start_notice,
+    #                 rehire,
+    #                 resignation_id
+    #             FROM 
+    #                 (
+    #                     SELECT
+    #                         he.id AS employee_id,
+    #                         he.name AS employee_name,
+    #                         he.mobile_phone AS mobile_phone,
+    #                         he.nik AS nik_employee,
+    #                         he2.id AS coach_id,
+    #                         he2.name AS coach_name, 
+    #                         coalesce(he2.work_email,'') coach_email, 
+    #                         coalesce(he.nik_lama,he.nik) AS nik_lama,
+    #                         he.employee_type AS status_employee,
+    #                         concat(he.private_street,' ',he.private_street2,' ',he.private_city)  AS employee_address,
+    #                         rc.id AS company_id,
+    #                         rc.name AS company_name,
+    #                         rb.id AS branch_id,
+    #                         rb.name AS branch_name,
+    #                         rt.id AS territory_id,
+    #                         rt.name AS territory_name,
+    #                         hd.id AS department_id,
+    #                         hd.name AS department_name,
+    #                         hj.id AS job_id,
+    #                         hj.name AS job_name,
+    #                         hc2.id AS contract_id,
+    #                         hc2.name AS contract_name,
+    #                         hc2.number AS contract_number,
+    #                         hc2.date_start AS date_start,
+    #                         hc2.date_end AS date_end,
+    #                         hc2.date_end - current_date AS time_limit,
+    #                         hc2.notice_days,
+    #                         hres.id resignation_id,
+    #                         hc2.date_end - (hc2.notice_days + 1) AS start_notice,
+    #                         COALESCE(hel2.end_contract, FALSE) AS rehire
+    #                     FROM
+    #                         hr_employee he
+    #                         INNER JOIN (
+    #                             SELECT MAX(id) AS id, employee_id
+    #                             FROM hr_contract where state not in ('cancel','close','')
+    #                             GROUP BY employee_id
+    #                         ) hc ON hc.employee_id = he.id
+    #                         LEFT JOIN hr_employee he2 on he.parent_id = he2.id
+    #                         LEFT JOIN hr_contract hc2 ON hc.id = hc2.id AND hc.employee_id = he.id
+    #                         LEFT JOIN res_company rc ON hc2.company_id = rc.id
+    #                         LEFT JOIN res_branch rb ON hc2.branch_id = rb.id
+    #                         LEFT JOIN res_territory rt ON hc2.area = rt.id
+    #                         LEFT JOIN hr_department hd ON hc2.department_id = hd.id
+    #                         LEFT JOIN hr_job hj ON hc2.job_id = hj.id
+    #                         LEFT JOIN (
+    #                             SELECT MAX(hel.id) AS id, hel.employee_id
+    #                             FROM hr_employment_log hel
+    #                             GROUP BY hel.employee_id
+    #                         ) hel ON hel.employee_id = he.id
+    #                         LEFT JOIN hr_employment_log hel2 ON hel.id = hel2.id and hel2.employee_id = he.id
+    #                         left join hr_resignation hres on hres.employee_id = he.id and hres.state not in ('cancel','inactive')
+    #                     WHERE
+    #                         hc2.active = TRUE
+    #                         AND he.active = TRUE
+    #                         AND he.state = 'approved'
+    #                         AND hc2.date_end - current_date <= 90
+    #                         and hres.id is null
+    #                 ) AS emp
+    #     )
+    #     """ % (self._table, ))
+                
+    # def act_re_contract(self):
+    #     # new_contract_id = self.new_contract('re-new',self.contract_id)
+    #     return {
+    #         'name': 'HR Contract Form',
+    #         'type': 'ir.actions.act_window',
+    #         'view_mode': 'form',  # You can remove 'view_type' since it's optional and is not necessary in Odoo 17
+    #         'res_model': 'hr.contract',
+    #         'target': 'current',
+    #         'view_id': self.env.ref('hr_contract.hr_contract_view_form').id,  # Ensure this XML ID is correct
+    #         'context': {
+    #             'default_company_id': self.company_id.id,
+    #             'default_employee_id': self.employee_id.id,
+    #             'default_date_start': self.date_end,
+    #             'default_contract_type_id': self.contract_id.contract_type_id.id,
+    #             'default_date_end': self.date_end + relativedelta(months=6),
+    #             'default_resource_calendar_id': self.contract_id.resource_calendar_id.id,
+    #             'default_type_id': self.contract_id.type_id.id,
+    #             'default_job_id': self.contract_id.job_id.id,
+    #             'depart_id': self.contract_id.depart_id.id,
+    #             'default_state':'draft',
+    #             'default_structure_type_id': self.contract_id.structure_type_id.id,
+    #             'default_branch_id': self.branch_id.id,
+    #             'default_area': self.contract_id.area.id,                
+    #         },
+    #     }
+        
+    # def act_emp_finished(self):
+    #     resign_id = self.env['hr.resignation'].sudo().create({
+    #             'employee_id': self.employee_id.id,
+    #             'emp_nos': self.employee_id.id,
+    #             'employee_name': self.employee_id.name,
+    #             'emp_nik': self.employee_id.nik,
+    #             'area': self.territory_id.id,
+    #             'branch_id': self.branch_id.id,
+    #             'joined_date': self.employee_id.join_date,
+    #             'resign_confirm_date': self.date_end,
+    #             'submitted_date': self.date_end,
+    #             'resignation_date': self.date_end,
+    #             'effective_date': self.date_end,
+    #             'expected_revealing_date': self.date_end,
+    #             'reason':'End Of Contract',
+    #             'notice_period':round(self.notice_days/30,1),
+    #             'state':'draft',
+    #             'resignation_type':'EOCT',
+    #             'employee_contract':self.contract_id.name,
+    #             })
+    #     return {
+    #         'name': 'HR Resignation Form',
+    #         'type': 'ir.actions.act_window',
+    #         'view_mode': 'form',
+    #         'res_model': 'hr.resignation',
+    #         'res_id': resign_id.id,
+    #         'target': 'current',
+    #         'view_id': self.env.ref('hr_resignation.hr_resignation_view_form').id,
+    #     }
+
+    # def act_promotion(self):
+    #     new_contract_id = self.new_contract('re-new',self.contract_id)
+    #     return {
+    #         'name': 'HR Contract Form',
+    #         'type': 'ir.actions.act_window',
+    #         'view_mode': 'form',  # You can remove 'view_type' since it's optional and is not necessary in Odoo 17
+    #         'res_model': 'hr.contract',
+    #         'res_id': new_contract_id.id,  # Make sure new_contract is a valid record
+    #         'target': 'current',
+    #         'view_id': self.env.ref('hr_contract.hr_contract_view_form').id,  # Ensure this XML ID is correct
+    #     }
+
+    
+    # def new_contract(self,type,old_contract):
+    #     new_status = old_contract.type_id.id
+    #     for existing_contract in self.env['hr.contract'].search([('employee_id','=',self.employee_id.id),('state','=','open')]):
+    #         existing_contract.state = 'close'
+    #     if type == 'promotion' and (old_contract.structure_type_id.name != 'Employee' or old_contract.structure_type_id.name != 'Permanent' or old_contract.structure_type_id.name != 'Full-Time') :
+    #         new_type = self.env['hr.contract.type'].search([('name','=','Permanent')])
+    #         new_status = new_type.id
+    #     else:
+    #         new_status = old_contract.type_id.id
+    #     month = datetime.now().month
+    #     contracts_branch = self.env['hr.contract'].search([('name','ilike','/HC-'+str(self.territory_id.area_code)+'/'+str(self.branch_id.branch_code)+'/' +month_to_roman(month) + '/' + str(datetime.now().year))])
+    #     number_contract = str(str('00000'+str(len(contracts_branch)+1))[3:])
+    #     return self.env['hr.contract'].sudo().create({
+    #             'company_id': old_contract.company_id.id,
+    #             'employee_id': old_contract.employee_id.id,
+    #             'date_start': old_contract.date_end,
+    #             'contract_type_id': old_contract.contract_type_id.id,
+    #             'date_end': old_contract.date_end + relativedelta(months=6),
+    #             'name': number_contract+'/HC-'+str(self.territory_id.area_code)+'/'+str(self.branch_id.branch_code)+'/' +month_to_roman(month) + '/' + str(datetime.now().year),
+    #             'resource_calendar_id': old_contract.resource_calendar_id.id,
+    #             'type_id': new_status,
+    #             'job_id': old_contract.job_id.id,
+    #             'depart_id': old_contract.depart_id.id,
+    #             'state':'draft',
+    #             'structure_type_id': old_contract.structure_type_id.id,
+    #             'branch_id': old_contract.branch_id.id,
+    #             'area': old_contract.area.id,
+    #             })
+        
+    # def act_deactive_employee(self):
+    #     for line in self.env['hr.employee.contract.monitoring']:
+    #         if line.date_end <= datetime.today() + timedelta(days=7) and not line.rehire:
+    #             line.employee_id.state = 'inactive'
+    #             line.employee_id.active = False
+    #             line.contract_id.state = 'close'
+                   
+    # def mail_send_hr(self):
+    #     # try:
+    #         query_superior_id = """ 
+    #                 SELECT DISTINCT hcm.branch_id FROM hr_employee_contract_monitoring hcm
+    #             """
+    #         self.env.cr.execute(query_superior_id)
+    #         users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'        
+    #         for distinct_records in self.env.cr.dictfetchall():
+    #             list_email = self.env['hr.mail.config'].search([('branch_id', '=', distinct_records['branch_id'])])
+    #             users = users +', '+ str(list_email.list_email or '')                    
+    #             table_rows = ""
+    #             for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=', distinct_records['branch_id']),('time_limit','<=',30)]):
+    #                 table_rows += f"""
+    #                 <tr>
+    #                     <td>{records.territory_name}</td>
+    #                     <td>{records.branch_name}</td>
+    #                     <td>{records.department_id.name}</td>
+    #                     <td>{records.employee_name}</td>
+    #                     <td>{records.job_id.name}</td>
+    #                     <td>{records.coach_name or ''}</td>
+    #                     <td>{records.date_end}</td>
+    #                 </tr>
+    #                 """                        
+    #             email_body = f"""<p>Semangat Pagi <br/>
+    #             Tim Human Resource,</p>
+    #             {table_header}
+    #             {table_rows}
+    #             {table_footer}
+    #             <p>Admin Sistem</p>
+    #             """                    
+    #             email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
+    #             email_dict = {'subject':f"""Pengingat HR: Kontrak Karyawan yang Akan Berakhir""",
+    #                             'email_to': users,
+    #                             'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
+    #                             'body_html': email_body,
+    #                             }
+    #             # raise UserError('Test')
+    #             email.sudo().write(email_dict)
+    #             email.with_context().send_mail(self.id,force_send=True)
+    #             print('Kirim ke HR')
+                        
+    # def mail_send_mentor(self):
+    # # try:
+    #     query_superior_id = """ 
+    #         SELECT DISTINCT hcm.coach_id superior_id, 
+    #             hcm.coach_name mentor_name, 
+    #             COALESCE(hcm.coach_email, '') work_email 
+    #         FROM hr_employee_contract_monitoring hcm
+    #         WHERE hcm.coach_id IS NOT NULL
+    #     """
+    #     self.env.cr.execute(query_superior_id)
+        
+    #     for data_superiors in self.env.cr.dictfetchall():
+    #         # Start with the mentor's email and add others
+    #         users = ['azizah@sanbe-farma.com', data_superiors['work_email']]  # List of users
+            
+    #         # Query to get contract information for the mentor's team
+    #         query = """ 
+    #             SELECT hcm.id,
+    #                 hcm.branch_name,
+    #                 hcm.territory_name,
+    #                 hcm.department_id,
+    #                 hcm.job_id,
+    #                 hcm.coach_name parent_name,
+    #                 hcm.employee_name,
+    #                 hcm.date_end::date date_end
+    #             FROM hr_employee_contract_monitoring hcm
+    #             WHERE hcm.coach_id = %s
+    #             AND hcm.date_end - current_date <= 30
+    #         """
+    #         self.env.cr.execute(query % (data_superiors['superior_id']))
+            
+    #         table_rows = ""
+    #         mentor_name = ""
+            
+    #         # Build table rows with the contract data
+    #         for record in self.env.cr.dictfetchall():
+    #             job_name = self.env['hr.job'].browse(record['job_id']).name
+    #             department_name = self.env['hr.department'].browse(record['department_id']).name
+    #             mentor_name = record['parent_name']
+    #             table_rows += f"""
+    #                 <tr>
+    #                     <td>{record['territory_name']}</td>
+    #                     <td>{record['branch_name']}</td>
+    #                     <td>{department_name}</td>
+    #                     <td>{record['employee_name']}</td>
+    #                     <td>{job_name}</td>
+    #                     <td>{record['parent_name'] or ''}</td>
+    #                     <td>{record['date_end']}</td>
+    #                 </tr>
+    #             """
+            
+    #         # Create the email body
+    #         email_body = f"""<p>Semangat Pagi <br/>
+    #             Mentor/Supervisor {mentor_name}</p> 
+    #             {table_header}
+    #             {table_rows}
+    #             {table_footer}
+    #             <p>Human Resource</p>
+    #         """
+            
+    #         # Ensure the email template is a singleton
+    #         email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
+            
+    #         if email:
+    #             # Email details
+    #             email_dict = {
+    #                 'subject': 'Pengingat: Kontrak Karyawan yang Akan Berakhir',
+    #                 'email_to': ', '.join(users),  # Join the emails into a string
+    #                 'email_from': 'Human Resource <donotreply@sanbe-farma.com>',
+    #                 'body_html': email_body,
+    #             }
+                
+    #             # Update the email template and send the email
+    #             email.sudo().write(email_dict)
+    #             email.with_context().send_mail(self.id, force_send=True)
+    #             print('Kirim ke Mentor')
+        
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute("""
@@ -187,7 +513,7 @@ class HrEmployeeContractMonitoring(models.Model):
                     ) AS emp
         )
         """ % (self._table, ))
-                
+                        
     def act_re_contract(self):
         # new_contract_id = self.new_contract('re-new',self.contract_id)
         return {
@@ -410,9 +736,6 @@ class HrEmployeeContractMonitoring(models.Model):
                 email.sudo().write(email_dict)
                 email.with_context().send_mail(self.id, force_send=True)
                 print('Kirim ke Mentor')
-        
-    
-        
 class HrContractMonitoring(models.Model):
     _name = 'hr.contract.monitoring'
     _description = 'Hr Contract Monitoring'
