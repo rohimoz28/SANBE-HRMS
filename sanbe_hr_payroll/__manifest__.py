@@ -20,7 +20,7 @@
     'price': 0,
     'currency': 'USD',
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sanbe_hr_tms','hr_payroll_community'],
+    'depends': ['base', 'sanbe_hr_tms','hr_payroll_community', 'sanbe_hr_extended'],
     'data': [
         'views/hr_payroll_entry.xml',
         'views/sb_bank_transfer_summary.xml',
