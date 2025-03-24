@@ -6,8 +6,18 @@
             <field name="name">sb.employee.profile.form</field>
             <field name="model">sb.employee.profile</field>
             <field name="arch" type="xml">
-                <form string="Employee Profile">
+                <form string="Employee Profile" domain="[('emp_status', '=', 'confirmed')]">
                     <header>
+                        <button string="Active" name="btn_active" 
+                                type="object" class="oe_highlight"
+                                invisible="state=='active'"/>
+                        <button string="Inactive" name="btn_inactive" 
+                                type="object" class="oe_highlight"
+                                invisible="state=='inactive'"/>
+                        <button string="Hold" name="btn_hold" 
+                                type="object" class="oe_highlight"
+                                invisible="state=='hold'"/>
+
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -15,18 +25,18 @@
                             <group>
                                 <field name="employee_group1"/>
                                 <field name="employee_id"/>
-                                <field name="nik_new" readonly="1"/>
-                                <field name="department_id" readonly="1"/>
-                                <field name="job_id" readonly="1"/>
-                                <field name="area_id" readonly="1" invisible="1"/>
+                                <field name="nik" />
+                                <field name="department_id" />
+                                <field name="job_id" />
+                                <field name="area" readonly="1" invisible="1"/>
                                 <!-- <field name="branch_id" readonly="1"/> -->
                             </group>
                             <group>
-                                <field name="npwp" readonly="1"/>
-                                <field name="employement_status" readonly="1"/>
+                                <field name="no_npwp" readonly="1"/>
+                                <field name="emp_status" readonly="1"/>
                                 <field name="job_status" readonly="1"/>
                                 <field name="gender" readonly="1"/>
-                                <field name="nik_old" readonly="1"/>
+                                <field name="nik_lama" readonly="1"/>
                             </group>
                             <notebook>
                                 <page name="sb_employee_profile_details_id" string="Employee Details">
@@ -36,12 +46,12 @@
                                             <field name="pay_period"/>
                                             <field name="effective_date"/>
                                             <field name="bank_account"/>
-                                            <field name="basic_salary" invisible="1"/>
+                                            <field name="basic_salary"/>
                                         </group>
                                         <group>
                                             <field name="status_ptkp"/>
                                             <field name="type_ter"/>
-                                            <field name="tax_method" invisible="1"/>
+                                            <field name="tax_method"/>
                                             <field name="bpjs_no"/>
                                             <field name="jamsostek_no"/>
                                         </group>
@@ -93,13 +103,13 @@
             <field name="model">sb.employee.profile</field>
             <field name="arch" type="xml">
                 <tree string="Employee Profile">
-                    <field name="employee_group1"/>
-                    <field name="area_id" string="Area"/>
-                    <field name="branch_id"/>
-                    <field name="department_id"/>
+                    <field name="nik"/>
                     <field name="employee_id" string="Employee Name"/>
-                    <field name="job_status" string="Job Status"/>
-                    <field name="employement_status"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="job_status"/>
+                    <field name="employee_group1"/>
+                    <field name="emp_status"/>
                     <field name="state"/>
                     <button name="action_view_employee_profile_details" type="object" string="View"
                             class="fa fa-check"/>
@@ -118,15 +128,17 @@
             </field>
         </record>
 
+
+
         <record id="action_payroll_employee_profile" model="ir.actions.act_window">
             <field name="name">Employee Profile</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">sb.employee.profile</field>
-            <!-- <field name="view_type">form</field> -->
             <field name="context">
                 {'search_default_employee_group1':1}
             </field>
             <field name="view_mode">tree,form</field>
+            <field name="domain">[('emp_status', '=', 'confirmed')]</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No Employee Profile Records
@@ -136,8 +148,6 @@
                 </p>
             </field>
         </record>
-
-        <!-- <menuitem name="ModelTitle" id="action_payroll_sb_payroll_summary" parent="menu_hr_payroll_sb_payroll_summary" action="action_payroll_bank_transfer_summary"/> -->
 
     </data>
 </odoo>
