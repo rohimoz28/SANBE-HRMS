@@ -68,10 +68,9 @@
                                             <field name="selected_detail_id" invisible="1"/>                                         
                                         </group>
                                         <group>
-                                            <field name="pct_from_bs" />
+                                            <field name="pct_from_bs" widget="percentage"/>
                                             <field name="formula"/>
                                             <field name="start_date"/>
-                                            <!-- <button name="btn_add" string="Add" type="object" class="btn-primary"/> -->
                                             <button name="btn_save" string="Save" type="object" class="btn-primary"/>  
                                         </group>
                                     </group>
@@ -122,8 +121,13 @@
             <field name="model">sb.employee.profile</field>
             <field name="arch" type="xml">
                 <search string="Employee Profile">
+                    <!-- grouping berdasarkan employee_group1 -->
                     <filter string="Employee P Group" name="employee_group1"
                             context="{'group_by':'employee_group1'}"/>
+                    <!-- field untuk pencarian yang lain -->
+                    <field name="employee_id" />
+                    <field name="gender" />
+                    <field name="job_status" />
                 </search>
             </field>
         </record>

@@ -35,6 +35,7 @@
         'views/sb_tax_setting.xml',
         'views/sb_payroll_employee.xml',
         'views/sb_allowance_deduction.xml',
+        'views/sb_allowance_deduction.xml',
         'views/sb_tax_yearly.xml',
         'views/hr_payroll_menu.xml',
         'security/ir.model.access.csv',
