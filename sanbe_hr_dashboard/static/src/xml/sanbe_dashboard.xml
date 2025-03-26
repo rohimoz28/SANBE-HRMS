@@ -50,9 +50,17 @@
                                                             </select>
                                                     </div>
 
-                                                    <div class="px-3 py-1 bg-primary cursor-pointer">
-                                                        <span class="fa fa-arrow-right text-white"/>
+                                                    <div class="year-selector">
+                                                        <select class="form-select" t-model="state.selectedYear2" t-on-change="onChangePeriod2">
+                                                            <t t-foreach="state.year_selection" t-as="y" t-key="y">
+                                                                <option t-att-value="y"><t t-esc="y"/></option>
+                                                            </t>
+                                                        </select>                                                                
                                                     </div>
+
+                                                    <!-- <div class="px-3 py-1 bg-primary cursor-pointer">
+                                                        <span class="fa fa-arrow-right text-white"/>
+                                                    </div> -->
                                             </div>
                                             <div style="height: 400px;">
                                                 <ChartRenderer 
@@ -145,9 +153,19 @@
                                                             </select>
                                                     </div>
 
-                                                    <div class="px-3 py-1 bg-primary cursor-pointer">
-                                                        <span class="fa fa-arrow-right text-white"/>
+
+                                                    <div class="year-selector">
+                                                        <select class="form-select" t-model="state.selectedYear" t-on-change="onChangePeriod">
+                                                            <t t-foreach="state.year_selection" t-as="y" t-key="y">
+                                                                <option t-att-value="y"><t t-esc="y"/></option>
+                                                            </t>
+                                                        </select>
                                                     </div>
+
+
+                                                    <!-- <div class="px-3 py-1 bg-primary cursor-pointer">
+                                                        <span class="fa fa-arrow-right text-white"/>
+                                                    </div> -->
 
                                             </div>  
                                             <div style="height: 400px;">
