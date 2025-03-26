@@ -118,7 +118,7 @@ class SbEmployeeProfile(models.Model):
                                 required=False)
     amount = fields.Float(string='Amount', required=False)
     times = fields.Float(string='Times')
-    pct_from_bs = fields.Float(string="% from BS")
+    pct_from_bs = fields.Float(string="from BS")
     formula = fields.Char(string='Formula')
     start_date = fields.Date(string='Start date')
     taxed = fields.Boolean(string="Tax")
@@ -130,6 +130,7 @@ class SbEmployeeProfile(models.Model):
     selected_detail_id = fields.Many2one(
     comodel_name='allowance.deduction.detail', 
     string="Selected Detail", 
+    ondelete="set null",
     help="Menyimpan ID detail yang sedang diedit"
     )
 
@@ -223,9 +224,12 @@ class AllowanceDeductionDetail(models.Model):
     _description = 'Allowance Deduction Detail'
 
 
-    allowance_id = fields.Many2one(comodel_name="hr.employee", 
-                                   string="Allowance and Deduction ID",
-                                   ondelete="cascade", index=True) 
+    allowance_id = fields.Many2one(
+        comodel_name="sb.employee.profile", 
+        string="Allowance and Deduction ID",
+        ondelete="cascade", 
+        index=True
+    ) 
     pay_code = fields.Selection(string='Pay Code',
                                 selection=[('trans', 'TRANS'),
                                            ('cash', 'CASH')], 
