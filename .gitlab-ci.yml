@@ -99,7 +99,7 @@ restart_apps_scheduled:
       fi
       "
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "staging"'
 
 success_notif_scheduled:
   stage: notify
@@ -132,7 +132,7 @@ success_notif_scheduled:
     - echo "Executing notification script..."
     - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "✅ Deployment Successful!" "Success" 3066993 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "staging"'
   needs:
     - job: restart_apps_scheduled
       optional: false # Ensures this notification only runs if the manual deployment runs
@@ -167,7 +167,7 @@ failure_notification_scheduled:
     - echo "Executing notification script..."
     - TZ="Asia/Jakarta" /tmp/scripts/send_notification.sh "❌ Deployment Failed!" "Failed" 15552000 "SANBE HRMS - STAGING" "$WEBHOOK_URL"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "staging"'
   needs:
     - job: restart_apps_scheduled
       optional: false # Ensures this notification only runs if the manual deployment runs
