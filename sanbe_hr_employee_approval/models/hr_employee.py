@@ -32,7 +32,14 @@ class HrEmployee(models.Model):
         default='draft')
 
     def request_for_approval(self):
-        return self.write({'state': 'req_approval'})
+        query = """ select contract_id from hr_employee where id = %s """
+        self.env.cr.execute((query)%(str(self.id)))
+        for distinct_records in self.env.cr.dictfetchall():
+            contract = self.env['hr.contract'].browse(distinct_records['contract_id'])
+            if contract:
+                return self.write({'state': 'req_approval'})
+            else:
+                raise UserError('Please Create Contract Employee')
 
     def action_reject(self):
         return self.write({'state': 'rejected'})
@@ -41,7 +48,14 @@ class HrEmployee(models.Model):
         return self.write({'state': 'hold'})
 
     def action_set_approved(self):
-        return self.write({'state': 'approved'})
+        query = """ select contract_id from hr_employee where id = %s """
+        self.env.cr.execute((query)%(str(self.id)))
+        for distinct_records in self.env.cr.dictfetchall():
+            contract = self.env['hr.contract'].browse(distinct_records['contract_id'])
+            if contract:
+                return self.write({'state': 'approved'})
+            else:
+                raise UserError('Please Create Contract Employee')
 
     def action_approval(self):
         self.ensure_one()
