@@ -14,10 +14,13 @@ class SalesDashboardComponent extends Component {
                 employees: [],
                 resignation_count: [],
                 employee_count: [],
+                year_selection: [(new Date().getFullYear())-1,new Date().getFullYear()],
                 currentMonth: new Date().toLocaleString('default', { month: 'short' }), // Format "Jan", "Feb", dll.
                 selectedMonth: new Date().toLocaleString('default', { month: 'short' }),
+                selectedYear: new Date().getFullYear(),
                 currentMonth2: new Date().toLocaleString('default', { month: 'short' }), // Format "Jan", "Feb", dll.
                 selectedMonth2: new Date().toLocaleString('default', { month: 'short' }),
+                selectedYear2: new Date().getFullYear(),
                 months: [
                     'Januari', 'Februari', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -138,7 +141,7 @@ class SalesDashboardComponent extends Component {
             const dashboardData = await this.orm.call(
                 "hr.resignation",
                 "get_dashboard_data",
-                []
+                ['defaut',this.state.selectedYear]
             ).catch(error => {
                 console.error("Error fetching dashboard data:", error);
                 return { resignation_data: [], end_contract_data: [], transfer_to_group: [], terminate_data: [], pension_data: [] };
@@ -588,7 +591,7 @@ class SalesDashboardComponent extends Component {
             const dashboardData = await this.orm.call(
                 "hr.resignation",
                 "get_employee_data",
-                []
+                ['defaut',this.state.selectedYear2]
             ).catch(error => {
                 console.error("Error fetching dashboard data:", error);
                 return { employee_active_data: [], employee_exit_data: [], employee_new_data: [] };
