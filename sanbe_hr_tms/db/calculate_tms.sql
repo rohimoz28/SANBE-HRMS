@@ -1561,10 +1561,15 @@ begin
                               JOIN tmsentry_data t ON sa.area_id = t.area_id
                      WHERE sa.area_id = l_area
                        AND sad.code = 'ans2'
-                       AND (t.time_in <= make_time(
+                       AND ((t.time_in <= make_time(
                              floor(sad.time_from)::int,
                              round((sad.time_from - floor(sad.time_from)) * 60)::int,
                              0::int)::time
+							OR
+							(t.date_in::DATE + t.time_in::TIME)::TIMESTAMP < (t.date_out::DATE + make_time(
+                             floor(sad.time_to)::int,
+                             round((sad.time_to - floor(sad.time_to)) * 60)::int,
+                             0::int)::TIME)::TIMESTAMP)
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
@@ -1634,10 +1639,15 @@ begin
                               JOIN tmsentry_data t ON sa.area_id = t.area_id
                      WHERE sa.area_id = l_area
                        AND sad.code = 'ans2'
-                       AND (t.time_in <= make_time(
+                       AND ((t.time_in <= make_time(
                              floor(sad.time_from)::int,
                              round((sad.time_from - floor(sad.time_from)) * 60)::int,
                              0::int)::time
+							OR
+							(t.date_in::DATE + t.time_in::TIME)::TIMESTAMP < (t.date_out::DATE + make_time(
+                             floor(sad.time_to)::int,
+                             round((sad.time_to - floor(sad.time_to)) * 60)::int,
+                             0::int)::TIME)::TIMESTAMP)
                                 AND t.time_out >= make_time(
                                  floor(sad.time_to)::int,
                                  round((sad.time_to - floor(sad.time_to)) * 60)::int,
