@@ -45,16 +45,17 @@ class HrEmployeeMutation(models.Model):
     emp_no = fields.Char('Employee No', tracking=True)
     emp_nos_ids = fields.Many2many('hr.employee', 'res_emp_nos_rel', string='AllEmpNos',
                                    compute='_isi_emps', store=False, tracking=True)
-    emp_nos = fields.Many2one('hr.employee', string='Employee Number', index=True, domain="[('id','in',emp_nos_ids)]", tracking=True)
+    emp_nos = fields.Many2one('hr.employee', string='Employee Name', index=True, domain="[('id','in',emp_nos_ids)]", tracking=True)
     employee_id = fields.Many2one('hr.employee', string='Employee ID', index=True, tracking=True)
     employee_name = fields.Char(string='Employee Name', tracking=True)
+    emp_id_name = fields.Char(string='Employee Number', compute='_compute_emp_display', tracking=True)
     nik = fields.Char('NIK', tracking=True)
     area = fields.Char('Area', tracking=True)
     bisnis_unit = fields.Char('Business Unit', tracking=True)
     departmentid = fields.Char(string='Sub Department', tracking=True)
     state = fields.Selection(selection=[('draft', "Draft"),
-                                        ('intransfer', "In Transfer"),
-                                        ('accept', "Accept"),
+                                        # ('intransfer', "In Transfer"),
+                                        # ('accept', "Accept"),
                                         ('approved', "Approved")],
                              string="Status", readonly=True,
                              copy=False, index=True,
@@ -233,13 +234,13 @@ class HrEmployeeMutation(models.Model):
         return self.write({'state': 'approved',
                            'service_status': 'Approved'})
 
-    def button_intransfer(self):
-        self.write({'state': 'intransfer'})
-        return True
+    # def button_intransfer(self):
+    #     self.write({'state': 'intransfer'})
+    #     return True
 
-    def button_accept(self):
-        self.write({'state': 'accept'})
-        return True
+    # def button_accept(self):
+    #     self.write({'state': 'accept'})
+    #     return True
     
     def print_fkpm_action_button(self):
         """ Print report FKPM """
@@ -296,6 +297,7 @@ class HrEmployeeMutation(models.Model):
             existing.nik = str(myemp.nik)
             existing.employee_id = myemp.id
             existing.employee_name = myemp.name
+            # existing.emp_id_name = f"[{myemp.emp_nos.employee_id}] {myemp.emp_nos.name}"
             existing.area = myemp.area.name
             existing.bisnis_unit = myemp.branch_id.name
             existing.departmentid = myemp.department_id.name
@@ -379,6 +381,14 @@ class HrEmployeeMutation(models.Model):
                 for node in arch.xpath("//button"):
                     node.set('invisible', 'True')
         return arch, view
+    
+    @api.depends('emp_nos')
+    def _compute_emp_display(self):
+        for rec in self:
+            if rec.emp_nos:
+                rec.emp_id_name = f"[{rec.emp_nos.employee_id}] {rec.emp_nos.name}"
+            else:
+                rec.emp_id_name = ''
 
 
 class HrEmployee(models.Model):
