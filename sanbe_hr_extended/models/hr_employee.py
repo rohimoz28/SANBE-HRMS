@@ -454,13 +454,13 @@ class HrEmployee(models.Model):
                 raise UserError('Cannot Delete Employee not in draft')
         return super().unlink()
         
-    @api.depends('employee_id','name')
-    def _compute_display_name(self):
-        for emp in self:
-            name = ''
-            if emp.employee_id and emp.name:
-                name = '[' + emp.employee_id + '] ' + emp.name 
-            emp.display_name = name
+    # @api.depends('employee_id','name')
+    # def _compute_display_name(self):
+    #     for emp in self:
+    #         name = ''
+    #         if emp.employee_id and emp.name:
+    #             name = '[' + emp.employee_id + '] ' + emp.name 
+    #         emp.display_name = name
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)
