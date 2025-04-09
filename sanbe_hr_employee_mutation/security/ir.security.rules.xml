@@ -5,7 +5,18 @@
     <record id="hr_employee_mutation_rule" model="ir.rule">
         <field name="name">HR Employee Mutation</field>
         <field name="model_id" ref="sanbe_hr_employee_mutation.model_hr_employee_mutations"/>
-        <field name="domain_force">['|',('employee_id.branch_id.id', '=',user.branch_id.id),('service_bisnisunit', '=',user.branch_id.id)] </field>
+        <!-- <field name="domain_force">['|',('employee_id.branch_id.id', '=',user.branch_id.id),'|',('service_bisnisunit', '=',user.branch_id.id),('service_type', '=', 'muta')] </field> -->
+        <!-- <field name="domain_force">[(1, '=', 1)]</field> -->
+        <field name="domain_force">
+            ['|',
+                '|',
+                    ('employee_id.branch_id.id', '=', user.branch_id.id),
+                    ('service_bisnisunit', '=', user.branch_id.id),
+                '&amp;',
+                    ('service_type', '=', 'muta'),
+                    ('bisnis_unit', '=', user.branch_id.name)
+            ]
+        </field>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         <field name="perm_unlink" eval="True"/>
         <field name="perm_write" eval="True"/>
