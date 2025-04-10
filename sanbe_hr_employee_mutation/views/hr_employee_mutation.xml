@@ -51,19 +51,18 @@
                 <sheet>
                     <header>
                         <button string="Approve" name="button_approve" type="object"
-                            class="oe_highlight"
-                            invisible="service_type == 'muta' and state != 'accept' or service_type != 'muta' and state != 'draft'" />
-                        <button string="In Transfer" name="button_intransfer" type="object"
+                            class="oe_highlight" invisible="state in ['approved']"/>
+                        <!-- <button string="In Transfer" name="button_intransfer" type="object"
                             invisible="service_type != 'muta' or state != 'draft'" />
                         <button string="Accept" name="button_accept" type="object"
-                            invisible="service_type != 'muta' or state != 'intransfer'" />
+                            invisible="service_type != 'muta' or state != 'intransfer'" /> -->
                         <button string="Print FKPM" name="print_fkpm_action_button" 
                                 groups="base.group_user" type="object" class="btn btn-primary" icon="fa-print"/>     
                         <field name="state" widget="statusbar"
-                            statusbar_visible="draft,approved" invisible="service_type == 'muta'" />
-                        <field name="state" widget="statusbar"
+                            statusbar_visible="draft,approved"/>
+                        <!-- <field name="state" widget="statusbar"
                             statusbar_visible="draft,intransfer,accept,approved"
-                            invisible="service_type != 'muta'" />
+                            invisible="service_type != 'muta'" /> -->
                     </header>
                     <group name="emp_mutation" string="Employee Mutation">
                         <!-- <div class="oe_title"> -->
@@ -89,12 +88,13 @@
                             </div>
                         </div> -->
                         <group>
+                            <field name="emp_id_name" readonly="1" force_save="1"/>
                             <field name="emp_nos"
                                 options="{'no_create': True,'no_create_edit': True}"
                                 context="{'search_by': 'No','search_by_name': False}" />
                             <field name="emp_nos_ids" invisible="1"/>
                             <field name="employee_id" invisible="1" />
-                            <field name="employee_name" readonly="1" force_save="1" />
+                            <!-- <field name="employee_name" readonly="1" force_save="1" /> -->
                             <field name="nik" readonly="1" force_save="1" />
                             <field name="nik_lama" readonly="1" force_save="1" />
                             <field name="emp_status"
