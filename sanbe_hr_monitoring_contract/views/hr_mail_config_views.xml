@@ -68,7 +68,7 @@
             </p>
         </field>
     </record>
-    <menuitem id="hr_mail_receiver" name="Mail Receiver" action="action_hr_mail_config" parent="hr.menu_human_resources_configuration" sequence="99"/>
+    <menuitem id="hr_mail_receiver" name="Mail Receiver" action="action_hr_mail_config" parent="hr.menu_human_resources_configuration" sequence="10"/>
 
 
 </odoo>
