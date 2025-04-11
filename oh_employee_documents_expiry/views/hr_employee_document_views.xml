@@ -83,8 +83,9 @@
     </record>
     <!--    Creates a menu item for HR Employee Documents.-->
     <menuitem id="hr_employee_document_menu"
-              name="Documents"
-              parent="hr.menu_hr_employee_payroll"
+              name="Employee Documents"
+              parent="sanbe_hr_menu.hr_documents_menu_root"
               action="hr_employee_document_action"
+              sequence="2"
               groups="hr.group_hr_manager"/>
 </odoo>
