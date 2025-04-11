@@ -125,7 +125,7 @@
             <field name="search_view_id" ref="view_employee_certificate_search" />
         </record>
         
-        <menuitem id="hr_sanbe_certification" name="Employee Certifications" action="open_view_employee_certificate_tree" parent="hr.hr_menu_hr_reports" sequence="12"/> 
+        <menuitem id="hr_sanbe_certification" name="Monitoring Certifications" action="open_view_employee_certificate_tree" parent="hr.hr_menu_hr_reports" sequence="12"/> 
         <menuitem id="hr_sanbe_certification_expired" name="Monitoring Certifications Expired" action="open_view_employee_expired_list" parent="hr.hr_menu_hr_reports" sequence="17"/>
     </data>
 </openerp>

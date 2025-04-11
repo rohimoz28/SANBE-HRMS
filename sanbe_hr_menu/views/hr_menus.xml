@@ -74,6 +74,11 @@
             groups="hr_expense.group_hr_expense_manager"
         />
 
+        <menuitem id="hr_documents_menu_root"
+              parent="hr.menu_hr_root"
+              name="Documents"
+              sequence="4"/>
+
         <!-- Configuration Menu -->
         <menuitem
             id="menu_hr_pasal_pelanggaran"
@@ -174,5 +179,24 @@
             sequence="14"
         />
 
+        <menuitem id="hr_contract.hr_menu_contract"
+            name="Employee Contracts"
+            parent="hr.menu_hr_employee_payroll"
+            sequence="4"
+            active="True"
+        />
+
+        <menuitem id="hr_org_chart.menu_hr_employee_org_chart"
+            name="Org Chart"
+            parent="hr.menu_hr_employee_payroll"
+            sequence="9"
+        />
+
+        <menuitem id="hr_skills.hr_employee_skill_report_menu"
+            name="Employee Skills"
+            parent="hr_documents_menu_root"
+            sequence="3"
+        />
+        
     </data>
 </odoo>
