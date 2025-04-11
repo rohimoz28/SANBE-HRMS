@@ -10,7 +10,7 @@ variables:
   DOCKER_SERVICE_STAGING: "sanbe-hrms"
   BRANCH_STAGING: "staging"
   # PRODUCTION
-  PROJECT_DIR_PROD: "/home/albert/my-docker/docker-sanbe-hrms/customize/sanbe-hrms/"
+  PROJECT_DIR_PROD: "/opt/OdooSanbe/sanbe-hrms"
   APP_SERVICE_PROD: "OdooSanbe.service"
   BRANCH_PROD: "production"
 
