@@ -104,7 +104,7 @@
         <menuitem id="menu_hr_mutation"
                   name="Employment Tracking"
                   parent="hr.menu_hr_employee_payroll"
-                  sequence="6"
+                  sequence="8"
                   action="action_view_hr_employement_tracking"/>
 
     </data>

@@ -104,9 +104,9 @@
             </field>
         </record>
         <menuitem id="menu_hr_warning_letter"
-                  name="Warning Letter"
+                  name="Employee Warning Letter"
                   parent="hr.menu_hr_employee_payroll"
-                  sequence="9"
+                  sequence="7"
                   action="action_hr_warning_letter"/>
     </data>
 
