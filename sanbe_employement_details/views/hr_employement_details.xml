@@ -11,8 +11,26 @@
                 </xpath>
                 <xpath expr="//page[@name='personal_information']" position="after">
                     <page name="employement_details" string="Employment Details">
-
-                                <div class="o_row">
+                        <group>
+                            <group>
+                                <field name="job_status" invisible="1"/>
+                                <field name="periode_probation" readonly="job_status !='permanent'"/>
+                                <field name="retire_age" readonly="job_status =='contract'"/>
+                                <field name="bond_service"/>
+                                <field name="is_pinalty"/>
+                                <field name="resign_notice"/>
+                                <field name="pinalty_bs"/>
+                            </group>
+                            <group>
+                                <field name="ext_probation" readonly="job_status !='permanent'"/>
+                                <field name="confirm_probation"/>
+                                <field name="pension_date" string="End Of Pension Date" force_save="1"/>
+                                <field name="service_from" readonly="bond_service == True"/>
+                                <field name="service_to" readonly="bond_service == True"/>
+                                <field name="pinalty_amount"/>
+                            </group>
+                        </group>
+                                <!-- <div class="o_row">
                                     <label for="periode_probation"/>
                                     <div class="o_row">
                                         <field name="periode_probation" readonly="job_status !='permanent'"/>
@@ -74,7 +92,7 @@
                                         <field name="resign_notice"/>
                                     </div>
                                  </div>
-                        </div>
+                        </div> -->
                          <notebook>
                              <page name="employee_asset" string="Asset / Benefit">
                                  <field name="asset_ids">

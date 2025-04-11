@@ -175,11 +175,11 @@
                             </group>
                             <group string="Remarks">
                                 <field name="attende_premie_amount" invisible="attende_premie == False" required="attende_premie == True"/>
-                                <field name="jemputan_remarks" />
-                                <field name="ot_remarks" />
-                                <field name="transport_remarks" />
-                                <field name="meal_remarks" />
-                                <field name="allowance_nightshift_remarks"/>
+                                <field name="jemputan_remarks" string="Jemputan Remarks" />
+                                <field name="ot_remarks" string="Overtime Remarks" />
+                                <field name="transport_remarks" string="Transport Remarks" />
+                                <field name="meal_remarks" string="Meal Remarks" />
+                                <field name="allowance_nightshift_remarks" string="Night Shift Remarks"/>
                             </group>
                         </group>
                     </page>
