@@ -11,7 +11,7 @@
                         <group>
                             <field name="ed_from" />
                             <field name="ter_names" />
-                            <field name="ptkp" string="Available for PTKP" />
+                            <field name="ptkp_ids" widget="many2many_tags" string="Available for PTKP" />
                             <field name="status" />
                         </group>
                     </group>
@@ -37,7 +37,7 @@
                 <tree string="Tax Setting - TER">
                     <field name="ter_names" />
                     <field name="ed_from" />
-                    <field name="ptkp" />
+                    <field name="ptkp_ids" widget="many2many_tags"/>
                     <field name="status" />
                 </tree>
             </field>
@@ -50,7 +50,7 @@
                 <search string="Tax Setting">
                     <field name="ter_names" />
                     <field name="ed_from" />
-                    <field name="ptkp" />
+                    <field name="ptkp_ids" />
                     <field name="status" />
                 </search>
             </field>

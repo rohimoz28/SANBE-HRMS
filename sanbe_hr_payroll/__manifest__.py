@@ -37,6 +37,7 @@
         'views/sb_allowance_deduction.xml',
         'views/sb_allowance_deduction.xml',
         'views/sb_tax_yearly.xml',
+        'views/sb_ptkp_setting.xml',
         'views/hr_payroll_menu.xml',
         'security/ir.model.access.csv',
     ],
