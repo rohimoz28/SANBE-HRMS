@@ -20,3 +20,4 @@ from . import sb_payroll_employee
 from . import sb_allowance_deduction
 from . import sb_allowance_deduction
 from . import sb_tax_yearly
+from . import sb_ptkp_setting
