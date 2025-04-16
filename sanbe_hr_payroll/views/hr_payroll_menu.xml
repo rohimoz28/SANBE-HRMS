@@ -74,10 +74,18 @@
         />
 
         <menuitem
+                id="menu_sb_ptkp_setting"
+                name="PTKP Setting"
+                parent="menu_payroll_setting_parameter"
+                sequence="10"
+                action="action_sb_ptkp_setting"
+        />
+
+        <menuitem
                 id="menu_sb_tax_setting"
                 name="Tax Setting - TER"
                 parent="menu_payroll_setting_parameter"
-                sequence="9"
+                sequence="11"
                 action="action_sb_tax_setting"
         />
 
@@ -85,7 +93,7 @@
                 id="menu_sb_tax_yearly"
                 name="Tax Setting - Yearly"
                 parent="menu_payroll_setting_parameter"
-                sequence="10"
+                sequence="12"
                 action="action_sb_tax_yearly"
         />
 
@@ -100,7 +108,7 @@
                 id="menu_hr_payroll_insurance_setting"
                 name="Insurance Setting"
                 parent="menu_payroll_setting_parameter"
-                sequence="12"
+                sequence="9"
                 action="action_payroll_insurance_setting"
         />
     </data>
