@@ -68,56 +68,58 @@
                     </group>
                     <notebook>
                         <page string="Request" name="overtime_request">
-                            <field name="hr_ot_planning_ids" readonly="state == 'approved' or state == 'done'"
+                            <field name="hr_ot_planning_ids"
                                    context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}">
                                 <tree editable="bottom">
-                                    <field name="ot_type" optional="show"/>
-                                    <field name="planning_id" column_invisible="1"/>
-                                    <field name="employee_ids" column_invisible="1"/>
+                                    <field name="state" force_save="1" column_invisible = "1"/>
+                                    <field name="ot_type" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="planning_id" column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="employee_ids" column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="employee_id"
-                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" optional="show"/>
-                                    <field name="nik" readonly="1" force_save="1" optional="show"/>
-                                    <field name="plann_date_from" widget="date" optional="show"/>
-                                    <field name="plann_date_to" widget="date" optional="show"/>
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="nik" readonly="state == 'approved' or state == 'done'" force_save="1" optional="show"/>
+                                    <field name="plann_date_from" widget="date" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="plann_date_to" widget="date" optional="show" readonly="state == 'approved' or state == 'done'"/>
                                     <!-- <field name="ot_plann_from" widget="easy_timepicker"/>
                                     <field name="ot_plann_to" widget="easy_timepicker"/>
                                     <field name="approve_time_from" widget="easy_timepicker"/>
                                     <field name="approve_time_to" widget="easy_timepicker"/> -->
-                                    <field name="ot_plann_from" widget="float_time" optional="show"/>
-                                    <field name="ot_plann_to" widget="float_time" optional="show"/>
-                                    <field name="approve_time_from" widget="float_time" optional="show"/>
-                                    <field name="approve_time_to" widget="float_time" optional="show"/>
-                                    <field name="machine" optional="show"/>
-                                    <field name="work_plann" optional="show"/>
-                                    <field name="output_plann" optional="show"/>
+                                    <field name="ot_plann_from" widget="float_time" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="ot_plann_to" widget="float_time" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="approve_time_from" widget="float_time" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="approve_time_to" widget="float_time" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="machine" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="work_plann" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="output_plann" optional="show" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="area_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show"/>
+                                           force_save="1" optional="show" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="areah_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           column_invisible="1"/>
+                                           column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="branch_ids"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           column_invisible="1"/>
+                                           column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="branchh_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           column_invisible="1"/>
+                                           column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="alldepartment"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           column_invisible="1"/>
+                                           column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="departmenth_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           column_invisible="1"/>
+                                           column_invisible="1" readonly="state == 'approved' or state == 'done'"/>
                                     <field name="branch_id" context="{'default_branch_id': branch_id}"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show"/>
+                                           force_save="1" optional="show" readonly="state == 'approved' or state == 'done'" />
                                     <field name="department_id" context="{'default_department_id': department_id}"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show"/>
-                                    <field name="bundling_ot" optional="show"/>
-                                    <field name="transport" optional="show"/>
-                                    <field name="meals" optional="show"/>
-                                    <field name="meals_cash" optional="show"/>
+                                           force_save="1" optional="show" readonly="state == 'approved' or state == 'done'" />
+                                    <field name="bundling_ot" optional="show" readonly="state == 'approved' or state == 'done'" />
+                                    <field name="transport" optional="show" readonly="state == 'approved' or state == 'done'" />
+                                    <field name="meals" optional="show" readonly="state == 'approved' or state == 'done'" />
+                                    <field name="meals_cash" optional="show" readonly="state == 'approved' or state == 'done'"/>
+                                    <field name="is_cancel" optional="show" readonly="is_cancel == True" force_save="1"/>
                                 </tree>
                             </field>
                         </page>
