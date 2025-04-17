@@ -466,7 +466,8 @@ begin
                     AND hop.area_id = l_area
                     AND hop.approve1 = true
                     AND hop.approve2 = true
-                    AND hop.approve3 = true)
+                    AND hop.approve3 = true
+                    AND (is_cancel = false or is_cancel is null))
     UPDATE sb_tms_tmsentry_details sttd
     SET approval_ot_from = f.approve_time_from,
         approval_ot_to   = f.approve_time_to,
