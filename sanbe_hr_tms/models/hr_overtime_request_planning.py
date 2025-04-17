@@ -328,6 +328,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     meals_cash = fields.Boolean(string='Meal Cash')
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT Type')
     planning_req_name = fields.Char(string='Planning Request Name',required=False)
+    is_cancel = fields.Boolean('Cancel')
+    state = fields.Selection(related='planning_id.state', string='state', store=True)
 
     @api.onchange('employee_id')
     def rubah_employee(self):
