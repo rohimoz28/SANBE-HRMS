@@ -40,3 +40,8 @@ class SbOvertimeAttendance(models.Model):
     state = fields.Char(
         string='State',
         required=False)
+    is_shuttle_car = fields.Boolean('Shuttle Car')
+    is_dine_in = fields.Boolean('Dine In')
+    is_meal_cash = fields.Boolean('Meal Cash')
+    is_cancel = fields.Boolean('Cancel')
+    

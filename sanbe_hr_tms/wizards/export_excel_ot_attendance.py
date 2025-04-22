@@ -19,6 +19,12 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
     )
     start_date = fields.Date(string='Start Date')
     end_date = fields.Date(string='End Date')
+    ot_request_id = fields.Many2one(
+        'hr.overtime.planning',
+        string='OT Request',
+        domain = "[('department_id', '=', department_id)]"
+        
+    )
 
     def _get_departments_domain(self):
         """
@@ -27,7 +33,7 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
         """
         department_ids = self.env['sb.overtime.attendance'].search([]).mapped('department_id.id')
         return [('id', 'in', department_ids)]
-
+    
     def button_export_html(self):
         self.ensure_one()
         
@@ -38,6 +44,8 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
             ot_attendance_domain.append(('req_date', '>=', self.start_date))
         if self.end_date:
             ot_attendance_domain.append(('req_date', '<=', self.end_date))
+        if self.ot_request_id:
+            ot_attendance_domain.append(('no_request', '=', self.ot_request_id.name))
 
         ot_attendance = self.env['sb.overtime.attendance'].search(ot_attendance_domain)
         
@@ -65,7 +73,9 @@ class ExportExcelOvertimeAttendance(models.TransientModel):
             ot_attendance_domain.append(('req_date', '>=', self.start_date))
         if self.end_date:
             ot_attendance_domain.append(('req_date', '<=', self.end_date))
-        
+        if self.ot_request_id:
+            ot_attendance_domain.append(('no_request', '=', self.ot_request_id.name))
+
         ot_attendance = self.env['sb.overtime.attendance'].search(ot_attendance_domain)
         
         if not ot_attendance:
