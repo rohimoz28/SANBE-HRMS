@@ -8,15 +8,58 @@
                     <h2 class="text-center mb-4">
                         Rekap Overtime Attendance - HRMS
                     </h2>
-                    
+                    <table style="width: auto; font-size: 14px; margin-bottom: 16px;">
+                        <tr>
+                            <td style="font-weight: bold; padding-right: 8px;">Business Unit</td>
+                            <td>:</td>
+                            <td><span t-esc="report_lines[0]['branch_id']"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding-right: 8px;">Sub Department</td>
+                            <td>:</td>
+                            <td><span t-esc="report_lines[0]['department']"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding-right: 8px;">Period</td>
+                            <td>:</td>
+                            <td><span t-esc="report_lines[0]['periode_id']"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding-right: 8px;">Request Date</td>
+                            <td>:</td>
+                            <t t-set="sorted_lines" t-value="sorted(report_lines, key=lambda l: l['req_date'])"/>
+                            <td> <span t-esc="report_lines[0]['req_date']"/> - <span t-esc="report_lines[-1]['req_date']"/></td>
+                        </tr>
+                        <t t-set="unique_requests" t-value="list(set(line['no_request'] for line in report_lines))"/>
+                        <t t-set="sorted_requests" t-value="sorted(unique_requests)"/>
+                        <tr>
+                            <td style="font-weight: bold; padding-right: 8px;">Request Number</td>
+                            <td>:</td>
+                            <td colspan="2">
+                                <table>
+                                    <t t-set="col_count" t-value="3"/>
+                                    <t t-set="rows" t-value="[(sorted_requests[i:i+col_count]) for i in range(0, len(sorted_requests), col_count)]"/>
+                                    <t t-foreach="rows" t-as="row">
+                                        <tr>
+                                            <t t-foreach="row" t-as="req">
+                                                <td style="padding-right: 12px;">
+                                                    <span t-esc="req"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="table table-bordered table-striped" style="table-layout: auto; word-wrap: break-word;">
                         <thead>
                             <tr>
                                 <th style="text-align: center; white-space: nowrap;">No</th>
-                                <th style="text-align: center; white-space: nowrap;">Business Unit</th>
-                                <th style="text-align: center; white-space: nowrap;">Sub Department</th>
-                                <th style="text-align: center; white-space: nowrap;">Request Number</th>
-                                <th style="text-align: center; white-space: nowrap;">Request Date</th>
+                                <!-- <th style="text-align: center; white-space: nowrap;">Business Unit</th>
+                                <th style="text-align: center; white-space: nowrap;">Sub Department</th> -->
+                                <!-- <th style="text-align: center; white-space: nowrap;">Request Number</th> -->
+                                <!-- <th style="text-align: center; white-space: nowrap;">Request Date</th> -->
                                 <th style="text-align: center; white-space: nowrap;">Employee Name</th>
                                 <th style="text-align: center; white-space: nowrap;">NIK</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Time Fr</th>
@@ -25,8 +68,12 @@
                                 <th style="text-align: center; white-space: nowrap;">App Time To</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time To</th>
-                                <th style="text-align: center; white-space: nowrap;">State</th>
-                                <th style="text-align: center; white-space: nowrap;">Period</th>
+                                <th style="text-align: center; white-space: nowrap;">Shuttle Car</th>
+                                <th style="text-align: center; white-space: nowrap;">Dine In</th>
+                                <th style="text-align: center; white-space: nowrap;">Meal Cash</th>
+                                <th style="text-align: center; white-space: nowrap;">Cancel?</th>
+                                <!-- <th style="text-align: center; white-space: nowrap;">State</th> -->
+                                <!-- <th style="text-align: center; white-space: nowrap;">Period</th> -->
                                 <!-- <th>Total Delay</th>
                                 <th>Times Delayed</th> -->
                             </tr>
@@ -35,10 +82,10 @@
                             <t t-foreach="report_lines" t-as="line">
                                 <tr>
                                     <td><span t-esc="line['no']"/></td>
-                                    <td class="text-wrap"><span t-esc="line['branch_id']"/></td>
-                                    <td><span t-esc="line['department']"/></td>
-                                    <td class="text-wrap"><span t-esc="line['no_request']"/></td>
-                                    <td><span t-esc="line['req_date']"/></td>
+                                    <!-- <td class="text-wrap"><span t-esc="line['branch_id']"/></td>
+                                    <td><span t-esc="line['department']"/></td> -->
+                                    <!-- <td class="text-wrap"><span t-esc="line['no_request']"/></td> -->
+                                    <!-- <td><span t-esc="line['req_date']"/></td> -->
                                     <td><span t-esc="line['employee_id']"/></td>
                                     <td><span t-esc="line['nik']"/></td>
                                     <td><span t-esc="line['req_time_fr']" widget="float_time"/></td>
@@ -47,8 +94,12 @@
                                     <td><span t-esc="line['approve_time_to']" widget="float_time"/></td>
                                     <td><span t-esc="line['rlz_time_fr']" widget="float_time"/></td>
                                     <td><span t-esc="line['rlz_time_to']" widget="float_time"/></td>
-                                    <td><span t-esc="line['state']"/></td>
-                                    <td><span t-esc="line['periode_id']"/></td>
+                                    <td><input type="checkbox" t-att-checked="'checked' if line['is_shuttle_car'] else None" disabled="disabled"/></td>
+                                    <td><input type="checkbox" t-att-checked="'checked' if line['is_dine_in'] else None" disabled="disabled"/></td>
+                                    <td><input type="checkbox" t-att-checked="'checked' if line['is_meal_cash'] else None" disabled="disabled"/></td>
+                                    <td><input type="checkbox" t-att-checked="'checked' if line['is_cancel'] else None" disabled="disabled"/></td>
+                                    <!-- <td><span t-esc="line['state']"/></td> -->
+                                    <!-- <td><span t-esc="line['periode_id']"/></td> -->
                                     <!-- <td><span t-esc="line['delay_total']"/></td>
                                     <td><span t-esc="line['delay_count']"/></td> -->
                                 </tr>

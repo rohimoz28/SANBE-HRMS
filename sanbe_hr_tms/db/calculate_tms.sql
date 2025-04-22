@@ -1996,7 +1996,7 @@ begin
 
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
-                                              , rlz_time_to, approve_time_from, approve_time_to, state)
+                                              , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in, is_meal_cash, is_cancel)
     select hts.area_id,
            hts.branch_id,
            hts.department_id,
@@ -2011,10 +2011,15 @@ begin
            coalesce(sttd.time_out, sttd.edited_time_out) as rlz_time_to,
            sttd.approval_ot_from,
            sttd.approval_ot_to,
-           hop.state
+           hop.state,
+           he.allowance_jemputan,
+           hoe.meals,
+           hoe.meals_cash,
+           hoe.is_cancel
     from hr_overtime_planning hop
              join hr_overtime_employees hoe on hop.id = hoe.planning_id
              join hr_tmsentry_summary hts on hts.employee_id = hoe.employee_id
+             join hr_employee he on hts.employee_id = he.id
              left join sb_tms_tmsentry_details sttd
                        on hoe.employee_id = sttd.employee_id and hoe.plann_date_from = sttd.details_date
     where hts.periode_id = period
