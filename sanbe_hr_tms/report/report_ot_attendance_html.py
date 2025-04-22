@@ -51,7 +51,11 @@ class AttendanceReportHTML(models.AbstractModel):
                     'rlz_time_fr': self.float_to_time(obj.rlz_time_fr) or 0, #Rel Time From
                     'rlz_time_to': self.float_to_time(obj.rlz_time_to) or 0, #Rel TIme To
                     'state': obj.state or None, #State
-                    'periode_id': obj.periode_id.name or None
+                    'periode_id': obj.periode_id.name or None,
+                    'is_shuttle_car': obj.is_shuttle_car,
+                    'is_dine_in': obj.is_dine_in,
+                    'is_meal_cash': obj.is_meal_cash,
+                    'is_cancel': obj.is_cancel
                     # 'delay_total': obj.delay_total or 0,
                     # 'delay_count': obj.delay_count or 0
                 }
