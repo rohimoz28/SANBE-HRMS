@@ -19,7 +19,7 @@
                             invisible="state !='req_approval'"/>
                     <button name="action_hold" type="object" data-hotkey="shift+g"
                             string="Hold" class="oe_highlight"
-                            invisible="state in ['draft','req_approval','hold']"
+                            invisible="state in ['draft','req_approval','hold'] or uid not in [2, 30]"
                     />
                     <button name="action_set_approved" type="object" data-hotkey="shift+g"
                             string="Set Approved" class="oe_highlight"

@@ -188,7 +188,7 @@ class HrEmployeeMutation(models.Model):
         #    for alllogs in mylogs:
         #        if alllogs.end_date == False:
         #            alllogs.write({'end_date': self.service_start})
-        self.employee_id.write({'state': 'hold'})
+        # self.employee_id.write({'state': 'hold'})
         if self.service_area.id != self.employee_id.area.id:
             self.employee_id.write({'area': self.service_area.id})
         if self.service_bisnisunit.id != self.employee_id.branch_id.id:
@@ -263,7 +263,8 @@ class HrEmployeeMutation(models.Model):
         for rec in self:
             myemp = rec.emp_nos
             if rec.state == 'draft':
-                myemp.write({'state': 'hold'})
+                # myemp.write({'state': 'hold'})
+                pass
             else:
                 myemp.write({'state': 'approved'})
         return res
@@ -289,7 +290,8 @@ class HrEmployeeMutation(models.Model):
             myemp = existing.emp_nos
             empgroup = existing.emp_nos.employee_group1
             if existing.state == 'draft':
-                myemp.write({'state': 'hold'})
+                # myemp.write({'state': 'hold'})
+                pass
             else:
                 myemp.write({'state': 'approved'})
             existing.service_identification = myemp.identification_id
@@ -367,7 +369,7 @@ class HrEmployeeMutation(models.Model):
         res = super(HrEmployeeMutation, self).create(vals)
         for allres in res:
             employee = self.env['hr.employee'].sudo().browse(allres.employee_id.id)
-            employee.write({'state': 'hold'})
+            # employee.write({'state': 'hold'})
         return res
 
     def _get_view(self, view_id=None, view_type='form', **options):
