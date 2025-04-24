@@ -22,7 +22,7 @@
                             invisible="state in ['draft','req_approval','hold']"
                     />
                     <button name="action_set_approved" type="object" data-hotkey="shift+g"
-                            string="Set Approved" class="oe_highlight"
+                            string="Unhold" class="oe_highlight"
                             invisible="state !='hold'"/>
 
                     <field name="state" widget="statusbar"
