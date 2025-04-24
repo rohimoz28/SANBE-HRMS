@@ -108,6 +108,8 @@ class HrResignation(models.Model):
         for rec in self:
             if rec.resignation_type == 'EOCT' and rec.employee_id.job_status != 'contract':
                 raise ValidationError('Employee job status is not contract')
+            if rec.resignation_type == 'RETR' and rec.employee_id.job_status != 'permanent':
+                raise ValidationError('Employee job status is not permanent')
 
     @api.depends('employee_id')
     def _compute_change_employee(self):
