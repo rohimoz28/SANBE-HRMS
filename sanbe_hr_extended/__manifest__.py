@@ -34,9 +34,13 @@
         'data/hitung_employee_ws.xml',
         'data/sequence_employee_id.xml',
         'views/hr_contracts.xml',
+
+        'wizards/hr_employee_wizard.xml',
     ],
     'assets': {
         'web.assets_backend': [
+            'sanbe_hr_extended/static/src/xml/export_button_hr_employee_extended.xml',
+            'sanbe_hr_extended/static/src/js/export_button_hr_employee_extended.js',
         ],
     },
     # only loaded in demonstration mode
