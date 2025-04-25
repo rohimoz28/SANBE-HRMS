@@ -42,7 +42,7 @@ class SbAdjusmentRequests(models.Model):
     request_date = fields.Date(string='Request Date', required=False)
     alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
-    employee_id = fields.Many2one('hr.employee', string='Employee')
+    employee_id = fields.Many2one('hr.employee', string='Employee', domain="[('state','=','approved')]")
     aplicant = fields.Selection(
         string='Applicant',
         selection=[('employee', 'Employee'),
