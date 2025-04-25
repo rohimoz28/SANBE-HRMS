@@ -38,7 +38,7 @@ class HrEmployeeDocument(models.Model):
     expiry_date = fields.Date(string='Expiry Date', copy=False,
                               help="Expiry date of the documents.")
     employee_ref_id = fields.Many2one('hr.employee', invisible=1,
-                                      copy=False,
+                                      copy=False, domain="[('state','=','approved')]",
                                       help='Specify the employee name.')
     doc_attachment_ids = fields.Many2many('ir.attachment',
                                           'doc_attach_rel',

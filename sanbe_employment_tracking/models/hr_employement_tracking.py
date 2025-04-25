@@ -20,7 +20,7 @@ class HrEmployementTracking(models.TransientModel):
     _description = 'HR Employement Tracking'
 
     idpeg = fields.Char('id pegawai')
-    emp_no = fields.Many2one('hr.employee',string='Employee No',index=True)
+    emp_no = fields.Many2one('hr.employee',string='Employee No', domain="[('state','=','approved')]", index=True)
     employee_id = fields.Many2one('hr.employee', string='Employee ID', index=True)
     employee_name = fields.Char(string='Employee Name')
     nik = fields.Char('NIK')
