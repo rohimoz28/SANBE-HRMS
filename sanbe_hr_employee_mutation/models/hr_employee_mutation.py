@@ -76,12 +76,8 @@ class HrEmployeeMutation(models.Model):
                                    ('terminated', 'Terminated'),
                                    ], string='Employment Status', store=True, tracking=True)
     emp_status_to_pam = fields.Selection([('probation', 'Probation'),
-                                   ('confirmed', 'Confirmed'),
-                                   ('end_contract', 'End Of Contract'),
-                                   ('resigned', 'Resigned'),
-                                   ('retired', 'Retired'),
-                                   ('terminated', 'Terminated'),
-                                   ], string='Employment Status', compute='_compute_emp_status', store=True, tracking=True)
+                                          ('confirmed', 'Confirmed'),
+                                         ], string='Employment Status', compute='_compute_emp_status', store=True, tracking=True)
     emp_status_actv = fields.Selection([('probation', 'Probation'),
                                         ('confirmed', 'Confirmed')
                                         ], string='Employment Status', store=True, tracking=True)
