@@ -36,7 +36,7 @@ class HrEmployee(models.Model):
         self.env.cr.execute((query)%(str(self.id)))
         for distinct_records in self.env.cr.dictfetchall():
             contract = self.env['hr.contract'].browse(distinct_records['contract_id'])
-            if contract:
+            if contract or self.job_status != 'contract':
                 return self.write({'state': 'req_approval'})
             else:
                 raise UserError('Please Create Contract Employee')
