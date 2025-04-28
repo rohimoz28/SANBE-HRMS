@@ -1,6 +1,7 @@
 stages:
   - build
   - deploy
+  - sync
   - notify
 
 variables:
@@ -13,6 +14,7 @@ variables:
   PROJECT_DIR_PROD: "/opt/OdooSanbe/sanbe-hrms"
   APP_SERVICE_PROD: "OdooSanbe.service"
   BRANCH_PROD: "production"
+  MAIN_BRANCH: "main"
 
 image: alpine:latest
 
@@ -144,6 +146,55 @@ restart_production:
       sudo systemctl restart $APP_SERVICE_PROD
       "
   rules: *default_prod_rule
+
+sync_branch_project_production:
+  stage: sync
+  tags: [test4]
+  <<: *default_before_script
+  script:
+    - echo "Deploying latest updates via SSH..."
+    - |
+      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
+      echo "Enter project directory"
+      cd $PROJECT_DIR_PROD
+      
+      echo "Starting synchronization of ${MAIN_BRANCH} with ${BRANCH_PROD}..."
+      # Checkout production branch
+      echo "Checking out ${BRANCH_PROD}..."
+      git checkout "$BRANCH_PROD"
+      
+      # Pull latest changes on production
+      echo "Pulling latest changes on ${BRANCH_PROD}..."
+      git pull origin "$BRANCH_PROD"
+      
+      # Checkout main branch
+      echo "Checking out ${MAIN_BRANCH}..."
+      git checkout "$MAIN_BRANCH"
+      
+      # Rebase main onto production
+      echo "Rebasing ${MAIN_BRANCH} onto ${BRANCH_PROD}..."
+      if git rebase "$BRANCH_PROD"; then
+      echo "Rebase successful."
+    
+      # Push main with force-with-lease
+      echo "Pushing ${MAIN_BRANCH} to origin with --force-with-lease..."
+      git push origin "$MAIN_BRANCH" --force-with-lease
+    
+      # Checkout back to production
+      echo "Checking out ${BRANCH_PROD}..."
+      git checkout "$BRANCH_PROD"
+    
+      echo "Synchronization complete."
+      else
+      echo "Rebase failed. Please resolve conflicts and try again."
+      exit 1
+      fi
+      
+      echo "Finished."
+      EOF
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $BRANCH_PROD'
+      when: always
 
 notify_production_success:
   stage: notify
