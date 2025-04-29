@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='certificate_details']" position="before">
                     <page name="education_details" string="Educations">
-                        <field name="education_ids" context="{'tree_view_ref': 'sanbe_hr_education.employee_educations_level_tree', 'form_view_ref': 'sanbe_hr_education.employee_education_level_form'}"/>
+                        <field name="education_ids" context="{'tree_view_ref': 'sanbe_hr_education.employee_educations_level_tree', 'form_view_ref': 'sanbe_hr_education.employee_education_level_form'}" class="o_horizontal_scroll"/>
                     </page>
                 </xpath>
                 <xpath expr="//page[@name='personal_information']/group/group[5]" position="attributes">

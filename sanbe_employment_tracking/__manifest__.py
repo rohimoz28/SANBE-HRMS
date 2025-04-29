@@ -27,7 +27,8 @@
     'demo': [],
     'assets': {
         'web.assets_backend': [
-            "/sanbe_employment_tracking/static/src/js/employment_tracking.js"
+            "/sanbe_employment_tracking/static/src/js/employment_tracking.js",
+            "/sanbe_employment_tracking/static/src/css/detail_table.css"
         ],
         'web.assets_qweb': [
         ],

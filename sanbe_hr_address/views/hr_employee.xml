@@ -31,7 +31,7 @@
                     <notebook>
                         <page name="list_address" string="Employee Address">
                             <field name="address_ids">
-                                <tree editable="bottom">
+                                <tree editable="bottom" class="o_horizontal_scroll">
                                     <field name="employee_id" column_invisible="True"/>
                                     <field name="address_type"/>
                                     <field name="address"/>
