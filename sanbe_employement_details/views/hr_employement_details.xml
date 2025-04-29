@@ -95,7 +95,7 @@
                         </div> -->
                          <notebook>
                              <page name="employee_asset" string="Asset / Benefit">
-                                 <field name="asset_ids">
+                                 <field name="asset_ids" class="o_horizontal_scroll">
                                      <tree editable="bottom">
                                          <field name="employee_id" column_invisible="True"/>
                                         <field name="asset_name"/>

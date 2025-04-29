@@ -6,7 +6,7 @@
             <field name="name">hr.employment.log.tree</field>
             <field name="model">hr.employment.log</field>
             <field name="arch" type="xml">
-                <tree string="HR Mutation" edit="0" create="0" delete="0">
+                <tree string="HR Mutation" edit="0" create="0" delete="0" class="o_horizontal_scroll">
                     <field name="service_type"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
