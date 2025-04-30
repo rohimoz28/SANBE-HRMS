@@ -31,7 +31,7 @@ class HrContract(models.Model):
     number = fields.Char('Contract Number')
     area = fields.Many2one('res.territory',string='Area',tracking=True,readonly=False)
     branch_ids = fields.Many2many('res.branch','res_branch_rel',string='AllBranch',compute='_isi_semua_branch',store=False)
-    employee_id = fields.Many2one('hr.employee', string='Employee', required=True, tracking=True, domain="[('state','not in',['hold'])]", index=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee', required=True, tracking=True, domain="[('state','not in',['hold','inactive'])]", index=True)
     date_end = fields.Date('End Date', tracking=True, help="End date of the contract (if it's a fixed-term contract).", required=True)
     alldepartment = fields.Many2many('hr.department','hr_department_rel', string='All Department',compute='_isi_department_branch',store=False)
     branch_id = fields.Many2one('res.branch',string='Business Units',domain="[('id','in',branch_ids)]",tracking=True,readonly=False)

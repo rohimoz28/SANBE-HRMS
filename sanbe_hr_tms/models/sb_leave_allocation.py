@@ -14,7 +14,7 @@ class SbLeaveAllocation(models.Model):
     branch_id = fields.Many2one('res.branch',string='Business Unit', tracking=True, required=True)
     department_id = fields.Many2one('hr.department', string='Sub Department', index=True, required=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True, required=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee Name', index=True, tracking=True, required=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee Name', domain="[('state','=','approved')]", index=True, tracking=True, required=True)
     date = fields.Date(string='Date', tracking=True, default=datetime.today(), required=True)
     remarks = fields.Char(string='Remarks', tracking=True)
     description = fields.Text(string='Description', tracking=True)
