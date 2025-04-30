@@ -183,6 +183,7 @@ class HrEmployee(models.Model):
         string='Workingday',
         help='Total Working Day in a Month',
         required=False)
+    marital = fields.Selection(selection="_get_selection_marital_options", string='Marital', tracking=True)
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,
@@ -241,6 +242,9 @@ class HrEmployee(models.Model):
     #    #myemployees = self.env['hr.employee'].search([])
     #    #for allemps in myemployees:
     #    #    allemps.write({'nik_lama': ''})
+
+    def _get_selection_marital_options(self):
+        return [('single', _("Single")),('married', _("Married")),('separate', _("Separate"))]
 
     @api.model
     def default_get(self, default_fields):
