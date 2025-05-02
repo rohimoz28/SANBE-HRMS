@@ -138,11 +138,11 @@ class HrEmployeeMutation(models.Model):
     employee_levels = fields.Many2one('employee.level', string='Employee Level', tracking=True)
     service_employee_levels = fields.Many2one('employee.level', string='Employee Level', tracking=True)
     join_date = fields.Date('Join Date', tracking=True)
-    marital = fields.Selection([('single', 'Single'),
-                                ('married', 'Married'),
-                                ('cohabitant', 'Legal Cohabitant'),
-                                ('widower', 'Widower'),
-                                ('divorced', 'Divorced')], string='Marital Status', tracking=True)
+    marital = fields.Selection([
+        ('single', 'Single'),
+        ('married', 'Married'),
+        ('separate', 'Separate')
+    ], string='Marital Status', tracking=True)
     contract_no = fields.Many2one('hr.contract', related='employee_id.contract_id', readonly=False, tracking=True)
     contract_from = fields.Date('Contract Date From', related='employee_id.contract_datefrom', readonly=False, tracking=True)
     contract_to = fields.Date('Contract Date To', related='employee_id.contract_dateto', readonly=False, tracking=True)
