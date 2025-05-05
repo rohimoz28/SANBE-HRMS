@@ -24,8 +24,12 @@
                                 <field name="employee_id" invisible="1"/>
                                 <field name="year_garduated"/>
                                 <field name="majoring"/>
-                                <field name="level_certificated"/>
+                                <field name="level_certificated_sd" invisible="school_level not in ['sd']"/>
+                                <field name="level_certificated_smp" invisible="school_level not in ['smp']"/>
+                                <field name="level_certificated_sma" invisible="school_level not in ['sma']"/>
+                                <field name="level_certificated_univ" invisible="school_level not in ['universitas']"/>
                                 <field name="gpa"/>
+                                <field name="is_last_edu"/>
                         </group>
                     </sheet>
                 </form>
@@ -44,6 +48,7 @@
                     <field name="majoring"/>
                     <field name="level_certificated"/>
                     <field name="gpa"/>
+                    <field name="is_last_edu"/>
                 </tree>
             </field>
         </record>
