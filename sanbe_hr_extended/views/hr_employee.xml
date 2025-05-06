@@ -49,6 +49,9 @@
                 <xpath expr="//field[@name='gender']" position="attributes">
                     <attribute name="required">1</attribute>
                 </xpath>
+                <xpath expr="//field[@name='certificate']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
                 <xpath expr="//field[@name='job_id']" position="attributes">
                     <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
                 </xpath>
@@ -64,6 +67,9 @@
                 </xpath>
                 <xpath expr="//field[@name='certificate']" position="before">
                     <field name="title" />
+                </xpath>
+                <xpath expr="//field[@name='study_field']" position="before">
+                    <field name="level_certificated" readonly="state not in ['draft']"/>
                 </xpath>
                 <xpath expr="//field[@name='children']" position="attributes">
                     <attribute name="required">marital != False</attribute>

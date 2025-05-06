@@ -184,6 +184,16 @@ class HrEmployee(models.Model):
         help='Total Working Day in a Month',
         required=False)
     marital = fields.Selection(selection="_get_selection_marital_options", string='Marital', tracking=True)
+    level_certificated = fields.Selection([('s3','S3'),
+                                     ('s2','S2'),
+                                     ('s1','S1'),
+                                     ('d3','D3'),
+                                     ('d4', 'D4'),
+                                     ('sma','SMA'),
+                                     ('smp','SMP'),
+                                     ('sd','SD')],compute="_compute_last_education_fields",store=True,string='Certificate Level')
+    study_field = fields.Char('Field of Study',compute="_compute_last_education_fields",store=True)
+    study_school = fields.Char('School',compute="_compute_last_education_fields",store=True)
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,
@@ -245,6 +255,19 @@ class HrEmployee(models.Model):
 
     def _get_selection_marital_options(self):
         return [('single', _("Single")),('married', _("Married")),('separate', _("Separate"))]
+    
+    @api.depends('education_ids.is_last_edu', 'education_ids.level_certificated', 'education_ids.majoring', 'education_ids.name')
+    def _compute_last_education_fields(self):
+        for employee in self:
+            last_edu = employee.education_ids.filtered(lambda e: e.is_last_edu)
+            if last_edu:
+                employee.level_certificated = last_edu[0].level_certificated
+                employee.study_field = last_edu[0].majoring
+                employee.study_school = last_edu[0].name
+            else:
+                employee.level_certificated = False
+                employee.study_field = False
+                employee.study_school = False
 
     @api.model
     def default_get(self, default_fields):
