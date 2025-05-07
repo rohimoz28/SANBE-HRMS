@@ -13,6 +13,7 @@
                         <field name="periode_id" required="1"/>
                         <field name="branch_id" invisible="1"/>
                         <field name="department_id" no_close="1" domain="[('branch_id', '=', branch_id)]" readonly="0" options="{'no_create': True, 'no_close': True}"/>
+                        <field name="employee_group1" />
                     </group>
                     <!-- <field name="allowed_department_ids" invisible="1" /> -->
                 </sheet>
