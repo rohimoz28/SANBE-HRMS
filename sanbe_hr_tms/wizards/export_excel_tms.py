@@ -6,6 +6,16 @@ import xlsxwriter
 import logging
 _logger = logging.getLogger(__name__)
 
+EMP_GROUP1 = [
+    ('Group1', 'Group 1 - Harian(pak Deni)'),
+    ('Group2', 'Group 2 - bulanan pabrik(bu Felisca)'),
+    ('Group3', 'Group 3 - Apoteker and Mgt(pak Ryadi)'),
+    ('Group4', 'Group 4 - Security and non apoteker (bu Susi)'),
+    ('Group5', 'Group 5 - Tim promosi(pak Yosi)'),
+    ('Group6', 'Group 6 - Adm pusat(pak Setiawan)'),
+    ('Group7', 'Group 7 - Tim Proyek (pak Ferry)'),
+]
+
 class ExportExcelTms(models.TransientModel):
     _name = 'export.excel.tms'
     # _inherit = 'hr.tmsentry.summary'
@@ -21,6 +31,7 @@ class ExportExcelTms(models.TransientModel):
         string='Sub Department',
         options="{'no_create': True}"
     )
+    employee_group1 = fields.Selection(selection=EMP_GROUP1,string='Employee P Group')
 
     @api.onchange('periode_id')
     def _onchange_periode_id(self):
@@ -65,11 +76,13 @@ class ExportExcelTms(models.TransientModel):
             tms_summary_domain.append(('periode_id', '=', self.periode_id.id))
         if self.department_id:
             tms_summary_domain.append(('department_id', '=', self.department_id.id))
+        if self.employee_group1:
+            tms_summary_domain.append(('employee_group1', '=', self.employee_group1))
         
         tms_summaries = self.env['hr.tmsentry.summary'].search(tms_summary_domain)
         
         if not tms_summaries:
-            raise UserError(_("Tidak Ada Data Record Dari periode atau department yang dipilih"))
+            raise UserError(_("Tidak ada data record dari Periode, Department atau Employee P Group yang dipilih"))
         
         return {
             'type': 'ir.actions.report',
@@ -91,6 +104,8 @@ class ExportExcelTms(models.TransientModel):
             tms_summary_domain.append(('periode_id', '=', self.periode_id.id))
         if self.department_id:
             tms_summary_domain.append(('department_id', '=', self.department_id.id))
+        if self.employee_group1:
+            tms_summary_domain.append(('employee_group1', '=', self.employee_group1))
         
         tms_summaries = self.env['hr.tmsentry.summary'].search(tms_summary_domain)
         
