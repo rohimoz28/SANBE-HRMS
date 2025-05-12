@@ -29,10 +29,10 @@ Project initial @2024
 3. Setelah selesai membuat fitur, push feature branch ke remote branch.
    - `git push origin HEAD`
 4. Developer buat Merge Request pada GitLab ke **staging branch**.
-4. Selanjutnya akan di lakukan QA pada server development (staging branch).
-5. Fitur yang lolos QA akan di beri label `QA - Approved` dan akan di merge ke release branch oleh DevOps via GitLab.
-6. Release branch akan di merge ke production branch oleh DevOps via GitLab.
-7. Terakhir, DevOps akan melakukan sinkronisasi antara branch production dan main branch.
+5. Selanjutnya akan di lakukan QA pada server development (staging branch).
+6. Fitur yang lolos QA akan di beri label `QA - Approved` dan akan di merge ke release branch oleh DevOps via GitLab.
+7. Release branch akan di merge ke production branch oleh DevOps via GitLab.
+8. Terakhir, DevOps akan melakukan sinkronisasi antara branch production dan main branch.
    - `git checkout production`
    - `git pull origin production`
    - `git checkout main`
