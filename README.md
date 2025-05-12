@@ -38,3 +38,4 @@ Project initial @2024
    - `git checkout main`
    - `git rebase production`
    - `git push origin main --force`
+9. Terimakasih!
