@@ -345,7 +345,7 @@ restart_production:
   <<: *default_before_script
   script:
     - ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD "
-      systemctl restart $DOCKER_SERVICE_PROD
+      sudo systemctl restart $DOCKER_SERVICE_PROD
       "
   rules:
     - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
