@@ -12,12 +12,19 @@
                     <field name="req_date" optional="show"/>
                     <field name="employee_id" optional="show" string="Employee Name"/>
                     <field name="nik" optional="show"/>
+                    <field name="req_date" optional="show"/>
                     <field name="req_time_fr" optional="show" widget="float_time"/>
                     <field name="req_time_to" optional="show" widget="float_time"/>
                     <field name="approve_time_from" optional="show" widget="float_time"/>
                     <field name="approve_time_to" optional="show" widget="float_time"/>
+                    <field name="rlz_date" optional="show"/>
                     <field name="rlz_time_fr" optional="show" widget="float_time"/>
                     <field name="rlz_time_to" optional="show" widget="float_time"/>
+                    <field name="overtime" optional="hide" />
+                    <field name="aot1" optional="hide" />
+                    <field name="aot2" optional="hide" />
+                    <field name="aot3" optional="hide" />
+                    <field name="aot4" optional="hide" />
                     <field name="state" optional="show"/>
                     <field name="periode_id" optional="show"/>
                 </tree>

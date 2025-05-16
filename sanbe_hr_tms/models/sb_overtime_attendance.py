@@ -44,4 +44,23 @@ class SbOvertimeAttendance(models.Model):
     is_dine_in = fields.Boolean('Dine In')
     is_meal_cash = fields.Boolean('Meal Cash')
     is_cancel = fields.Boolean('Cancel')
+    rlz_date = fields.Date(
+        string='Realization Date',
+        required=False)
+    aot1 = fields.Float(
+        string='OT 1',
+        required=False)
+    aot2 = fields.Float(
+        string='OT 2',
+        required=False)
+    aot3 = fields.Float(
+        string='OT 3',
+        required=False)
+    aot4 = fields.Float(
+        string='OT 4',
+        required=False)
+    overtime = fields.Char(
+        string='Overtime',
+        required=False)
+    
     

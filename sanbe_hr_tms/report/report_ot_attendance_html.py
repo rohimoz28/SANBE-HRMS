@@ -55,7 +55,13 @@ class AttendanceReportHTML(models.AbstractModel):
                     'is_shuttle_car': obj.is_shuttle_car,
                     'is_dine_in': obj.is_dine_in,
                     'is_meal_cash': obj.is_meal_cash,
-                    'is_cancel': obj.is_cancel
+                    'is_cancel': obj.is_cancel,
+                    'rlz_date' : obj.rlz_date,
+                    'aot1' : obj.aot1,
+                    'aot2' : obj.aot2,
+                    'aot3' : obj.aot3,
+                    'aot4' : obj.aot4,
+                    'overtime' : obj.overtime
                     # 'delay_total': obj.delay_total or 0,
                     # 'delay_count': obj.delay_count or 0
                 }

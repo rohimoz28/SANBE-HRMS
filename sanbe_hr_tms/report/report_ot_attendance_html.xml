@@ -62,12 +62,19 @@
                                 <!-- <th style="text-align: center; white-space: nowrap;">Request Date</th> -->
                                 <th style="text-align: center; white-space: nowrap;">Employee Name</th>
                                 <th style="text-align: center; white-space: nowrap;">NIK</th>
+                                <th style="text-align: center; white-space: nowrap;">Req Date From</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Time To</th>
                                 <th style="text-align: center; white-space: nowrap;">App Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">App Time To</th>
+                                <th style="text-align: center; white-space: nowrap;">Realization Date</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time To</th>
+                                <th style="text-align: center; white-space: nowrap;">Overtime</th>
+                                <th style="text-align: center; white-space: nowrap;">OT 1</th>
+                                <th style="text-align: center; white-space: nowrap;">OT 2</th>
+                                <th style="text-align: center; white-space: nowrap;">OT 3</th>
+                                <th style="text-align: center; white-space: nowrap;">OT 4</th>
                                 <th style="text-align: center; white-space: nowrap;">Shuttle Car</th>
                                 <th style="text-align: center; white-space: nowrap;">Dine In</th>
                                 <th style="text-align: center; white-space: nowrap;">Meal Cash</th>
@@ -88,12 +95,19 @@
                                     <!-- <td><span t-esc="line['req_date']"/></td> -->
                                     <td><span t-esc="line['employee_id']"/></td>
                                     <td><span t-esc="line['nik']"/></td>
+                                    <td><span t-esc="line['req_date']"/></td>
                                     <td><span t-esc="line['req_time_fr']" widget="float_time"/></td>
                                     <td><span t-esc="line['req_time_to']" widget="float_time"/></td>
                                     <td><span t-esc="line['approve_time_from']" widget="float_time"/></td>
                                     <td><span t-esc="line['approve_time_to']" widget="float_time"/></td>
+                                    <td><span t-esc="line['rlz_date']" /></td>
                                     <td><span t-esc="line['rlz_time_fr']" widget="float_time"/></td>
                                     <td><span t-esc="line['rlz_time_to']" widget="float_time"/></td>
+                                    <td><span t-esc="line['overtime']" /></td>
+                                    <td><span t-esc="line['aot1']" /></td>
+                                    <td><span t-esc="line['aot2']" /></td>
+                                    <td><span t-esc="line['aot3']" /></td>
+                                    <td><span t-esc="line['aot4']" /></td>
                                     <td><input type="checkbox" t-att-checked="'checked' if line['is_shuttle_car'] else None" disabled="disabled"/></td>
                                     <td><input type="checkbox" t-att-checked="'checked' if line['is_dine_in'] else None" disabled="disabled"/></td>
                                     <td><input type="checkbox" t-att-checked="'checked' if line['is_meal_cash'] else None" disabled="disabled"/></td>
