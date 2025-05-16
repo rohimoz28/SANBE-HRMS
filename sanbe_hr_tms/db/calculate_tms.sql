@@ -1996,7 +1996,7 @@ begin
 
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
-                                              , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in, is_meal_cash, is_cancel)
+                                              , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in, is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime)
     select hts.area_id,
            hts.branch_id,
            hts.department_id,
@@ -2015,7 +2015,18 @@ begin
            he.allowance_jemputan,
            hoe.meals,
            hoe.meals_cash,
-           hoe.is_cancel
+           hoe.is_cancel,
+           sttd.date_in,
+           sttd.aot1,
+           sttd.aot2,
+           sttd.aot3,
+           sttd.aot4,
+           case
+                when he.allowance_ot = true then 'OT'
+           	    when he.allowance_ot1 = true then 'OT 1'
+           	    when he.allowance_ot_flat  = true then 'OT Flat'
+           	    else 'None'
+           end as overtime
     from hr_overtime_planning hop
              join hr_overtime_employees hoe on hop.id = hoe.planning_id
              join hr_tmsentry_summary hts on hts.employee_id = hoe.employee_id

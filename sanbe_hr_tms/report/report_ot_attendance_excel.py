@@ -88,8 +88,9 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
             # Headers
             headers = [
                 'No', 'Employee Name', 
-                'NIK', 'Req Time Fr', 'Req Time To', 'App Time Fr', 
-                'App Time To', 'Rel Time Fr', 'Rel Time To', 'Shuttle Car', 'Dine In', 'Meal Cash', 'Cancel?' #'State', 'Period' 
+                'NIK', 'Req Date From', 'Req Time Fr', 'Req Time To', 'App Time Fr', 
+                'App Time To', 'Rel Time Fr', 'Rel Time To', 'Overtime', 'OT 1', 'OT 2', 'OT 3', 'OT 4', 
+                'Shuttle Car', 'Dine In', 'Meal Cash', 'Cancel?' #'State', 'Period' 
                 # 'Total Delay', 'Total Times Delay'
             ]
 
@@ -122,12 +123,18 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
                         # obj.req_date.strftime('%Y-%m-%d') or 'Tidak Diketahui', #Tanggal Request
                         obj.employee_id.name or None, #Employee
                         obj.nik or None, #NIK
+                        obj.req_date.strftime('%Y-%m-%d'),
                         self.float_to_time(obj.req_time_fr) or 0, #Req Time FR
                         self.float_to_time(obj.req_time_to) or 0, #Req Time To
                         self.float_to_time(obj.approve_time_from) or 0, #Approve Time From
                         self.float_to_time(obj.approve_time_to) or 0, #Approve Time To
                         self.float_to_time(obj.rlz_time_fr) or 0, #Rel Time From
                         self.float_to_time(obj.rlz_time_to) or 0, #Rel TIme To
+                        obj.overtime,
+                        obj.aot1,
+                        obj.aot2,
+                        obj.aot3,
+                        obj.aot4,
                         obj.is_shuttle_car,
                         obj.is_dine_in,
                         obj.is_meal_cash,
