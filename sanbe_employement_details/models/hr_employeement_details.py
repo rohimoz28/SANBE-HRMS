@@ -88,6 +88,6 @@ class HREmployeeAssets(models.Model):
     serial_number = fields.Char(string = 'Serial Number')
     no_ref = fields.Char(string = 'No Ref (No TTU)')
     product_id = fields.Many2one('product.product', string="Product", related="product_template_id.product_variant_id", store=True)
-    stock_lot_id = fields.Many2one(comodel_name="stock.lot", string="stock lot")
+    stock_lot_id = fields.Many2one(comodel_name="stock.lot", string="Stock Lot")
     product_template_id = fields.Many2one(comodel_name="product.template", string="product template")
 
