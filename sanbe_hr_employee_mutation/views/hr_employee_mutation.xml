@@ -140,7 +140,7 @@
                             <field name="branch_ids" invisible="1"/>
                             <field name="service_bisnisunit" readonly="state in ['approved'] or service_type not in ['muta']" force_save="1" />
                             <field name="service_departmentid" readonly="state in ['approved'] or service_type not in ['muta']" force_save="1" />
-                            <field name="service_jobtitle" readonly="state in ['approved'] or service_type not in ['muta']" />
+                            <field name="service_jobtitle" readonly="state in ['approved'] or service_type not in ['muta']" force_save="1" />
                             <field name="service_jobstatus" readonly="state in ['approved']" force_save="1" />
                             <field name="service_employementstatus" readonly="state in ['approved']" 
                                 invisible="job_status !='permanent'" force_save="1" />
