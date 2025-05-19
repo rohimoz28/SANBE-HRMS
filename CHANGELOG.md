@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.7-2025w21.3 (2025-05-19)
+
+- 5a0e8b7 [IMP] PAM : Read Only Mandatory Field di Employee ketika state bukan draft
+
+
 ## v0.0.5-2025w21.1 (2025-05-19)
 
 - 8653ad8 [IMP] PAM : Menghilangkan Product Template & Product di Asset Employment Details
