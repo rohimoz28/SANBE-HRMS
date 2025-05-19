@@ -30,11 +30,11 @@
                 <field name="allowance_ot_flat" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='ptkp']" position="replace">
-                <field name="ptkp" widget="radio" options="{'horizontal': true}"/>
+                <field name="ptkp" readonly="state not in ['draft']" widget="radio" options="{'horizontal': true}"/>
             </xpath>
             <xpath expr="//field[@name='no_sim']" position="after">
                 <field name="state" invisible="1"/>
-                <field name="exp_sim_no"/>
+                <field name="exp_sim_no" readonly="state not in ['draft']"/>
             </xpath>
             <xpath expr="//field[@name='allowance_ot_flat']" position="after">
                 <field name="allowance_ot1" invisible="1"/>

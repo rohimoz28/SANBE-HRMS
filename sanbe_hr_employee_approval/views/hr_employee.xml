@@ -234,15 +234,15 @@
                 <xpath expr="//field[@name='name']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                <xpath expr="//field[@name='mobile_phone']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='work_phone']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='work_phone']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='work_email']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='work_email']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='area']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
@@ -258,75 +258,75 @@
                 <xpath expr="//field[@name='coach_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='private_street']" position="attributes">
+                <xpath expr="//field[@name='private_street']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_street2']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_street2']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_city']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_city']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_state_id']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_state_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_zip']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_zip']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_country_id']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_country_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_email']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_email']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='berat_badan']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='berat_badan']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='tinggi_badan']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='tinggi_badan']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_phone']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_phone']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='bank_account_id']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='bank_account_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='lang']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='lang']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='km_home_work']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='km_home_work']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='private_car_plate']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='private_car_plate']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='doc_ktp']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='doc_ktp']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='doc_npwp']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='doc_npwp']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='no_sim']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='no_sim']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='insurance']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='insurance']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='jamsostek']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='jamsostek']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='children']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='children']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='first_date_join']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='title']" position="attributes">
+                <xpath expr="//field[@name='title']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='back_title']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='back_title']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='certificate']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
@@ -336,39 +336,39 @@
                 <xpath expr="//field[@name='study_school']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='ssnid']" position="attributes">
+                <xpath expr="//field[@name='ssnid']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='place_of_birth']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='place_of_birth']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='country_of_birth']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='country_of_birth']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='visa_no']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='visa_no']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='permit_no']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='permit_no']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='visa_expire']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='visa_expire']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='work_permit_expiration_date']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='work_permit_expiration_date']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='has_work_permit']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='has_work_permit']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='emergency_contact']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='emergency_contact']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='emergency_phone']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='emergency_phone']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='passport_id']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='passport_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='join_date']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
@@ -380,9 +380,9 @@
                 <xpath expr="//field[@name='employee_group1']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='identification_id']" position="attributes">
+                <xpath expr="//field[@name='identification_id']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='nik']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
@@ -398,12 +398,12 @@
                 <xpath expr="//field[@name='birthday']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
-                <!-- <xpath expr="//field[@name='gender']" position="attributes">
+                <xpath expr="//field[@name='gender']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//field[@name='religion']" position="attributes">
+                </xpath>
+                <xpath expr="//field[@name='religion']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
-                </xpath> -->
+                </xpath>
                 <xpath expr="//field[@name='job_status']" position="attributes">
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath>
