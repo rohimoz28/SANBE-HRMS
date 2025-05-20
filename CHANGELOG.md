@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.10-2025w21.6 (2025-05-20)
+
+- e23678b [FIX] PAM : Bugfix Job Position Hilang ketika Melakukan Transaksi Mutasi
+
+
 ## v0.0.7-2025w21.3 (2025-05-19)
 
 - 5a0e8b7 [IMP] PAM : Read Only Mandatory Field di Employee ketika state bukan draft
