@@ -73,3 +73,4 @@ access_export_excel_ot_bundling,sanbe_hr_tms.export.excel.ot.bundling,model_expo
 access_value_group,sanbe_hr_tms.value.group,model_value_group,base.group_user,1,1,1,1
 
 access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_absent,base.group_user,1,1,1,1
+access_sb_employee_overtime,access.sb.employee.overtime,model_sb_employee_overtime,base.group_user,1,1,1,1
