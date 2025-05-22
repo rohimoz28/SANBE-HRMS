@@ -175,9 +175,18 @@
         />
 
         <menuitem
+                id="menu_sb_employee_overtime"
+                name="Monitor Overtime"
+                sequence="14"
+                parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
+                action="sb_employee_overtime_action"
+                groups="base.group_user"
+        />
+
+        <menuitem
                 id="menu_sb_overtime_attendance"
                 name="Request vs Realization"
-                sequence="14"
+                sequence="15"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_overtime_attendance"
                 groups="module_sub_category_request_vs_realization_manager,module_sub_category_request_vs_realization_supervisor"
@@ -186,7 +195,7 @@
         <menuitem
                 id="menu_sb_overtime_bundling"
                 name="Overtime Bundling"
-                sequence="15"
+                sequence="16"
                 parent="sanbe_hr_tms.hr_menu_tabel_monitoring"
                 action="action_sb_overtime_bundling"
                 groups="module_sub_category_request_vs_realization_manager,module_sub_category_request_vs_realization_supervisor"
