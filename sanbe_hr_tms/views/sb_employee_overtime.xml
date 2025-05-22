@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sb_employee_overtime_view_tree" model="ir.ui.view">
+            <field name="name">sb.employee.overtime.view.tree</field>
+            <field name="model">sb.employee.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Monitoring Overtime" create='0' edit='0'>
+                    <field name="area_id" optional="hide"/>
+                    <field name="branch_id" optional="show"/>
+                    <field name="department_id" optional="show"/>
+                    <field name="nik" optional="show"/>
+                    <field name="employee_id" optional="show"/>
+                    <field name="attendee_total" optional="show"/>
+                    <field name="job_id" optional="show"/>
+                    <field name="net_salary" optional="show"/>
+                    <field name="pharma_allowance" optional="show"/>
+                    <field name="work_allowance" optional="show"/>
+                    <field name="family_allowance" optional="show"/>
+                    <field name="salary_total" optional="show"/>
+                    <field name="aot1" optional="show"/>
+                    <field name="aot2" optional="show"/>
+                    <field name="aot3" optional="show"/>
+                    <field name="aot4" optional="show"/>
+                    <field name="rp_aot1" optional="show"/>
+                    <field name="rp_aot2" optional="show"/>
+                    <field name="rp_aot3" optional="show"/>
+                    <field name="rp_aot4" optional="show"/>
+                    <field name="aot_total" optional="show"/>
+                    <field name="salary_allowance_total" optional="show"/>
+                    <field name="aot_salary_percentage" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sb_employee_overtime_view_search" model="ir.ui.view">
+            <field name="name">sb.employee.overtime.view.search</field>
+            <field name="model">sb.employee.overtime</field>
+            <field name="arch" type="xml">
+                <search string="Monitoring Overtime">
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
+                    <field name="nik"/>
+                    <field name="employee_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="sb_employee_overtime_action" model="ir.actions.act_window">
+            <field name="name">Monitoring Overtime</field>
+            <field name="res_model">sb.employee.overtime</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report Monitoring Overtime
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
