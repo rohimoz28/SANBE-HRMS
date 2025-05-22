@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.12-2025w21.8 (2025-05-22)
+
+- 28a9854 [FIX] TMS : Revisi menampilkan menu item monitor overtime di dashboard (2)
+
+
 ## v0.0.10-2025w21.6 (2025-05-20)
 
 - e23678b [FIX] PAM : Bugfix Job Position Hilang ketika Melakukan Transaksi Mutasi
