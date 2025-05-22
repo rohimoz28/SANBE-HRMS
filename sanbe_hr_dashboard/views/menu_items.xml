@@ -8,7 +8,15 @@
             name="Dashboard HRMS"
             action="action_sales_dashboard"
             sequence="-101"/>
-
+        
+        <menuitem
+            id="menu_sb_employee_overtime"
+            name="Monitor Overtime"
+            sequence="10"
+            parent='test_menu'
+            action="sanbe_hr_tms.sb_employee_overtime_action"
+            groups="base.group_user"
+        />
         <!-- <menuitem
             id="Sales_menu"
             name="Sales"
