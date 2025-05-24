@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="export_excel_monitor_ot_view_form" model="ir.ui.view">
+            <field name="name">export.excel.monitor.ot.view.form</field>
+            <field name="model">export.excel.monitor.ot</field>
+            <field name="arch" type="xml">
+                <form string="Monitoring Overtime" options="{'no_close': True}">
+                    <sheet>
+                        <group>
+                            <field name="area_id" no_close="1" readonly="0" options="{'no_create': True, 'no_close': True}"/>
+                        </group>
+                        <!-- <field name="allowed_department_ids" invisible="1" /> -->
+                    </sheet>
+                    <footer>
+                        <button
+                            name="button_export_xlsx"
+                            string="Export XLSX"
+                            type="object"
+                            class="oe_highlight"
+                        />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="export_excel_monitor_ot_action_wizard" model="ir.actions.act_window">
+            <field name="name">Rekap Monitor Overtime</field>
+            <field name="res_model">export.excel.monitor.ot</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="groups_id" eval="[(4, ref('sanbe_hr_tms.group_tms_user'))]"/>
+        </record>
+    
+    </data>
+    
+
+</odoo>

@@ -34,6 +34,18 @@
             </field>
         </record>
 
+        <record id="sb_employee_overtime_tree_ext" model="ir.ui.view">
+            <field name="name">sb.employee.overtime.tree.ext</field>
+            <field name="model">sb.employee.overtime</field>
+            <field name="inherit_id" ref="sanbe_hr_tms.sb_employee_overtime_view_tree"/>
+            <field name="mode">extension</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="js_class">owl_list_controller_monitor_ot</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record id="sb_employee_overtime_view_search" model="ir.ui.view">
             <field name="name">sb.employee.overtime.view.search</field>
             <field name="model">sb.employee.overtime</field>
