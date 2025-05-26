@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.14-2025w22.1 (2025-05-26)
+
+- 1984141 [FEAT] DASHBOARD : Menambahkan Fungsi Filter per 'Area' Ketika Eksport All Data Monitoring OT
+
+
 ## v0.0.12-2025w21.8 (2025-05-22)
 
 - 28a9854 [FIX] TMS : Revisi menampilkan menu item monitor overtime di dashboard (2)
