@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.16-2025w22.3 (2025-05-27)
+
+- 2336c72 [IMP] PAM : Perbaikan Field pada Form Mutasi
+
+
 ## v0.0.14-2025w22.1 (2025-05-26)
 
 - 1984141 [FEAT] DASHBOARD : Menambahkan Fungsi Filter per 'Area' Ketika Eksport All Data Monitoring OT
