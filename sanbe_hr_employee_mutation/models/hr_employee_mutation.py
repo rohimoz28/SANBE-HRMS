@@ -149,6 +149,7 @@ class HrEmployeeMutation(models.Model):
     company_id = fields.Many2one('res.company', required=True, readonly=True, default=lambda self: self.env.company, tracking=True)
     nik_lama = fields.Char('Previous NIK', tracking=True)
     service_nik_lama = fields.Char('Previous NIK', tracking=True)
+    service_birthday = fields.Date('Date of Birth')
 
     _sql_constraints = [
         (
@@ -222,6 +223,8 @@ class HrEmployeeMutation(models.Model):
             self.employee_id.write({'marital': self.marital})
         if self.service_employee_levels != self.employee_id.employee_levels:
             self.employee_id.write({'employee_levels': self.service_employee_levels})
+        if self.service_birthday != self.employee_id.birthday:
+            self.employee_id.write({'birthday': self.service_birthday})
         # if self.service_nik_lama != self.employee_id.nik_lama:
         #     self.employee_id.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
@@ -322,6 +325,7 @@ class HrEmployeeMutation(models.Model):
             existing.service_no_ktp = myemp.no_ktp
             existing.join_date = myemp.join_date
             existing.marital = myemp.marital
+            existing.service_birthday = myemp.birthday
 
             existing.service_status = 'Draft'
 
@@ -355,6 +359,8 @@ class HrEmployeeMutation(models.Model):
                             employee.write({'no_npwp': allcari.service_no_npwp})
                         elif allcari.service_no_ktp != employee.no_ktp:
                             employee.write({'no_ktp': allcari.service_no_ktp})
+                        elif allcari.service_birthday != employee.birthday:
+                            employee.write({'birthday': allcari.service_birthday})
         return True
 
     @api.model
