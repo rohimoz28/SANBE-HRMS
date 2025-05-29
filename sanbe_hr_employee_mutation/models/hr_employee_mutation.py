@@ -73,7 +73,10 @@ class HrEmployeeMutation(models.Model):
                                    ('end_contract', 'End Of Contract'),
                                    ('resigned', 'Resigned'),
                                    ('retired', 'Retired'),
+                                   ('transfer_to_group', 'Transfer To Group'),
                                    ('terminated', 'Terminated'),
+                                   ('pass_away', 'Pass Away'),
+                                   ('long_illness', 'Long Illness')
                                    ], string='Employment Status', store=True, tracking=True)
     emp_status_to_pam = fields.Selection([('probation', 'Probation'),
                                           ('confirmed', 'Confirmed'),

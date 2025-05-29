@@ -52,6 +52,7 @@ class HRCheckingID(models.Model):
                     'employee_id' : emp.id,
                     'emp_nos' : emp.id,
                     'service_type' : 'actv',
+                    'emp_status_actv' : 'confirmed',
                     'service_start' : fields.Date.today(),
                 })
                 
