@@ -91,7 +91,8 @@
                             <field name="emp_id_name" readonly="1" force_save="1"/>
                             <field name="emp_nos"
                                 options="{'no_create': True,'no_create_edit': True}"
-                                context="{'search_by': 'No','search_by_name': False}" />
+                                context="{'search_by': 'No','search_by_name': False}" 
+                                readonly="state in ['approved']"/>
                             <field name="emp_nos_ids" invisible="1"/>
                             <field name="employee_id" invisible="1" />
                             <!-- <field name="employee_name" readonly="1" force_save="1" /> -->
@@ -125,8 +126,8 @@
                             options="{'no_create': True,'no_quick_create': True}" />
                             <!--field name="employee_level" readonly="state in ['approved']" invisible="service_type != 'prom'" required="service_type == 'prom'"/-->
                             <field name="service_identification" readonly="state in ['approved']" invisible="service_type != 'corr'"/>
-                            <field name="service_nik" readonly="state in ['approved']" invisible="service_type not in ['muta','corr']" force_save="1" />
-                            <field name="service_nik_lama" readonly="1" invisible="service_type not in ['muta','corr']" force_save="1" />
+                            <field name="service_nik" readonly="state in ['approved']" invisible="service_type not in ['muta','corr','actv']" force_save="1" />
+                            <field name="service_nik_lama" readonly="1" invisible="service_type not in ['muta','corr','actv']" force_save="1" />
                             <field name="service_no_npwp" readonly="state in ['approved']" invisible="service_type != 'corr'" force_save="1" />
                             <field name="service_no_ktp" readonly="state in ['approved']" invisible="service_type != 'corr'" force_save="1" />
                             <field name="remarks" readonly="state in ['approved']" />
