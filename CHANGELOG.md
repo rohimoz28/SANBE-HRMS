@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.22-2025w23.3 (2025-06-03)
+
+- 7345238 [IMP] PAM : Menampilkan Field NIK di Form Mutasi Ketika Service Type 'Activation'
+
+
 ## v0.0.20-2025w23.1 (2025-06-03)
 
 - b58706d [IMP] PAM : Hidden Button 'NEW' Pada Contrect Type
