@@ -118,7 +118,7 @@
                                     widget="state_selection" readonly="0"/>
                             </h1>
                             <h2>
-                                <field name="contract_type_id" placeholder="Contract Type" nolabel="1"/>
+                                <field name="contract_type_id" placeholder="Contract Type" nolabel="1" options="{'no_create': True,'no_create_edit': True}"/>
 
 
                                 <field name="number" placeholder="Contract Number" nolabel="1"/>
