@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.20-2025w23.1 (2025-06-03)
+
+- b58706d [IMP] PAM : Hidden Button 'NEW' Pada Contrect Type
+
+
 ## v0.0.18-2025w22.5 (2025-05-29)
 
 - 96691a5 [FIX] PAM : Perbaikan Pada Form Checking ID
