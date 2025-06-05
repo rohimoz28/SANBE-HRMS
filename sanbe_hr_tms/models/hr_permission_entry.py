@@ -143,9 +143,9 @@ class HRPermissionEntry(models.Model):
                 ('id', '=', rec.periode_id.id),
                 ('open_periode_from','<=',rec.permission_date_from),
                 ('open_periode_to','>=',rec.permission_date_from),
-                ('state_process','=','running')], limit=1)
+                ('state_process', 'in', ['draft', 'running'])], limit=1)
             if not get_periode:
-                raise ValidationError('This period is either not opened yet or already closed.')
+                raise ValidationError('This period is already closed.')
 
     @api.onchange('permission_date_from')
     def _get_periode_id(self):
