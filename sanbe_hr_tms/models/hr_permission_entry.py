@@ -143,7 +143,7 @@ class HRPermissionEntry(models.Model):
                 ('id', '=', rec.periode_id.id),
                 ('open_periode_from','<=',rec.permission_date_from),
                 ('open_periode_to','>=',rec.permission_date_from),
-                ('state_process','=','running')], limit=1)
+                ('state_process', 'in', ['draft', 'running'])], limit=1)
             if not get_periode:
                 raise ValidationError('This period is already closed.')
 
@@ -153,7 +153,8 @@ class HRPermissionEntry(models.Model):
             get_periode = self.env['hr.opening.closing'].sudo().search([
                 # ('id', '=', rec.periode_id.id),
                 ('open_periode_from','<=',rec.permission_date_from),
-                ('open_periode_to','>=',rec.permission_date_from)], limit=1)
+                ('open_periode_to','>=',rec.permission_date_from),
+                ('branch_id','=',rec.branch_id.id)], limit=1)
             if get_periode:
                 rec.periode_id = get_periode.id
             else:
