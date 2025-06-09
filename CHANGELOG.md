@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.24-2025w23.5 (2025-06-05)
+
+- 1923ba6 [IMP] TMS : Revisi Penambahan Domain 'Business Unit' pada Period di Permission Entry
+
+
 ## v0.0.22-2025w23.3 (2025-06-03)
 
 - 7345238 [IMP] PAM : Menampilkan Field NIK di Form Mutasi Ketika Service Type 'Activation'

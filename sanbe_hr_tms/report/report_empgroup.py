@@ -44,7 +44,7 @@ class ReportEmpgroupXlsx(models.AbstractModel):
             # Headers
             headers = [
                 'Emp Group Name', 'Employee Name', 'NIK', 'Job Position', 
-                'Working Day', 'Date From', 'Date To'
+                'Shift', 'Date From', 'Date To'
             ]
             col_widths = [len(header) for header in headers]
 
@@ -77,7 +77,7 @@ class ReportEmpgroupXlsx(models.AbstractModel):
                         obj.name or 'Tidak Diketahui',
                         obj.nik or 'Tidak Diketahui',
                         obj.job_title or 'Tidak Diketahui',
-                        obj.workingday or 0,
+                        obj.workingday or None,
                         '01/12/2024',
                         '01/12/2024'
                     ]
