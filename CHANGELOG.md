@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.25-2025w24.1 (2025-06-09)
+
+- 2a820d8 [IMP] TMS : Pengubahan String pada Export to Excel Menu Emp Group
+
+
 ## v0.0.24-2025w23.5 (2025-06-05)
 
 - 1923ba6 [IMP] TMS : Revisi Penambahan Domain 'Business Unit' pada Period di Permission Entry
