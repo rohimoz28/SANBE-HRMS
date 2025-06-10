@@ -196,6 +196,13 @@
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user'))]" />
         </record>
 
+        <record id="hr_empgroup_branch_view_rule" model="ir.rule">
+            <field name="name">TMS Employee Group Access</field>
+            <field name="model_id" ref="model_hr_empgroup"/>
+            <field name="domain_force">['|',('branch_id','=',user.branch_id.id),('branch_id','in',user.branch_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
         <!-- TMS Fingerprint Settings -->
         <record id="hr_machine_setting_branch_manager_rule" model="ir.rule">
             <field name="name">TMS Fingerprint Settings Branch Manager</field>
