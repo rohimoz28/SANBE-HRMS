@@ -74,9 +74,9 @@ class ReportEmpgroupXlsx(models.AbstractModel):
                     # Prepare row data
                     data_row = [
                         current_value.value_name or '',
-                        obj.name or 'Tidak Diketahui',
-                        obj.nik or 'Tidak Diketahui',
-                        obj.job_title or 'Tidak Diketahui',
+                        obj.name or None,
+                        obj.nik or None,
+                        obj.job_title or None,
                         obj.workingday or None,
                         '01/12/2024',
                         '01/12/2024'

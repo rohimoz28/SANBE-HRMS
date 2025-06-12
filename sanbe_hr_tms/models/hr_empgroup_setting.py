@@ -23,12 +23,14 @@ class HREmpGroupSetting(models.Model):
     @api.depends('area_id')
     def _isi_semua_branch(self):
         for allrecs in self:
-            databranch = []
-            for allrec in allrecs.area_id.branch_id:
-                mybranch = self.env['res.branch'].search([('name', '=', allrec.name)], limit=1)
-                databranch.append(mybranch.id)
-            allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
-            allrecs.branch_ids = [Command.set(allbranch.ids)]
+            user_branch_ids = self.env.user.branch_ids.ids
+            allrecs.branch_ids = [(6, 0, user_branch_ids)]
+            # databranch = []
+            # for allrec in allrecs.area_id.branch_id:
+            #     mybranch = self.env['res.branch'].search([('name', '=', allrec.name)], limit=1)
+            #     databranch.append(mybranch.id)
+            # allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
+            # allrecs.branch_ids = [Command.set(allbranch.ids)]
 
     @api.depends('area_id','branch_id')
     def _isi_department_branch(self):
@@ -52,7 +54,7 @@ class HREmpGroupSetting(models.Model):
     is_inactive = fields.Boolean('In Active', copy=True,tracking=True)
     islabelstate = fields.Char('Status', copy=True)
     branch_id = fields.Many2one('res.branch',string='Bisnis Unit', copy=True,index=True,domain="[('id','in',branch_ids)]",tracking=True)
-    area_id = fields.Many2one("res.territory", string='Area ID', copy=True, index=True, required=True)
+    area_id = fields.Many2one("res.territory", domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area ID', copy=True, index=True, required=True)
     alldepartment = fields.Many2many('hr.department','hr_department_emp_set_rel', string='All Department', copy=True,compute='_isi_department_branch',store=False, tracking=True)
     department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]", copy=True,string='Sub Department',tracking=True)
     state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], default='draft', copy=True, tracking=True)
@@ -340,8 +342,8 @@ class HREmpGroupSetting(models.Model):
                 'value_name': self.name
             })
                     
-        if not tms_summaries:
-            raise UserError(_("Tidak Ada Datas Record Dari data yang dipilih"))
+        # if not tms_summaries:
+        #     raise UserError(_("Tidak Ada Datas Record Dari data yang dipilih"))
 
         return {
             'type': 'ir.actions.report',
