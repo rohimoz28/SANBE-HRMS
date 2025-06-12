@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.27-2025w24.3 (2025-06-12)
+
+- 9745380 [IMP] TMS : Perbaikan Menu Employee P Group
+
+
 ## v0.0.25-2025w24.1 (2025-06-09)
 
 - 2a820d8 [IMP] TMS : Pengubahan String pada Export to Excel Menu Emp Group
