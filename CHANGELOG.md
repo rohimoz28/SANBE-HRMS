@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.29-2025w24.5 (2025-06-13)
+
+- 244281b [IMP] PAM : Penambahan Field 'Name' dan 'Previous Name' di Transaction Mutasi
+
+
 ## v0.0.27-2025w24.3 (2025-06-12)
 
 - 9745380 [IMP] TMS : Perbaikan Menu Employee P Group
