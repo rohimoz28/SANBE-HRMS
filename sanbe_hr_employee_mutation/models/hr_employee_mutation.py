@@ -153,6 +153,8 @@ class HrEmployeeMutation(models.Model):
     nik_lama = fields.Char('Previous NIK', tracking=True)
     service_nik_lama = fields.Char('Previous NIK', tracking=True)
     service_birthday = fields.Date('Date of Birth')
+    service_name = fields.Char('Name')
+    service_previous_name = fields.Char('Previous Name')
 
     _sql_constraints = [
         (
@@ -220,6 +222,8 @@ class HrEmployeeMutation(models.Model):
             self.nik_lama = self.employee_id.nik_lama
             self.service_nik_lama = self.employee_id.nik_lama
             self.nik = self.employee_id.nik
+        if self.service_name != self.employee_id.name:
+            self.employee_id.write({'name': self.service_name})
         if self.join_date != self.employee_id.join_date:
             self.employee_id.write({'join_date': self.join_date})
         if self.marital != self.employee_id.marital:
@@ -311,6 +315,8 @@ class HrEmployeeMutation(models.Model):
             existing.employee_group1 = myemp.employee_group1
             existing.service_nik = str(str(myemp.nik).replace("('", '')).replace("')", "")
             existing.service_nik_lama = str(str(myemp.nik_lama).replace("('", '')).replace("')", "")
+            existing.service_name = myemp.name
+            existing.service_previous_name = myemp.name
             existing.nik_lama = existing.service_nik_lama
             existing.service_area = myemp.area.id
             existing.service_bisnisunit = myemp.department_id.branch_id.id or myemp.branch_id.id
