@@ -116,6 +116,8 @@
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
                             <field name="emp_status_to_pam" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="service_name" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="service_previous_name" invisible="service_type not in ['corr']" readonly="1" force_save="1" />
                             <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
                             <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
                             <field name="emp_status_actv" invisible="service_type not in ['actv']" required="service_type in ['actv']"  readonly="state in ['approved']" force_save="1" />
