@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.31-2025w25.1 (2025-06-18)
+
+- d746fbf [FIX] PAM : Bugfix Error Ketika Eksport Employee dengan Mode Debug Hidup
+
+
 ## v0.0.29-2025w24.5 (2025-06-13)
 
 - 244281b [IMP] PAM : Penambahan Field 'Name' dan 'Previous Name' di Transaction Mutasi
