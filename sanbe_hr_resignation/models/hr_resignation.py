@@ -117,7 +117,16 @@ class HrResignation(models.Model):
             myear = 0
             mmonth = 0
             mday = 0
-            mycont = self.env['hr.contract'].sudo().search([('employee_id','=',record.employee_id.id)],limit=1)
+
+            record.cs_year = 0
+            record.cs_month = 0
+            record.cs_day = 0
+            record.contract_id = False
+
+            if not record.employee_id:
+                continue 
+
+            mycont = self.env['hr.contract'].sudo().search([('employee_id','=',record.employee_id.id)],order='id desc',limit=1)
             if mycont:
                 record.contract_id = mycont.id
                 service_until = record.contract_dateto
@@ -157,7 +166,7 @@ class HrResignation(models.Model):
             if not rec.employee_contract:
                 return
             employee_contract = self.env['hr.contract'].search(
-                [('employee_id', '=', rec.employee_id.id)])
+                [('employee_id', '=', rec.employee_id.id)],order='id desc',limit=1)
             for contracts in employee_contract:
                 #if contracts.state == 'open':
                 rec.contract_id = contracts.id
