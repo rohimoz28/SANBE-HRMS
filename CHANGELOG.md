@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.33-2025w25.3 (2025-06-19)
+
+- 74cb077 [FIX] PAM : Perbaikan Data Tanggal End Contract di Form Employee Exit
+
+
 ## v0.0.31-2025w25.1 (2025-06-18)
 
 - d746fbf [FIX] PAM : Bugfix Error Ketika Eksport Employee dengan Mode Debug Hidup
