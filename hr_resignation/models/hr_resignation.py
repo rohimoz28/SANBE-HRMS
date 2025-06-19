@@ -163,7 +163,7 @@ class HrResignation(models.Model):
                     _('There is a resignation request in confirmed or'
                       ' approved state for this employee'))
             employee_contract = self.env['hr.contract'].search(
-                [('employee_id', '=', self.employee_id.id)])
+                [('employee_id', '=', self.employee_id.id)],order='id desc',limit=1)
             for contracts in employee_contract:
                 if contracts.state == 'open':
                     self.employee_contract = contracts.name
@@ -256,7 +256,7 @@ class HrResignation(models.Model):
             if (resignation.expected_revealing_date and
                     resignation.resign_confirm_date):
                 employee_contract = self.env['hr.contract'].search(
-                    [('employee_id', '=', self.employee_id.id)])
+                    [('employee_id', '=', self.employee_id.id)],order='id desc',limit=1)
                 # print('0000000000000000')
                 if employee_contract:
                     # raise ValidationError(
