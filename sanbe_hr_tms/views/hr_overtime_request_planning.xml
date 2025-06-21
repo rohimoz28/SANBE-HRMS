@@ -42,6 +42,7 @@
                                    readonly="state == 'approved' or state == 'done'"/>
                             <field name="approve1" readonly="state == 'done'"/>
                             <field name="approve2" readonly="state == 'done'"/>
+                            <field name="approve4" readonly="state == 'done'"/>
                             <field name="approve3" readonly="state == 'done'"/>
                         </group>
                         <group>
