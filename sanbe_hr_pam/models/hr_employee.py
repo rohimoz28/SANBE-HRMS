@@ -41,6 +41,16 @@ class HrEmployee(models.Model):
     leave_calculation = fields.Selection(selection=[('contract_based', "Contract Based"),
                                     ('first_month', "First Month"),],
                                     string="Leave Calc")
+    private_street = fields.Char(string="Private Street", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
+    private_street2 = fields.Char(string="Private Street2", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
+    private_city = fields.Char(string="Private City", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
+    private_state_id = fields.Many2one(
+        "res.country.state", string="Private State",
+        domain="[('country_id', '=?', private_country_id)]",
+        groups="hr.group_hr_user", 
+        compute="_compute_last_address", store="True")
+    private_zip = fields.Char(string="Private Zip", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
+    private_country_id = fields.Many2one("res.country", string="Private Country", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
 
     _sql_constraints = [
         # ('nik_uniq', 'check(1=1)', "The NIK  must be unique, this one is already assigned to another employee."),
@@ -182,3 +192,22 @@ class HrEmployee(models.Model):
             mycontract.write({'employee_id': res.id})
         
         return res
+    
+    @api.depends('address_ids.address', 'address_ids.city', 'address_ids.district', 'address_ids.default', 'address_ids.private_state_id', 'address_ids.private_country_id')
+    def _compute_last_address(self):
+        for employee in self:
+            last_address = employee.address_ids.filtered(lambda e: e.default)
+            if last_address:
+                employee.private_street = last_address[0].address
+                employee.private_street2 = last_address[0].district
+                employee.private_city = last_address[0].city
+                employee.private_zip = last_address[0].private_zip
+                employee.private_state_id = last_address[0].private_state_id
+                employee.private_country_id = last_address[0].private_country_id
+            else:
+                employee.private_street = False
+                employee.private_street2 = False
+                employee.private_city = False
+                employee.private_zip = False
+                employee.private_state_id = False
+                employee.private_country_id = False
