@@ -6,8 +6,13 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="sanbe_hr_extended.hr_employee_extended_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']//label[@for='private_street']" position="replace"/>
+            <xpath expr="//page[@name='personal_information']//div[@class='o_address_format']" position="replace"/>
+            <xpath expr="//field[@name='employee_properties']" position="replace"/>
+            <xpath expr="//field[@name='work_location_id']" position="replace"/>
             <xpath expr="//field[@name='address_id']" position="after">
-                <label for="street" string="Work Address"/>
+                <group>
+                    <label for="street" string="Work Address"/>
                     <div class="o_address_format">
                         <field name="street" nolabel='1' invisible="not street"/>
                         <field name="street2" nolabel='1' invisible="not street2"/>
@@ -16,6 +21,18 @@
                         <field name="zip" nolabel='1' invisible="not zip"/>
                         <field name="country_id" nolabel='1' options="{'no_create': True, 'no_open': True}" invisible="not country_id"/>
                     </div>
+                </group>
+                <group>
+                    <label for="private_street" string="Private Address"/>
+                    <div class="o_address_format">
+                        <field name="private_street" nolabel='1' placeholder="Street..." invisible="not private_street"/>
+                        <field name="private_street2" nolabel='1' placeholder="Street 2..." invisible="not private_street2"/>
+                        <field name="private_city" nolabel='1' placeholder="City" invisible="not private_city"/>
+                        <field name="private_state_id" nolabel='1' options="{'no_create': True, 'no_open': True}" placeholder="State" invisible="not private_state_id"/>
+                        <field name="private_zip" nolabel='1' placeholder="ZIP" invisible="not private_zip"/>
+                        <field name="private_country_id" nolabel='1' options="{'no_create': True, 'no_open': True}" placeholder="Country" invisible="not private_country_id"/>
+                    </div>
+                </group>
             </xpath>
             <xpath expr="//field[@name='address_id']" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -44,6 +61,14 @@
             </xpath>
             <xpath expr="//field[@name='overtime']" position="after">
                 <field name="leave_calculation" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
+            <xpath expr="//div[@class='oe_chatter']" position="replace"/>
+            <xpath expr="//notebook" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user" options="{'post_refresh': 'recipients'}"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </xpath>
         </field>
     </record>
