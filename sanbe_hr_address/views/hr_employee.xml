@@ -31,7 +31,7 @@
                     <notebook>
                         <page name="list_address" string="Employee Address">
                             <field name="address_ids">
-                                <tree editable="bottom" class="o_horizontal_scroll">
+                                <tree editable="bottom" delete="False" class="o_horizontal_scroll">
                                     <field name="employee_id" column_invisible="True"/>
                                     <field name="address_type"/>
                                     <field name="address"/>
@@ -40,7 +40,12 @@
                                     <field name="subdistrict"/>
                                     <field name="district"/>
                                     <field name="city"/>
+                                    <field name="private_zip"/>
+                                    <field name="private_country_id" options="{'no_create': True}"/>
+                                    <field name="private_state_id" options="{'no_create': True}"/>
                                     <field name="default"/>
+                                    <button name="action_confirm_delete" string="Hapus" type="object"
+                                            icon="fa-trash" confirm="Apakah Anda yakin ingin menghapus alamat ini?"/>
                                 </tree>
                             </field>
                         </page>
