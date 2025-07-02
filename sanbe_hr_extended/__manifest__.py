@@ -38,6 +38,9 @@
         'views/hr_contract_type.xml',
 
         'wizards/hr_employee_wizard.xml',
+        'wizards/employee_report_wizard.xml',
+
+        'controllers/employee_report_html.xml',
     ],
     'assets': {
         'web.assets_backend': [

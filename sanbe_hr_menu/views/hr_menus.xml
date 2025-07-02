@@ -78,6 +78,12 @@
               parent="hr.menu_hr_root"
               name="Documents"
               sequence="4"/>
+        
+        <menuitem id="employee_report_menu_root"
+              parent="hr.menu_hr_root"
+              name="Employee Report"
+              action="sanbe_hr_extended.action_employee_report_wizard"
+              sequence="90"/>
 
         <!-- Configuration Menu -->
         <menuitem
