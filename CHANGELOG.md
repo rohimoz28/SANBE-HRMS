@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.39-2025w27.1 (2025-07-02)
+
+- 56786b6 [FEAT] PAM : Report Laporan Karyawan
+
+
 ## v0.0.37-2025w26.1 (2025-06-25)
 
 - b2e238f [IMP] PAM : Improvement Field Alamat Pribadi di Tab Sheet Address Information
