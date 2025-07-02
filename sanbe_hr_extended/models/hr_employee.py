@@ -78,7 +78,7 @@ class HrEmployee(models.Model):
     state_id = fields.Char(related='branch_id.state_id')
     zip = fields.Char(related='branch_id.zip')
     country_id = fields.Many2one(related='branch_id.country_id')
-    department_id = fields.Many2one(domain="[('id','in',alldepartment),('active','=',True)]", required=True,
+    department_id = fields.Many2one(domain="[('id','in',alldepartment),('is_active','=',True)]", required=True,
                                     string='Sub Department')
     employee_id = fields.Char('Employee ID', default='New')
     nik = fields.Char('NIK')

@@ -15,6 +15,8 @@ from odoo.osv import expression
 class HrDepartment(models.Model):
     _inherit = "hr.department"
 
+    is_active = fields.Boolean('Active')
+
     @api.model
     def default_get(self, default_fields):
         res = super(HrDepartment, self).default_get(default_fields)
