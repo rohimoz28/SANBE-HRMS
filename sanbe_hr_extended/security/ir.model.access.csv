@@ -8,3 +8,4 @@ access_hr_employee_branches_users,access.hr.employee.branches.users,model_hr_emp
 access_hr_departmentss,access_hr_departmentss_user,model_hr_department,base.group_user,1,1,1,1
 access_hr_employee_branches_manager,access.hr.employee.branches.manager,model_hr_employee,base_territory.group_branch_user_manager,1,1,1,1
 access_hr_employee_export_wizard,sanbe_hr_extended.hr.employee.export.wizard,model_hr_employee_export_wizard,base.group_user,1,1,1,1
+access_hr_contract_type,sanbe_hr_extended.hr.contract.type,model_hr_contract_type,base.group_user,1,1,1,1
