@@ -51,6 +51,7 @@ class HrContract(models.Model):
                                 ('3','3'),
                                 ('4','4'),
                                 ('5','5')],string='# of PKWT',ondelete='cascade')
+    contract_type_id = fields.Many2one('hr.contract.type', "Contract Type", domain=[('is_active', '=', True)], tracking=True)
     # @api.model
     # def name_create(self, name):
     #     default_type = self._context.get('employee_name')

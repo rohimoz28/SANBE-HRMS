@@ -257,5 +257,18 @@
                 </xpath>
             </field>
         </record>
+        
+        <record id="view_search_employee_filter_dept_active" model="ir.ui.view">
+            <field name="name">hr.employee.view.search.dept.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <filter name="department_active" string="Dept. Active" domain="[('department_id.is_active', '=', True)]"/>
+                    <filter name="department_inactive" string="Dept. Inactive" domain="[('department_id.is_active', '=', False)]"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>

@@ -34,6 +34,8 @@
         'data/hitung_employee_ws.xml',
         'data/sequence_employee_id.xml',
         'views/hr_contracts.xml',
+        'views/hr_department.xml',
+        'views/hr_contract_type.xml',
 
         'wizards/hr_employee_wizard.xml',
         'wizards/employee_report_wizard.xml',
