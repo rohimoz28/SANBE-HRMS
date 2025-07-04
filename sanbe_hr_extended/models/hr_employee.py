@@ -6,16 +6,15 @@
 # youtube   => https://www.youtube.com/channel/UCCtgLDIfqehJ1R8cohMeTXA
 #################################################################################
 import pytz
-import re
 from odoo import api, fields, models, _, Command
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from odoo.osv import expression
 from datetime import date
 
 EMP_GROUP1 = [
-    # ('Group1', 'Group 1 - Harian(pak Deni)'),
+    ('Group1', 'Group 1 - Harian(pak Deni)'),
     ('Group2', 'Group 2 - bulanan pabrik(bu Felisca)'),
     ('Group3', 'Group 3 - Apoteker and Mgt(pak Ryadi)'),
     ('Group4', 'Group 4 - Security and non apoteker (bu Susi)'),
@@ -99,7 +98,7 @@ class HrEmployee(models.Model):
                                  ('budha', 'Budha')],
                                 default='islam', string='Religion')
 
-    join_date = fields.Date('Join Date Permanent')
+    join_date = fields.Date('Join Date')
     job_status = fields.Selection([('permanent', 'Permanent'),
                                    ('contract', 'Contract'),
                                    ('outsource', 'Outsource'),
@@ -253,18 +252,6 @@ class HrEmployee(models.Model):
     #    #myemployees = self.env['hr.employee'].search([])
     #    #for allemps in myemployees:
     #    #    allemps.write({'nik_lama': ''})
-
-    @api.constrains('no_ktp')
-    def _check_no_ktp(self):
-        for rec in self:
-            if rec.no_ktp and not re.fullmatch(r'\d{16}', rec.no_ktp):
-                raise ValidationError("No KTP harus terdiri dari 16 digit angka.")
-
-    @api.constrains('no_npwp')
-    def _check_no_npwp(self):
-        for rec in self:
-            if rec.no_npwp and not re.fullmatch(r'[\d\-.]{16}', rec.no_npwp):
-                raise ValidationError("No NPWP harus berisi 16 karakter dan hanya boleh terdiri dari angka, titik, dan strip.")
 
     def _get_selection_marital_options(self):
         return [('single', _("Single")),('married', _("Married")),('separate', _("Separate"))]
