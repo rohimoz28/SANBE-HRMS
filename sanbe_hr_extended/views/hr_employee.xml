@@ -101,10 +101,10 @@
                     position="attributes">
                     <attribute name="string">Private</attribute>
                 </xpath>
-                <xpath expr="//field[@name='private_email']" position="after">
+                <!-- <xpath expr="//field[@name='private_email']" position="after">
                     <field name="berat_badan" />
                     <field name="tinggi_badan" />
-                </xpath>
+                </xpath> -->
                 <xpath expr="//field[@name='parent_id']" position="attributes">
                     <attribute name="option">{'no_create': True}</attribute>
                 </xpath>
