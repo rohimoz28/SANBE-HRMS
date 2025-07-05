@@ -55,6 +55,19 @@ class HrEmployee(models.Model):
     family_info_ids = fields.One2many('hr.employee.family', 'employee_id',
                                       string='Family',
                                       help='Family Information')
+    emergency_contact = fields.Char("Contact Name", tracking=True, compute='_compute_emergency')
+    emergency_phone = fields.Char("Contact Phone", tracking=True, compute='_compute_emergency')
+
+    @api.depends('family_info_ids.member_name','family_info_ids.member_contact')
+    def _compute_emergency(self):
+        for record in self:
+            emergency = record.family_info_ids.filtered(lambda e: e.emergency_contact)
+            if emergency:
+                record.emergency_contact = emergency[0].member_name
+                record.emergency_phone = emergency[0].member_contact
+            else:
+                record.emergency_contact = False
+                record.emergency_phone = False
 
     @api.depends('contract_id')
     def _compute_joining_date(self):
@@ -140,3 +153,28 @@ class HrEmployeeFamily(models.Model):
                              help='Birth date of the family member')
     address = fields.Text('Address')
     emergency_contact = fields.Boolean('Emergency Contact',default=False)
+
+    @api.model
+    def create(self, vals):
+        record = super().create(vals)
+        if vals.get('emergency_contact') and vals.get('employee_id'):
+            record._unset_other_default()
+        return record
+
+    def write(self, vals):
+        result = super().write(vals)
+        if vals.get('emergency_contact') and vals.get('employee_id', self.employee_id.id):
+            self._unset_other_default()
+        return result
+
+    def _unset_other_default(self):
+        self.search([
+            ('employee_id', '=', self.employee_id.id),
+            ('id', '!=', self.id),
+            ('emergency_contact', '=', True)
+        ]).write({'emergency_contact': False})
+    
+    def action_confirm_delete(self):
+        self.unlink()
+    
+
