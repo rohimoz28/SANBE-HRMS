@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.49-2025w27.11 (2025-07-05)
+
+- 40d946a [IMP] PAM : Perbaikan Tab Sheet 'Employment Details' pada Form Employee
+
+
 ## v0.0.47-2025w27.9 (2025-07-05)
 
 - d41dd59 [IMP] PAM : Perbaikan Form Employee Tab Sheet Job Information 2
