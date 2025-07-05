@@ -9,6 +9,9 @@
                 <xpath expr="//field[@name='job_id']" position="attributes">
                     <attribute name="options">{'no_create': True,'no_quick_create': True}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='join_date']" position="after">
+                    <field name="confirm_probation"/>
+                </xpath>
                 <xpath expr="//page[@name='personal_information']" position="after">
                     <page name="employement_details" string="Employment Details">
                         <group>
@@ -17,16 +20,15 @@
                                 <field name="periode_probation" readonly="job_status !='permanent'"/>
                                 <field name="retire_age" readonly="job_status =='contract'"/>
                                 <field name="bond_service"/>
-                                <field name="is_pinalty"/>
+                                <field name="service_from" invisible="bond_service == False"/>
+                                <field name="service_to" invisible="bond_service == False"/>
                                 <field name="resign_notice"/>
-                                <field name="pinalty_bs"/>
                             </group>
                             <group>
                                 <field name="ext_probation" readonly="job_status !='permanent'"/>
-                                <field name="confirm_probation"/>
                                 <field name="pension_date" string="End Of Pension Date" force_save="1"/>
-                                <field name="service_from" readonly="bond_service == True"/>
-                                <field name="service_to" readonly="bond_service == True"/>
+                                <field name="is_pinalty"/>
+                                <field name="pinalty_bs"/>
                                 <field name="pinalty_amount"/>
                             </group>
                         </group>
