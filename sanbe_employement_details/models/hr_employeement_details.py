@@ -33,14 +33,14 @@ class HREmployee(models.Model):
 
     periode_probation = fields.Integer('Periode Probation',default=3,readonly="job_status != 'permanent'")
     ext_probation = fields.Integer('Ext Prob',readonly="job_status != 'permanent'")
-    confirm_probation = fields.Date('Confirmation Date',compute='hitung_confirmation',store=False,readonly=False)
+    confirm_probation = fields.Date('Tanggal Pengangkatan',compute='hitung_confirmation',store=False,readonly=False)
     retire_age = fields.Integer('Retire Age',default=55)
     pension_date = fields.Date('Pension Date',compute='_isi_pensiunemployee',store=False,readonly=False)
     bond_service = fields.Boolean('Bond Services',default=False)
     service_from = fields.Date('Service From')
     service_to = fields.Date('To')
     is_pinalty = fields.Boolean('Pinalty',default=False)
-    pinalty_bs = fields.Integer('Pinalty BS')
+    pinalty_bs = fields.Integer('Pinalty BS + Tunjangan')
 
     pinalty_amount = fields.Monetary('Penalty Amount')
     resign_notice = fields.Integer('Resign Notice')
