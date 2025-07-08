@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.51-2025w28.1 (2025-07-08)
+
+- dda3fb6 [FIX] PAM : Bugfix & Improvement - Validasi Input dan Penghapusan Data Pendidikan
+
+
 ## v0.0.49-2025w27.11 (2025-07-05)
 
 - 40d946a [IMP] PAM : Perbaikan Tab Sheet 'Employment Details' pada Form Employee
