@@ -65,6 +65,9 @@
                     <field name="nama_pekerjaans" invisible="1" />
                     <field name="no_sim" required="nama_pekerjaans =='Driver' " />
                 </xpath>
+                <xpath expr="//field[@name='ssnid']" position="before">
+                    <field name="race" />
+                </xpath>
                 <xpath expr="//field[@name='certificate']" position="before">
                     <field name="title" />
                 </xpath>
@@ -149,6 +152,7 @@
                 <xpath expr="//field[@name='gender']" position="replace" />
                 <xpath expr="//field[@name='private_phone']" position="before">
                     <field name="gender" />
+                    <field name="blood_type" />
                 </xpath>
                 <xpath expr="//field[@name='identification_attachment_ids']" position="after">
                     <field name="religion" required="1" />
