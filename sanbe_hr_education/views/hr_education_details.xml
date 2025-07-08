@@ -24,11 +24,12 @@
                                 <field name="employee_id" invisible="1"/>
                                 <field name="year_garduated"/>
                                 <field name="majoring"/>
-                                <field name="level_certificated_sd" invisible="school_level not in ['sd']"/>
-                                <field name="level_certificated_smp" invisible="school_level not in ['smp']"/>
-                                <field name="level_certificated_sma" invisible="school_level not in ['sma']"/>
-                                <field name="level_certificated_univ" invisible="school_level not in ['universitas']"/>
-                                <field name="gpa"/>
+                                <field name="level_certificated_sd" invisible="school_level not in ['sd']" required="school_level in ['sd']"/>
+                                <field name="level_certificated_smp" invisible="school_level not in ['smp']" required="school_level in ['smp']"/>
+                                <field name="level_certificated_sma" invisible="school_level not in ['sma']" required="school_level in ['sma']"/>
+                                <field name="level_certificated_univ" invisible="school_level not in ['universitas']" required="school_level in ['universitas']"/>
+                                <field name="gpa" invisible="school_level not in ['universitas']"/>
+                                <field name="final_score" invisible="school_level not in ['sd','smp','sma']"/>
                                 <field name="is_last_edu"/>
                         </group>
                     </sheet>
@@ -40,7 +41,7 @@
             <field name="name">employee.educations.level.tree</field>
             <field name="model">employee.educations</field>
             <field name="arch" type="xml">
-                <tree string="Employee Educations Level">
+                <tree string="Employee Educations Level" delete="False">
                     <field name="employee_id" column_invisible="1"/>
                     <field name="school_level"/>
                     <field name="name"/>
@@ -48,7 +49,10 @@
                     <field name="majoring"/>
                     <field name="level_certificated"/>
                     <field name="gpa"/>
+                    <field name="final_score"/>
                     <field name="is_last_edu"/>
+                    <button name="action_confirm_delete" string="Hapus" type="object"
+                            icon="fa-trash" confirm="Apakah Anda yakin ingin menghapus data pendidikan ini?"/>
                 </tree>
             </field>
         </record>
