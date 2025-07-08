@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,ValidationError
 import requests
 import logging
 _logger = logging.getLogger(__name__)
@@ -39,8 +39,10 @@ class HrEmployee(models.Model):
                                     ('none', "None"),],
                                     string="Overtime")
     leave_calculation = fields.Selection(selection=[('contract_based', "Contract Based"),
-                                    ('first_month', "First Month"),],
+                                    ('first_month', "First Month"),
+                                    ('other', "Other"),],
                                     string="Leave Calc")
+    leave_date = fields.Integer('Tanggal Tambah Cuti')
     private_street = fields.Char(string="Private Street", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
     private_street2 = fields.Char(string="Private Street2", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
     private_city = fields.Char(string="Private City", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
@@ -211,3 +213,14 @@ class HrEmployee(models.Model):
                 employee.private_zip = False
                 employee.private_state_id = False
                 employee.private_country_id = False
+
+    @api.constrains('leave_date')
+    def _constrains_leave_date(self):
+        for rec in self:
+            if rec.leave_calculation == 'other' and (rec.leave_date <= 0 or rec.leave_date > 31):
+                raise ValidationError("Tanggal tambah cuti hanya bisa diisi dari 1 - 31.")
+    
+    @api.onchange('leave_calculation')
+    def _onchange_leave_calculation(self):
+        if self.leave_calculation == 'other' and not self.leave_date:
+            self.leave_date = 1

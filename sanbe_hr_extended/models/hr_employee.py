@@ -94,9 +94,10 @@ class HrEmployee(models.Model):
     license = fields.Char('License')
     religion = fields.Selection([('islam', 'Islam'),
                                  ('katolik', 'Katolik'),
-                                 ('protestan', 'Protestan'),
+                                 ('kristen', 'Kristen'),
                                  ('hindu', 'Hindu'),
-                                 ('budha', 'Budha')],
+                                 ('budha', 'Budha'),
+                                 ('konghucu', 'Kong Hu CU')],
                                 default='islam', string='Religion')
 
     join_date = fields.Date('Join Date Permanent')
@@ -195,6 +196,13 @@ class HrEmployee(models.Model):
                                      ('sd','SD')],compute="_compute_last_education_fields",store=True,string='Certificate Level')
     study_field = fields.Char('Field of Study',compute="_compute_last_education_fields",store=True)
     study_school = fields.Char('School',compute="_compute_last_education_fields",store=True)
+    blood_type = fields.Selection([
+        ('a', 'A'),
+        ('b', 'B'),
+        ('ab', 'AB'),
+        ('o', 'O'),
+    ], string='Golongan Darah')
+    race = fields.Char('Ras')
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,
