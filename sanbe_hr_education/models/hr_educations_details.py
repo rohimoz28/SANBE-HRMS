@@ -28,7 +28,7 @@ class EducationLevel(models.Model):
                                      ('d4', 'D4'),
                                      ('sma','SMA'),
                                      ('smp','SMP'),
-                                     ('sd','SD')],default='s1',compute="_compute_level_certificated",string='Certificate Level')
+                                     ('sd','SD')],compute="_compute_level_certificated",string='Certificate Level', store=True)
     level_certificated_sd = fields.Selection([('sd','SD')],default='sd',string='Certificate Level')
     level_certificated_smp = fields.Selection([('smp','SMP')],default='smp',string='Certificate Level')
     level_certificated_sma = fields.Selection([('sma','SMA')],default='sma',string='Certificate Level')
@@ -40,8 +40,10 @@ class EducationLevel(models.Model):
                                      ],default='s1',string='Certificate Level')
     gpa = fields.Float('GPA')
     is_last_edu = fields.Boolean('Last Education')
+    final_score = fields.Float('Nilai Akhir')
     
     @api.depends('school_level', 'level_certificated_sd', 'level_certificated_smp', 'level_certificated_sma', 'level_certificated_univ')
+    @api.onchange('school_level', 'level_certificated_sd', 'level_certificated_smp', 'level_certificated_sma', 'level_certificated_univ')
     def _compute_level_certificated(self):
         for rec in self: 
             if rec.school_level in ['sd']:
@@ -50,8 +52,16 @@ class EducationLevel(models.Model):
                 rec.level_certificated = rec.level_certificated_smp
             elif rec.school_level in ['sma']:
                 rec.level_certificated = rec.level_certificated_sma
-            else:
+            elif rec.school_level in ['universitas']:
                 rec.level_certificated = rec.level_certificated_univ
+
+    @api.onchange('school_level')
+    def _onchange_final_score(self):
+        for rec in self:
+            if rec.school_level in ['sd','smp','sma']:
+                rec.gpa = False
+            elif rec.school_level in ['universitas']:
+                rec.final_score = False
 
     @api.model
     def create(self, vals):
@@ -84,3 +94,6 @@ class EducationLevel(models.Model):
                    for node in arch.xpath("//button"):
                           node.set('invisible', 'True')
         return arch, view
+    
+    def action_confirm_delete(self):
+        self.unlink()
