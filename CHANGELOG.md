@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.53-2025w28.3 (2025-07-08)
+
+- 9027078 [IMP] PAM : Improvement Form Employee
+
+
 ## v0.0.51-2025w28.1 (2025-07-08)
 
 - dda3fb6 [FIX] PAM : Bugfix & Improvement - Validasi Input dan Penghapusan Data Pendidikan
