@@ -6,4 +6,5 @@
 # youtube   => https://www.youtube.com/channel/UCCtgLDIfqehJ1R8cohMeTXA
 #################################################################################
 
+from . import wizards
 from . import models
