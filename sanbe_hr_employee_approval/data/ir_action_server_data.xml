@@ -12,24 +12,3 @@
         ]]></field>
     </record>
 </odoo>
-
-
-
-<!--<odoo>
-    <data>
-        <record id="action_employees_skk" model="ir.actions.server">
-            <field name="name">Print Surat Keterangan</field>
-            <field name="model_id" ref="hr.model_hr_employee"/>
-            <field name="binding_model_id" ref="hr.model_hr_employee"/>
-            <field name="binding_view_types">list,form</field>
-            <field name="binding_type">report</field>
-            <field name="groups" eval="[(4, ref('base.group_hr_manager'))]"/>
-            <field name="state">code</field>
-    
-            <field name="code">
-                action = env['ir.actions.act_window']._for_xml_id('sanbe_hr_employee_approval.action_skk_employee_wizard')
-            </field>
-        </record>
-    </data>
-</odoo> -->
-     

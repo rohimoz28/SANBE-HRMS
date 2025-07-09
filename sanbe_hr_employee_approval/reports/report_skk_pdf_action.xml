@@ -3,6 +3,14 @@
     <data>
         <template id="skk_pdf_format">
             <t t-call="web.external_layout">
+                <style>
+                    .no-border-table,
+                    .no-border-table td,
+                    .no-border-table tr {
+                        border: none !important;
+                        border-collapse: collapse;
+                    }
+                </style>
                 <div class="page">
                     <div class="text-center" style="text-align: center;">
                         <p style="text-align:center;">
@@ -18,7 +26,7 @@
                     </div>
                     <br/>
                     <p style="font-size:17px;">Yang bertanda tangan di bawah ini:</p>
-                    <table class="table table-sm">
+                    <table class="no-border-table">
                         <tr>
                             <td style="width:50px;"></td>
                             <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
@@ -34,7 +42,7 @@
                     </table>
 
                     <p style="font-size:17px;">Menerangkan bahwa:</p>
-                    <table class="table table-sm">
+                    <table class="no-border-table">
                         <tr>
                             <td style="width:50px;"></td>
                             <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
@@ -75,7 +83,6 @@
                     <div class="text-right">
                         <p style="font-size:17px;">Bandung, <t t-esc="dates"/>
                         </p>
-                        <br/>
                         <br/>
                         <br/>
                         <br/>
