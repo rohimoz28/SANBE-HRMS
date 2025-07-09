@@ -3,6 +3,13 @@
     <data>
         <template id="skk_pdf_format">
             <t t-call="web.external_layout">
+                <style>
+                    .no-border-table,
+                    .no-border-table td,
+                    .no-border-table tr {
+                        border: none !important;
+                    }
+                </style>
                 <div class="page">
                     <div class="text-center" style="text-align: center;">
                         <p style="text-align:center;">
@@ -18,39 +25,39 @@
                     </div>
                     <br/>
                     <p style="font-size:17px;">Yang bertanda tangan di bawah ini:</p>
-                    <table class="table table-sm">
-                        <tr>
-                            <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Asep Rohman, SH.</span></strong>
+                    <table style="border: none; border-collapse: collapse;" class="table table-sm">
+                        <tr style="border: none;">
+                            <td style="width:50px; border: none;"></td>
+                            <td style="width:150px; font-size:17px; border: none;"><strong>Nama</strong></td>
+                            <td style="font-size:17px; border: none;">:&#160;&#160;<strong><span>Asep Rohman, SH.</span></strong>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Jabatan</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Personnel &amp; General Affairs Manager</span></strong>
+                        <tr style="border: none;">
+                            <td style="width:50px; border: none;"></td>
+                            <td style="width:150px; font-size:17px; border: none;"><strong>Jabatan</strong></td>
+                            <td style="font-size:17px; border: none;">:&#160;&#160;<strong><span>Personnel &amp; General Affairs Manager</span></strong>
                             </td>
                         </tr>
                     </table>
 
                     <p style="font-size:17px;">Menerangkan bahwa:</p>
-                    <table class="table table-sm">
-                        <tr>
-                            <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.name"/></strong>
+                    <table style="border: none; border-collapse: collapse;" class="table table-sm">
+                        <tr style="border: none;">
+                            <td style="width:50px; border: none;"></td>
+                            <td style="width:150px; font-size:17px; border: none;"><strong>Nama</strong></td>
+                            <td style="font-size:17px; border: none;">:&#160;&#160;<strong><span t-field="o.employee_id.name"/></strong>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Jabatan</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.job_id.name"/></strong>
+                        <tr style="border: none;">
+                            <td style="width:50px; border: none;"></td>
+                            <td style="width:150px; font-size:17px; border: none;"><strong>Jabatan</strong></td>
+                            <td style="font-size:17px; border: none;">:&#160;&#160;<strong><span t-field="o.employee_id.job_id.name"/></strong>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="width:50px;"></td>
-                            <td style="width:150px;font-size:17px;"><strong>NIK</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.nik"/></strong>
+                        <tr style="border: none;">
+                            <td style="width:50px; border: none;"></td>
+                            <td style="width:150px;font-size:17px; border: none;"><strong>NIK</strong></td>
+                            <td style="font-size:17px; border: none;">:&#160;&#160;<strong><span t-field="o.employee_id.nik"/></strong>
                             </td>
                         </tr>
                     </table>
@@ -75,7 +82,6 @@
                     <div class="text-right">
                         <p style="font-size:17px;">Bandung, <t t-esc="dates"/>
                         </p>
-                        <br/>
                         <br/>
                         <br/>
                         <br/>
