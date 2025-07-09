@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id="skk_pdf_format">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center" style="text-align: center;">
+                        <p style="text-align:center;">
+                            <span style="font-size:25px;">
+                                <strong>
+                                    <u>SURAT KETERANGAN KERJA</u>
+                                </strong>
+                            </span>
+                            <br/>
+                            <span style="font-size:20px;"><span t-field="o.name"/>
+                            </span>
+                        </p>
+                    </div>
+                    <br/>
+                    <p style="font-size:17px;">Yang bertanda tangan di bawah ini:</p>
+                    <table class="table table-sm">
+                        <tr>
+                            <td style="width:50px;"></td>
+                            <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
+                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Asep Rohman, SH.</span></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50px;"></td>
+                            <td style="width:150px; font-size:17px;"><strong>Jabatan</strong></td>
+                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Personnel &amp; General Affairs Manager</span></strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="font-size:17px;">Menerangkan bahwa:</p>
+                    <table class="table table-sm">
+                        <tr>
+                            <td style="width:50px;"></td>
+                            <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
+                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.name"/></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50px;"></td>
+                            <td style="width:150px; font-size:17px;"><strong>Jabatan</strong></td>
+                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.job_id.name"/></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50px;"></td>
+                            <td style="width:150px;font-size:17px;"><strong>NIK</strong></td>
+                            <td style="font-size:17px;">:&#160;&#160;<strong><span t-field="o.employee_id.nik"/></strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="text-align:justify; font-size:17px;">
+                Yang bersangkutan adalah benar karyawan di perusahaan ini yang bekerja sejak tanggal
+                        <strong>
+                            <span t-field="o.first_join_date"/>
+                        </strong> sampai dengan sekarang.
+                    </p>
+
+                    <p style="text-align:justify; font-size:17px;">
+                Demikian surat keterangan ini dibuat untuk melengkapi persyaratan <strong><span t-field="o.descr"/></strong>
+                    </p>
+
+                    <br/>
+                    <br/>
+
+                    <t t-set="date" t-value="o.write_date"/>
+                    <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+
+                    <div class="text-right">
+                        <p style="font-size:17px;">Bandung, <t t-esc="dates"/>
+                        </p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p style="font-size:18px;">
+                            <strong>
+                                <span>Asep Rohman, SH.</span>
+                                <br/>
+                                <span>Personnel &amp; General Affairs Manager</span>
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        
+        <template id="report_skk_pdf_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sanbe_hr_employee_approval.skk_pdf_format"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
