@@ -33,6 +33,7 @@
         'views/employee_level.xml',
         'data/hitung_employee_ws.xml',
         'data/sequence_employee_id.xml',
+        'data/email_contract_notification.xml',
         'views/hr_contracts.xml',
         'views/hr_department.xml',
         'views/hr_contract_type.xml',

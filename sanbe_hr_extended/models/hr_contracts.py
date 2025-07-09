@@ -2,7 +2,7 @@
 from odoo import api, fields, models, _, Command
 from odoo.exceptions import ValidationError
 from odoo.exceptions import UserError
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 class HrContract(models.Model):
@@ -197,3 +197,47 @@ class HrContract(models.Model):
                 'branch_id' : self.env.user.branch_id.id or False
             })
         return res
+    
+    def get_contract_list(self):
+        today = date.today()
+
+        contracts = self.search([
+            ('date_end', '!=', False),
+            ('date_end', '>=', today)
+            ], limit=10)
+
+        result = []
+        for index, contract in enumerate(contracts, start=1):
+            result.append({
+                'no': index,
+                'nik': contract.employee_id.nik or '',
+                'name': contract.employee_id.name or '',
+                'job': contract.job_id.name or '',
+                'department': contract.depart_id.name or '',
+                'company': contract.company_id.name or '',
+                'start_date': contract.date_start.strftime('%d-%m-%Y') if contract.date_start else '',
+                'end_date': contract.date_end.strftime('%d-%m-%Y') if contract.date_end else '',
+                'duration': self._get_duration(contract),
+            })
+        return result
+    
+    def _get_duration(self, contract):
+        if not contract.date_start or not contract.date_end:
+            return ''
+
+        duration = contract.date_end - contract.date_start
+        
+        years = duration.days // 365
+        remaining_days = duration.days % 365
+        months = remaining_days // 30
+        days = remaining_days % 30
+
+        result = []
+        if years and duration >= 365:
+            result.append(f"{years} tahun")
+        if months:
+            result.append(f"{months} bulan")
+        if days or not result:
+            result.append(f"{days} hari")
+
+        return ' '.join(result)
