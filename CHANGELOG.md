@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.55-2025w28.5 (2025-07-11)
+
+- 06abed5 [FEAT] PAM : Pembuatan Format Email Otomatis untuk Notifikasi Masa Akhir Kontrak Karyawan
+
+
 ## v0.0.53-2025w28.3 (2025-07-08)
 
 - 9027078 [IMP] PAM : Improvement Form Employee
