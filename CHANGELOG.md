@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.59-2025w28.9 (2025-07-11)
+
+- 144ea78 [FIX] TMS : disable some function on action_closing_periode - button period
+
+
 ## v0.0.57-2025w28.7 (2025-07-11)
 
 - e715aa4 [IMP] PAM : Improvement Tab Sheet Benefit/Allowance Ketika Bisnis Unit Tamansari
