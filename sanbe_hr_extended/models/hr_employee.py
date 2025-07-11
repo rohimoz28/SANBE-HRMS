@@ -203,6 +203,7 @@ class HrEmployee(models.Model):
         ('o', 'O'),
     ], string='Golongan Darah')
     race = fields.Char('Ras')
+    is_ts_user = fields.Boolean('Is TS User', compute='_compute_is_ts_user', store=False)
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,
@@ -261,6 +262,12 @@ class HrEmployee(models.Model):
     #    #myemployees = self.env['hr.employee'].search([])
     #    #for allemps in myemployees:
     #    #    allemps.write({'nik_lama': ''})
+
+    @api.model
+    def _compute_is_ts_user(self):
+        is_ts = self.env.user.branch_id.name == 'Taman Sari'
+        for rec in self:
+            rec.is_ts_user = is_ts
 
     @api.constrains('no_ktp')
     def _check_no_ktp(self):

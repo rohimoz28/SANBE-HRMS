@@ -176,21 +176,22 @@
                     <page name="Benefit / Allowance " class="o_hr_contract_salary_information">
                         <group name="salary_info">
                             <group string="Allowance">
+                                <field name="is_ts_user" invisible="1"/>
                                 <field name="attende_premie"/>
-                                <field name="allowance_jemputan" />
+                                <field name="allowance_jemputan" invisible="is_ts_user == True"/>
                                 <field name="allowance_ot" />
                                 <field name="allowance_transport" />
-                                <field name="allowance_meal" />
-                                <field name="allowance_night_shift"/>
-                                <field name="allowance_nightshift_amount" invisible="allowance_night_shift == False"/>
+                                <field name="allowance_meal" invisible="is_ts_user == True"/>
+                                <field name="allowance_night_shift" invisible="is_ts_user == True"/>
+                                <field name="allowance_nightshift_amount" invisible="allowance_night_shift == False or is_ts_user == True"/>
                             </group>
                             <group string="Remarks">
                                 <field name="attende_premie_amount" invisible="attende_premie == False" required="attende_premie == True"/>
-                                <field name="jemputan_remarks" string="Jemputan Remarks" />
+                                <field name="jemputan_remarks" string="Jemputan Remarks" invisible="is_ts_user == True"/>
                                 <field name="ot_remarks" string="Overtime Remarks" />
-                                <field name="transport_remarks" string="Transport Remarks" />
-                                <field name="meal_remarks" string="Meal Remarks" />
-                                <field name="allowance_nightshift_remarks" string="Night Shift Remarks"/>
+                                <field name="transport_remarks" string="Transport Remarks" invisible="is_ts_user == True"/>
+                                <field name="meal_remarks" string="Meal Remarks" invisible="is_ts_user == True"/>
+                                <field name="allowance_nightshift_remarks" string="Night Shift Remarks" invisible="is_ts_user == True"/>
                             </group>
                         </group>
                     </page>
