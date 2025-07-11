@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    <record id="mail_contract_notification" model="mail.template">
+        <field name="name">Email Template Contract Notification</field>
+        <field name="model_id" ref="hr_contract.model_hr_contract"/>
+        <field name="subject">Contract Notification</field>
+        <field name="body_html">
+            <![CDATA[
+                <p>Kepada Yth.</p>
+                <p>Personalia PT Sanbe Farma</p>
+                <p>di Tempat</p>
+                <br/>
+                <p>Dengan hormat,</p>
+                <p>Bersama ini kami sampaikan list masa kontrak kerja karyawan di lingkungan PT Sanbe Farma yang akan berakhir. Berikut list nya:</p>
+                <br/>
+
+                <table border="1" cellspacing="0" cellpadding="4" style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;">No</th>
+                            <th style="border: 1px solid black;">NIK Karyawan</th>
+                            <th style="border: 1px solid black;">Nama Karyawan</th>
+                            <th style="border: 1px solid black;">Jabatan</th>
+                            <th style="border: 1px solid black;">Departemen</th>
+                            <th style="border: 1px solid black;">Perusahaan</th>
+                            <th style="border: 1px solid black;">Tanggal Awal Kontrak</th>
+                            <th style="border: 1px solid black;">Tanggal Akhir Kontrak</th>
+                            <th style="border: 1px solid black;">Lama Kontrak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="object.get_contract_list()" t-as="line">
+                            <td><t t-esc="line.no"/></td>
+                            <td><t t-esc="line.nik"/></td>
+                            <td><t t-esc="line.name"/></td>
+                            <td><t t-esc="line.job"/></td>
+                            <td><t t-esc="line.department"/></td>
+                            <td><t t-esc="line.company"/></td>
+                            <td><t t-esc="line.start_date"/></td>
+                            <td><t t-esc="line.end_date"/></td>
+                            <td><t t-esc="line.duration"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br/>
+                <p>Mohon agar dilakukan evaluasi kinerja dan pertimbangan lebih lanjut terkait perpanjangan kontrak atau penghentian hubungan kerja sesuai kebijakan perusahaan dan hasil penilaian kerja karyawan yang bersangkutan.</p>
+                <p>Demikian kami sampaikan. Atas perhatian dan kerja samanya, kami ucapkan terima kasih.</p>
+                <p>Hormat kami,</p>
+                <br/><br/>
+                <p><strong>Odoo - ERP</strong></p>
+                <p><strong>PT Sanbe Farma</strong></p>
+            ]]>
+        </field>
+    </record>
+    </data>
+</odoo>
