@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.57-2025w28.7 (2025-07-11)
+
+- e715aa4 [IMP] PAM : Improvement Tab Sheet Benefit/Allowance Ketika Bisnis Unit Tamansari
+
+
 ## v0.0.55-2025w28.5 (2025-07-11)
 
 - 06abed5 [FEAT] PAM : Pembuatan Format Email Otomatis untuk Notifikasi Masa Akhir Kontrak Karyawan
