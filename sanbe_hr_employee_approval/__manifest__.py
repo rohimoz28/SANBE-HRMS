@@ -20,6 +20,11 @@
 	'currency': 'EUR',
 	'support': 'xabre0010@gmail.com',
 	'data': [
+		'security/ir.model.access.csv',
+		'data/ir_action_server_data.xml',
+		'reports/list_report.xml',
+		'reports/report_skk_pdf_action.xml',
+		'wizards/skk_print_req.xml',
 		'views/hr_employee.xml',
 	],
 	'images': [

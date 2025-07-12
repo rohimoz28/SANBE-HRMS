@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_skk_employee_wizard_form" model="ir.ui.view">
+            <field name="name">skk.employee.req.wizard.form</field>
+            <field name="model">skk.employee.req.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Surat Keterangan Kerja">
+                    <group>
+                        <group>
+                            <field name="employee_id" invisible="1"/>
+                            <field name="name" placeholder="e.g. ....../REFS/PERS-GA/....../2025"/>
+                            <field name="descr" placeholder="e.g. --"/>
+                        </group>                        
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Print" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_skk_employee_wizard" model="ir.actions.act_window">
+            <field name="name">Surat Keterangan Kerja</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">skk.employee.req.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_skk_employee_wizard_form"/>
+            <field name="context">{'default_employee_id': active_id}</field>
+        </record>
+    </data>
+</odoo>
