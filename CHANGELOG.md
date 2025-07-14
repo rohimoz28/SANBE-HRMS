@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.62-2025w29.1 (2025-07-14)
+
+- b3ed2ef [FIX]PAM Print Out PDF - Surat Keterangan Habis Kontrak
+
+
 ## v0.0.59-2025w28.9 (2025-07-11)
 
 - 144ea78 [FIX] TMS : disable some function on action_closing_periode - button period
