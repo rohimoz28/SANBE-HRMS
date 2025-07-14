@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id="eoc_pdf_format">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center" style="text-align: center;">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <t t-set="date" t-value="o.write_date"/>
+                                <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                <br/>
+                                <br/>
+                                <p style="text-align: justify; font-size:18px;">
+                                    <strong>Bandung, 
+                                        <t t-esc="dates"/>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="text-align: left; font-size:18px;" class="col-xs-12">
+                                <strong>
+                                    <p>Kepada
+                                        <br/>
+                                    Yth. 
+                                        <span t-field="o.receiver_id.name"/>
+                                        <br/>
+                                        <span t-field="o.receiver_id.job_id.name"/>
+                                        <br/>
+                                    Di Tempat.
+                                    </p>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p style="text-align:justify; font-size:18px;">Nomor: 
+                                    <strong>
+                                        <span t-field="o.name"/>
+                                    </strong>
+                                    <br/>
+                                    Perihal: 
+                                    <strong>
+                                        <u>Pemberitahuan berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT)</u>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    <br/>
+                        <p style="text-align:justify; font-size:18px;"> Dengan hormat, <br/>
+                            Melalui surat ini kami sampaikan mengenai Perjanjian Kerja Waktu Tertentu (PKWT), atas nama :
+                        </p>
+                        <ol style="text-align:justify; font-size:18px; margin-top: 10px;">
+                            <li>
+                                <strong>
+                                    <span t-field="o.employee_id.name"/>
+                                </strong> - 
+                                <strong>
+                                    <span t-field="o.employee_id.job_id.name"/>
+                                </strong>
+                                <ul>
+                                    <li> PKWT ybs berakhir pada tanggal 
+                                        <strong>
+                                            <span t-field="o.char_eoc_date"/>
+                                        </strong>. 
+                                    </li>
+                                    <li> Perpanjangan PKWT tahun ke 
+                                        <span t-field="o.contracts_count"/>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <p style="text-align:justify; font-size:18px;">
+                                            Untuk itu, kami mohon informasi selanjutnya terkait status yang bersangkutan, Jika PKWT-nya tidak diperpanjang, kami akan menghitungkan hari kerja dan sisa cutinya untuk dibayarkan.
+                        </p>
+                        <p style="text-align:justify; font-size:18px;">
+                                            Jika diperpanjang maka sertakan:
+                            
+                            <ol style="text-align:justify; font-size:18px;">
+                                <li>
+                                                            Surat permohonan perpanjangan kontrak karyawan yang ditujukan kepada 
+                                    <strong>Personalia &amp; G.A. Manager</strong> serta mengisi "
+                                    <strong>Form Tenaga Kerja</strong>".
+                                
+                                </li>
+                                <li>
+                                                            Mengisi formulir analisa perpanjangan kontrak karyawan untuk di review oleh HRD Corporate.
+                                </li>
+                            </ol>
+                        </p>
+                        <p style="text-align:justify; font-size:18px;">
+                                                Jawaban dapat langsung ditulis pada tempat yang kosong di surat ini dan 
+                            <strong>
+                                <u>segera dikembalikan ke Personalia</u>
+                            </strong> paling lambat 
+                            <strong>7 hari</strong> sebelum berakhirnya jangka waktu PKWT yang bersangkutan.
+                        
+                        </p>
+                        <p style="text-align:justify; font-size:18px;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
+                        <p style="text-align:justify; font-size:18px;">
+                                            Selanjutnya seluruh permohonan kontrak akan kami sampaikan kepada Owner untuk dimohonkan persetujuannya.</p>
+                        <p style="text-align:justify; font-size:18px;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="text-right">
+                        <p style="font-size:18px;">Hormat kami,</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p style="font-size:16px;">
+                            <strong>
+                                <span>Asep Rohman, SH.</span>
+                            </strong>
+                            <br/>
+                            <span>Personnel &amp; General Affairs Manager</span>
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="report_skk_eoc_pdf_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sanbe_hr_employee_approval.eoc_pdf_format"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
