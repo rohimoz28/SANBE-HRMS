@@ -25,6 +25,8 @@
 		'reports/list_report.xml',
 		'reports/report_skk_pdf_action.xml',
 		'wizards/skk_print_req.xml',
+  		'reports/report_pkwt_notification.xml',
+		'wizards/eoc_req.xml',
 		'views/hr_employee.xml',
 	],
 	'images': [
