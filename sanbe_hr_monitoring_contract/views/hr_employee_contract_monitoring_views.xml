@@ -11,7 +11,7 @@
                 <header>
                     <button name="act_deactive_employee" type="object" string="Deactive Employee" invisible="1" />
                     <button name="mail_send_hr" type="object" string="mail HR" invisible="1" />
-                    <button name="mail_send_mentor" type="object" string="mail Mentor" invisible="1"/>
+                    <!-- <button name="mail_send_mentor" type="object" string="mail Mentor" invisible="1"/> -->
                 </header> 
                 <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
@@ -81,8 +81,8 @@
             <form string="Employee Information" class="o_purchase_order">
                 <header>
                     <button name="generate_data" type="object" string="Generate Data" invisible="1" />
-                    <button name="mail_send_hr" type="object" string="Check Branch" invisible="1" />
-                    <button name="mail_send_mentor" type="object" string="Check Mentor" invisible="1" />
+                    <!-- <button name="mail_send_hr" type="object" string="Check Branch" invisible="1" /> -->
+                    <!-- <button name="mail_send_mentor" type="object" string="Check Mentor" invisible="1" /> -->
                     <field name="is_done" widget="statusbar" statusbar_visible="waiting,done" readonly="1"/>
                 </header>
                 <sheet>
@@ -150,8 +150,8 @@
             <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id" decoration-danger="date_end &lt; current_date and is_done == 'waiting'">
                 <header>
                     <button name="generate_data" string="Generate Data" type="object" class="oe_highlight" invisible="1" />
-                    <button name="mail_send_hr" type="object" string="Check Branch" invisible="1" />
-                    <button name="mail_send_mentor" type="object" string="Check Mentor" invisible="1" />
+                    <!-- <button name="mail_send_hr" type="object" string="Check Branch" invisible="1" /> -->
+                    <!-- <button name="mail_send_mentor" type="object" string="Check Mentor" invisible="1" /> -->
                 </header>
                 <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
