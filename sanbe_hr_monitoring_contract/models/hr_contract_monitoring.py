@@ -6,18 +6,21 @@ from itertools import groupby
 
 table_header = """
 <br/>
-<p>Dengan hormat, kami ingin mengingatkan bahwa terdapat beberapa karyawan yang kontraknya akan segera berakhir. Berikut adalah daftar karyawan yang kontraknya mendekati tanggal berakhirnya:</p>
+<p>Dengan hormat, <br/>Bersama ini kami sampaikan list masa kontrak kerja karyawan di lingkungan PT Sanbe Farma yang akan berakhir. Berikut list nya:</p>
 <br/>
 <table border="1" cellpadding="5" cellspacing="0">
     <thead>
         <tr>
-            <th>Area</th>
-            <th>Business Units</th>
-            <th>Sub Department</th>
+            <th>No</th>
+            <th>NIK Karyawan</th>
             <th>Nama Karyawan</th>
-            <th>Job Position</th>
-            <th>Immediate Superior</th>
-            <th>End Date</th>
+            <th>Unit Bisnis</th>
+            <th>Jabatan</th>
+            <th>Departemen</th>
+            <th>Perusahaan</th>
+            <th>Tanggal Awal Kontrak</th>
+            <th>Tanggal Akhir Kontrak</th>
+            <th>Lama Kontrak</th>
         </tr>
     </thead>
     <tbody>
@@ -28,11 +31,11 @@ table_footer = """
         </tbody>
     </table>
     <br/> 
-    <p>Mohon untuk melakukan verifikasi dan tindakan lebih lanjut sesuai dengan kebijakan perusahaan.</p>
+    <p>Mohon agar dilakukan evaluasi kinerja dan pertimbangan lebih lanjut terkait perpanjangan kontrak atau penghentian hubungan kerja sesuai kebijakan perusahaan dan hasil penilaian kerja karyawan yang bersangkutan.</p>
     <br/>
-    <p>Terima kasih atas perhatian dan kerjasamanya.</p>
+    <p>Demikian kami sampaikan. Atas perhatian dan kerja samanya, kami ucapkan terima kasih.</p>
     <br/>
-    <p>Salam hormat,</p>
+    <p>Hormat kami,</p>
     <br/>
     <br/>         
     """
@@ -508,7 +511,7 @@ class HrEmployeeContractMonitoring(models.Model):
                             hc2.active = TRUE
                             AND he.active = TRUE
                             AND he.state = 'approved'
-                            AND hc2.date_end - current_date <= 90
+                            AND (hc2.date_end::date BETWEEN current_date AND current_date + INTERVAL '90 days')
                             and hres.id is null
                     ) AS emp
         )
@@ -622,32 +625,42 @@ class HrEmployeeContractMonitoring(models.Model):
     def mail_send_hr(self):
         # try:
             query_superior_id = """ 
-                    SELECT DISTINCT hcm.branch_id FROM hr_employee_contract_monitoring hcm
+                    SELECT DISTINCT hcm.branch_id FROM hr_employee_contract_monitoring hcm where hcm.time_limit <= 60;
                 """
             self.env.cr.execute(query_superior_id)
-            users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'        
+            # users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'    
+            # users = ''    
             for distinct_records in self.env.cr.dictfetchall():
                 list_email = self.env['hr.mail.config'].search([('branch_id', '=', distinct_records['branch_id'])])
-                users = users +', '+ str(list_email.list_email or '')                    
+                # email_list = [rec.list_email for rec in list_email if rec.list_email]
+                # users = ', ' + str(list_email.list_email or '')
+                # users = users + ', ' + ', '.join(filter(None, list_email.mapped('list_email'))) 
+                users = ', '.join(filter(None, list_email.mapped('list_email')))                 
                 table_rows = ""
-                for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=', distinct_records['branch_id']),('time_limit','<=',30)]):
+                idx = 1
+                for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=', distinct_records['branch_id']),('time_limit','<=',60)]):
                     table_rows += f"""
                     <tr>
-                        <td>{records.territory_name}</td>
-                        <td>{records.branch_name}</td>
-                        <td>{records.department_id.name}</td>
+                        <td>{idx}</td> 
+                        <td>{records.nik_employee}</td>
                         <td>{records.employee_name}</td>
+                        <td>{records.branch_id.name}</td>
                         <td>{records.job_id.name}</td>
-                        <td>{records.coach_name or ''}</td>
+                        <td>{records.department_id.name}</td>
+                        <td>{records.company_name}</td>
+                        <td>{records.date_start}</td>
                         <td>{records.date_end}</td>
+                        <td>{self._get_duration(records)}</td>
                     </tr>
-                    """                        
-                email_body = f"""<p>Semangat Pagi <br/>
-                Tim Human Resource,</p>
+                    """
+                    idx += 1                        
+                email_body = f"""<p>Kepada Yth.</p>
+                <p>Personalia PT Sanbe Farma <br/>
+                di Tempat</p>
                 {table_header}
                 {table_rows}
                 {table_footer}
-                <p>Admin Sistem</p>
+                <p>Odoo - ERP <br/> PT Sanbe Farma</p>
                 """                    
                 email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
                 email_dict = {'subject':f"""Pengingat HR: Kontrak Karyawan yang Akan Berakhir""",
@@ -659,83 +672,106 @@ class HrEmployeeContractMonitoring(models.Model):
                 email.sudo().write(email_dict)
                 email.with_context().send_mail(self.id,force_send=True)
                 print('Kirim ke HR')
-                        
-    def mail_send_mentor(self):
-    # try:
-        query_superior_id = """ 
-            SELECT DISTINCT hcm.coach_id superior_id, 
-                hcm.coach_name mentor_name, 
-                COALESCE(hcm.coach_email, '') work_email 
-            FROM hr_employee_contract_monitoring hcm
-            WHERE hcm.coach_id IS NOT NULL
-        """
-        self.env.cr.execute(query_superior_id)
+
+
+    def _get_duration(self, contract):
+        if not contract.date_start or not contract.date_end:
+            return ''
+
+        duration = contract.date_end - contract.date_start
+        total_days = duration.days
+
+        years = total_days // 365
+        remaining_days = total_days % 365
+        months = remaining_days // 30
+        days = remaining_days % 30
+
+        result = []
+        if years and total_days >= 365:
+            result.append(f"{years} tahun")
+        if months:
+            result.append(f"{months} bulan")
+        if days or not result:
+            result.append(f"{days} hari")
+
+        return ' '.join(result)
+                      
+    # def mail_send_mentor(self):
+    # # try:
+    #     query_superior_id = """ 
+    #         SELECT DISTINCT hcm.coach_id superior_id, 
+    #             hcm.coach_name mentor_name, 
+    #             COALESCE(hcm.coach_email, '') work_email 
+    #         FROM hr_employee_contract_monitoring hcm
+    #         WHERE hcm.coach_id IS NOT NULL
+    #     """
+    #     self.env.cr.execute(query_superior_id)
         
-        for data_superiors in self.env.cr.dictfetchall():
-            # Start with the mentor's email and add others
-            users = ['azizah@sanbe-farma.com', data_superiors['work_email']]  # List of users
+    #     for data_superiors in self.env.cr.dictfetchall():
+    #         # Start with the mentor's email and add others
+    #         users = ['azizah@sanbe-farma.com', data_superiors['work_email']]  # List of users
             
-            # Query to get contract information for the mentor's team
-            query = """ 
-                SELECT hcm.id,
-                    hcm.branch_name,
-                    hcm.territory_name,
-                    hcm.department_id,
-                    hcm.job_id,
-                    hcm.coach_name parent_name,
-                    hcm.employee_name,
-                    hcm.date_end::date date_end
-                FROM hr_employee_contract_monitoring hcm
-                WHERE hcm.coach_id = %s
-                AND hcm.date_end - current_date <= 30
-            """
-            self.env.cr.execute(query % (data_superiors['superior_id']))
+    #         # Query to get contract information for the mentor's team
+    #         query = """ 
+    #             SELECT hcm.id,
+    #                 hcm.branch_name,
+    #                 hcm.territory_name,
+    #                 hcm.department_id,
+    #                 hcm.job_id,
+    #                 hcm.coach_name parent_name,
+    #                 hcm.employee_name,
+    #                 hcm.date_end::date date_end
+    #             FROM hr_employee_contract_monitoring hcm
+    #             WHERE hcm.coach_id = %s
+    #             AND hcm.date_end - current_date <= 30
+    #         """
+    #         self.env.cr.execute(query % (data_superiors['superior_id']))
             
-            table_rows = ""
-            mentor_name = ""
+    #         table_rows = ""
+    #         mentor_name = ""
             
-            # Build table rows with the contract data
-            for record in self.env.cr.dictfetchall():
-                job_name = self.env['hr.job'].browse(record['job_id']).name
-                department_name = self.env['hr.department'].browse(record['department_id']).name
-                mentor_name = record['parent_name']
-                table_rows += f"""
-                    <tr>
-                        <td>{record['territory_name']}</td>
-                        <td>{record['branch_name']}</td>
-                        <td>{department_name}</td>
-                        <td>{record['employee_name']}</td>
-                        <td>{job_name}</td>
-                        <td>{record['parent_name'] or ''}</td>
-                        <td>{record['date_end']}</td>
-                    </tr>
-                """
+    #         # Build table rows with the contract data
+    #         for record in self.env.cr.dictfetchall():
+    #             job_name = self.env['hr.job'].browse(record['job_id']).name
+    #             department_name = self.env['hr.department'].browse(record['department_id']).name
+    #             mentor_name = record['parent_name']
+    #             table_rows += f"""
+    #                 <tr>
+    #                     <td>{record['territory_name']}</td>
+    #                     <td>{record['branch_name']}</td>
+    #                     <td>{department_name}</td>
+    #                     <td>{record['employee_name']}</td>
+    #                     <td>{job_name}</td>
+    #                     <td>{record['parent_name'] or ''}</td>
+    #                     <td>{record['date_end']}</td>
+    #                 </tr>
+    #             """
             
-            # Create the email body
-            email_body = f"""<p>Semangat Pagi <br/>
-                Mentor/Supervisor {mentor_name}</p> 
-                {table_header}
-                {table_rows}
-                {table_footer}
-                <p>Human Resource</p>
-            """
+    #         # Create the email body
+    #         email_body = f"""<p>Semangat Pagi <br/>
+    #             Mentor/Supervisor {mentor_name}</p> 
+    #             {table_header}
+    #             {table_rows}
+    #             {table_footer}
+    #             <p>Human Resource</p>
+    #         """
             
-            # Ensure the email template is a singleton
-            email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
+    #         # Ensure the email template is a singleton
+    #         email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
             
-            if email:
-                # Email details
-                email_dict = {
-                    'subject': 'Pengingat: Kontrak Karyawan yang Akan Berakhir',
-                    'email_to': ', '.join(users),  # Join the emails into a string
-                    'email_from': 'Human Resource <donotreply@sanbe-farma.com>',
-                    'body_html': email_body,
-                }
+    #         if email:
+    #             # Email details
+    #             email_dict = {
+    #                 'subject': 'Pengingat: Kontrak Karyawan yang Akan Berakhir',
+    #                 'email_to': ', '.join(users),  # Join the emails into a string
+    #                 'email_from': 'Human Resource <donotreply@sanbe-farma.com>',
+    #                 'body_html': email_body,
+    #             }
                 
-                # Update the email template and send the email
-                email.sudo().write(email_dict)
-                email.with_context().send_mail(self.id, force_send=True)
-                print('Kirim ke Mentor')
+    #             # Update the email template and send the email
+    #             email.sudo().write(email_dict)
+    #             email.with_context().send_mail(self.id, force_send=True)
+    #             print('Kirim ke Mentor')
 class HrContractMonitoring(models.Model):
     _name = 'hr.contract.monitoring'
     _description = 'Hr Contract Monitoring'
@@ -915,157 +951,157 @@ class HrContractMonitoring(models.Model):
 
         
             
-    def mail_send_hr(self):
-        # try:
-            list_employe_contract = self.env['hr.contract.monitoring'].search([('is_done','=','waiting'),('company_id','=',self.company_id.id)])
-            distinct_records = []
-            for branch_id, group in groupby(list_employe_contract, key=lambda r: r.branch_id.id):
-                distinct_records.append(next(group)) 
-                users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'        
-                for record in distinct_records:
-                    query = """ SELECT 
-                                    hcm.id,
-                                    rb.name AS branch_name,
-                                    rt.name AS territory_name,
-                                    hd.id AS department_id,
-                                    hd.name::VARCHAR AS department_name,  -- Single-language field for department
-                                    hj.id AS job_id,
-                                    hj.name::VARCHAR AS job_name,         -- Single-language field for job
-                                    he.name AS parent_name,
-                                    hcm.employee_name,
-                                    hc.date_end::DATE AS date_end
-                                FROM 
-                                    hr_contract_monitoring hcm
-                                LEFT JOIN 
-                                    res_branch rb ON hcm.branch_id = rb.id
-                                LEFT JOIN 
-                                    res_territory rt ON hcm.territory_id = rt.id
-                                LEFT JOIN 
-                                    hr_department hd ON hcm.department_id = hd.id
-                                LEFT JOIN 
-                                    hr_job hj ON hj.id = hcm.job_id
-                                LEFT JOIN 
-                                    hr_employee he ON he.id = hcm.superior_id
-                                LEFT JOIN 
-                                    hr_contract hc ON hc.id = hcm.contract_id
-                                WHERE 
-                                    hcm.is_done = 'waiting' 
-                                    AND hcm.branch_id = %s
-                                    AND hc.date_end >= CURRENT_DATE + INTERVAL '1 month';
-  """
-                    self.env.cr.execute((query) % (record.branch_id.id))
-                    list_email = self.env['hr.mail.config'].search([('branch_id', '=', record.branch_id.id)])
-                    users = users +', '+ str(list_email.list_email or '')                    
-                    table_rows = ""
-                    for record in self.env.cr.dictfetchall():
-                        job_name = self.env['hr.contract.monitoring'].browse(record['id']).job_name
-                        department_name = self.env['hr.contract.monitoring'].browse(record['id']).department_name
-                        table_rows += f"""
-                        <tr>
-                            <td>{record['territory_name']}</td>
-                            <td>{record['branch_name']}</td>
-                            <td>{department_name}</td>
-                            <td>{record['employee_name']}</td>
-                            <td>{job_name}</td>
-                            <td>{record['parent_name'] or ''}</td>
-                            <td>{record['date_end']}</td>
-                        </tr>
-                        """                        
-                    email_body = f"""
-                    <<p>Semangat Pagi <br/>
-                    Tim Human Resource,</p>
-                    {table_header}
-                    {table_rows}
-                    {table_footer}
-                    <p>Admin Sistem</p>
-                    """                    
-                    email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
-                    email_dict = {'subject':f"""Pengingat HR: Kontrak Karyawan yang Akan Berakhir""",
-                                    'email_to': users,
-                                    'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
-                                    'body_html': email_body,
+#     def mail_send_hr(self):
+#         # try:
+#             list_employe_contract = self.env['hr.contract.monitoring'].search([('is_done','=','waiting'),('company_id','=',self.company_id.id)])
+#             distinct_records = []
+#             for branch_id, group in groupby(list_employe_contract, key=lambda r: r.branch_id.id):
+#                 distinct_records.append(next(group)) 
+#                 users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'        
+#                 for record in distinct_records:
+#                     query = """ SELECT 
+#                                     hcm.id,
+#                                     rb.name AS branch_name,
+#                                     rt.name AS territory_name,
+#                                     hd.id AS department_id,
+#                                     hd.name::VARCHAR AS department_name,  -- Single-language field for department
+#                                     hj.id AS job_id,
+#                                     hj.name::VARCHAR AS job_name,         -- Single-language field for job
+#                                     he.name AS parent_name,
+#                                     hcm.employee_name,
+#                                     hc.date_end::DATE AS date_end
+#                                 FROM 
+#                                     hr_contract_monitoring hcm
+#                                 LEFT JOIN 
+#                                     res_branch rb ON hcm.branch_id = rb.id
+#                                 LEFT JOIN 
+#                                     res_territory rt ON hcm.territory_id = rt.id
+#                                 LEFT JOIN 
+#                                     hr_department hd ON hcm.department_id = hd.id
+#                                 LEFT JOIN 
+#                                     hr_job hj ON hj.id = hcm.job_id
+#                                 LEFT JOIN 
+#                                     hr_employee he ON he.id = hcm.superior_id
+#                                 LEFT JOIN 
+#                                     hr_contract hc ON hc.id = hcm.contract_id
+#                                 WHERE 
+#                                     hcm.is_done = 'waiting' 
+#                                     AND hcm.branch_id = %s
+#                                     AND hc.date_end >= CURRENT_DATE + INTERVAL '1 month';
+#   """
+#                     self.env.cr.execute((query) % (record.branch_id.id))
+#                     list_email = self.env['hr.mail.config'].search([('branch_id', '=', record.branch_id.id)])
+#                     users = users +', '+ str(list_email.list_email or '')                    
+#                     table_rows = ""
+#                     for record in self.env.cr.dictfetchall():
+#                         job_name = self.env['hr.contract.monitoring'].browse(record['id']).job_name
+#                         department_name = self.env['hr.contract.monitoring'].browse(record['id']).department_name
+#                         table_rows += f"""
+#                         <tr>
+#                             <td>{record['territory_name']}</td>
+#                             <td>{record['branch_name']}</td>
+#                             <td>{department_name}</td>
+#                             <td>{record['employee_name']}</td>
+#                             <td>{job_name}</td>
+#                             <td>{record['parent_name'] or ''}</td>
+#                             <td>{record['date_end']}</td>
+#                         </tr>
+#                         """                        
+#                     email_body = f"""
+#                     <<p>Semangat Pagi <br/>
+#                     Tim Human Resource,</p>
+#                     {table_header}
+#                     {table_rows}
+#                     {table_footer}
+#                     <p>Admin Sistem</p>
+#                     """                    
+#                     email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
+#                     email_dict = {'subject':f"""Pengingat HR: Kontrak Karyawan yang Akan Berakhir""",
+#                                     'email_to': users,
+#                                     'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
+#                                     'body_html': email_body,
                     
-                                    }
-                    # raise UserError('Test')
-                    email.sudo().write(email_dict)
-                    email.with_context().send_mail(self.id, force_send=True)
-                    print('Kirim ke HR')        
+#                                     }
+#                     # raise UserError('Test')
+#                     email.sudo().write(email_dict)
+#                     email.with_context().send_mail(self.id, force_send=True)
+#                     print('Kirim ke HR')        
         # except Exception as e:
         #     _logger.error("Error in mail_send_mentor cron job: %s", e)
     
-    def mail_send_mentor(self):
-        # try:
+    # def mail_send_mentor(self):
+    #     # try:
 
-            query_superior_id = """ select distinct he.parent_id superior_id, 
-                                        he.name mentor_name, 
-                                        coalesce(he2.work_email,'') work_email 
-                                    from 
-                                        hr_contract_monitoring hcm 
-                                    left join 
-                                        hr_employee he on hcm.employee_id = he.id 
-                                    left join 
-                                        hr_employee he2 on he.parent_id = he2.id 
-                                    where 
-                                        hcm.is_done = 'waiting' and he.parent_id is not null"""
-            self.env.cr.execute(query_superior_id)                 
-            for data_superiors in self.env.cr.dictfetchall():
-                users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>,' + data_superiors['work_email']
-                query = """ SELECT hcm.id,
-                        rb.name AS branch_name,
-                        rt.name AS territory_name,
-                        hd.id AS department_id,
-                        hd.name::VARCHAR AS department_name,   -- Single-language field for department
-                        hj.id AS job_id,
-                        hj.name::VARCHAR AS job_name,          -- Single-language field for job
-                        he.name parent_name,
-                        hcm.employee_name,
-                        hc.date_end::date date_end
-                    FROM 
-                        hr_contract_monitoring hcm
-                    LEFT JOIN 
-                        res_branch rb ON hcm.branch_id = rb.id
-                    LEFT JOIN 
-                        res_territory rt ON hcm.territory_id = rt.id
-                    LEFT JOIN 
-                        hr_department hd ON hcm.department_id = hd.id
-                    LEFT JOIN 
-                        hr_job hj ON hj.id = hcm.job_id
-                    LEFT JOIN 
-                        hr_employee he ON he.id = hcm.superior_id
-                    LEFT JOIN 
-                        hr_contract hc ON hc.id = hcm.contract_id
-                    WHERE 
-                        hcm.is_done = 'waiting' and hcm.superior_id = %s """
-                self.env.cr.execute((query) % (data_superiors['superior_id']))
-                table_rows = ""
-                mentor_name = ""
-                for record in self.env.cr.dictfetchall():
-                    job_name = self.env['hr.contract.monitoring'].browse(record['id']).job_name
-                    department_name = self.env['hr.contract.monitoring'].browse(record['id']).department_name
-                    mentor_name = record['parent_name']
-                    table_rows += (("""
-                    <tr>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                    </tr>
-                    """    )%(record['territory_name'],record['branch_name'],department_name,record['employee_name'],job_name,record['parent_name'] or '',record['date_end']))
-                email_body = (("""
-                <p>Semangat Pagi <br/>
-                Mentor/Supervisor %s </p> %s %s %s  <p>Human Resource</p>""")%(mentor_name,table_header,table_rows,table_footer))
-                email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
-                email_dict = {'subject':'Pengingat: Kontrak Karyawan yang Akan Berakhir',
-                                'email_to': users,
-                                'email_from': 'Human Resource <donotreply@sanbe-farma.com>',
-                                'body_html': email_body,
+    #         query_superior_id = """ select distinct he.parent_id superior_id, 
+    #                                     he.name mentor_name, 
+    #                                     coalesce(he2.work_email,'') work_email 
+    #                                 from 
+    #                                     hr_contract_monitoring hcm 
+    #                                 left join 
+    #                                     hr_employee he on hcm.employee_id = he.id 
+    #                                 left join 
+    #                                     hr_employee he2 on he.parent_id = he2.id 
+    #                                 where 
+    #                                     hcm.is_done = 'waiting' and he.parent_id is not null"""
+    #         self.env.cr.execute(query_superior_id)                 
+    #         for data_superiors in self.env.cr.dictfetchall():
+    #             users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>,' + data_superiors['work_email']
+    #             query = """ SELECT hcm.id,
+    #                     rb.name AS branch_name,
+    #                     rt.name AS territory_name,
+    #                     hd.id AS department_id,
+    #                     hd.name::VARCHAR AS department_name,   -- Single-language field for department
+    #                     hj.id AS job_id,
+    #                     hj.name::VARCHAR AS job_name,          -- Single-language field for job
+    #                     he.name parent_name,
+    #                     hcm.employee_name,
+    #                     hc.date_end::date date_end
+    #                 FROM 
+    #                     hr_contract_monitoring hcm
+    #                 LEFT JOIN 
+    #                     res_branch rb ON hcm.branch_id = rb.id
+    #                 LEFT JOIN 
+    #                     res_territory rt ON hcm.territory_id = rt.id
+    #                 LEFT JOIN 
+    #                     hr_department hd ON hcm.department_id = hd.id
+    #                 LEFT JOIN 
+    #                     hr_job hj ON hj.id = hcm.job_id
+    #                 LEFT JOIN 
+    #                     hr_employee he ON he.id = hcm.superior_id
+    #                 LEFT JOIN 
+    #                     hr_contract hc ON hc.id = hcm.contract_id
+    #                 WHERE 
+    #                     hcm.is_done = 'waiting' and hcm.superior_id = %s """
+    #             self.env.cr.execute((query) % (data_superiors['superior_id']))
+    #             table_rows = ""
+    #             mentor_name = ""
+    #             for record in self.env.cr.dictfetchall():
+    #                 job_name = self.env['hr.contract.monitoring'].browse(record['id']).job_name
+    #                 department_name = self.env['hr.contract.monitoring'].browse(record['id']).department_name
+    #                 mentor_name = record['parent_name']
+    #                 table_rows += (("""
+    #                 <tr>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                     <td>%s</td>
+    #                 </tr>
+    #                 """    )%(record['territory_name'],record['branch_name'],department_name,record['employee_name'],job_name,record['parent_name'] or '',record['date_end']))
+    #             email_body = (("""
+    #             <p>Semangat Pagi <br/>
+    #             Mentor/Supervisor %s </p> %s %s %s  <p>Human Resource</p>""")%(mentor_name,table_header,table_rows,table_footer))
+    #             email = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end')
+    #             email_dict = {'subject':'Pengingat: Kontrak Karyawan yang Akan Berakhir',
+    #                             'email_to': users,
+    #                             'email_from': 'Human Resource <donotreply@sanbe-farma.com>',
+    #                             'body_html': email_body,
                 
-                                }
-                email.sudo().write(email_dict)
-                email.with_context().send_mail(self.id, force_send=True)
-                print('Kirim ke Mentor')
-        # except Exception as e:
-        #     _logger.error("Error in mail_send_mentor cron job: %s", e)
+    #                             }
+    #             email.sudo().write(email_dict)
+    #             email.with_context().send_mail(self.id, force_send=True)
+    #             print('Kirim ke Mentor')
+    #     # except Exception as e:
+    #     #     _logger.error("Error in mail_send_mentor cron job: %s", e)

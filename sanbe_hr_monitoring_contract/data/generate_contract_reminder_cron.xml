@@ -80,7 +80,7 @@
         <field name="state">code</field>
         <field name="code">model.mail_send_hr()</field>
     </record>
-    <record model="ir.cron" id="hr_contract_remainder_mentor_cron">
+    <!-- <record model="ir.cron" id="hr_contract_remainder_mentor_cron">
         <field name="name">Contract Monitoring Reminder Mentor</field>
         <field name="active">True</field>
         <field name="user_id" ref="base.user_root"/>
@@ -92,7 +92,7 @@
         <field name="model_id" ref="model_hr_employee_contract_monitoring"/>
         <field name="state">code</field>
         <field name="code">model.mail_send_mentor()</field>
-    </record>
+    </record> -->
         <record model="ir.cron" id="hr_contract_expired">
         <field name="name">Contract Auto Expired</field>
         <field name="active">True</field>
