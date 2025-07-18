@@ -4,6 +4,9 @@ from odoo.exceptions import ValidationError
 from odoo.exceptions import UserError
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+from odoo.osv import expression
+import logging
+_logger = logging.getLogger(__name__)
 
 class HrContract(models.Model):
     _inherit = 'hr.contract'
@@ -52,6 +55,13 @@ class HrContract(models.Model):
                                 ('4','4'),
                                 ('5','5')],string='# of PKWT',ondelete='cascade')
     contract_type_id = fields.Many2one('hr.contract.type', "Contract Type", domain=[('is_active', '=', True)], tracking=True)
+    contract_type_code = fields.Char('Contract Ttpe Code', related='contract_type_id.code')
+    contract_year = fields.Selection([('1','1'),
+                                ('2','2'),
+                                ('3','3'),
+                                ('4','4'),
+                                ('5','5')],string='Tahun Ke')
+    contract_ref_id = fields.Many2one('hr.contract', string='Referensi Kontrak', domain="[('employee_id', '=', employee_id),('state', '=', 'open'),('date_start', '<=', date_start),('date_end', '>=', date_start)]")
     # @api.model
     # def name_create(self, name):
     #     default_type = self._context.get('employee_name')
@@ -119,6 +129,7 @@ class HrContract(models.Model):
     def write(self,vals_list):
         res = super(HrContract,self).write(vals_list)
         for allrec in self:
+            contract_ref = self.env['hr.contract'].sudo().search([('id','=',allrec.contract_ref_id.id)], limit=1)
             if allrec.state =='open':
                 # if allrec.employee_id.state !='approved':
                 #     raise UserError('Cannot Running Contract Because The Employee Not Yet Being Approved!')
@@ -142,7 +153,53 @@ class HrContract(models.Model):
                                                                  'model_id': allrec.id,
                                                                  'doc_number': allrec.name,
                                                                  })
+                    
+                if contract_ref and allrec.contract_type_id.code == 'ADCO':                   
+                    contract_ref.write({'state': 'close'})
+    
+    @api.constrains('employee_id', 'state', 'kanban_state', 'date_start', 'date_end')
+    def _check_current_contract(self):
+        """ Two contracts in state [incoming | open | close] cannot overlap """
+        # excluded_ids = []
+        excluded_ids = set()
+        for contract in self.filtered(lambda c: (c.state not in ['draft', 'cancel'] or c.state == 'draft' and c.kanban_state == 'done') and c.employee_id and c.contract_type_id.code != 'ADCO'): 
+            
+            excluded_ids.add(contract.id)
 
+            if contract.contract_ref_id and contract.contract_ref_id.employee_id == contract.employee_id:
+                excluded_ids.add(contract.contract_ref_id.id)
+            
+            contract_ref = self.env['hr.contract'].sudo().search([('contract_ref_id','=',contract.id)])
+            if contract_ref:
+                excluded_ids.update(contract_ref.ids)
+
+            domain = [
+                ('id', 'not in', list(excluded_ids)),
+                ('employee_id', '=', contract.employee_id.id),
+                ('company_id', '=', contract.company_id.id),
+                '|',
+                    ('state', 'in', ['open', 'close']),
+                    '&',
+                        ('state', '=', 'draft'),
+                        ('kanban_state', '=', 'done')
+            ]
+
+            if not contract.date_end:
+                start_domain = []
+                end_domain = ['|', ('date_end', '>=', contract.date_start), ('date_end', '=', False)]
+            else:
+                start_domain = [('date_start', '<=', contract.date_end)]
+                end_domain = ['|', ('date_end', '>', contract.date_start), ('date_end', '=', False)]
+
+            domain = expression.AND([domain, start_domain, end_domain])
+            if self.search_count(domain):
+                raise ValidationError(
+                    _(
+                        'An employee can only have one contract at the same time. (Excluding Draft and Cancelled contracts).\n\nEmployee: %(employee_name)s',
+                        employee_name=contract.employee_id.name
+                    )
+                )
+                
 
     @api.depends("date_start","date_end")
     def _compute_service_duration_display(self):

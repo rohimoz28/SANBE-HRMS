@@ -129,6 +129,7 @@ class HrEmployee(models.Model):
     employee_group1 = fields.Selection(selection=_selection1,
                                        default='Group2',
                                        string='Employee P Group')
+    contract_year = fields.Selection('Tahun Ke', related='contract_id.contract_year', store=True)
     # employee_group2 = fields.Selection(selection=_selection1,
     #                                    default='Group2',
     #                                   string='Employee P Group 2')

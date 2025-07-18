@@ -125,6 +125,7 @@
                         <field name="contract_dateto" string="End Of Contract Date" invisible="job_status !='contract'" />
                         <field name="contracts_count" string="Contract Time"
                             invisible="job_status !='contract'" />
+                        <field name="contract_year" invisible="job_status !='contract'" />
                         <label for="ws_day" string="Working Service"
                             invisible="job_status !='permanent'" />
                         <div class="o_row" invisible="job_status !='permanent'">
