@@ -15,10 +15,10 @@
                         </header>
                         <group string="PERMISSION ENTRY" name="permission_entry">
                             <group>
-                                <field name="employee_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
                                 <field name="area_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
                                 <field name="branch_ids" invisible="1" />
                                 <field name="branch_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True" />
+                                <field name="employee_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="True"/>
                                 <field name="alldepartment" invisible="1"/>
                                 <field name="department_id" readonly="1" force_save="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id !=False"/>
                                 <field name="job_id" readonly="1" force_save="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
@@ -54,17 +54,17 @@
                                 <label for="approve1_by" string="Approval 1 By"/>
                                 <div class="mr8 oe_inline">
                                     <field name="approved1" readonly="id==False or permission_status != 'draft'" class="mr8 oe_inline"/>
-                                    <field name="approve1_by" readonly="approved1==True or permission_status != 'draft'" class="mr8 oe_inline"/>
+                                    <field name="approve1_by" readonly="approved1==True or permission_status != 'draft'" class="mr8 oe_inline" force_save="1"/>
                                 </div>
                                 <label for="approve2_by" string="Approval 2 By"/>
                                 <div class="mr8 oe_inline">
                                     <field name="approved2" readonly="id==False or permission_status != 'draft'" class="mr8 oe_inline"/>
-                                    <field name="approve2_by" readonly="approved2==True or permission_status != 'draft'" class="mr8 oe_inline"/>
+                                    <field name="approve2_by" readonly="approved2==True or permission_status != 'draft'" class="mr8 oe_inline" force_save="1"/>
                                 </div>
                                 <label for="approve3_by" string="Approval 3 By "/>
                                 <div class="mr8 oe_inline">
                                     <field name="approved3" readonly="id==False or permission_status != 'draft'" class="mr8 oe_inline"/>
-                                    <field name="approve3_by" readonly="approved3==True or permission_status != 'draft'" class="mr8 oe_inline"/>
+                                    <field name="approve3_by" readonly="approved3==True or permission_status != 'draft'" class="mr8 oe_inline" force_save="1"/>
                                 </div>
                             </group>
                             <group>

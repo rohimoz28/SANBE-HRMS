@@ -31,7 +31,7 @@ class HRPermissionEntry(models.Model):
             allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
             allrecs.alldepartment = [Command.set(allbranch.ids)]
 
-    area_id = fields.Many2one('res.territory', string='Area', index=True)
+    area_id = fields.Many2one('res.territory', string='Area', index=True, domain=lambda self: [('id', '=', self.env.user.area.id)])
     branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
     alldepartment = fields.Many2many('hr.department', 'hr_employeelist_schedule_rel', string='All Department', compute='_isi_department_branch', store=False)
     branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True,)
