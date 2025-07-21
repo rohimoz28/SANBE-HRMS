@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.66-2025w30.3 (2025-07-21)
+
+- 4c45d7b [IMP] PAM : Edit Template Email Otomatis untuk Notifikasi Masa Akhir Kontrak Karyawan
+
+
 ## v0.0.62-2025w29.1 (2025-07-14)
 
 - b3ed2ef [FIX]PAM Print Out PDF - Surat Keterangan Habis Kontrak
