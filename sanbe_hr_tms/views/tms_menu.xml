@@ -299,7 +299,7 @@
                 parent="hr_menu_tms_root"
                 sequence="7"
                 action="action_hr_openin_closing"
-                groups="group_processing_period_manager,group_processing_period_supervisor"
+                groups="group_processing_period_manager,group_processing_period_supervisor,group_processing_period_staff"
         />
         <!-- END PROCESSING AND PERIOD -->
 
