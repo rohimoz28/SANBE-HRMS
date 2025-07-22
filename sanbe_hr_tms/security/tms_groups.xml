@@ -436,7 +436,7 @@
 
         <record model="res.groups" id="group_processing_period_staff" >
             <field name="name">Staff</field>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+            <!-- <field name="implied_ids" eval="[(4, ref('base.group_user'))]" /> -->
             <field name="category_id" ref="sanbe_hr_tms.group_processing_period"/>
         </record>
 
