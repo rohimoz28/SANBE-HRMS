@@ -3,8 +3,10 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError, UserError
 from itertools import groupby
+from datetime import datetime
 
 table_header = """
+<p>Pengingat HR: List Kontrak Karyawan yang Akan Berakhir 90 Hari kedepan dari Tanggal {today} untuk Bisnis Unit {branch}</p>
 <br/>
 <p>Dengan hormat, <br/>Bersama ini kami sampaikan list masa kontrak kerja karyawan di lingkungan PT Sanbe Farma yang akan berakhir. Berikut list nya:</p>
 <br/>
@@ -20,7 +22,7 @@ table_header = """
             <th>Perusahaan</th>
             <th>Tanggal Awal Kontrak</th>
             <th>Tanggal Akhir Kontrak</th>
-            <th>Lama Kontrak</th>
+            <th>Masa Kontrak</th>
         </tr>
     </thead>
     <tbody>
@@ -50,6 +52,13 @@ def month_to_roman(month):
         return roman_list[month][1]
     else:
         return "Invalid month"
+
+bulan_map = {
+    '01': 'Januari', '02': 'Februari', '03': 'Maret',
+    '04': 'April', '05': 'Mei', '06': 'Juni',
+    '07': 'Juli', '08': 'Agustus', '09': 'September',
+    '10': 'Oktober', '11': 'November', '12': 'Desember'
+}
     
 class HrEmployeeContractMonitoring(models.Model):
     _auto = False
@@ -624,13 +633,16 @@ class HrEmployeeContractMonitoring(models.Model):
                    
     def mail_send_hr(self):
         # try:
+            today_date = fields.Datetime.today().date()
+            today = self._format_date(today_date)
             query_superior_id = """ 
-                    SELECT DISTINCT hcm.branch_id FROM hr_employee_contract_monitoring hcm where hcm.time_limit <= 60;
+                    SELECT DISTINCT hcm.branch_id FROM hr_employee_contract_monitoring hcm where hcm.time_limit <= 90;
                 """
             self.env.cr.execute(query_superior_id)
             # users = 'azizah <azizah_nurmahdyah@sanbe-farma.com>'    
             # users = ''    
             for distinct_records in self.env.cr.dictfetchall():
+                branch_id = self.env['res.branch'].browse(distinct_records['branch_id'])
                 list_email = self.env['hr.mail.config'].search([('branch_id', '=', distinct_records['branch_id'])])
                 # email_list = [rec.list_email for rec in list_email if rec.list_email]
                 # users = ', ' + str(list_email.list_email or '')
@@ -638,7 +650,7 @@ class HrEmployeeContractMonitoring(models.Model):
                 users = ', '.join(filter(None, list_email.mapped('list_email')))                 
                 table_rows = ""
                 idx = 1
-                for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=', distinct_records['branch_id']),('time_limit','<=',60)]):
+                for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=', distinct_records['branch_id']),('time_limit','<=',90)]):
                     table_rows += f"""
                     <tr>
                         <td>{idx}</td> 
@@ -648,16 +660,20 @@ class HrEmployeeContractMonitoring(models.Model):
                         <td>{records.job_id.name}</td>
                         <td>{records.department_id.name}</td>
                         <td>{records.company_name}</td>
-                        <td>{records.date_start}</td>
-                        <td>{records.date_end}</td>
+                        <td>{self._format_date(records.date_start)}</td>
+                        <td>{self._format_date(records.date_end)}</td>
                         <td>{self._get_duration(records)}</td>
                     </tr>
                     """
-                    idx += 1                        
+                    idx += 1
+                table_header_template = table_header.format(
+                                today=today,
+                                branch=branch_id.name,
+                            )                        
                 email_body = f"""<p>Kepada Yth.</p>
                 <p>Personalia PT Sanbe Farma <br/>
                 di Tempat</p>
-                {table_header}
+                {table_header_template}
                 {table_rows}
                 {table_footer}
                 <p>Odoo - ERP <br/> PT Sanbe Farma</p>
@@ -678,7 +694,8 @@ class HrEmployeeContractMonitoring(models.Model):
         if not contract.date_start or not contract.date_end:
             return ''
 
-        duration = contract.date_end - contract.date_start
+        today = fields.Datetime.today().date()
+        duration = contract.date_end - today
         total_days = duration.days
 
         years = total_days // 365
@@ -695,6 +712,14 @@ class HrEmployeeContractMonitoring(models.Model):
             result.append(f"{days} hari")
 
         return ' '.join(result)
+    
+    def _format_date(self, record):
+        if not record:
+            return '-'
+        day = record.strftime('%d')
+        month = bulan_map[record.strftime('%m')]
+        year = record.strftime('%Y')
+        return f"{day} {month} {year}"
                       
     # def mail_send_mentor(self):
     # # try:
