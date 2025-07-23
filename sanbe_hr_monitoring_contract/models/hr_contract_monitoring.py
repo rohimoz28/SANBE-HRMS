@@ -98,6 +98,15 @@ class HrEmployeeContractMonitoring(models.Model):
     coach_id = fields.Many2one('hr.employee', string='Coach', required=True)
     coach_name = fields.Char('Coach Name', required=True)
     coach_email = fields.Char('Coach Email', required=True)
+    emp_id = fields.Char('Employee ID', required=True)
+    contract_type_id = fields.Many2one('hr.contract.type', string='Contract Type')
+    state = fields.Selection([
+        ('draft', 'New'),
+        ('open', 'Running'),
+        ('close', 'Expired'),
+        ('cancel', 'Cancelled')
+    ], string='Status')
+    resource_calendar_id = fields.Many2one('resource.calendar', string='Working Schedule')
     
     # def init(self):
     #     tools.drop_view_if_exists(self.env.cr, self._table)
@@ -428,100 +437,131 @@ class HrEmployeeContractMonitoring(models.Model):
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
-                SELECT
+                SELECT 
                     ROW_NUMBER() OVER (
-                        ORDER BY time_limit, employee_id, date_end, contract_id
-                    ) AS id,
-                    employee_id,
-                    mobile_phone,
-                    nik_employee,
-                    coach_email,
-                    coach_id,
-                    coach_name,
-                    nik_lama,
-                    employee_name,
-                    status_employee,
-                    employee_address,
-                    company_id,
-                    company_name,
-                    branch_id,
-                    branch_name,
-                    territory_id,
-                    territory_name,
-                    department_id,
-                    department_name,
-                    job_id,
-                    job_name,
-                    contract_id,
-                    contract_name,
-                    contract_number,
-                    date_start,
-                    date_end,
-                    time_limit,
-                    notice_days,
-                    start_notice,
-                    rehire,
-                    resignation_id
-                FROM 
+                        ORDER BY 
+                        time_limit, 
+                        employee_id, 
+                        date_end, 
+                        contract_id
+                    ) AS id, 
+                    employee_id, 
+                    emp_id, 
+                    mobile_phone, 
+                    nik_employee, 
+                    coach_email, 
+                    coach_id, 
+                    coach_name, 
+                    nik_lama, 
+                    employee_name, 
+                    status_employee, 
+                    employee_address, 
+                    company_id, 
+                    company_name, 
+                    branch_id, 
+                    branch_name, 
+                    territory_id, 
+                    territory_name, 
+                    department_id, 
+                    department_name, 
+                    job_id, 
+                    job_name, 
+                    contract_id, 
+                    contract_name, 
+                    contract_number, 
+                    date_start, 
+                    date_end, 
+                    time_limit, 
+                    notice_days, 
+                    contract_type_id, 
+                    resource_calendar_id, 
+                    state, 
+                    start_notice, 
+                    rehire, 
+                    resignation_id 
+                    FROM 
                     (
-                        SELECT
-                            he.id AS employee_id,
-                            he.name AS employee_name,
-                            he.mobile_phone AS mobile_phone,
-                            he.nik AS nik_employee,
-                            he2.id AS coach_id,
-                            he2.name AS coach_name, 
-                            coalesce(he2.work_email,'') coach_email, 
-                            coalesce(he.nik_lama,he.nik) AS nik_lama,
-                            he.employee_type AS status_employee,
-                            concat(he.private_street,' ',he.private_street2,' ',he.private_city)  AS employee_address,
-                            rc.id AS company_id,
-                            rc.name AS company_name,
-                            rb.id AS branch_id,
-                            rb.name AS branch_name,
-                            rt.id AS territory_id,
-                            rt.name AS territory_name,
-                            hd.id AS department_id,
-                            hd.name AS department_name,
-                            hj.id AS job_id,
-                            hj.name AS job_name,
-                            hc2.id AS contract_id,
-                            hc2.name AS contract_name,
-                            hc2.number AS contract_number,
-                            hc2.date_start AS date_start,
-                            hc2.date_end AS date_end,
-                            hc2.date_end - current_date AS time_limit,
-                            hc2.notice_days,
-                            hres.id resignation_id,
-                            hc2.date_end - (hc2.notice_days + 1) AS start_notice,
-                            COALESCE(hel2.end_contract, FALSE) AS rehire
-                        FROM
-                            hr_employee he
-                            INNER JOIN (
-                                SELECT MAX(id) AS id, employee_id
-                                FROM hr_contract where state not in ('cancel','close','')
-                                GROUP BY employee_id
-                            ) hc ON hc.employee_id = he.id
-                            LEFT JOIN hr_employee he2 on he.parent_id = he2.id
-                            LEFT JOIN hr_contract hc2 ON hc.id = hc2.id AND hc.employee_id = he.id
-                            LEFT JOIN res_company rc ON hc2.company_id = rc.id
-                            LEFT JOIN res_branch rb ON hc2.branch_id = rb.id
-                            LEFT JOIN res_territory rt ON hc2.area = rt.id
-                            LEFT JOIN hr_department hd ON hc2.department_id = hd.id
-                            LEFT JOIN hr_job hj ON hc2.job_id = hj.id
-                            LEFT JOIN (
-                                SELECT MAX(hel.id) AS id, hel.employee_id
-                                FROM hr_employment_log hel
-                                GROUP BY hel.employee_id
-                            ) hel ON hel.employee_id = he.id
-                            LEFT JOIN hr_employment_log hel2 ON hel.id = hel2.id and hel2.employee_id = he.id
-                            left join hr_resignation hres on hres.employee_id = he.id and hres.state not in ('cancel','inactive')
-                        WHERE
-                            hc2.active = TRUE
-                            AND he.active = TRUE
-                            AND he.state = 'approved'
-                            AND (hc2.date_end::date BETWEEN current_date AND current_date + INTERVAL '90 days')
-                            and hres.id is null
+                        SELECT 
+                        he.id AS employee_id, 
+                        he.employee_id as emp_id, 
+                        he.name AS employee_name, 
+                        he.mobile_phone AS mobile_phone, 
+                        he.nik AS nik_employee, 
+                        he2.id AS coach_id, 
+                        he2.name AS coach_name, 
+                        coalesce(he2.work_email, '') coach_email, 
+                        coalesce(he.nik_lama, he.nik) AS nik_lama, 
+                        he.employee_type AS status_employee, 
+                        concat(
+                            he.private_street, ' ', he.private_street2, 
+                            ' ', he.private_city
+                        ) AS employee_address, 
+                        rc.id AS company_id, 
+                        rc.name AS company_name, 
+                        rb.id AS branch_id, 
+                        rb.name AS branch_name, 
+                        rt.id AS territory_id, 
+                        rt.name AS territory_name, 
+                        hd.id AS department_id, 
+                        hd.name AS department_name, 
+                        hj.id AS job_id, 
+                        hj.name AS job_name, 
+                        hc2.id AS contract_id, 
+                        hc2.name AS contract_name, 
+                        hc2.number AS contract_number, 
+                        hc2.date_start AS date_start, 
+                        hc2.date_end AS date_end, 
+                        hc2.date_end - current_date AS time_limit, 
+                        hc2.notice_days, 
+                        hc2.contract_type_id, 
+                        hc2.resource_calendar_id, 
+                        hc2.state, 
+                        hres.id resignation_id, 
+                        hc2.date_end - (hc2.notice_days + 1) AS start_notice, 
+                        COALESCE(hel2.end_contract, FALSE) AS rehire 
+                        FROM 
+                        hr_employee he 
+                        INNER JOIN (
+                            SELECT 
+                            MAX(id) AS id, 
+                            employee_id 
+                            FROM 
+                            hr_contract 
+                            where 
+                            state not in ('cancel', 'close', 'draft') 
+                            GROUP BY 
+                            employee_id
+                        ) hc ON hc.employee_id = he.id 
+                        LEFT JOIN hr_employee he2 on he.parent_id = he2.id 
+                        LEFT JOIN hr_contract hc2 ON hc.id = hc2.id 
+                        AND hc.employee_id = he.id 
+                        LEFT JOIN res_company rc ON hc2.company_id = rc.id 
+                        LEFT JOIN res_branch rb ON hc2.branch_id = rb.id 
+                        LEFT JOIN res_territory rt ON hc2.area = rt.id 
+                        LEFT JOIN hr_department hd ON hc2.department_id = hd.id 
+                        LEFT JOIN hr_job hj ON hc2.job_id = hj.id 
+                        LEFT JOIN (
+                            SELECT 
+                            MAX(hel.id) AS id, 
+                            hel.employee_id 
+                            FROM 
+                            hr_employment_log hel 
+                            GROUP BY 
+                            hel.employee_id
+                        ) hel ON hel.employee_id = he.id 
+                        LEFT JOIN hr_employment_log hel2 ON hel.id = hel2.id 
+                        and hel2.employee_id = he.id 
+                        left join hr_resignation hres on hres.employee_id = he.id 
+                        and hres.state not in ('cancel', 'inactive') 
+                        WHERE 
+                        hc2.active = TRUE 
+                        AND he.active = TRUE 
+                        AND he.state = 'approved' 
+                        AND (
+                            hc2.date_end :: date BETWEEN current_date 
+                            AND current_date + INTERVAL '90 days'
+                        ) 
+                        and hres.id is null
                     ) AS emp
         )
         """ % (self._table, ))
