@@ -13,21 +13,32 @@
                     <button name="mail_send_hr" type="object" string="mail HR" invisible="1" />
                     <!-- <button name="mail_send_mentor" type="object" string="mail Mentor" invisible="1"/> -->
                 </header> 
-                <field name="territory_id" string="Area"/>
+                <field name="employee_id" string="Employee"/>
+                <field name="coach_id" string="Immediate Superior"/>
+                <field name="emp_id" />
+                <field name="contract_name" string="Contract Reference"/>
+                <field name="department_id" string="Department"/>
+                <field name="job_id" />
+                <field name="date_start" string="Start Date"/>
+                <field name="date_end" string="End Date"/>
+                <field name="contract_type_id"/>
+                <field name="resource_calendar_id" />
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'close'" decoration-success="state == 'open'"/>
+                <!-- <field name="territory_id" string="Area"/>
                 <field name="branch_id" string="Business Units"/>
                 <field name="department_id" string="Sub Department"/>
-                <field name="employee_id" string="Employee"/>
                 <field name="nik_employee" string="NIK"/>
                 <field name="mobile_phone" string="Phone"/>
                 <field name="employee_address" string="Address"/>
                 <field name="notice_days" string="Notice"/>
-                <field name="date_end" string="End Date"/>
                 <field name="rehire"/>
-                <field name="time_limit" column_invisible="1" />
+                <field name="time_limit" column_invisible="1" /> --> 
+
                 <!-- <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
                 <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/> -->
-                <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
-                <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/>
+                
+                <!-- <button name="act_re_contract" type="object" string=" re Contract" class="fa fa-undo oe_highlight"/>
+                <button name="act_emp_finished" type="object" string=" Employee Exit" class="fa fa-chain-broken"/> -->
             </tree>
         </field>
     </record>

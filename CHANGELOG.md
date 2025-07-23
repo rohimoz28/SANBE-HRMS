@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.70-2025w30.7 (2025-07-23)
+
+- c91cf05 [IMP] PAM : Improvement Email Template Notifikasi Masa Akhir Kontrak
+
+
+## v0.0.68-2025w30.5 (2025-07-23)
+
+- 5da0214 [IMP] TMS : Hide Button 'New' pada Form Processing and Periode
+
+
 ## v0.0.66-2025w30.3 (2025-07-21)
 
 - 4c45d7b [IMP] PAM : Edit Template Email Otomatis untuk Notifikasi Masa Akhir Kontrak Karyawan
