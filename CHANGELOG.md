@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.72-2025w30.9 (2025-07-24)
+
+- 05c8ebc [IMP] PAM : Improvement Monitoring Kontak
+
+
 ## v0.0.70-2025w30.7 (2025-07-23)
 
 - c91cf05 [IMP] PAM : Improvement Email Template Notifikasi Masa Akhir Kontrak
