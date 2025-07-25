@@ -1,37 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <template id="external_layout_standard_right_address" inherit_id="web.external_layout_standard">
-            <!-- Ubah alamat pada header menjadi rata kanan -->
-            <xpath expr="//div[@name='company_address']" position="replace">
-                <div class="col-4 offset-9" name="company_address">
-                    <div style="text-align: left;">
-                        <ul class="list-unstyled" name="company_address_list">
-                            <li t-if="company.is_company_details_empty">
-                                <span t-field="company.partner_id"
-                                      t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
-                                    <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                        <strong>Company address block</strong>
-                                        <div>Contains the company address.</div>
-                                    </div>
-                                </span>
-                            </li>
-                            <li t-else="">
-                                <span t-field="company.company_details"/>
-                            </li>
-                            <li t-if="not forced_vat"/>
-                            <li t-else="">
-                                <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
-                                <span t-esc="forced_vat"/>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </xpath>
-        </template>
-
         <template id="skk_pdf_format">
-            <t t-call="web.external_layout">
+            <t t-call="web.basic_layout">
                 <style>
                     .no-border-table,
                     .no-border-table td,
@@ -40,6 +11,63 @@
                         border-collapse: collapse;
                     }
                 </style>
+                <div class="header">
+                    <t t-set="company" t-value="res_company" />
+                    <table style="width=100%; margin-right: auto; border: 0px solid transparent;">
+                        <tr>
+                            <td>
+                                <img
+                                    t-if="company.logo"
+                                    t-att-src="image_data_uri(company.logo)"
+                                    style="max-height: 100px; width: 200px;" alt="Logo"
+                                />
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="border-bottom: 1px solid black; margin-bottom: 2px;" />
+                            <div style="border-bottom: 4px solid black;" />
+                        </div>
+                    </div>
+                    <table style="width=100%; margin-left: auto; border: 0px solid transparent;">
+                        <tr>
+                            <td class="text-left" style="vertical-align: middle; font-family: 'Bookman Old Style', Georgia, serif;">
+                                <strong>
+                                    <span style="font-size:17px;" t-field="company.name" />
+                                    Pharmaceutical Manufacturer
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" class="text-left">
+                            <t t-if="o.employee_id.branch_id.street">
+                                <strong>
+                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.street" />
+                                </strong>
+                            </t>
+                            <t t-if="o.employee_id.branch_id.street2">
+                                <strong>
+                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.street2" />
+                                </strong>
+                            </t>
+                            <t t-if="o.employee_id.branch_id.city">
+                                <strong>
+                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.city" />
+                                </strong>
+                            </t>
+                                <strong>
+                                    <br /> Telp: <t t-if="o.employee_id.branch_id.phone"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.phone" /></t>
+                                    <br /> Fax: <t t-if="o.employee_id.branch_id.fax"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.fax" /></t>
+                                    <br />
+                                    <t t-if="o.employee_id.branch_id.city"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.city" /></t> <t t-if="o.employee_id.branch_id.zip"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.zip" /></t>
+                                </strong>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br />
+                <br />
                 <div class="page">
                     <div class="text-center" style="text-align: center;">
                         <p style="text-align:center;">

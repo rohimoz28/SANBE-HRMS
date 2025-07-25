@@ -11,7 +11,7 @@ class SkkEmployeeEOCWizard(models.TransientModel):
     name = fields.Char(string="No.", required=True, store=True)
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True)
     receiver_id = fields.Many2one('hr.employee', string="Receive", default=lambda self:self.employee_id.parent_id.id, required=True)
-    contracts_count = fields.Integer(string="Contracts",default=1, required=True)
+    # contracts_count = fields.Integer(string="Contracts",default=1, required=True)
     
     date_print = fields.Date("Date Print", default=fields.Date.context_today)
     oec_date = fields.Date("End of Contract", default=lambda self:self.employee_id.contract_dateto)
