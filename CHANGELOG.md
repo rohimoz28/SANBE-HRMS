@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.74-2025w30.11 (2025-07-25)
+
+- 5fbaf31 [IMP] PAM : Perbaikan Layout Surat Keterangan Kerja - Header dan Nama
+
+
 ## v0.0.72-2025w30.9 (2025-07-24)
 
 - 05c8ebc [IMP] PAM : Improvement Monitoring Kontak
