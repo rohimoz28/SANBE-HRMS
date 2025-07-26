@@ -10,7 +10,7 @@
                         <group>
                             <field name="name" string="Nomor :" placeholder="e.g. ....../PERS-GA/Intrn/....../2025"/>
                             <field name="employee_id" string="Karyawan" readonly="1"/>
-                            <field name="contracts_count" string="Tahun ke" readonly="0"/>
+                            <!-- <field name="contracts_count" string="Tahun ke" readonly="0"/> -->
                         </group>
                         <group>
                             <field name="receiver_id" string="Tujuan" readonly="0"/>
