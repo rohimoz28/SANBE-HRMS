@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.76-2025w30.13 (2025-07-26)
+
+- fe789b5 [IMP] PAM : Penyesuaian Tampilan Header Alamat Perusahaan di Dokumen Odoo & Wizard SKHK
+
+
 ## v0.0.74-2025w30.11 (2025-07-25)
 
 - 5fbaf31 [IMP] PAM : Perbaikan Layout Surat Keterangan Kerja - Header dan Nama
