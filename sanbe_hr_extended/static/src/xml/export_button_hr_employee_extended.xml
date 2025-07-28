@@ -1,7 +1,7 @@
 <template id="template_hr_employee" xml:space="preserve">
     <t t-name="sanbe_hr_extended.ListView.Buttons" t-inherit="web.ListView.Buttons" t-inherit-mode="extension">
         <xpath expr="//div[contains(@class, 'o_list_buttons')]" position="inside">
-            <t t-if="props.resModel === 'hr.employee'">
+            <t t-if="props.resModel === 'hr.employee' and props.context.show_export_excel !== false">
                 <button type="button" class="btn btn-primary" t-on-click="showHrEmployee">
                     Export to Excel
                 </button>

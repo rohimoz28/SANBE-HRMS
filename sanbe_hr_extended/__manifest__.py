@@ -37,6 +37,7 @@
         'views/hr_contracts.xml',
         'views/hr_department.xml',
         'views/hr_contract_type.xml',
+        'views/hr_pension_monitoring.xml',
 
         'wizards/hr_employee_wizard.xml',
         'wizards/employee_report_wizard.xml',
@@ -47,6 +48,7 @@
         'web.assets_backend': [
             'sanbe_hr_extended/static/src/xml/export_button_hr_employee_extended.xml',
             'sanbe_hr_extended/static/src/js/export_button_hr_employee_extended.js',
+            'sanbe_hr_extended/static/src/css/hide_search_panel.css',
         ],
     },
     # only loaded in demonstration mode
