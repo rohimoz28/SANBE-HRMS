@@ -12,3 +12,4 @@ from . import hr_contracts
 from . import hr_department
 from . import ir_sequence
 from . import hr_contract_type
+from . import hr_pension_monitoring

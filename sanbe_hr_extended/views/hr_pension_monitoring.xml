@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="hr_pension_monitoring_view_tree" model="ir.ui.view">
+            <field name="name">hr.pension.monitoring.view.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree string="Monitoring Pension" create="0" delete="0" class="hide-searchpanel">
+                        <field name="name" />
+                        <field name="parent_id" />
+                        <field name="employee_id" />
+                        <field name="department_id" />
+                        <field name="job_id" />
+                        <field name="join_date" />
+                        <field name="pension_date" />
+                        <field name="retire_age" />
+                        <field name="birthday" />
+                        <field name="pension_state" widget="badge" decoration-warning="pension_state == 'expired'" decoration-success="pension_state == 'running'"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_pension_monitoring_action" model="ir.actions.act_window">
+            <field name="name">Monitoring Pension</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_pension_monitoring_view_tree"/>
+            <field name="domain">[('job_status', '=', 'permanent')]</field>
+            <field name="context">{'show_export_excel': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report Pension Monitoring
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_hr_pension_monitoring"
+            name="Monitoring Pension"
+            parent="hr.hr_menu_hr_reports"
+            sequence="23"
+            action="hr_pension_monitoring_action"
+        />
+        
+    
+    </data>
+    
+
+</odoo>
