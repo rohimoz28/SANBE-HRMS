@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.80-2025w31.3 (2025-07-29)
+
+- 37fb66e [IMP] PAM :Hide Group 1 (pak Deni) from Employee P Group Dropdown Mutasi
+
+
 ## v0.0.78-2025w31.1 (2025-07-29)
 
 - f0d7139 [FEAT] PAM : Create Monitoring Pensiun View
