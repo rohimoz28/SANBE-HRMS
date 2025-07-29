@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.78-2025w31.1 (2025-07-29)
+
+- f0d7139 [FEAT] PAM : Create Monitoring Pensiun View
+
+
 ## v0.0.76-2025w30.13 (2025-07-26)
 
 - fe789b5 [IMP] PAM : Penyesuaian Tampilan Header Alamat Perusahaan di Dokumen Odoo & Wizard SKHK
