@@ -142,6 +142,7 @@
                                 <div class="col-12">
                                     <br />
                                     <br />
+                                    <br />
                                     <h2 style="line-height: 1; font-size:21px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <strong>
                                             <u>
@@ -171,9 +172,10 @@
                                     </td>
                                     <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
                                     <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                        <t t-if="doc.emp_nos.name">
+                                        <!-- <t t-if="doc.emp_nos.name">
                                             <t t-esc="doc.emp_nos.name" />
-                                        </t>
+                                        </t> -->
+                                        <span>Asep Rohman, SH.</span>
                                     </td>
                                 </tr>
                                 <tr style="height: 10px;">
@@ -182,9 +184,10 @@
                                     </td>
                                     <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
                                     <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                        <t t-if="doc.emp_nos.job_id.name">
+                                        <!-- <t t-if="doc.emp_nos.job_id.name">
                                             <t t-esc="doc.emp_nos.job_id.name" />
-                                        </t>
+                                        </t> -->
+                                        <span>Personnel &amp; General Affairs Manager</span>
                                     </td>
                                 </tr>
                             </table>
@@ -207,13 +210,15 @@
                                     </td>
                                 </tr>
                                 <tr style="height: 10px;">
-                                    <td style="width: 150px; padding: 0; margin: 0;">
+                                    <td style="width: 150px; padding: 0; margin: 0; vertical-align: top;">
                                         <p style="line-height: 0.1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">Alamat</p>
                                     </td>
-                                    <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
+                                    <td style="width: 15px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif; vertical-align: top;">:</td>
                                     <td style="width: 300px; padding: 0; margin: 0; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <t t-if="doc.emp_nos.private_street">
-                                            <t t-esc="doc.emp_nos.private_street" />
+                                            <t t-esc="doc.emp_nos.private_street" /> <t t-esc="doc.emp_nos.private_street2" />,<t t-esc="doc.emp_nos.private_city" />
+                                            <br />
+                                            <t t-esc="doc.emp_nos.private_state_id.name" />, <t t-esc="doc.emp_nos.private_zip" />, <t t-esc="doc.emp_nos.private_country_id.name" />
                                         </t>
                                     </td>
                                 </tr>
@@ -247,25 +252,60 @@
                                         Adalah benar pernah bekerja pada <span t-field="company.name" /> dari tanggal 
                                         <t t-if="doc.emp_nos.job_status == 'permanent'">
                                             <t t-if="doc.joined_date">
-                                                <t t-esc="doc.joined_date.strftime('%d-%m-%Y')" /></t>
+                                                <t t-set="join_date" t-value="doc.joined_date"/>
+                                                <t t-set="join_dates" t-value="join_date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                                <strong><t t-esc="join_dates"/></strong>
+                                                <!-- <t t-esc="doc.joined_date.strftime('%d-%m-%Y')" / -->
+                                            </t>
                                             <t t-else="">.....</t>
                                         </t>
                                         <t t-elif="doc.emp_nos.job_status == 'contract'">
                                             <t t-if="doc.emp_nos.contract_datefrom">
-                                                <t t-esc="doc.emp_nos.contract_datefrom.strftime('%d-%m-%Y')" /></t>
+                                                <t t-set="contract_datefrom" t-value="doc.emp_nos.contract_datefrom"/>
+                                                <t t-set="contract_dates" t-value="contract_datefrom.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                                <strong><t t-esc="contract_dates"/></strong>
+                                                <!-- <t t-esc="doc.emp_nos.contract_datefrom.strftime('%d-%m-%Y')" />-->
+                                            </t> 
                                             <t t-else="">.....</t>
                                         </t>
                                         <t t-else="">.....</t> 
-                                        dan <br />terhitung tanggal 
+                                        dan terhitung tanggal 
                                         <t t-if="doc.effective_date">
-                                            <t t-esc="doc.effective_date.strftime('%d-%m-%Y')" /></t>
+                                            <t t-set="effective_date" t-value="doc.effective_date"/>
+                                            <t t-set="effective_dates" t-value="effective_date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                            <strong><t t-esc="effective_dates"/></strong>
+                                            <!-- <t t-esc="doc.effective_date.strftime('%d-%m-%Y')" /> -->
+                                        </t>
                                         <t t-else="">.....</t> telah mengundurkan diri atas permintaannya sendiri. 
                                     </p>
-                                    <p style="line-height: 1; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Demikian surat keterangan ini kami <br />buat untuk dapat dipergunakan sebagaimana mestinya. </p>
+                                    <p style="line-height: 1; margin: 1; font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;"> Demikian surat keterangan ini kami buat untuk dapat dipergunakan sebagaimana mestinya. </p>
                                 </div>
                             </div>
                             <br />
-                            <div class="row mt-12 mb-1" id="tandata_tangan">
+                            <br/>
+                            <br/>
+
+                            <t t-set="date" t-value="doc.write_date"/>
+                            <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+
+                            <div class="text-right">
+                                <p style="font-size:17px;">Bandung, <t t-esc="dates"/><br/><span>Hormat Kami,</span>
+
+                                </p>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p style="font-size:18px;">
+                                    <strong>
+                                        <span>Asep Rohman, SH.</span>
+                                        <br/>
+                                        <span>Personnel &amp; General Affairs Manager</span>
+                                    </strong>
+                                </p>
+                            </div>
+
+                            <!-- <div class="row mt-12 mb-1" id="tandata_tangan">
                                 <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" style="font-size:16px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                     <span t-esc="doc.area.name" />, <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')" />
                                     <br />
@@ -286,8 +326,8 @@
                                     <t t-else="">
                                         
                                     </t>
-                                </div>
-                            </div>
+                                </div> -->
+                            <!-- </div> -->
                         </div>
                     </t>
                 </t>
