@@ -125,7 +125,8 @@ class HrEmployeeMutation(models.Model):
                                                   ('terminated', 'Terminated')],
                                                  string='Employment Status', tracking=True)
     service_jobtitle = fields.Many2one('hr.job', domain="[('department_id','=',service_departmentid)]", string='Job Position', index=True, tracking=True)
-    service_empgroup1 = fields.Selection(selection=[('Group1', 'Group 1 - Harian(pak Deni)'),
+    service_empgroup1 = fields.Selection(selection=[
+                                                    # ('Group1', 'Group 1 - Harian(pak Deni)'),
                                                     ('Group2', 'Group 2 - bulanan pabrik(bu Felisca)'),
                                                     ('Group3', 'Group 3 - Apoteker and Mgt(pak Ryadi)'),
                                                     ('Group4', 'Group 4 - Security and non apoteker (bu Susi)'),
