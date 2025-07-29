@@ -2,7 +2,7 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 
 EMP_GROUP1 = [
-    ('Group1', 'Group 1 - Harian(pak Deni)'),
+    # ('Group1', 'Group 1 - Harian(pak Deni)'),
     ('Group2', 'Group 2 - bulanan pabrik(bu Felisca)'),
     ('Group3', 'Group 3 - Apoteker and Mgt(pak Ryadi)'),
     ('Group4', 'Group 4 - Security and non apoteker (bu Susi)'),
