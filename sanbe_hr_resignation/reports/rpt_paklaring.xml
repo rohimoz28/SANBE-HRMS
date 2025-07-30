@@ -203,7 +203,8 @@
                             </td>
                             <td style="width: 15px; padding: 0; margin: 0;">:</td>
                             <td style="width: 300px; padding: 0; margin: 0;">
-                                <t t-esc="doc.emp_nos.name" />
+                                <!-- <t t-esc="doc.emp_nos.name" /> -->
+                                <span>Asep Rohman, SH.</span>
                             </td>
                         </tr>
                         <!-- <tr style="height: 120px;">
@@ -230,7 +231,8 @@
                             </td>
                             <td style="width: 15px; padding: 0; margin: 0;">:</td>
                             <td style="width: 300px; padding: 0; margin: 0;">
-                                <t t-esc="doc.emp_nos.job_id.name" />
+                                <!-- <t t-esc="doc.emp_nos.job_id.name" /> -->
+                                <span>Personnel &amp; General Affairs Manager</span>
                             </td>
                         </tr>
                     </table>
@@ -355,12 +357,12 @@
                             </p> -->
                             <p style="line-height: 1; margin: 1;">
                                 <!-- <strong style="line-height: 0.1;"> -->
-                                Adalah benar pernah bekerja pada PT. ……………………. dari tanggal ……………. dan <br/>terhitung tanggal …………………. telah mengundurkan diri atas permintaannya sendiri. 
+                                Adalah benar pernah bekerja pada PT. ……………………. dari tanggal ……………. dan terhitung tanggal …………………. telah mengundurkan diri atas permintaannya sendiri. 
                                 <!-- </strong> -->
                             </p>
                             <p style="line-height: 1; margin: 1;">
                                 <!-- <strong style="line-height: 0.1;"> -->
-                                Demikian surat keterangan ini kami <br/>buat untuk dapat dipergunakan sebagaimana mestinya.
+                                Demikian surat keterangan ini kami buat untuk dapat dipergunakan sebagaimana mestinya.
                                 <!-- </strong> -->
                             </p>
                         </div>
@@ -368,7 +370,27 @@
                     <br />
                     <br />
                     <br />
-                    <div class="row mt-12 mb-1" id="tandata_tangan">
+                    <t t-set="date" t-value="doc.write_date"/>
+                    <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+
+                    <div class="text-right">
+                        <p style="font-size:17px;">Bandung, <t t-esc="dates"/>
+                        <br/>
+                        <span>Hormat Kami,</span></p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p style="font-size:18px;">
+                            <strong>
+                                <span>Asep Rohman, SH.</span>
+                                <br/>
+                                <span>Personnel &amp; General Affairs Manager</span>
+                            </strong>
+                        </p>
+                    </div>
+                    
+                    <!-- <div class="row mt-12 mb-1" id="tandata_tangan">
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" />
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" />
                         <div class="col-auto col-3 mw-100 mb-2" name="informations_reference" />
@@ -387,7 +409,7 @@
                                          <p>
                             (...................................................)</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </t>
         </template>
