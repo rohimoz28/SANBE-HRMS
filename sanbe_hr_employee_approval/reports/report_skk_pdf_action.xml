@@ -71,7 +71,7 @@
                 <div class="page">
                     <div class="text-center" style="text-align: center;">
                         <p style="text-align:center;">
-                            <span style="font-size:25px;">
+                            <span style="font-size:20px;">
                                 <strong>
                                     <u>SURAT KETERANGAN KERJA</u>
                                 </strong>
@@ -82,52 +82,52 @@
                         </p>
                     </div>
                     <br/>
-                    <p style="font-size:17px;">Yang bertanda tangan di bawah ini:</p>
+                    <p style="font-size:16px;">Yang bertanda tangan di bawah ini:</p>
                     <table class="no-border-table">
                         <tr>
                             <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Nama</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Asep Rohman, SH.</span></strong>
+                            <td style="width:150px; font-size:16px;"><strong>Nama</strong></td>
+                            <td style="font-size:16px;">:&#160;&#160;<strong><span>Asep Rohman, SH.</span></strong>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;"><strong>Jabatan</strong></td>
-                            <td style="font-size:17px;">:&#160;&#160;<strong><span>Personnel &amp; General Affairs Manager</span></strong>
+                            <td style="width:150px; font-size:16px;"><strong>Jabatan</strong></td>
+                            <td style="font-size:16px;">:&#160;&#160;<strong><span>Personnel &amp; General Affairs Manager</span></strong>
                             </td>
                         </tr>
                     </table>
 
-                    <p style="font-size:17px;">Menerangkan bahwa:</p>
+                    <p style="font-size:16px;">Menerangkan bahwa:</p>
                     <table class="no-border-table">
                         <tr>
                             <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;white-space:nowrap;"><strong>Nama</strong></td>
-                            <td style="font-size:17px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.name"/></strong>
+                            <td style="width:150px; font-size:16px;white-space:nowrap;"><strong>Nama</strong></td>
+                            <td style="font-size:16px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.name"/></strong>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50px;"></td>
-                            <td style="width:150px; font-size:17px;white-space:nowrap;"><strong>Jabatan</strong></td>
-                            <td style="font-size:17px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.job_id.name"/></strong>
+                            <td style="width:150px; font-size:16px;white-space:nowrap;"><strong>Jabatan</strong></td>
+                            <td style="font-size:16px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.job_id.name"/></strong>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50px;"></td>
-                            <td style="width:150px;font-size:17px;white-space:nowrap;"><strong>NIK</strong></td>
-                            <td style="font-size:17px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.nik"/></strong>
+                            <td style="width:150px;font-size:16px;white-space:nowrap;"><strong>NIK</strong></td>
+                            <td style="font-size:16px;white-space:nowrap;">:&#160;&#160;<strong><span t-field="o.employee_id.nik"/></strong>
                             </td>
                         </tr>
                     </table>
 
-                    <p style="text-align:justify; font-size:17px;">
+                    <p style="text-align:justify; font-size:16px;">
                 Yang bersangkutan adalah benar karyawan di perusahaan ini yang bekerja sejak tanggal
                         <strong>
                             <span t-field="o.first_join_date"/>
                         </strong> sampai dengan sekarang.
                     </p>
 
-                    <p style="text-align:justify; font-size:17px;">
+                    <p style="text-align:justify; font-size:16px;">
                 Demikian surat keterangan ini dibuat untuk melengkapi persyaratan <strong><span t-field="o.descr"/></strong>
                     </p>
 
@@ -138,15 +138,16 @@
                     <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
 
                     <div class="text-right">
-                        <p style="font-size:17px;">Bandung, <t t-esc="dates"/>
+                        <p style="font-size:16px;">Bandung, <t t-esc="dates"/>
                         </p>
                         <br/>
                         <br/>
                         <br/>
                         <br/>
-                        <p style="font-size:18px;">
+                        <p style="font-size:16px;">
                             <strong>
                                 <span>Asep Rohman, SH.</span>
+                                <br/>
                                 <br/>
                                 <span>Personnel &amp; General Affairs Manager</span>
                             </strong>
