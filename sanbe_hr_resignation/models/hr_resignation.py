@@ -5,7 +5,7 @@
 # linkedin  => https://www.linkedin.com/in/albertus-restiyanto-pramayudha-470261a8/
 # youtube   => https://www.youtube.com/channel/UCCtgLDIfqehJ1R8cohMeTXA
 #################################################################################
-from datetime import timedelta
+from datetime import timedelta, date
 from odoo import api, fields, models, _, Command
 from odoo.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
@@ -76,7 +76,7 @@ class HrResignation(models.Model):
     resignation_date = fields.Date('Resignation Date')
     bondservice_from = fields.Date('Bond Services From')
     bondservice_to = fields.Date('To')
-    effective_date = fields.Date('Effective Date')
+    effective_date = fields.Date('Effective Date', default=lambda self: date.today() + timedelta(days=1))
     #penalty = fields.Char('Penalty')
     remarks = fields.Text('Remarks')
     images = fields.Many2many('ir.attachment', 'hr_resoignation_rel',string='Images',
