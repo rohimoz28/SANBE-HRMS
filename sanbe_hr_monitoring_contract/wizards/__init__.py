@@ -7,3 +7,4 @@
 #################################################################################
 
 from . import hr_monitoring_contract
+from . import hr_eoc_wizard

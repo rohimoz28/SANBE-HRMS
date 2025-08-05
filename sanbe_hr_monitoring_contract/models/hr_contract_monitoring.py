@@ -4,6 +4,8 @@ from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError, UserError
 from itertools import groupby
 from datetime import datetime
+import logging
+_logger = logging.getLogger(__name__)
 
 table_header = """
 <p>Pengingat HR: List Kontrak Karyawan yang Akan Berakhir 90 Hari kedepan dari Tanggal {today} untuk Bisnis Unit {branch}</p>

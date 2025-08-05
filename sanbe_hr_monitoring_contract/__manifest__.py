@@ -25,13 +25,18 @@
         "data/generate_contract_reminder_cron.xml",
         "data/mail_template.xml",
         "wizards/hr_monitoring_contract.xml",
+        "wizards/hr_eoc_wizard.xml",
         "views/employee_monitoring.xml",
         "views/hr_employee_contract_monitoring_views.xml",
-        "views/hr_mail_config_views.xml"
+        "views/hr_mail_config_views.xml",
+        "report/hr_eoc_report_template.xml",
+        "report/hr_eoc_report.xml",
     ],
     'assets': {
         'web.assets_backend': [
             "/sanbe_hr_monitoring_contract/static/src/js/hr_monitoring_controller.js",
+            "/sanbe_hr_monitoring_contract/static/src/js/hr_eoc_wizard.js",
+            '/sanbe_hr_monitoring_contract/static/src/xml/hr_eoc_wizard_button.xml',
         ],
         'web.assets_qweb': [
         ],

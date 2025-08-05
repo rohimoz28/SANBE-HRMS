@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.84-2025w31.7 (2025-07-30)
+
+- 07161d5 [IMP] PAM : Hide Group 1 (pak Deni) from Employee P Group Dropdown Employee Report
+
+
+## v0.0.82-2025w31.5 (2025-07-30)
+
+- aa7dd68 [FEAT]PAM : Revisi Template Surat Paklaring
+
+
 ## v0.0.80-2025w31.3 (2025-07-29)
 
 - 37fb66e [IMP] PAM :Hide Group 1 (pak Deni) from Employee P Group Dropdown Mutasi
