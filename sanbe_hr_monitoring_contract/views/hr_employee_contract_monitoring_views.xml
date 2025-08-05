@@ -7,7 +7,7 @@
         <field name="model">hr.employee.contract.monitoring</field>
         <field name="arch" type="xml">
         
-            <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id" decoration-danger="date_end &lt; current_date">
+            <tree default_order="territory_id,branch_id,time_limit,department_id,employee_id" decoration-danger="date_end &lt; current_date" create="0">
                 <header>
                     <button name="act_deactive_employee" type="object" string="Deactive Employee" invisible="1" />
                     <button name="mail_send_hr" type="object" string="mail HR" invisible="1" />

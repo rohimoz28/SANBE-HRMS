@@ -6,3 +6,4 @@ access_hr_contract_monitoring_manager,hr_contract_monitoring_manager,model_hr_co
 access_hr_contract_monitoring_users,hr_contract_monitoring_manager.users,model_hr_contract_monitoring,,1,1,1,0
 access_hr_mail_config_manager,hr_mail_config_manager,model_hr_mail_config,base.group_user,1,1,1,0
 access_hr_mail_config,hr_mail_config,model_hr_mail_config,,1,1,1,0
+access_hr_eoc_report,access.hr.eoc.report,model_hr_eoc_report,base.group_user,1,1,1,1
