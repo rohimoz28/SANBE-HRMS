@@ -66,9 +66,9 @@
         <field name="model_id" ref="model_hr_employee_contract_monitoring"/>
         <field name="state">code</field>
         <field name="code">model.generate_data()</field>
+    </record>
     <!-- mail_send_hr cron -->
-    <!-- </record>
-        <record model="ir.cron" id="hr_contract_remainder_hr_cron">
+    <!-- <record model="ir.cron" id="hr_contract_remainder_hr_cron">
         <field name="name">Contract Monitoring Reminder HR</field>
         <field name="active">True</field>
         <field name="user_id" ref="base.user_root"/>
