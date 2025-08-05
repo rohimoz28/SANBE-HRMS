@@ -145,6 +145,7 @@
                             <field name="service_bisnisunit" readonly="state in ['approved'] or service_type not in ['muta','corr']" invisible="service_type not in ['muta','corr']" force_save="1" />
                             <field name="service_departmentid" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" force_save="1" />
                             <field name="service_jobtitle" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" force_save="1" />
+                            <field name="service_parent_id" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type != 'corr'" options="{'no_create': True,'no_create_edit': True}" force_save="1" />
                             <field name="service_jobstatus" readonly="state in ['approved']" invisible="service_type == 'conf'" force_save="1" />
                             <field name="service_employementstatus" readonly="state in ['approved']" 
                                 invisible="job_status !='permanent'" force_save="1" />

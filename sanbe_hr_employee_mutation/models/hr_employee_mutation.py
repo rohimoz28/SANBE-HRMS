@@ -156,6 +156,7 @@ class HrEmployeeMutation(models.Model):
     service_birthday = fields.Date('Date of Birth')
     service_name = fields.Char('Name')
     service_previous_name = fields.Char('Previous Name')
+    service_parent_id = fields.Many2one('hr.employee', string='Immadiate Superior')
 
     _sql_constraints = [
         (
@@ -225,6 +226,8 @@ class HrEmployeeMutation(models.Model):
             self.nik = self.employee_id.nik
         if self.service_name != self.employee_id.name:
             self.employee_id.write({'name': self.service_name})
+        if self.service_parent_id != self.employee_id.parent_id.id:
+            self.employee_id.write({'parent_id': self.service_parent_id.id})
         if self.join_date != self.employee_id.join_date:
             self.employee_id.write({'join_date': self.join_date})
         if self.marital != self.employee_id.marital:
@@ -317,6 +320,7 @@ class HrEmployeeMutation(models.Model):
             existing.service_nik = str(str(myemp.nik).replace("('", '')).replace("')", "")
             existing.service_nik_lama = str(str(myemp.nik_lama).replace("('", '')).replace("')", "")
             existing.service_name = myemp.name
+            existing.service_parent_id = myemp.parent_id.id
             existing.service_previous_name = myemp.name
             existing.nik_lama = existing.service_nik_lama
             existing.service_area = myemp.area.id
