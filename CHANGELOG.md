@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.90-2025w32.5 (2025-08-05)
+
+- b02d2e6 [IMP] PAM : Perbaikan Daftar Relationship pada Modul Personal Adm
+
+
 ## v0.0.88-2025w32.3 (2025-08-05)
 
 - 5d8b5ce [IMP] PAM : Penambahan Immadiate Superior di Mutasi
