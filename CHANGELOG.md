@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.86-2025w32.1 (2025-08-05)
+
+- adb28eb [FIX] PAM : fix eror Opening and ending tag mismatch ketika upgrade extended dan monitoring contract
+
+
 ## v0.0.84-2025w31.7 (2025-07-30)
 
 - 07161d5 [IMP] PAM : Hide Group 1 (pak Deni) from Employee P Group Dropdown Employee Report
