@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.94-2025w32.9 (2025-08-07)
+
+- c7d6247 [FIX] PAM : Perbaikan Emp Status & Perhitungan Masa Jabatan di Tab Employment Tracking
+
+
 ## v0.0.92-2025w32.7 (2025-08-07)
 
 - e2be261 [IMP] PAM : Set Default Value pada Field 'Effective Date' (H+1 dari Approved Last Day of Employee)
