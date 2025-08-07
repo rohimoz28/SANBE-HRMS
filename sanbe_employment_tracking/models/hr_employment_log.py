@@ -75,37 +75,51 @@ class HrEmployementlog(models.Model):
                 rec.nik = rec.employee_id.nik
                 rec.employee_group1 = rec.employee_id.employee_group1
 
+    # @api.depends('start_date', 'end_date')
+    # def hitung_masa_jabatan(self):
+    #     for record in self:
+    #         service_util = False
+    #         myear = 0
+    #         mmonth = 0
+    #         mday = 0
+    #         if record.employee_id.job_status == 'contract':
+    #             mycont = self.env['hr.contract'].sudo().search(
+    #                 [('employee_id', '=', record.employee_id.id), ('date_end', '<=', record.start_date)], limit=1)
+    #             if mycont:
+    #                 service_until = mycont.date_end
+    #                 if mycont.date_start and service_until > mycont.date_start:
+    #                     service_duration = relativedelta(
+    #                         service_until, mycont.date_start
+    #                     )
+    #                     myear = service_duration.years
+    #                     mmonth = service_duration.months
+    #                     mday = service_duration.days
+    #         else:
+    #             if record.start_date and record.end_date:
+    #                 service_until = record.end_date
+    #             else:
+    #                 service_until = fields.Date.today()
+    #             if record.start_date and service_until > record.start_date:
+    #                 service_duration = relativedelta(
+    #                     service_until, record.start_date
+    #                 )
+    #                 myear = service_duration.years
+    #                 mmonth = service_duration.months
+    #                 mday = service_duration.days
+    #         masajab = 'Year %s Month %s Days %s' % (myear, mmonth, mday)
+    #         record.masa_jabatan = masajab
+
     @api.depends('start_date', 'end_date')
     def hitung_masa_jabatan(self):
         for record in self:
-            service_util = False
             myear = 0
             mmonth = 0
             mday = 0
-            if record.employee_id.job_status == 'contract':
-                mycont = self.env['hr.contract'].sudo().search(
-                    [('employee_id', '=', record.employee_id.id), ('date_end', '<=', record.start_date)], limit=1)
-                if mycont:
-                    service_until = mycont.date_end
-                    if mycont.date_start and service_until > mycont.date_start:
-                        service_duration = relativedelta(
-                            service_until, mycont.date_start
-                        )
-                        myear = service_duration.years
-                        mmonth = service_duration.months
-                        mday = service_duration.days
-            else:
-                if record.start_date and record.end_date:
-                    service_until = record.end_date
-                else:
-                    service_until = fields.Date.today()
-                if record.start_date and service_until > record.start_date:
-                    service_duration = relativedelta(
-                        service_until, record.start_date
-                    )
-                    myear = service_duration.years
-                    mmonth = service_duration.months
-                    mday = service_duration.days
+            if record.start_date and record.end_date:
+                service_duration = relativedelta(record.end_date, record.start_date)
+                myear = service_duration.years
+                mmonth = service_duration.months
+                mday = service_duration.days
             masajab = 'Year %s Month %s Days %s' % (myear, mmonth, mday)
             record.masa_jabatan = masajab
 
