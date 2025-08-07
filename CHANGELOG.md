@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.92-2025w32.7 (2025-08-07)
+
+- e2be261 [IMP] PAM : Set Default Value pada Field 'Effective Date' (H+1 dari Approved Last Day of Employee)
+
+
 ## v0.0.90-2025w32.5 (2025-08-05)
 
 - b02d2e6 [IMP] PAM : Perbaikan Daftar Relationship pada Modul Personal Adm
