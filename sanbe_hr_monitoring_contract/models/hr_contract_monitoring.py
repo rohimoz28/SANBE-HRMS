@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError, UserError
 from itertools import groupby
+from odoo.tools import html2plaintext    
 from datetime import datetime
 import logging
 _logger = logging.getLogger(__name__)
@@ -728,9 +729,66 @@ class HrEmployeeContractMonitoring(models.Model):
                                 }
                 # raise UserError('Test')
                 email.sudo().write(email_dict)
-                email.with_context().send_mail(self.id,force_send=True)
+                email.with_context().send_mail(branch_id.id,force_send=True)
                 print('Kirim ke HR')
 
+
+    def mail_send_hr_x(self, branch):
+        # try:
+            today_date = fields.Datetime.today().date()
+            today = self._format_date(today_date)
+            branch_id = self.env['res.branch'].browse(branch)
+            task_branch = self.env['mail.scheduler.task'].search([('models','=','hr.employee.contract.monitoring'),('branch_id','=',branch_id.id)])
+            print(len(task_branch))
+            if task_branch:
+                table_rows = ""
+                idx = 1
+                for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=',branch_id.id),('time_limit','<=',90),('time_limit','=',0)]):
+                    print(len(records))
+                    table_rows += f"""
+                    <tr>
+                        <td>{idx}</td> 
+                        <td>{records.nik_employee}</td>
+                        <td>{records.employee_name}</td>
+                        <td>{records.branch_id.name}</td>
+                        <td>{records.job_id.name}</td>
+                        <td>{records.department_id.name}</td>
+                        <td>{records.company_name}</td>
+                        <td>{self._format_date(records.date_start)}</td>
+                        <td>{self._format_date(records.date_end)}</td>
+                        <td>{self._get_duration(records)}</td>
+                    </tr>   
+                    """
+                    idx += 1
+                # table_header_template = table_header.format(
+                #                 today=today,
+                #                 branch=branch_id.name,
+                #             )                        
+                email_body = f"""
+                {branch_id.name}<br/>
+                {html2plaintext(task_branch.header_templates_html)}
+                {table_rows}<br/>
+                {html2plaintext(task_branch.bottom_templates_html)}
+                """
+                task_branch.failure_reason = "Kesini"
+                # raise UserError("kesini.")
+    
+                # Ambil template email
+                template = self.env.ref('sanbe_hr_monitoring_contract.email_template_reminder_contract_end', raise_if_not_found=False)
+                if not template:
+                    raise UserError("Email template tidak ditemukan.")
+
+                # Render dan kirim email
+                email_values = {
+                    'subject': "Pengingat: Kontrak Karyawan yang Akan Berakhir",
+                    'email_to': task_branch.email_to,
+                    'email_cc': task_branch.email_cc,
+                    'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
+                    'body_html': email_body,
+                }
+
+                self.env['mail.mail'].sudo().create(email_values).send()
+                #     print('Kirim ke HR')
 
     def _get_duration(self, contract):
         if not contract.date_start or not contract.date_end:
@@ -763,6 +821,9 @@ class HrEmployeeContractMonitoring(models.Model):
         year = record.strftime('%Y')
         return f"{day} {month} {year}"
                       
+    def generate_data(self):
+        pass
+
     # def mail_send_mentor(self):
     # # try:
     #     query_superior_id = """ 

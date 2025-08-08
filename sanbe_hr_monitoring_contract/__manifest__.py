@@ -18,7 +18,7 @@
     'currency': 'USD',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr','hr_skills','hr_resignation','hr_skills_survey','hr_presence','base_territory','sanbe_employement_details'],
+    'depends': ['base', 'hr','hr_skills','hr_resignation','hr_skills_survey','hr_presence','base_territory','sanbe_mail','sanbe_employement_details'],
     "data": [
         "security/contract_monitoring_rule.xml",
         "security/ir.model.access.csv",

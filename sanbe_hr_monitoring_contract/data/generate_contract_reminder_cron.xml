@@ -54,7 +54,7 @@
         <field name="code">model.act_deactive_employee()</field>
     </record> -->
 
-    <record model="ir.cron" id="hr_contract_monitoring_cron">
+    <!-- <record model="ir.cron" id="hr_contract_monitoring_cron">
         <field name="name">Contract Monitoring Reminder</field>
         <field name="active">True</field>
         <field name="user_id" ref="base.user_root"/>
@@ -66,7 +66,7 @@
         <field name="model_id" ref="model_hr_employee_contract_monitoring"/>
         <field name="state">code</field>
         <field name="code">model.generate_data()</field>
-    </record>
+    </record> -->
     <!-- mail_send_hr cron -->
     <!-- <record model="ir.cron" id="hr_contract_remainder_hr_cron">
         <field name="name">Contract Monitoring Reminder HR</field>

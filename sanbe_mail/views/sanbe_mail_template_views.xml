@@ -1,0 +1,110 @@
+<odoo>
+    <data noupdate="1">
+
+        <!-- Tree View: Clean, focused, and readable -->
+        <record id="view_sanbe_mail_template_tree" model="ir.ui.view">
+            <field name="name">sanbe.mail.template.tree</field>
+            <field name="model">sanbe.mail.template</field>
+            <field name="arch" type="xml">
+                <tree string="Sanbe Mail Templates" default_order="name asc">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="subject"/>
+                    <field name="email_to"/>
+                    <field name="email_cc"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <field name="write_date"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <!-- Form View: Improved layout and grouping -->
+        <record id="view_sanbe_mail_template_form" model="ir.ui.view">
+            <field name="name">sanbe.mail.template.form</field>
+            <field name="model">sanbe.mail.template</field>
+            <field name="arch" type="xml">
+                <form string="Sanbe Mail Template">
+                    <sheet>
+                        <!-- Title Section -->
+                        <div class="oe_title">
+                            <label for="name" string ="Template Name"/>
+                            <h1>
+                                <field name="name" placeholder="Template Name..."/>
+                            </h1>
+                            <label for="code" string ="Template Code"/>
+                            <h3>
+                                <field name="code" placeholder="Template Code..."/>
+                            </h3>
+                        </div>
+
+                        <!-- Main Grouping -->
+                        <group>
+                            <group>
+                                <field name="subject"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="email_to" string="Email" placeholder="dummy@dummy.com, example@example.com..."/>
+                                <field name="email_cc" string="CC" placeholder="dummy@dummy.com, example@example.com..."/>
+                                <!-- <field name="partner_to" invisible="1"/> -->
+                                <!-- <field name="company_id" readonly="1" invisible="1"/>
+                                <field name="branch_id" readonly="1" invisible="1"/>
+                                <field name="create_uid" readonly="1" invisible="1"/>
+                                <field name="create_date" readonly="1" invisible="1"/>
+                                <field name="write_date" readonly="1" invisible="1"/> -->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Header Content">
+                                <group>
+                                    <field name="header_template" placeholder="Header text or greeting..."/>
+                                    <!-- <field name="header_templates_html" placeholder="Header text or greeting..."/> -->
+                                </group>
+                            </page>
+                            <page string="Bottom Content">
+                                <group>
+                                    <field name="bottom_template" placeholder="Closing, signature, etc."/>
+                                    <!-- <field name="bottom_templates_html" placeholder="Closing, signature, etc."/> -->
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_sanbe_mail_config_search" model="ir.ui.view">
+            <field name="name">view.sanbe.mail.config.search</field>
+            <field name="model">sanbe.mail.template</field>
+            <field name="arch" type="xml">
+                <search>
+                    <group expand="1" string="Group By">
+                        <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- Action: Simple and helpful -->
+        <record id="action_sanbe_mail_template" model="ir.actions.act_window">
+            <field name="name">Mail Templates</field>
+            <field name="res_model">sanbe.mail.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Mail Template here.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_sanbe_config_mail_template" name="Sanbe Mail Template" parent="menu_sanbe_config_mail_root" sequence="2" action="action_sanbe_mail_template" />
+
+    </data>
+</odoo>

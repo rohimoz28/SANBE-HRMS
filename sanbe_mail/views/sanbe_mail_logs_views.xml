@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View sanbe.mail.logs View Tree -->
+    <record id="view_sanbe_mail_logs_tree" model="ir.ui.view">
+        <field name="name">view.sanbe.mail.logs.tree</field>
+        <field name="model">sanbe.mail.logs</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View sanbe.mail.logs form -->
+    <record id="view_sanbe_mail_logs_form" model="ir.ui.view">
+        <field name="name">view.sanbe.mail.logs.form</field>
+        <field name="model">sanbe.mail.logs</field>
+        <field name="arch" type="xml">
+            <form string="Sanbe Mail Logs">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Name..."/>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View sanbe.mail.logs search -->
+    <record id="view_sanbe_mail_logs_search" model="ir.ui.view">
+        <field name="name">view.sanbe.mail.logs.search</field>
+        <field name="model">sanbe.mail.logs</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action sanbe.mail.logs -->
+    <record id="action_sanbe_mail_logs" model="ir.actions.act_window">
+        <field name="name">Sanbe Mail Logs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sanbe.mail.logs</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                There is no examples click here to add new Sanbe Mail Logs.
+            </p>
+        </field>
+    </record>
+
+</odoo>
