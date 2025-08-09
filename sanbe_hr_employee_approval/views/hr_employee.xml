@@ -370,7 +370,8 @@
                     <attribute name="readonly">state not in ['draft']</attribute>
                 </xpath> -->
                 <xpath expr="//field[@name='join_date']" position="attributes">
-                    <attribute name="readonly">state not in ['draft'] or job_status != 'permanent'</attribute>
+                    <attribute name="readonly">state not in ['draft']</attribute>
+                    <attribute name="invisible">job_status != 'permanent'</attribute>
                 </xpath>
                 <xpath expr="//field[@name='emp_status']" position="replace">
                     <field name="state" invisible="1"/>
