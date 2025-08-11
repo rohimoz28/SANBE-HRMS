@@ -101,6 +101,7 @@ class HrEmployee(models.Model):
                                 default='islam', string='Religion')
 
     join_date = fields.Date('Join Date Permanent')
+    join_date_contract = fields.Date('Join Date Contract')
     job_status = fields.Selection([('permanent', 'Permanent'),
                                    ('contract', 'Contract'),
                                    ('outsource', 'Outsource'),
