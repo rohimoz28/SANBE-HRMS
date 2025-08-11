@@ -141,8 +141,11 @@ class HrResignation(models.Model):
         """
         for resignation in self:
             resignation_request = self.env['hr.resignation'].search(
-                [('employee_id', '=', resignation.employee_id.id),
-                 ('state', 'in', ['confirm', 'approved'])])
+                [
+                    ('employee_id', '=', resignation.employee_id.id),
+                    # ('state', 'in', ['confirm', 'approved'])
+                    ('state', 'in', ['confirm'])
+                ])
             if resignation_request:
                 raise ValidationError(
                     _('There is a resignation request in confirmed or'
@@ -156,8 +159,11 @@ class HrResignation(models.Model):
         self.joined_date = self.employee_id.joining_date
         if self.employee_id:
             resignation_request = self.env['hr.resignation'].search(
-                [('employee_id', '=', self.employee_id.id),
-                 ('state', 'in', ['confirm', 'approved'])])
+                [
+                    ('employee_id', '=', self.employee_id.id),
+                    # ('state', 'in', ['confirm', 'approved'])
+                    ('state', 'in', ['confirm'])
+                ])
             if resignation_request:
                 raise ValidationError(
                     _('There is a resignation request in confirmed or'
