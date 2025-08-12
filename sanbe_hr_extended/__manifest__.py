@@ -43,6 +43,7 @@
         'wizards/employee_report_wizard.xml',
 
         'controllers/employee_report_html.xml',
+        'controllers/employee_report_excel.xml',
     ],
     'assets': {
         'web.assets_backend': [

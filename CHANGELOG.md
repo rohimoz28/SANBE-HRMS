@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.98-2025w33.3 (2025-08-11)
+
+- 099391e [IMP] PAM : Perbaikan Data Join Date Permanent yang Tidak Sesuai pada Employee dengan Status Kontrak
+
+
+## v0.0.96-2025w33.1 (2025-08-11)
+
+- 85de25c [IMP] PAM : Multiple Employee Exit Requests
+
+
 ## v0.0.94-2025w32.9 (2025-08-07)
 
 - c7d6247 [FIX] PAM : Perbaikan Emp Status & Perhitungan Masa Jabatan di Tab Employment Tracking
