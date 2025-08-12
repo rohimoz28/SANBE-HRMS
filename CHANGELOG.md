@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.100-2025w33.5 (2025-08-12)
+
+- 4bcfc4d [FEAT] PAM : Penambahan Fitur Export to Excel pada Export Employee Report
+
+
 ## v0.0.98-2025w33.3 (2025-08-11)
 
 - 099391e [IMP] PAM : Perbaikan Data Join Date Permanent yang Tidak Sesuai pada Employee dengan Status Kontrak
