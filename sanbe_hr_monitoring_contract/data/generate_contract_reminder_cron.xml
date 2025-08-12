@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+    <data noupdate="1">
     <!-- <record model="ir.cron" id="hr_contract_monitoring_cron">
         <field name="name">Contract Monitoring Reminder</field>
         <field name="active">True</field>
@@ -107,4 +107,5 @@
         <field name="state">code</field>
         <field name="code">model.act_deactive_employee()</field>
     </record>
+    </data>
 </odoo>

@@ -3,12 +3,11 @@ import logging
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta, time
+from dateutil.relativedelta import relativedelta
 from pytz import UTC
 
 _logger = logging.getLogger(__name__)
-
-
 
 class SANBECron(models.Model):
     _name = 'sanbe.mail.scheduler'
@@ -149,10 +148,9 @@ class SANBECron(models.Model):
 
     cron_interval = fields.Integer( 
         string='Cron Interval Number', 
-        compute='_compute_cron_info',
-        inverse='_inverse_cron_info',
         store=True,
-        tracking=True
+        tracking=True,
+        default=1
     )
     
     cron_duration = fields.Selection([
@@ -162,34 +160,74 @@ class SANBECron(models.Model):
         ('weeks', 'Weeks'),
         ('months', 'Months')],
         string='Cron Interval', 
-        compute='_compute_cron_info', 
-        inverse='_inverse_cron_info', 
         store=True,
-        tracking=True
-    )
+        tracking=True,
+        default='months'
+    )   
     cron_active = fields.Boolean(
         string='Cron Active',
-        related='cron_id.active',
         store=True, 
         tracking=True,
-        readonly=True
+        readonly=True,
+        default=True
     )
     last_cron_exec = fields.Datetime(
         'Last Executed', 
-        related='cron_id.lastcall', 
         store=True,
         tracking=True
     )
     
-    attempt_count = fields.Integer(string="Attempt Count", default=0)
-    max_attempts = fields.Integer(string="Max Attempts", default=4)
-    
     next_cron_exec = fields.Datetime(
         string='Next Execution',
-        compute='_get_cron',
+        compute='_compute_next_cron_exec',
         store=True, 
         tracking=True
     )
+
+    @api.onchange('cron_interval', 'cron_duration', 'last_cron_exec')
+    def compute_next_cron_exec(self):
+        for line in self:
+            line._compute_next_cron_exec()
+
+
+    @api.depends('cron_interval', 'cron_duration', 'last_cron_exec')
+    def _compute_next_cron_exec(self):
+        for rec in self:
+            rec.next_cron_exec = False  # Default fallback
+            base_time = fields.Datetime.now()
+            if rec.cron_interval and rec.cron_duration:
+                interval = int(rec.cron_interval)
+                if rec.last_cron_exec:
+                    base_time = rec.last_cron_exec or fields.Datetime.now()
+                    next_time = base_time
+                    if rec.cron_duration == 'minutes':
+                        next_time += timedelta(minutes=interval)
+                    elif rec.cron_duration == 'hours':
+                        next_time += timedelta(hours=interval)
+                    elif rec.cron_duration == 'days':
+                        next_time += timedelta(days=interval)
+                    elif rec.cron_duration == 'weeks':
+                        next_time += timedelta(weeks=interval)
+                    elif rec.cron_duration == 'months':
+                        next_time += relativedelta(months=interval)
+                    rec.next_cron_exec = next_time
+                else:
+                    base_time =  fields.Datetime.now()
+                    next_time = base_time
+                    if rec.cron_duration == 'minutes':
+                        next_time += timedelta(minutes=interval)
+                    elif rec.cron_duration == 'hours':
+                        next_time += timedelta(hours=interval)
+                    elif rec.cron_duration == 'days':
+                        next_time += timedelta(days=interval)
+                    elif rec.cron_duration == 'weeks':
+                        next_time += timedelta(weeks=interval)
+                    elif rec.cron_duration == 'months':
+                        next_time += relativedelta(months=interval)
+                    rec.next_cron_exec = next_time
+                    
+    attempt_count = fields.Integer(string="Attempt Count", default=0)
+    max_attempts = fields.Integer(string="Max Attempts", default=4)
     
     state_cron = fields.Selection([
         ('draft','Draft'),
@@ -227,52 +265,43 @@ class SANBECron(models.Model):
     
     task_hour = fields.Selection([(str(i), str(i).zfill(2)) for i in range(0, 24)], string="Hour", default="8")
     task_minute = fields.Selection( [('00', '00'), ('15', '15'), ('30', '30'), ('45', '45')], string="Minute", default="00")
-    
-    
-    def _get_cron(self):
-        for line in self:
-            cr = self.env.cr
-            query = """ SELECT 
-                            ic.id cron_id,
-                            im.id model_id,
-                            ic.nextcall::date AS nextcall,
-                            ic.lastcall::date AS lastcall,
-                            EXTRACT(HOUR FROM ic.lastcall)::char AS lastcall_hour
-                        FROM 
-                            ir_cron ic
-                        LEFT JOIN 
-                            ir_act_server ias ON ic.ir_actions_server_id = ias.id
-                        LEFT JOIN 
-                            ir_model im ON ias.model_id = im.id
-                        WHERE 
-                            im.model ILIKE 'mail.message.schedule';
-            """
-            cr.execute(query)
-            for cron_id, model_id,nextcall,lastcall,lastcall_hour in cr.fetchall():
-                line.cron_id = self.env['ir.cron'].sudo().browse(cron_id)
-                line.cron_id = self.env['ir.model'].sudo().browse(model_id)
-                line.next_cron_exec = nextcall
-                line.last_cron_exec = lastcall
-                line.last_cron_hour = lastcall_hour
                 
     def _task_domain_search(self):
-        current_date = fields.Date.today()  # or however you define it
-        current_hours = fields.Datetime.now().hour  # for example
-
+        current_datetime = fields.Datetime.now() + timedelta(hours=7)  # Adjust timezone
+        current_date = current_datetime.date()  # Get the adjusted date
+        current_hour = '{:02d}'.format(current_datetime.hour)  # Format hour to two digits
         domain = [
             ('next_cron_date', '=', current_date),
-            ('active', '=', True),
-            ('task_hour', '>=', current_hours),
+            ('state_cron', '=', 'run'),
+            ('task_hour', '=', current_hour),
+        ]
+        return domain
+    
+    
+    @api.model
+    def _sch_domain_search(self):
+        self.env.cr.execute("""
+            SELECT id FROM sanbe_mail_scheduler
+            WHERE next_cron_exec::date = CURRENT_DATE
+        """)
+        result = self.env.cr.fetchall()
+        ids = [row[0] for row in result]
+        domain = [
+            ('id', 'in', ids),
+            ('state_cron', '=', 'run'),
         ]
         return domain
                 
-                
     def running_task_list(self):
-        domain = self._contract_domain_search()
-        task = self.env['mail.scheduler.task'].search(domain)
-        for task_list in task:
-            task_list.process_task()
-            task_list.last_cron_exec = fields.Datetime.now()
+        domain = self._sch_domain_search()
+        sch = self.env['sanbe.mail.scheduler'].search(domain)
+        for line_sch in sch:
+            # print(line_sch.id)
+            for line_task in self.env['mail.scheduler.task'].search([('scheduler_id','=',line_sch.id),('active', '=', True),('state_cron', '=', 'run')]):
+                line_task.process_task()
+                line_task.last_cron_exec = fields.Datetime.now()
+            line_sch.last_cron_exec = fields.Datetime.now()
+            line_sch._compute_next_cron_exec()
         
 
     @api.depends('subject', 'last_cron_exec', 'state_cron')
@@ -295,51 +324,21 @@ class SANBECron(models.Model):
                 record.mail_ids = False
                 record.mail_failed = 0
 
-    @api.depends('cron_id')
-    def _compute_cron_info(self):
-        for rec in self:
-            cron = rec.cron_id
-            rec.next_cron_exec = cron.nextcall if cron else False
-            rec.cron_interval = cron.interval_number if cron else 1
-            rec.cron_duration = cron.interval_type if cron else 'months'
-
-    def _inverse_cron_info(self):
-        for rec in self:
-            cron = rec.cron_id
-            if cron:
-                if rec.next_cron_exec:
-                    cron.nextcall = rec.next_cron_exec
-                if rec.cron_duration:
-                    cron.interval_type = rec.cron_duration
-                if rec.cron_interval:
-                    if rec.cron_interval < 1:
-                        raise UserError(_('Interval number must be greater than 0'))
-                    cron.interval_number = rec.cron_interval
-                cron.active = rec.cron_active
-
     def action_set_draft(self):
         self.write({'state_cron': 'draft'})
 
     def action_set_run(self):
         for rec in self:
-            if rec.cron_id and hasattr(rec.cron_id, 'method_direct_trigger'):
-                rec.cron_id.lastcall = datetime.now()
-                rec.cron_id.method_direct_trigger()
-                rec.cron_id.failed_count = 0
-                rec.cron_id.active = True
             rec.write({'state_cron': 'run'})
             
     @api.depends('mail_ids')
     def _compute_count_failed(self):
         for record in self:
-            # raise UserError('Kesini')
             record.count_failed = sum(1 for mail in record.mail_ids if mail.failure_type != False)
 
     def action_set_hold(self):
-        if self.cron_id:
-            self.cron_id.active = False
-            self.cron_id.lastcall = False
-            self.write({'state_cron': 'hold'})
+        for rec in self:
+            rec.write({'state_cron': 'hold'})
         
     def _update_failure_info_from_mails(self):
         """Check related mails and update failure info from the latest failed one."""

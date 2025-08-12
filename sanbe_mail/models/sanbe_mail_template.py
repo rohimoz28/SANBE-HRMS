@@ -13,6 +13,7 @@ class SANBEMailTemplate(models.Model):
     name = fields.Char(string='Template Name', required=True, tracking=True)
     code = fields.Char(string='Template Code', required=True, tracking=True)
     subject = fields.Char(string='Subject', required=True, tracking=True)
+    mail_template_id = fields.Many2one('mail.template', string='Mail Template', tracking=True)
 
     company_id = fields.Many2one('res.company', string='Company', tracking=True)
     branch_id = fields.Many2one('res.branch', string='Branch', tracking=True)
@@ -70,8 +71,48 @@ class SANBEMailTemplate(models.Model):
     @api.model
     def create(self, vals):
         self._prepare_html_fields(vals)
-        return super(SANBEMailTemplate, self).create(vals)
+
+        record = super(SANBEMailTemplate, self).create(vals)
+        
+        body_html = ''
+        if record.header_templates_html:
+            body_html += record.header_templates_html
+        if record.bottom_templates_html:
+            body_html += '<br/><br/>' + record.bottom_templates_html
+
+        mail_template = self.env['mail.template'].create({
+            'name': record.name,
+            'subject': record.subject,
+            'email_to': record.email_to,
+            'email_cc': record.email_cc,
+        })
+
+        # Optional: Simpan ID mail.template ke record ini
+        record.mail_template_id = mail_template.id
+
+        return record
 
     def write(self, vals):
         self._prepare_html_fields(vals)
-        return super(SANBEMailTemplate, self).write(vals)
+        res = super(SANBEMailTemplate, self).write(vals)
+        for record in self:
+            if record.mail_template_id:
+                # Gabungkan ulang header dan bottom sebagai body_html
+                body_html = ''
+                if record.header_templates_html:
+                    body_html += record.header_templates_html
+                if record.bottom_templates_html:
+                    body_html += '<br/><br/>' + record.bottom_templates_html
+
+                # Siapkan nilai yang ingin disinkronkan
+                update_vals = {
+                    'subject': record.subject,
+                    'email_to': record.email_to,
+                    'email_cc': record.email_cc,
+                    'model_id': record.model_id.id,
+                    'body_html': body_html,
+                }
+
+                record.mail_template_id.write(update_vals)
+
+        return res

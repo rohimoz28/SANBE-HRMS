@@ -6,7 +6,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from datetime import datetime,timedelta
 from pytz import UTC
-from odoo.tools import html_escape, html_sanitize
+from odoo.tools import html_escape, html_sanitize, html2plaintext
+
 _logger = logging.getLogger(__name__)
 
 
@@ -23,8 +24,8 @@ class SANBECronTask(models.Model):
     task_code = fields.Char(string='Code')
     scheduler_id = fields.Many2one('sanbe.mail.scheduler', string='Scheduler')
     branch_id = fields.Many2one('res.branch', string='Branch', related='scheduler_id.branch_id', store=True)
-    attempt_count = fields.Integer(string="Attempt Count", related="scheduler_id.attempt_count")
-    max_attempts = fields.Integer(string="Max Attempts", related="scheduler_id.max_attempts")
+    attempt_count = fields.Integer(string="Attempt Count",store=True,default=0)
+    max_attempts = fields.Integer(string="Max Attempts",store=True,default=4)
 
     # Company / Branch
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
@@ -119,10 +120,7 @@ class SANBECronTask(models.Model):
         ("mail_bl", "Blacklisted Address"), ("mail_optout", "Opted Out"),
         ("mail_dup", "Duplicated Email")
     ], string='Failure type', tracking=True)
-    failure_reason = fields.Text('Failure Reason', related="mail_id.failure_reason", readonly=True, store=True, copy=False, help="Email server error", tracking=True)
-
-
-    
+    failure_reason = fields.Text('Failure Reason', related="mail_id.failure_reason", readonly=True, store=True, copy=False, help="Email server error", tracking=True)    
     # Model Related
     model_id = fields.Many2one('ir.model', string='Model', store=True, tracking=True)
     models = fields.Char(string='Model Name', related='model_id.model', store=True, tracking=True)
@@ -147,7 +145,14 @@ class SANBECronTask(models.Model):
     # State
     state_cron = fields.Selection([
         ('draft', 'Draft'), ('run', 'Active'), ('hold', 'Hold')
-    ], string='State', store=True, tracking=True, default='draft')
+    ], string='State', store=True, tracking=True, default='run')
+
+    def re_active_task(self):
+        for line in self:        
+            context = context or {}
+            if line.state_cron != 'run':
+                line.state_cron = 'run'
+                line.process_task(context=context)
 
     ########    execution like ir.con but it dooesn't add argument  
     # model ke 1  
@@ -198,55 +203,70 @@ class SANBECronTask(models.Model):
     # 3. process_all_tasks() dipanggil di mail_scheduler_task.running_task_list()
     # 4. untuk debuggin buat button pada mail scheduler dg nama Running Task List ->> running_task_list
     def process_task(self, context=None):
+        # branch_id = self.branch_id
         self.ensure_one()  # pastikan cuma 1 record
-        for task in self:
-            if task.task_code:
-                print("START DEBUGGING")
-                print("ID: ", task.id)
-                print("Function: ", task.task_code)
-                import pdb
-                pdb.set_trace()
-
         context = context or {}
         for task in self:
-            while task.attempt_count < task.max_attempts:
-                try:
-                    model = task.env[task.models]
-                    print('ok1')
-                    match = re.match(r'^(\w+)\((.*)\)$', task.task_code.strip())
-                    if not match:
-                        task.failure_reason = f"Invalid task_code format: {task.task_code}"
-                        break
-                    print('ok2')
-                    method_name, raw_args = match.groups()
-                    method_name = method_name.strip()
-                    raw_args = raw_args.strip()
-                    print('ok3')
-                    if not hasattr(model, method_name):
-                        task.failure_reason = (
-                            f"Function '{method_name}' not found on model '{task.models}'"
-                        )
-                        break
-                    print('ok4')
-                    method = getattr(model, method_name)
-                    print('ok5')
-                    if raw_args:
-                        args, kwargs = self.parse_args_kwargs_with_context(raw_args, context)
-                    else:
-                        args, kwargs = [], {}
-                    print('ok6')
-                    method(*args, **kwargs)
-                    
-                    task.failure_reason = False
-                    task.attempt_count = 0
+            model = task.env[task.models]
+            match = re.match(r'^(\w+)\((.*)\)$', task.task_code.strip())
+            if not match:
+                task.failure_reason = f"Invalid task_code format: {task.task_code}"
+                task.attempt_count += 1
+                if task.attempt_count >= task.max_attempts:
+                    task.state_cron = 'hold'
                     break
+            method_name, raw_args = match.groups()
+            method_name = method_name.strip()
+            raw_args = raw_args.strip()
+            method = getattr(model, method_name)
+            if not hasattr(model, method_name):
+                task.failure_reason = (
+                    f"Function '{method_name}' not found on model '{task.models}'"
+                )
+                task.attempt_count += 1
+                if task.attempt_count >= task.max_attempts:
+                    task.state_cron = 'hold'
+                    break
+            if task.attempt_count < task.max_attempts:
+                if raw_args:
+                    args, kwargs = self.parse_args_kwargs_with_context(raw_args, context)
+                else:
+                    args, kwargs = [], {}
+                try:
+                    print('args',*args)
+                    print('kwargs',**kwargs)
+                    branch = self.env['res.branch'].browse(*args)
+                    dynamic_data = method(*args, **kwargs)
+                    email_body = f"""
+                        {html2plaintext(task.header_templates_html.format(
+                                today=datetime.today().strftime("%d-%b-%Y") ,
+                                branch=branch.name,
+                            ))}<br/><br/>
+                        {dynamic_data}<br/><br/>
+                        {html2plaintext(task.bottom_templates_html)}
+                        """
+                    print('Dikerjakan')
+                    email_values = {
+                        'subject': task.subject,
+                        'email_to': task.email_to,
+                        'email_cc': task.email_cc,
+                        'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
+                        'body_html': email_body,
+                    }
+                    task.template_id.mail_template_id.sudo().write(email_values)
+                    self.env['mail.mail'].sudo().create(email_values).send()
+                    # task.template_id.mail_template_id.with_context().send_mail(task.id,force_send=True)
                     
+                    task.failure_reason = ''
+                    task.attempt_count = 0
+                    task.last_cron_exec = fields.Datetime.now()
+                    break
                 except Exception as e:
                     task.attempt_count += 1
                     task.failure_reason = str(e)
-                    if task.attempt_count >= task.max_attempts:
-                        break
+                    task.state_cron = 'hold'
 
+    
 
     def process_all_pending_tasks(self, context=None):
         """
@@ -311,6 +331,33 @@ class SANBECronTask(models.Model):
             return 'mail_dup'
         else:
             return 'unknown'
+        
+    @api.model
+    def create(self, vals):
+        record = super(SANBECronTask, self).create(vals)
+        if record.template_id and record.model_id:
+            record.template_id.model_id = record.model_id
+            record.template_id.mail_template_id.model_id = record.model_id
+        return record
+
+
+    def write(self, vals):
+        res = super(SANBECronTask, self).write(vals)
+        
+        for rec in self:
+            # Sinkronisasi model_id ke template jika model_id berubah
+            if 'model_id' in vals:
+                if rec.template_id:
+                    rec.template_id.model_id = rec.model_id
+                    if rec.template_id.mail_template_id:
+                        rec.template_id.mail_template_id.model_id = rec.model_id
+            
+            # Set failure_type jika failure_reason diubah
+            if 'failure_reason' in vals:
+                failure_type = rec._get_failure_type_from_reason(vals['failure_reason'])
+                rec.failure_type = failure_type
+
+        return res
 
     def act_resend_msg(self):
         for line in self:
