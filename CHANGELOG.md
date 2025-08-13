@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.102-2025w33.7 (2025-08-13)
+
+- 3f7958c [FIX] PAM : Perbaikan Tampilan Department di List View Kontrak
+
+
 ## v0.0.100-2025w33.5 (2025-08-12)
 
 - 4bcfc4d [FEAT] PAM : Penambahan Fitur Export to Excel pada Export Employee Report
