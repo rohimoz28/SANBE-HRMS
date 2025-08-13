@@ -82,6 +82,7 @@ class HREmpOvertimeRequest(models.Model):
     company_id = fields.Many2one('res.company', string="Company Name", index=True)
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
     count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
+    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
 
 
     @api.onchange('periode_id')
@@ -269,7 +270,14 @@ class HREmpOvertimeRequest(models.Model):
     @api.depends('hr_ot_planning_ids')
     def _compute_record_employees(self):
         for record in self:
-            record.count_record_employees = len(record.hr_ot_planning_ids)   
+            record.count_record_employees = len(record.hr_ot_planning_ids)
+
+    @api.onchange('ot_type')
+    def _onchange_ot_type(self):
+        for rec in self:
+            if rec.ot_type and rec.hr_ot_planning_ids:
+                for line in rec.hr_ot_planning_ids:
+                    line.ot_type = rec.ot_type   
             
     
 class HREmpOvertimeRequestEmployee(models.Model):
