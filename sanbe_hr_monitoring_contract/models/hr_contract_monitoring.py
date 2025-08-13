@@ -733,8 +733,22 @@ class HrEmployeeContractMonitoring(models.Model):
                 email.with_context().send_mail(branch_id.id,force_send=True)
                 print('Kirim ke HR')
 
+    def mail_send_hr_x(self, branch=None):
+        # Default branch_id = None
+        branch_id = None
 
-    def mail_send_hr_x(self, branch):
+        # Cek tipe input dan ambil branch_id sesuai
+        if isinstance(branch, dict):
+            branch_id = branch.get('branch_id')
+        elif isinstance(branch, int):
+            branch_id = branch
+        elif branch is None:
+            branch_id = None
+        else:
+            _logger.warning("mail_send_hr_x received invalid input: %s", branch)
+            return "<p>Error: Invalid branch input.</p>"
+
+        # Mulai generate isi tabel
         table_rows = """
         <br/>
         <table border="1" cellpadding="5" cellspacing="0">
@@ -755,28 +769,35 @@ class HrEmployeeContractMonitoring(models.Model):
             <tbody>
         """
         idx = 1
-        for records in self.env['hr.employee.contract.monitoring'].search([('branch_id', '=',branch),('time_limit','<=',90),('time_limit','>=',0)]):
+
+        domain = [('time_limit', '<=', 90), ('time_limit', '>=', 0)]
+        if branch_id:
+            domain.append(('branch_id', '=', branch_id))
+
+        for record in self.env['hr.employee.contract.monitoring'].search(domain):
             table_rows += f"""
             <tr>
                 <td>{idx}</td> 
-                <td>{records.nik_employee}</td>
-                <td>{records.employee_name}</td>
-                <td>{records.branch_id.name}</td>
-                <td>{records.job_id.name}</td>
-                <td>{records.department_id.name}</td>
-                <td>{records.company_name}</td>
-                <td>{self._format_date(records.date_start)}</td>
-                <td>{self._format_date(records.date_end)}</td>
-                <td>{self._get_duration(records)}</td>
-            </tr>   
+                <td>{record.nik_employee}</td>
+                <td>{record.employee_name}</td>
+                <td>{record.branch_id.name}</td>
+                <td>{record.job_id.name}</td>
+                <td>{record.department_id.name}</td>
+                <td>{record.company_name}</td>
+                <td>{self._format_date(record.date_start)}</td>
+                <td>{self._format_date(record.date_end)}</td>
+                <td>{self._get_duration(record)}</td>
+            </tr>
             """
             idx += 1
-        table_rows +="""
-                    </tbody>
+
+        table_rows += """
+            </tbody>
         </table>
         <br/> 
         """
-        return table_rows    
+
+        return table_rows 
                 #     print('Kirim ke HR')
 
     def _get_duration(self, contract):

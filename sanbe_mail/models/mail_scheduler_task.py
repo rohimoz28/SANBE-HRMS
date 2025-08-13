@@ -25,7 +25,7 @@ class SANBECronTask(models.Model):
     scheduler_id = fields.Many2one('sanbe.mail.scheduler', string='Scheduler')
     branch_id = fields.Many2one('res.branch', string='Branch', related='scheduler_id.branch_id', store=True)
     attempt_count = fields.Integer(string="Attempt Count",store=True,default=0)
-    max_attempts = fields.Integer(string="Max Attempts",store=True,default=4)
+    max_attempts = fields.Integer(string="Max Attempts",store=True, related='scheduler_id.max_attempts')
 
     # Company / Branch
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
@@ -145,7 +145,7 @@ class SANBECronTask(models.Model):
     # State
     state_cron = fields.Selection([
         ('draft', 'Draft'), ('run', 'Active'), ('hold', 'Hold')
-    ], string='State', store=True, tracking=True, default='run')
+    ], string='State', store=True, tracking=True, default='draft')
 
     def re_active_task(self):
         for line in self:        
@@ -177,75 +177,187 @@ class SANBECronTask(models.Model):
     #                     break
     
     
-    def parse_args_kwargs_with_context(self, raw_args, context):
-        source = f"f({raw_args})"
-        module = ast.parse(source, mode='exec')
-        call = module.body[0].value
+    # def parse_args_kwargs_with_context(self, raw_args, context):
+    #     source = f"f({raw_args})"
+    #     module = ast.parse(source, mode='exec')
+    #     call = module.body[0].value
 
-        args = []
-        for arg in call.args:
-            if isinstance(arg, ast.Name) and arg.id in context:
-                args.append(context[arg.id])
+    #     args = []
+    #     for arg in call.args:
+    #         if isinstance(arg, ast.Name) and arg.id in context:
+    #             args.append(context[arg.id])
+    #         else:
+    #             args.append(ast.literal_eval(arg))
+
+    #     kwargs = {}
+    #     for kw in call.keywords:
+    #         if isinstance(kw.value, ast.Name) and kw.value.id in context:
+    #             kwargs[kw.arg] = context[kw.value.id]
+    #         else:
+    #             kwargs[kw.arg] = ast.literal_eval(kw.value)
+
+    #     return args, kwargs
+
+    # # 1. process_task ->> hanya menjalankan 1 task
+    # # 2. process_task ini dipanggil di method self.process_all_tasks()
+    # # 3. process_all_tasks() dipanggil di mail_scheduler_task.running_task_list()
+    # # 4. untuk debuggin buat button pada mail scheduler dg nama Running Task List ->> running_task_list
+    # def process_task(self, context=None):
+    #     # branch_id = self.branch_id
+    #     self.ensure_one()  # pastikan cuma 1 record
+    #     context = context or {}
+    #     for task in self:
+    #         model = task.env[task.models]
+    #         match = re.match(r'^(\w+)\((.*)\)$', task.task_code.strip())
+    #         if not match:
+    #             task.failure_reason = f"Invalid task_code format: {task.task_code}"
+    #             task.attempt_count += 1
+    #             if task.attempt_count >= task.max_attempts:
+    #                 task.state_cron = 'hold'
+    #                 break
+    #         method_name, raw_args = match.groups()
+    #         method_name = method_name.strip()
+    #         raw_args = raw_args.strip()
+    #         method = getattr(model, method_name)
+    #         if not hasattr(model, method_name):
+    #             task.failure_reason = (
+    #                 f"Function '{method_name}' not found on model '{task.models}'"
+    #             )
+    #             task.attempt_count += 1
+    #             if task.attempt_count >= task.max_attempts:
+    #                 task.state_cron = 'hold'
+    #                 break
+    #         if task.attempt_count < task.max_attempts:
+    #             if raw_args:
+    #                 args, kwargs = self.parse_args_kwargs_with_context(raw_args, context)
+    #             else:
+    #                 args, kwargs = [], {}
+    #             try:
+    #                 print('args',*args)
+    #                 print('kwargs',**kwargs)
+    #                 branch = self.env['res.branch'].browse(*args)
+    #                 dynamic_data = method(*args, **kwargs)
+    #                 email_body = f"""
+    #                     {html2plaintext(task.header_templates_html.format(
+    #                             today=datetime.today().strftime("%d-%b-%Y") ,
+    #                             branch=branch.name,
+    #                         ))}<br/><br/>
+    #                     {dynamic_data}<br/><br/>
+    #                     {html2plaintext(task.bottom_templates_html)}
+    #                     """
+    #                 email_values = {
+    #                     'subject': task.subject,
+    #                     'email_to': task.email_to,
+    #                     'email_cc': task.email_cc,
+    #                     'email_from': 'System Administrator <donotreply@sanbe-farma.com>',
+    #                     'body_html': email_body,
+    #                 }
+    #                 task.template_id.mail_template_id.sudo().write(email_values)
+    #                 self.env['mail.mail'].sudo().create(email_values).send()
+    #                 # task.template_id.mail_template_id.with_context().send_mail(task.id,force_send=True)
+                    
+    #                 task.failure_reason = ''
+    #                 task.attempt_count = 0
+    #                 task.last_cron_exec = fields.Datetime.now()
+    #                 break
+    #             except Exception as e:
+    #                 task.attempt_count += 1
+    #                 task.failure_reason = str(e)
+    #                 task.state_cron = 'hold'
+
+    def eval_node(self, node, context):
+        if isinstance(node, ast.Name):
+            if node.id in context:
+                return context[node.id]
             else:
-                args.append(ast.literal_eval(arg))
+                raise ValueError(f"Name '{node.id}' not found in context")
+        elif isinstance(node, ast.Attribute):
+            value = self.eval_node(node.value, context)
+            return getattr(value, node.attr)
+        elif isinstance(node, ast.Constant):
+            return node.value
+        elif isinstance(node, ast.Str):  # py<3.8 compatibility
+            return node.s
+        elif isinstance(node, ast.Num):
+            return node.n
+        elif isinstance(node, ast.Dict):
+            return {self.eval_node(k, context): self.eval_node(v, context) for k, v in zip(node.keys, node.values)}
+        elif isinstance(node, ast.List):
+            return [self.eval_node(e, context) for e in node.elts]
+        elif isinstance(node, ast.Tuple):
+            return tuple(self.eval_node(e, context) for e in node.elts)
+        elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+            return -self.eval_node(node.operand, context)
+        else:
+            try:
+                return ast.literal_eval(node)
+            except Exception:
+                self.failure_reason = f"Unsupported expression: {ast.dump(node)}"
+                if self.attempt_count >= self.max_attempts:
+                    self.state_cron = 'hold'
+                raise ValueError(f"Unsupported expression: {ast.dump(node)}")
 
-        kwargs = {}
-        for kw in call.keywords:
-            if isinstance(kw.value, ast.Name) and kw.value.id in context:
-                kwargs[kw.arg] = context[kw.value.id]
-            else:
-                kwargs[kw.arg] = ast.literal_eval(kw.value)
-
-        return args, kwargs
-
-    # 1. process_task ->> hanya menjalankan 1 task
-    # 2. process_task ini dipanggil di method self.process_all_tasks()
-    # 3. process_all_tasks() dipanggil di mail_scheduler_task.running_task_list()
-    # 4. untuk debuggin buat button pada mail scheduler dg nama Running Task List ->> running_task_list
     def process_task(self, context=None):
-        # branch_id = self.branch_id
-        self.ensure_one()  # pastikan cuma 1 record
+        self.ensure_one()
         context = context or {}
         for task in self:
-            model = task.env[task.models]
-            match = re.match(r'^(\w+)\((.*)\)$', task.task_code.strip())
-            if not match:
-                task.failure_reason = f"Invalid task_code format: {task.task_code}"
-                task.attempt_count += 1
+            if task.state_cron == 'run':
+                exec_context = {
+                    'self': task,
+                    'env': task.env,
+                    'fields': fields,
+                    'datetime': datetime,
+                }
+                exec_context.update(context)
+
+                if not task.task_code:
+                    task.failure_reason = "No task_code defined"
+                    task.attempt_count += 1
+                    if task.attempt_count >= task.max_attempts:
+                        task.state_cron = 'hold'
+                    continue
+
+                model = task.env[task.models]
+                match = re.match(r'^(\w+)\((.*)\)$', task.task_code.strip())
+                if not match:
+                    task.failure_reason = f"Invalid task_code format: {task.task_code}"
+                    task.attempt_count += 1
+                    if task.attempt_count >= task.max_attempts:
+                        task.state_cron = 'hold'
+                    continue
+
+                method_name, raw_args = match.groups()
+                method_name = method_name.strip()
+                raw_args = raw_args.strip()
+
+                if not hasattr(model, method_name):
+                    task.failure_reason = f"Function '{method_name}' not found on model '{task.models}'"
+                    task.attempt_count += 1
+                    if task.attempt_count >= task.max_attempts:
+                        task.state_cron = 'hold'
+                    continue
+
                 if task.attempt_count >= task.max_attempts:
-                    task.state_cron = 'hold'
-                    break
-            method_name, raw_args = match.groups()
-            method_name = method_name.strip()
-            raw_args = raw_args.strip()
-            method = getattr(model, method_name)
-            if not hasattr(model, method_name):
-                task.failure_reason = (
-                    f"Function '{method_name}' not found on model '{task.models}'"
-                )
-                task.attempt_count += 1
-                if task.attempt_count >= task.max_attempts:
-                    task.state_cron = 'hold'
-                    break
-            if task.attempt_count < task.max_attempts:
-                if raw_args:
-                    args, kwargs = self.parse_args_kwargs_with_context(raw_args, context)
-                else:
-                    args, kwargs = [], {}
+                    continue
+
                 try:
-                    print('args',*args)
-                    print('kwargs',**kwargs)
-                    branch = self.env['res.branch'].browse(*args)
-                    dynamic_data = method(*args, **kwargs)
+                    if raw_args:
+                        args, kwargs = self.parse_args_kwargs_with_context(raw_args, exec_context)
+                    else:
+                        args, kwargs = [], {}
+
+                    result = getattr(model, method_name)(*args, **kwargs)
+                    print(*args)
+                    print(*kwargs)
+                    # Reset failure and attempt count on success
                     email_body = f"""
                         {html2plaintext(task.header_templates_html.format(
                                 today=datetime.today().strftime("%d-%b-%Y") ,
-                                branch=branch.name,
+                                branch=self.branch_id.name,
                             ))}<br/><br/>
-                        {dynamic_data}<br/><br/>
+                        {result}<br/><br/>
                         {html2plaintext(task.bottom_templates_html)}
                         """
-                    print('Dikerjakan')
                     email_values = {
                         'subject': task.subject,
                         'email_to': task.email_to,
@@ -256,17 +368,25 @@ class SANBECronTask(models.Model):
                     task.template_id.mail_template_id.sudo().write(email_values)
                     self.env['mail.mail'].sudo().create(email_values).send()
                     # task.template_id.mail_template_id.with_context().send_mail(task.id,force_send=True)
-                    
-                    task.failure_reason = ''
                     task.attempt_count = 0
+                    task.failure_reason = ''
                     task.last_cron_exec = fields.Datetime.now()
-                    break
+                    task.state_cron = 'run'
+
                 except Exception as e:
                     task.attempt_count += 1
                     task.failure_reason = str(e)
-                    task.state_cron = 'hold'
+                    _logger.error(f"Error processing task {task.name}: {e}")
+                    if task.attempt_count >= task.max_attempts:
+                        task.state_cron = 'hold'
 
-    
+    def parse_args_kwargs_with_context(self, raw_args, context):
+        source = f"f({raw_args})"
+        module = ast.parse(source, mode='exec')
+        call = module.body[0].value
+        args = [self.eval_node(arg, context) for arg in call.args]
+        kwargs = {kw.arg: self.eval_node(kw.value, context) for kw in call.keywords}
+        return args, kwargs
 
     def process_all_pending_tasks(self, context=None):
         """

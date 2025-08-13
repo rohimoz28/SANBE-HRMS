@@ -227,7 +227,7 @@ class SANBECron(models.Model):
                     rec.next_cron_exec = next_time
                     
     attempt_count = fields.Integer(string="Attempt Count", default=0)
-    max_attempts = fields.Integer(string="Max Attempts", default=4)
+    max_attempts = fields.Integer(string="Max Attempts", default=1)
     
     state_cron = fields.Selection([
         ('draft','Draft'),
@@ -329,6 +329,9 @@ class SANBECron(models.Model):
 
     def action_set_run(self):
         for rec in self:
+            for task_list in self.env['mail.scheduler.task'].search([('scheduler_id','=',self.id),('state_cron','=','run')]):
+                task_list.state_cron = 'run'
+            rec.running_task_list()
             rec.write({'state_cron': 'run'})
             
     @api.depends('mail_ids')

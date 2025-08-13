@@ -6,11 +6,15 @@
         <field name="name">view.sanbe.mail.config.tree</field>
         <field name="model">sanbe.mail.scheduler</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state_cron == 'draft'" decoration-warning="state_cron == 'hold'" decoration-muted="state_cron == 'draft'">
+            <tree decoration-info="state_cron == 'run'" decoration-warning="state_cron == 'hold'" decoration-muted="state_cron == 'draft'">
             <!-- <tree  decorations-success="state_cron == 'run'" decorations-warning="state_cron == 'hold'" decorations-muted="state_cron == 'draft'"> -->
                 <field name="branch_id"/>
                 <field name="name"/>
-                <field name="state_cron" widget="badge"/>
+                <field name="cron_interval" string="Interval"/>
+                <field name="cron_duration" string="Duration"/>
+                <field name="next_cron_exec" string="Last Exec"/>
+                <field name="last_cron_exec" string="Next Exec"/>
+                <field name="state_cron" widget="badge" decoration-danger="state_cron == 'hold'"/>
             </tree>
         </field>
     </record>
@@ -22,9 +26,10 @@
         <field name="arch" type="xml">
             <form string="Sanbe Mail Config">
                 <header>
-                    <button name="running_task_list" type="object" string="Running By Cron" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
-                    <button name="action_set_run" type="object" string="Run" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
-
+                    <button name="running_task_list" type="object" string="Running By Cron" groups="sanbe_mail.group_sanbe_mail_template_administrator" invisible="1" />
+                    <button name="action_set_run" type="object" class="btn-primary oe_highlight" string="Run" invisible="state_cron != 'draft'" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
+                    <button name="action_set_hold" type="object" string="Hold" invisible="state_cron != 'run'" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
+                    <button name="action_set_run" type="object" class="btn-primary oe_highlight" string="Re - Run" invisible="state_cron != 'hold'" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
                     <field name="state_cron" widget="statusbar" statusbar_visible="draft,run,hold"/>
                 </header>
                 <sheet>
@@ -48,11 +53,21 @@
                                 <field name="cron_interval" required="1"/>
                                 <field name="cron_duration" required="1"/>
                             </div>
-                            <field name="task_hour" string="At: " required="1"/>
+                            <label for="task_hour" string="At :" invisible="1" />
+                            <div class="o_row" invisible="1" >
+                                <field name="task_hour" required="1" invisible="1" />
+                                <field name="task_minute" required="1" invisible="1" />
+                            </div>
                         </group>
                         <group>
                                 <field name="next_cron_exec" string="Next Exec" readonly="1" widget="date"/>
                                 <field name="last_cron_exec" string="Last Exec" readonly="1" widget="date"/>
+                        </group>
+                        <group invisible="1" >
+                            <label for="max_attempts" string="Max Failed :" />
+                            <div class="o_row" >
+                                <field name="max_attempts" required="1" />
+                            </div>
                         </group>
                     </group>
                     <notebook>
@@ -61,18 +76,20 @@
                                 <tree editable="bottom">
                                     <field name="create_date"/>
                                     <field name="subject"/>
-                                    <field name="model_id" required="1" string="Model/Class"/>
-                                    <field name="task_code" required="1" string="Code/Function"/>
-                                    <field name="template_id" required="1" />
+                                    <field name="model_id" required="1" readonly="state_cron != 'hold'" string="Model/Class"/>
+                                    <field name="task_code" required="1" string="Code/Function" readonly="state_cron != 'hold'"/>
+                                    <field name="template_id" required="1" readonly="state_cron != 'hold'"/>
                                     <field name="email_to" widget='email'/>
                                     <field name="next_cron_date" string="Next Exec" required="0" column_invisible="1"/>
                                     <field name="task_hour" string="at:" required="0" column_invisible="1"/>
                                     <field name="mail_id" column_invisible="1"/>
-                                    <field name="failure_reason"/>
+                                    <field name="failure_reason" string='Reason'/>
+                                    <field name="attempt_count" readonly="1" column_invisible="1"/>
+                                    <field name="max_attempts" readonly="1" column_invisible="1"/>
                                     <field name="last_cron_date" string="Last Exec" readonly="1" column_invisible="1"/>
                                     <field name="state_cron" widget="badge" decoration-danger="state_cron == 'hold'" />
-                                    <button name="process_task" string="Proses Ulang" type="object" icon="fa-refresh"/>
-                                    <button name="re_active_task" string="Re Active Task" type="object" icon="fa-check"/>
+                                    <button name="process_task" string="Retry" type="object" icon="fa-refresh"/>
+                                    <button name="re_active_task" string="Re Active Task" type="object" icon="fa-check" column_invisible="1"/>
                                     <button name="act_resend_msg" string="Re-Send" type="object" icon="fa-refresh" column_invisible="1"/>
                                     <field name="active" column_invisible="1"/>
                                 </tree>
