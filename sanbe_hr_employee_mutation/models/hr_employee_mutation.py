@@ -200,7 +200,7 @@ class HrEmployeeMutation(models.Model):
             
             self.env.cr.execute((query)%(self.service_bisnisunit.id,self.employee_id.id))
             # self.employee_id.sudo().write({'branch_id': self.service_bisnisunit.id})
-        if self.service_departmentid.id != self.employee_id.department_id.parent_id.id:
+        if self.service_departmentid.id != self.employee_id.department_id.id:
             self.employee_id.write({'department_id': self.service_departmentid.id})
         if self.service_jobstatus != self.employee_id.job_status:
             self.employee_id.write({'job_status': self.service_jobstatus})
