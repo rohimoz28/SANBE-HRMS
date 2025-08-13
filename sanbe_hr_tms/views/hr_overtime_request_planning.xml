@@ -52,6 +52,7 @@
                             <!--field name="employee_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/-->
                             <field name="periode_from" readonly="state == 'done'"/>
                             <field name="periode_to" readonly="state == 'done'"/>
+                            <field name="ot_type" widget="radio" options="{'horizontal': true}"/>
                         </group>
                         <!-- <group>
                             <field name="approve1" readonly="state == 'done'"/>
