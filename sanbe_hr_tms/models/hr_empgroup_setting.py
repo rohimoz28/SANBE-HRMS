@@ -361,9 +361,7 @@ class HREmpGroupSetting(models.Model):
     def _reset_sequence_empgroup(self):
         sequences = self.env['ir.sequence'].search([('code', '=like', '%hr.empgroup%')])
         sequences.write({'number_next_actual': 1})
-        print(">>>>>>>>>>>>>>>")
-        print("sequences:",sequences)
-        print(">>>>>>>>>>>>>>>")
+
 
     #Function For AutoFill data Employee Based On Code
     @api.onchange('code')
