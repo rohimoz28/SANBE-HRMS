@@ -16,6 +16,7 @@ class SkkEmployeeReqWizard(models.TransientModel):
                                    )
     company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company)
     first_join_date = fields.Char(store=True)
+    join_date_contract = fields.Char(store=True)
     
     @api.model
     def default_get(self, fields):
@@ -49,7 +50,35 @@ class SkkEmployeeReqWizard(models.TransientModel):
                         'November', 'November'
                     ).replace(
                         'December', 'Desember'
+                    ) # convert employee.join_date to 09 Mei 2025
+
+            if employee.join_date_contract:
+                res['join_date_contract'] = res['join_date_contract'] = employee.join_date_contract.strftime('%d %B %Y').replace(
+                        'January', 'Januari'
+                    ).replace(
+                        'February', 'Februari'
+                    ).replace(
+                        'March', 'Maret'
+                    ).replace(
+                        'April', 'April'
+                    ).replace(
+                        'May', 'Mei'
+                    ).replace(
+                        'June', 'Juni'
+                    ).replace(
+                        'July', 'Juli'
+                    ).replace(
+                        'August', 'Agustus'
+                    ).replace(
+                        'September', 'September'
+                    ).replace(
+                        'October', 'Oktober'
+                    ).replace(
+                        'November', 'November'
+                    ).replace(
+                        'December', 'Desember'
                     ) # convert employee.join_date to 09 Mei 2025 
+            
         return res
     
     def action_confirm(self):

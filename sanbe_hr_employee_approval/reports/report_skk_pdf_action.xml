@@ -123,7 +123,15 @@
                     <p style="text-align:justify; font-size:16px;">
                 Yang bersangkutan adalah benar karyawan di perusahaan ini yang bekerja sejak tanggal
                         <strong>
-                            <span t-field="o.first_join_date"/>
+                            <t t-if="o.employee_id.job_status == 'permanent'">
+                                <span t-field="o.first_join_date"/>    
+                            </t>
+                            <t t-if="o.employee_id.job_status == 'contract'">
+                                <span t-field="o.join_date_contract"/>    
+                            </t>
+                            <t t-else="">
+
+                            </t>
                         </strong> sampai dengan sekarang.
                     </p>
 
