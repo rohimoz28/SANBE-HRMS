@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.108-2025w33.13 (2025-08-15)
+
+- 9002490 [IMP] PAM : Perbaikan Ukuran Margin Paper Format Surat EoC & SKK
+
+
 ## v0.0.106-2025w33.11 (2025-08-14)
 
 - ea3a597 [IMP] PAM : Perbaikan Tanggal Surat Keterangan Kerja
