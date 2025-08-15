@@ -167,7 +167,7 @@
                         
                         </p>
                         <p style="text-align:justify; font-size:16px;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
-                        <t t-if="len(employees) >= 2">
+                        <t t-if="len(employees) > 3">
                             <div style="page-break-before: always;" />
                             <br/>
                         </t>
