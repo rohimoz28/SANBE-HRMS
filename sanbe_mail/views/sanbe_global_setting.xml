@@ -3,18 +3,22 @@
     <data noupdate="1">
 
         <!-- Root Menu -->
-        <menuitem name="User Global Setting" id="menu_sanbe_config_root" groups="sanbe_mail.group_sanbe_mail_template_manager,sanbe_mail.group_sanbe_mail_template_administrator" web_icon="sanbe_mail,static/description/icon.png" sequence="375" />
+        <menuitem
+                name="User Global Setting" id="menu_sanbe_config_root"
+                web_icon="sanbe_mail,static/description/icon.png" sequence="375" />
 
         <!-- Configuration Submenu -->
-        <menuitem id="menu_sanbe_config" name="Configuration" parent="menu_sanbe_config_root" groups="sanbe_mail.group_sanbe_mail_template_administrator" sequence="10" />
+        <menuitem id="menu_sanbe_config" name="Configuration" parent="menu_sanbe_config_root" sequence="10" />
 
-        <menuitem id="menu_sanbe_config_management" name="Setting" parent="menu_sanbe_config" sequence="1" groups="sanbe_mail.group_sanbe_mail_template_administrator" />
+        <menuitem id="menu_sanbe_config_management" name="Setting"
+                  parent="menu_sanbe_config" sequence="1" />
 
 
         <!-- Mail Submenu -->
-        <menuitem id="menu_sanbe_config_mail" name="Mail Settings" parent="menu_sanbe_config_root" groups="sanbe_mail.group_sanbe_mail_template_manager,sanbe_mail.group_sanbe_mail_template_administrator" sequence="20" />
+        <menuitem id="menu_sanbe_config_mail" name="Mail Settings" parent="menu_sanbe_config_root"
+                  sequence="20" />
 
-        <menuitem id="menu_sanbe_config_mail_root" name="Mail" parent="menu_sanbe_config_mail" sequence="1" groups="sanbe_mail.group_sanbe_mail_template_manager,sanbe_mail.group_sanbe_mail_template_administrator"/>
+        <menuitem id="menu_sanbe_config_mail_root" name="Mail" parent="menu_sanbe_config_mail" sequence="1"/>
 
 
     </data>
