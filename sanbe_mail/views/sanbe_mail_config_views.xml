@@ -76,14 +76,14 @@
                                 <tree editable="bottom">
                                     <field name="create_date"/>
                                     <field name="subject"/>
-                                    <field name="model_id" required="1" readonly="state_cron != 'hold'" string="Model/Class"/>
-                                    <field name="task_code" required="1" string="Code/Function" readonly="state_cron != 'hold'"/>
-                                    <field name="template_id" required="1" readonly="state_cron != 'hold'"/>
-                                    <field name="email_to" widget='email'/>
+                                    <field name="model_id" required="1" string="Model/Class" groups="sanbe_mail.group_sanbe_scheduler_admin" attrs="{'readonly': [('user_id', '!=', 'sanbe_mail.group_sanbe_scheduler_admin')]}" />
+                                    <field name="task_code" required="1" string="Code/Function" groups="sanbe_mail.group_sanbe_scheduler_admin" attrs="{'readonly': [('user_id', '!=', 'sanbe_mail.group_sanbe_scheduler_admin')]}" />
+                                    <field name="template_id" required="1" />
+                                    <!-- <field name="email_to" widget='email' string="Test Email" invisible="1"/> -->
                                     <field name="next_cron_date" string="Next Exec" required="0" column_invisible="1"/>
                                     <field name="task_hour" string="at:" required="0" column_invisible="1"/>
                                     <field name="mail_id" column_invisible="1"/>
-                                    <field name="failure_reason" string='Reason'/>
+                                    <field name="failure_reason" string='Messages'/>
                                     <field name="attempt_count" readonly="1" column_invisible="1"/>
                                     <field name="max_attempts" readonly="1" column_invisible="1"/>
                                     <field name="last_cron_date" string="Last Exec" readonly="1" column_invisible="1"/>
@@ -142,6 +142,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_sanbe_config_mail_config" name="Sanbe Mail Scheduller" parent="menu_sanbe_config_mail_root" sequence="1" action="action_sanbe_mail_config" groups="sanbe_mail.group_sanbe_mail_template_administrator"/>
+    <menuitem id="menu_sanbe_config_mail_config" name="Sanbe Mail Scheduller" parent="menu_sanbe_config_mail_root" sequence="1" action="action_sanbe_mail_config"/>
 
 </odoo>

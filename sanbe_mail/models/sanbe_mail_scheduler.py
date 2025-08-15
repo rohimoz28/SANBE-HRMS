@@ -95,7 +95,6 @@ class SANBECron(models.Model):
         compute='_compute_last_mail',
         store=True
     )
-    
     @api.depends('mail_ids')
     def _compute_last_mail(self):
         for rec in self:

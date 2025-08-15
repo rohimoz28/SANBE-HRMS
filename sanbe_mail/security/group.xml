@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <record id="module_category_sanbe_mail_template" model="ir.module.category">
-            <field name="name">SANBE Mail Templates</field>
-            <field name="description">Manage SANBE Mail Template access rights and groups.</field>
+        <record id="module_category_sanbe_scheduler" model="ir.module.category">
+            <field name="name">Sanbe Mail Scheduler</field>
+            <field name="description">Manage Sanbe Scheduler Template access rights and groups.</field>
             <field name="sequence">10</field>
         </record>
-        <!-- <record id="group_sanbe_mail_template_user" model="res.groups">
-            <field name="name">Mail Template User</field>
-            <field name="category_id" ref="sanbe_mail.module_category_sanbe_mail_template"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-        </record> -->
-        <record id="group_sanbe_mail_template_manager" model="res.groups">
-            <field name="name">Mail Template User</field>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-            <field name="category_id" ref="sanbe_mail.module_category_sanbe_mail_template"/>
-            <!-- <field name="users" eval="[(4, ref('base.user_admin'))]"/> -->
+
+        <record id="group_sanbe_scheduler_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="sanbe_mail.module_category_sanbe_scheduler"/>
         </record>
-        <record id="group_sanbe_mail_template_administrator" model="res.groups">
-            <field name="name">Mail Template Admin</field>
-            <field name="implied_ids" eval="[(4, ref('sanbe_mail.group_sanbe_mail_template_manager'))]"/>
-            <field name="category_id" ref="sanbe_mail.module_category_sanbe_mail_template"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+
+        <record id="group_sanbe_scheduler_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="implied_ids" eval="[(4, ref('sanbe_mail.group_sanbe_scheduler_user'))]"/>
+            <field name="category_id" ref="sanbe_mail.module_category_sanbe_scheduler"/>
         </record>
     </data>
 </odoo>

@@ -104,7 +104,7 @@
             </field>
         </record>
 
-        <menuitem id="menu_sanbe_config_mail_template" name="Sanbe Mail Template" parent="menu_sanbe_config_mail_root" sequence="2" action="action_sanbe_mail_template" groups="sanbe_mail.group_sanbe_mail_template_manager,sanbe_mail.group_sanbe_mail_template_administrator"/>
+        <menuitem id="menu_sanbe_config_mail_template" name="Sanbe Mail Template" parent="menu_sanbe_config_mail_root" sequence="2" action="action_sanbe_mail_template" />
 
     </data>
 </odoo>
