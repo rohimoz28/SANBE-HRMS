@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.110-2025w33.15 (2025-08-16)
+
+- 716c16d [IMP] TMS : Perbaikan Total Cuti Karyawan - TMS
+
+
 ## v0.0.108-2025w33.13 (2025-08-15)
 
 - 9002490 [IMP] PAM : Perbaikan Ukuran Margin Paper Format Surat EoC & SKK
