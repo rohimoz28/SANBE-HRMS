@@ -1775,10 +1775,10 @@ begin
                          COUNT(CASE
                                    WHEN sttd.status_attendance = 'Attendee' THEN 1 END)         AS total_attendee,
                          COUNT(CASE WHEN sttd.status_attendance = 'Absent' THEN 1 END)          AS total_absent,
-                         sum(case when sttd.status_attendance = 'Sick Leave' then 1 else 0 end) as total_sick,
+                         sum(case when sttd.status_attendance = 'Sick Leave - Cuti Sakit' then 1 else 0 end) as total_sick,
                          SUM(CASE
-                                 WHEN sttd.status_attendance = 'Full Day Leave' THEN 1
-                                 WHEN sttd.status_attendance = 'Half Day Leave' THEN 0.5
+                                 WHEN sttd.status_attendance = 'Full Day Leave - Cuti 1 Hari' THEN 1
+                                 WHEN sttd.status_attendance = 'Half Day Leave - Cuti Setengah Hari' THEN 0.5
                                  ELSE 0
                              END)                                                               AS total_leave,
                          SUM(COALESCE(sttd.delay_level2, 0)) + SUM(COALESCE(sttd.delay_level1, 0)) AS total_times_delayed,
