@@ -11,6 +11,7 @@ class HrPensionMonitoring(models.Model):
         ('expired', 'Expired'),
         ('running', 'Running')
     ], string='Pension State', compute='_pension_state_compute', store=False)
+    emp_status_id = fields.Many2one('hr.emp.status', string='Employment Status')
 
     @api.depends('pension_date')
     def _pension_state_compute(self):

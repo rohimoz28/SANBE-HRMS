@@ -35,7 +35,7 @@ class HREmployee(models.Model):
     ext_probation = fields.Integer('Ext Prob',readonly="job_status != 'permanent'")
     confirm_probation = fields.Date('Tanggal Pengangkatan',compute='hitung_confirmation',store=False,readonly=False)
     retire_age = fields.Integer('Retire Age',default=55)
-    pension_date = fields.Date('Pension Date',compute='_isi_pensiunemployee',store=False,readonly=False)
+    pension_date = fields.Date('Pension Date',compute='_isi_pensiunemployee',store=True,readonly=False)
     bond_service = fields.Boolean('Bond Services',default=False)
     service_from = fields.Date('Service From')
     service_to = fields.Date('To')
@@ -46,6 +46,10 @@ class HREmployee(models.Model):
     resign_notice = fields.Integer('Resign Notice')
     asset_ids = fields.One2many('hr.employee.assets','employee_id',auto_join=True,string='Asset Details')
 
+    def init(self):
+        employees = self.env['hr.employee'].search([('job_status', '=', 'permanent')])
+        for emp in employees:
+            emp._isi_pensiunemployee()
 
     @api.depends('join_date','periode_probation')
     def hitung_confirmation(self):
