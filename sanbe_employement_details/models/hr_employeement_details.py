@@ -33,7 +33,7 @@ class HREmployee(models.Model):
 
     periode_probation = fields.Integer('Periode Probation',default=3,readonly="job_status != 'permanent'")
     ext_probation = fields.Integer('Ext Prob',readonly="job_status != 'permanent'")
-    confirm_probation = fields.Date('Tanggal Pengangkatan',compute='hitung_confirmation',store=False,readonly=False)
+    confirm_probation = fields.Date('Tanggal Pengangkatan',store=True,readonly=False)
     retire_age = fields.Integer('Retire Age',default=55)
     pension_date = fields.Date('Pension Date',compute='_isi_pensiunemployee',store=False,readonly=False)
     bond_service = fields.Boolean('Bond Services',default=False)
@@ -47,20 +47,20 @@ class HREmployee(models.Model):
     asset_ids = fields.One2many('hr.employee.assets','employee_id',auto_join=True,string='Asset Details')
 
 
-    @api.depends('join_date','periode_probation')
-    def hitung_confirmation(self):
-        for allrec in self:
-            if allrec.periode_probation and allrec.join_date:
-                allrec.confirm_probation = allrec.join_date + relativedelta(months=+allrec.periode_probation)
-            elif allrec.periode_probation and not allrec.join_date:
-                allrec.confirm_probation = False
-            elif not allrec.periode_probation and not allrec.join_date:
-                allrec.confirm_probation = False
-            else:
-                if allrec.join_date:
-                    allrec.confirm_probation = allrec.join_date
-                else:
-                    allrec.confirm_probation = False
+    # @api.depends('join_date','periode_probation')
+    # def hitung_confirmation(self):
+    #     for allrec in self:
+    #         if allrec.periode_probation and allrec.join_date:
+    #             allrec.confirm_probation = allrec.join_date + relativedelta(months=+allrec.periode_probation)
+    #         elif allrec.periode_probation and not allrec.join_date:
+    #             allrec.confirm_probation = False
+    #         elif not allrec.periode_probation and not allrec.join_date:
+    #             allrec.confirm_probation = False
+    #         else:
+    #             if allrec.join_date:
+    #                 allrec.confirm_probation = allrec.join_date
+    #             else:
+    #                 allrec.confirm_probation = False
 
     @api.depends('retire_age','state','birthday')
     def _isi_pensiunemployee(self):
