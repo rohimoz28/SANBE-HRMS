@@ -157,6 +157,8 @@ class HrEmployeeMutation(models.Model):
     service_name = fields.Char('Name')
     service_previous_name = fields.Char('Previous Name')
     service_parent_id = fields.Many2one('hr.employee', string='Immadiate Superior')
+    service_work_unit = fields.Char('Work Unit')
+    service_coach_id = fields.Many2one('hr.employee', string='Work Unit Superior')
 
     _sql_constraints = [
         (
@@ -236,6 +238,10 @@ class HrEmployeeMutation(models.Model):
             self.employee_id.write({'employee_levels': self.service_employee_levels})
         if self.service_birthday != self.employee_id.birthday:
             self.employee_id.write({'birthday': self.service_birthday})
+        if self.service_work_unit != self.employee_id.work_unit:
+            self.employee_id.write({'work_unit': self.service_work_unit})
+        if self.service_coach_id != self.employee_id.coach_id.id:
+            self.employee_id.write({'coach_id': self.service_coach_id.id})
         # if self.service_nik_lama != self.employee_id.nik_lama:
         #     self.employee_id.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
@@ -340,6 +346,8 @@ class HrEmployeeMutation(models.Model):
             existing.join_date = myemp.join_date
             existing.marital = myemp.marital
             existing.service_birthday = myemp.birthday
+            existing.service_work_unit = myemp.work_unit
+            existing.service_coach_id = myemp.coach_id.id
 
             existing.service_status = 'Draft'
 
