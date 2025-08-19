@@ -116,45 +116,54 @@
                         <group>
                             <field name="service_type" readonly="state in ['approved']"/>
                             <field name="emp_status_to_pam" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_name" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_previous_name" invisible="service_type not in ['corr']" readonly="1" force_save="1" />
-                            <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
-                            <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent'" readonly="state in ['approved']"/>
+                            <field name="service_name" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
+                            <field name="service_previous_name" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="1" force_save="1" />
+                            <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent' or service_type in ['corr']" readonly="state in ['approved']"/>
+                            <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent' or service_type in ['corr']" readonly="state in ['approved']"/>
                             <field name="emp_status_actv" invisible="service_type not in ['actv']" required="service_type in ['actv']"  readonly="state in ['approved']" force_save="1" />
                             <field name="emp_status_other" invisible="service_type not in ['conf']" required="service_type in ['conf']" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_birthday" invisible="service_type not in ['corr']" readonly="state in ['approved']" force_save="1"/>
+                            <field name="service_birthday" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1"/>
+                            <!-- <field name="service_employee_levels" readonly="state in ['approved']" 
+                                invisible="service_type == 'conf'" 
+                                required="service_type == 'prom'"
+                                options="{'no_create': True,'no_quick_create': True}" 
+                            /> -->
                             <field name="service_employee_levels" readonly="state in ['approved']" 
-                            invisible="service_type == 'conf'" required="service_type == 'prom'"
-                            options="{'no_create': True,'no_quick_create': True}" />
+                                invisible="service_type == 'conf'" 
+                                required="service_type not in ['conf']"
+                                options="{'no_create': True,'no_quick_create': True}" 
+                            />
                             <!--field name="employee_level" readonly="state in ['approved']" invisible="service_type != 'prom'" required="service_type == 'prom'"/-->
-                            <field name="service_identification" readonly="state in ['approved']" invisible="service_type != 'corr'"/>
-                            <field name="service_nik" readonly="state in ['approved']" invisible="service_type not in ['muta','corr','actv']" force_save="1" />
-                            <field name="service_nik_lama" readonly="1" invisible="service_type not in ['muta','corr','actv']" force_save="1" />
-                            <field name="service_no_npwp" readonly="state in ['approved']" invisible="service_type != 'corr'" force_save="1" />
-                            <field name="service_no_ktp" readonly="state in ['approved']" invisible="service_type != 'corr'" force_save="1" />
+                            <field name="service_identification" readonly="state in ['approved']" invisible="service_type != 'corr'" required="service_type in ['corr']"/>
+                            <field name="service_nik" readonly="state in ['approved']" invisible="service_type not in ['muta','corr','actv']" required="service_type in ['muta','corr','actv']" force_save="1" />
+                            <field name="service_nik_lama" readonly="1" invisible="service_type not in ['muta','corr','actv']" required="service_type in ['muta','corr','actv']" force_save="1" />
+                            <field name="service_no_npwp" readonly="state in ['approved']" invisible="service_type != 'corr'" required="service_type in ['corr']" force_save="1" />
+                            <field name="service_no_ktp" readonly="state in ['approved']" invisible="service_type != 'corr'" required="service_type in ['corr']" force_save="1" />
                             <field name="remarks" readonly="state in ['approved']" />
                             <field name="image" readonly="state in ['approved']" widget="many2many_binary" />
                         </group>
                         <group>
-                            <field name="service_date" readonly="state in ['approved']" force_save="1" />
-                            <field name="service_start" readonly="state in ['approved']" required="True"/>
-                            <field name="service_end" readonly="state in ['approved']" />
+                            <field name="service_date" readonly="state in ['approved']" required="True" force_save="1" />
+                            <field name="service_start" readonly="state in ['approved']" required="True" />
+                            <field name="service_end" readonly="state in ['approved']" required="True" />
                             <!-- <field name="service_status" readonly="state in ['approved']" force_save="1" /> -->
-                            <field name="service_area" readonly="state in ['approved'] or service_type not in ['muta', 'corr']" invisible="service_type not in ['muta','corr']" force_save="1" />
+                            <field name="service_area" readonly="state in ['approved'] or service_type not in ['muta', 'corr']" invisible="service_type not in ['muta','corr']" required="service_type in ['muta','corr']" force_save="1" />
                             <field name="branch_ids" invisible="1"/>
-                            <field name="service_bisnisunit" readonly="state in ['approved'] or service_type not in ['muta','corr']" invisible="service_type not in ['muta','corr']" force_save="1" />
-                            <field name="service_departmentid" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" force_save="1" />
-                            <field name="service_jobtitle" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" force_save="1" />
-                            <field name="service_parent_id" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type != 'corr'" options="{'no_create': True,'no_create_edit': True}" force_save="1" />
-                            <field name="service_jobstatus" readonly="state in ['approved']" invisible="service_type == 'conf'" force_save="1" />
+                            <field name="service_bisnisunit" readonly="state in ['approved'] or service_type not in ['muta','corr']" invisible="service_type not in ['muta','corr']" required="service_type in ['muta','corr']" force_save="1" />
+                            <field name="service_departmentid" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
+                            <field name="service_jobtitle" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
+                            <field name="service_parent_id" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type != 'corr'" required="service_type in ['corr']" options="{'no_create': True,'no_create_edit': True}" force_save="1" />
+                            <field name="service_coach_id" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type != 'corr'" required="service_type in ['corr']" options="{'no_create': True,'no_create_edit': True}" force_save="1" />
+                            <field name="service_work_unit" readonly="state in ['approved'] or service_type == 'conf'" invisible="service_type != 'corr'" required="service_type in ['corr']" force_save="1" />
+                            <field name="service_jobstatus" readonly="state in ['approved']" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
                             <field name="service_employementstatus" readonly="state in ['approved']" 
-                                invisible="job_status !='permanent'" force_save="1" />
-                            <field name="service_empgroup1" readonly="state in ['approved']" invisible="service_type == 'conf'" force_save="1" />
+                                invisible="job_status !='permanent'" required="job_status =='permanent'" force_save="1" />
+                            <field name="service_empgroup1" readonly="state in ['approved']" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
                             <field name="company_id" invisible="1"/>
                             <!-- <field name="join_date" /> -->
-                            <field name="contract_no" invisible="service_type not in [('corr','actv')]" required="job_status =='Permanent'"/>
-                            <field name="contract_from" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
-                            <field name="contract_to" invisible="service_type not in [('corr','actv')]" required="job_status =='Contract'"/>
+                            <field name="contract_no" invisible="service_type not in ['corr','actv']" required="job_status =='permanent' or service_type in ['corr','actv']"/>
+                            <field name="contract_from" invisible="service_type not in ['corr','actv']" required="job_status =='contract' or service_type in ['corr','actv']"/>
+                            <field name="contract_to" invisible="service_type not in ['corr','actv']" required="job_status =='contract' or service_type in ['corr','actv']"/>
                         </group>
                     </group>
                 </sheet>
