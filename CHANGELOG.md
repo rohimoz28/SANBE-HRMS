@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.114-2025w34.3 (2025-08-19)
+
+- 9b37320 [IMP] TMS : Revisi Perbaikan Create New 'Holiday'
+
+
 ## v0.0.112-2025w34.1 (2025-08-19)
 
 - 6a54bdb [IMP] PAM : Perbaikan Menu Monitoring
