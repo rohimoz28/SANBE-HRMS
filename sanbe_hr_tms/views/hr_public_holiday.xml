@@ -11,8 +11,22 @@
                     <field name="area_id"
                         options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" />
                     <field name="branch_ids" invisible="1" optional="hide"/>
-                    <field name="branch_id"
+                    <field name="branch_id" column_invisible="1"
                         options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" />
+                </xpath>
+                <!-- <xpath expr="//field[@name='calendar_id']" position="replace" />
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="calendar_id" />
+                </xpath> -->
+            </field>
+        </record>
+        <record id="hr_public_holiday_tree_view" model="ir.ui.view">
+            <field name="name">hr.public.holiday.tree.view</field>
+            <field name="model">resource.calendar.leaves</field>
+            <field name="inherit_id" ref="resource.resource_calendar_leave_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_to']" position="after">
+                    <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-success="state == 'post'"/>
                 </xpath>
             </field>
         </record>
