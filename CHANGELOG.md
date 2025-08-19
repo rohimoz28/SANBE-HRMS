@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.115-2025w34.4 (2025-08-19)
+
+- 5e2e25a [IMP] TMS : Penambahan Field 'Tanggal Pengangkatan'
+
+
 ## v0.0.114-2025w34.3 (2025-08-19)
 
 - 9b37320 [IMP] TMS : Revisi Perbaikan Create New 'Holiday'
