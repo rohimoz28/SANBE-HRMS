@@ -14,10 +14,10 @@
                     <field name="branch_id" column_invisible="1"
                         options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" />
                 </xpath>
-                <xpath expr="//field[@name='calendar_id']" position="replace" />
+                <!-- <xpath expr="//field[@name='calendar_id']" position="replace" />
                 <xpath expr="//field[@name='state']" position="after">
                     <field name="calendar_id" />
-                </xpath>
+                </xpath> -->
             </field>
         </record>
         <record id="hr_public_holiday_tree_view" model="ir.ui.view">
