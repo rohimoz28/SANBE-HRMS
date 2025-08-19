@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.112-2025w34.1 (2025-08-19)
+
+- 6a54bdb [IMP] PAM : Perbaikan Menu Monitoring
+
+
 ## v0.0.110-2025w33.15 (2025-08-16)
 
 - 716c16d [IMP] TMS : Perbaikan Total Cuti Karyawan - TMS
