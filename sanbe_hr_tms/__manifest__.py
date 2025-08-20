@@ -76,6 +76,7 @@
         'security/tms_groups.xml',
         'views/hr_tms_overtime_Setting.xml',
         'views/sb_employee_overtime.xml',
+        'views/sb_leave_master.xml',
         'views/tms_menu.xml',
         'data/tms_seq_number.xml',
         'db/calculate_tms.sql',
