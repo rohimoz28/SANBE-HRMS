@@ -78,3 +78,4 @@ access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_abse
 access_sb_employee_overtime,access.sb.employee.overtime,model_sb_employee_overtime,base.group_user,1,1,1,1
 
 access_export_excel_monitor_ot,sanbe_hr_tms.export.excel.monitor.ot,model_export_excel_monitor_ot,base.group_user,1,1,1,1
+access_sb_leave_master,access.sb.leave.master,model_sb_leave_master,base.group_user,1,1,1,1
