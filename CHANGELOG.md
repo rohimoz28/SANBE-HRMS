@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.119-2025w34.8 (2025-08-21)
+
+- 1b617b7 [FEAT] TMS : Pembuatan Master Cuti
+
+
 ## v0.0.117-2025w34.6 (2025-08-19)
 
 - 91939a1 [IMP] PAM : Improvement Form Mutation
