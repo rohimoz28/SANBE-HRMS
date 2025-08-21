@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="sb_leave_master_view_form" model="ir.ui.view">
+            <field name="name">sb.leave.master.view.form</field>
+            <field name="model">sb.leave.master</field>
+            <field name="arch" type="xml">
+                <form string="Cuti">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="area_id" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="branch_ids" invisible="1"/>
+                            <field name="branch_id" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="days" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="sb_leave_master_view_tree" model="ir.ui.view">
+            <field name="name">sb.leave.master.view.tree</field>
+            <field name="model">sb.leave.master</field>
+            <field name="arch" type="xml">
+                <tree string="Cuti">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="area_id" />
+                    <field name="branch_id" />
+                    <field name="days" />        
+                </tree>
+            </field>
+        </record>
+
+        <record id="sb_leave_master_view_search" model="ir.ui.view">
+            <field name="name">sb.leave.master.view.search</field>
+            <field name="model">sb.leave.master</field>
+            <field name="arch" type="xml">
+                <search string="Cuti">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="area_id" />
+                    <field name="branch_id" />
+                    <field name="days" />
+                </search>
+            </field>
+        </record>
+
+        <record id="sb_leave_master_action" model="ir.actions.act_window">
+            <field name="name">Cuti</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.leave.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report Master Cuti
+                </p>
+                <p>
+                    Create New Master Cuti
+                </p>
+            </field>
+        </record>
+        
+    
+    </data>
+    
+
+</odoo>

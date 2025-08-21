@@ -38,5 +38,6 @@ from . import sb_overtime_bundling
 from . import stg_transform_absent
 from . import sb_leave_allocation
 from . import sb_employee_overtime
+from . import sb_leave_master
 #from . import idris
 
