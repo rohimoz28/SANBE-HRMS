@@ -19,7 +19,7 @@ class SbLeaveAllocationRequest(models.Model):
         ('draft', 'Draft'),
         ('running', 'Running'),
         ('hold', 'Hold'),
-    ], string='State')
+    ], string='State', default='draft')
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
@@ -67,9 +67,24 @@ class SbLeaveTracking(models.Model):
     _description = 'Leave Benefit'
 
     leave_req_id = fields.Many2one('sb.leave.allocation.request', string='Leave Req')
+    leave_master_id = fields.Many2one('sb.leave.master', string='Name')
+    name = fields.Char('Name', compute='_compute_leave_master_id', store=True)
     code = fields.Char('Code')
-    description = fields.Char('description')
-    total_leave_balance = fields.Float('Total Saldo Cuti')
+    description = fields.Char('Description')
+    total_leave_balance = fields.Float('Total Leave Balance')
     notes = fields.Char('Keterangan')
     start_date = fields.Date('Masa Berlaku Dari')
     end_date = fields.Date('Masa Berlaku Hingga')
+
+    @api.onchange('leave_master_id')
+    def _onchange_leave_master_id(self):
+        for rec in self:
+            if rec.leave_master_id:
+                rec.code = rec.leave_master_id.code
+                rec.total_leave_balance = rec.leave_master_id.days
+    
+    @api.depends('leave_master_id')
+    def _compute_leave_master_id(self):
+        for rec in self:
+            if rec.leave_master_id:
+                rec.name = f'{rec.code} - {rec.leave_master_id.name}'
