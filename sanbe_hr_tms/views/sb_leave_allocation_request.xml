@@ -10,7 +10,7 @@
                 <form string="Leave Allocation Req">
                     <header>
                         <button name="btn_draft" type="object"
-                            string="Draft" class="oe_highlight" invisible="state not in ['draft','running']"/>
+                            string="Draft" class="oe_highlight" invisible="state not in ['Hold','running']"/>
                         <button name="btn_running" type="object"
                            string="Running" class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="btn_hold" type="object"
@@ -44,9 +44,10 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name="leave_benefit" string="Benefit">
+                        <page name="leave_benefit" string="Leave Entitlement">
                             <field name="leave_benfit_ids" >
                                 <tree string="Benefit" editable="bottom">
+                                    <field name="leave_master_id" options="{'no_create': True,'no_create_edit': True}"/>
                                     <field name="code" />
                                     <field name="description" />
                                     <field name="total_leave_balance" />
@@ -94,7 +95,7 @@
         </record>
 
         <record id="sb_leave_allocation_request_action" model="ir.actions.act_window">
-            <field name="name">Leave Allocation request</field>
+            <field name="name">Leave Allocation Request</field>
             <field name="res_model">sb.leave.allocation.request</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>

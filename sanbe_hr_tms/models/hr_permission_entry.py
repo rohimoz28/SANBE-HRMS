@@ -78,6 +78,28 @@ class HRPermissionEntry(models.Model):
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
     leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_remaining',
                                     readonly=True, store=True)
+    permission_type_id = fields.Many2one('sb.leave.benefit', domain="[('leave_req_id.employee_id','=',employee_id)]", string='Permission Type')
+    leave_used = fields.Float('Leave Used', compute='_compute_permission_type', store=True)
+    total_leave_balance = fields.Float('Total Leave Balance', compute='_compute_permission_type', store=True)
+    remaining_leave = fields.Float('Remaining Leave', compute='_compute_permission_type', store=True)
+
+    @api.depends('permission_type_id', 'permission_date_from', 'permission_date_To')
+    def _compute_permission_type(self):
+        for rec in self:
+            if rec.permission_type_id:
+                rec.total_leave_balance = rec.permission_type_id.total_leave_balance
+                rec.leave_used = rec.time_days
+                rec.remaining_leave = max(rec.total_leave_balance - rec.leave_used, 0.0)
+            else:
+                rec.total_leave_balance = 0
+                rec.leave_used = 0
+                rec.remaining_leave = 0
+    
+    @api.constrains('leave_used','total_leave_balance')
+    def _constrains_leave_balance(self):
+        for rec in self:
+            if rec.leave_used and rec.total_leave_balance and rec.leave_used > rec.total_leave_balance:
+                raise ValidationError('Insufficient leave balance.')
 
     @api.onchange('holiday_status_id', 'time_days')
     def set_remarks(self):
@@ -255,6 +277,10 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             if rec.is_approved == True:
                 rec.permission_status = 'approved'
+
+                if rec.permission_type_id:
+                    benefit = rec.permission_type_id
+                    benefit.total_leave_balance = rec.remaining_leave
 
                 if rec.permission_date_from and rec.permission_date_To:
                     # days_permission = (rec.permission_date_To - rec.permission_date_from).days
