@@ -145,7 +145,7 @@
                         <group>
                             <field name="service_date" readonly="state in ['approved']" required="True" force_save="1" />
                             <field name="service_start" readonly="state in ['approved']" required="True" />
-                            <field name="service_end" readonly="state in ['approved']" required="True" />
+                            <field name="service_end" readonly="state in ['approved']" />
                             <!-- <field name="service_status" readonly="state in ['approved']" force_save="1" /> -->
                             <field name="service_area" readonly="state in ['approved'] or service_type not in ['muta', 'corr']" invisible="service_type not in ['muta','corr']" required="service_type in ['muta','corr']" force_save="1" />
                             <field name="branch_ids" invisible="1"/>
@@ -161,9 +161,9 @@
                             <field name="service_empgroup1" readonly="state in ['approved']" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
                             <field name="company_id" invisible="1"/>
                             <!-- <field name="join_date" /> -->
-                            <field name="contract_no" invisible="service_type not in ['corr','actv']" required="job_status =='permanent' or service_type in ['corr','actv']"/>
-                            <field name="contract_from" invisible="service_type not in ['corr','actv']" required="job_status =='contract' or service_type in ['corr','actv']"/>
-                            <field name="contract_to" invisible="service_type not in ['corr','actv']" required="job_status =='contract' or service_type in ['corr','actv']"/>
+                            <field name="contract_no" invisible="service_type not in ['corr','actv']" />
+                            <field name="contract_from" invisible="service_type not in ['corr','actv']" />
+                            <field name="contract_to" invisible="service_type not in ['corr','actv']" />
                         </group>
                     </group>
                 </sheet>
