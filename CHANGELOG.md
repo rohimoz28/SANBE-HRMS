@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.126-2025w35.4 (2025-08-26)
+
+- 8fec7ef [FIX] PAM : Hide Tab Sheet 'Received Badges'
+
+
 ## v0.0.125-2025w35.3 (2025-08-26)
 
 - 57c759e [IMP] PAM :Perbaikan Field Not Required - From Mutasi
