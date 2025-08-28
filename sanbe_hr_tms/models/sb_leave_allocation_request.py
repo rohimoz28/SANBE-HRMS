@@ -12,7 +12,7 @@ class SbLeaveAllocationRequest(models.Model):
     employee_id = fields.Many2one('hr.employee',domain="[('area','=',area_id), ('branch_id','=',branch_id), ('department_id','=',department_id)]", string='Employee')
     job_id = fields.Many2one('hr.job', domain="[('department_id','=',department_id)]", string='Job Position')
     employee_levels = fields.Many2one('employee.level', string='Employee Level')
-    total_leave = fields.Float('Total Cuti')
+    total_leave = fields.Float('Total Cuti', compute='_compute_total_leave', store=True)
     leave_tracking_ids = fields.One2many('sb.leave.tracking', 'leave_req_id', string='Leave Tracking')
     leave_benfit_ids = fields.One2many('sb.leave.benefit', 'leave_req_id', string='Leave Benfit')
     state = fields.Selection([
@@ -37,7 +37,15 @@ class SbLeaveAllocationRequest(models.Model):
                 databranch.append(mybranch.id)
             allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
             allrecs.branch_ids = [Command.set(allbranch.ids)]
-
+    
+    @api.depends('leave_benfit_ids.total_leave_balance', 'leave_benfit_ids.code')
+    def _compute_total_leave(self):
+        for rec in self:
+            benefits = rec.leave_benfit_ids.filtered(lambda b: b.code == 'A1')
+            if benefits:
+                latest = max(benefits, key=lambda b: b.id, default=False)
+                rec.total_leave = latest.total_leave_balance if latest else 0
+                    
     def btn_draft(self):
         for rec in self:
             rec.state = 'draft'
@@ -55,14 +63,17 @@ class SbLeaveTracking(models.Model):
     _description = 'Leave Tracking'
 
     leave_req_id = fields.Many2one('sb.leave.allocation.request', string='Leave Req')
-    date = fields.Date('Date')
+    date = fields.Date('Transaction Date')
+    permission_date_from = fields.Date('Permission From')
+    permission_date_to = fields.Date('Permission To')
+    leave_master_id = fields.Many2one('sb.leave.master', string='Permission Type')
     leave_allocation = fields.Float('Leave Adjustment')
     leave_used = fields.Float('Leave Used')
     leave_remaining = fields.Float('Remaining Leave')
     remarks = fields.Char('Remarks')
     description = fields.Text('Description')
 
-class SbLeaveTracking(models.Model):
+class SbLeaveBenefit(models.Model):
     _name = 'sb.leave.benefit'
     _description = 'Leave Benefit'
 
