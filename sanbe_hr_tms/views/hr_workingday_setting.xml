@@ -42,6 +42,7 @@
                                 <div class="mr8 oe_inline">
                                     <field name="type_hari" widget="radio" class="mr8 oe_inline"/>
                                 </div-->
+                                <field name="swap_in_out" />
                             </group>
                         </group>
                         <group>
