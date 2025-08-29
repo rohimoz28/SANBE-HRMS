@@ -74,7 +74,6 @@ class HRPermissionEntry(models.Model):
     holiday_status_id = fields.Many2one("hr.leave.type", store=True, string="Permission Code",
                                         required=True, readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
-    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
     leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_remaining',
                                     readonly=True, store=True)
@@ -100,6 +99,12 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             if rec.leave_used and rec.total_leave_balance and rec.leave_used > rec.total_leave_balance:
                 raise ValidationError('Insufficient leave balance.')
+    
+    @api.constrains('total_leave_balance','permission_type_id')
+    def _constraint_leave_balance_zero(self):
+        for rec in self:
+            if rec.permission_type_id and rec.total_leave_balance == 0:
+                raise ValidationError('You cannot create a Permission Entry. Leave balance is 0.')
 
     @api.onchange('holiday_status_id', 'time_days')
     def set_remarks(self):
@@ -157,30 +162,6 @@ class HRPermissionEntry(models.Model):
             leave_alloc = self.env['sb.leave.allocation'].sudo().search([('employee_id', '=', employee)], limit=1)
             if not leave_alloc or leave_alloc.leave_remaining < time_days:
                 raise ValidationError('Employee Has No Leave Allocation.\nPlease choose Leave Type: Unpaid Leave.')
-
-    @api.constrains('permission_date_from')
-    def _validate_date_periode(self):
-        for rec in self:
-            get_periode = self.env['hr.opening.closing'].sudo().search([
-                ('id', '=', rec.periode_id.id),
-                ('open_periode_from','<=',rec.permission_date_from),
-                ('open_periode_to','>=',rec.permission_date_from),
-                ('state_process', 'in', ['draft', 'running'])], limit=1)
-            if not get_periode:
-                raise ValidationError('This period is already closed.')
-
-    @api.onchange('permission_date_from')
-    def _get_periode_id(self):
-        for rec in self:
-            get_periode = self.env['hr.opening.closing'].sudo().search([
-                # ('id', '=', rec.periode_id.id),
-                ('open_periode_from','<=',rec.permission_date_from),
-                ('open_periode_to','>=',rec.permission_date_from),
-                ('branch_id','=',rec.branch_id.id)], limit=1)
-            if get_periode:
-                rec.periode_id = get_periode.id
-            else:
-                rec.periode_id = False
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -281,6 +262,18 @@ class HRPermissionEntry(models.Model):
                 if rec.permission_type_id:
                     benefit = rec.permission_type_id
                     benefit.total_leave_balance = rec.remaining_leave
+
+                    self.env['sb.leave.tracking'].create({  
+                        'leave_req_id': benefit.leave_req_id.id,
+                        'date': rec.permission_date_from,
+                        'permission_date_from': rec.permission_date_from,
+                        'permission_date_to': rec.permission_date_To,
+                        'leave_master_id': benefit.leave_master_id.id,
+                        'leave_allocation': rec.total_leave_balance,
+                        'leave_used': rec.leave_used,
+                        'leave_remaining': rec.remaining_leave,
+                        'remarks': rec.remarks
+                    })
 
                 if rec.permission_date_from and rec.permission_date_To:
                     # days_permission = (rec.permission_date_To - rec.permission_date_from).days
