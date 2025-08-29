@@ -32,10 +32,13 @@
                         </group>
                     </group>
                     <notebook>
-                        <page name="leave_tracking" string="Tracking Cuti">
+                        <page name="leave_tracking" string="Leave Tracking">
                             <field name="leave_tracking_ids">
-                                <tree string="Tracking Cuti" editable="bottom">
+                                <tree string="Leave Tracking" editable="bottom">
                                     <field name="date" />
+                                    <field name="permission_date_from" />
+                                    <field name="permission_date_to" />
+                                    <field name="leave_master_id" options="{'no_create': True,'no_create_edit': True}"/>
                                     <field name="leave_allocation" />
                                     <field name="leave_used" />
                                     <field name="leave_remaining" />
