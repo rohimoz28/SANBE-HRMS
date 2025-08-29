@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.128-2025w35.6 (2025-08-29)
+
+- 609486f [FEAT] TMS : Add Boolean Flag 'Swap In Out' at Setting Working Day
+
+
 ## v0.0.126-2025w35.4 (2025-08-26)
 
 - 8fec7ef [FIX] PAM : Hide Tab Sheet 'Received Badges'
