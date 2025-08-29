@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.0.126-2025w35.4 (2025-08-26)
+
+- 8fec7ef [FIX] PAM : Hide Tab Sheet 'Received Badges'
+
+
+## v0.0.125-2025w35.3 (2025-08-26)
+
+- 57c759e [IMP] PAM :Perbaikan Field Not Required - From Mutasi
+
+
+## v0.0.123-2025w35.1 (2025-08-26)
+
+- b110de4 [FEAT] PAM : Enhancement Permission Entry – Menambahkan Field dan menampilkan Saldo Cuti (Total, Used, Remaining) berdasarkan Permission Type
+
+
 ## v0.0.121-2025w34.10 (2025-08-22)
 
 - 83c5b5a [FEAT] TMS : Form Cuti

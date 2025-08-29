@@ -98,6 +98,7 @@ class HRWorkingDays(models.Model):
     is_ot_automatic = fields.Boolean(
         string='OT Otomatis',
         required=False)
+    swap_in_out = fields.Boolean('Swap In Out', default=False)
     
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)

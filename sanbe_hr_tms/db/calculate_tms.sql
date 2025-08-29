@@ -159,6 +159,29 @@ begin
       and hts.area_id = l_area
       and hts.branch_id = branch;
 
+--update time_in and time out with swap in out = True
+    with xx as (
+        select 
+            distinct dua.employee_id, 
+            dua.tgl, 
+            dua.tgl_masuk, 
+            dua.time_out time_in, 
+            (dua.tgl_masuk + interval '1 day')::date tgl_keluar, 
+            dua_next.time_in time_out
+        from sb_tms_tmsentry_details sttd 
+        join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id 
+        join hr_working_days hwd on sttd.workingday_id = hwd.id 
+        join data_upload_attendance dua on sttd.employee_id = dua.employee_id 
+        left join data_upload_attendance dua_next on dua.employee_id = dua_next.employee_id and dua_next.tgl_masuk = dua.tgl_masuk + interval '1 day'
+        where hwd.swap_in_out = True 
+            and dua.tgl_masuk = dua.tgl_keluar 
+            and dua.time_out > dua.time_in
+    )
+    update sb_tms_tmsentry_details sttd
+    set time_in = xx.time_in, date_out = xx.tgl_keluar, time_out = xx.time_out
+    from xx
+    where sttd.employee_id = xx.employee_id and sttd.details_date = xx.tgl;
+    
     --update hr_tms_summary from temp
     with temp_hts as (
       select 
