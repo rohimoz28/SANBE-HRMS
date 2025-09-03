@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.132-2025w36.1 (2025-09-03)
+
+- 391ab96 [IMP] PAM : Un Hide Field ' Night Shift' di Tab Sheet 'Benefit / Allowance' pada Branch Tamansari
+
+
 ## v0.0.130-2025w35.8 (2025-08-29)
 
 - 2dde5be [IMP] TMS : Improvement Menu Leave Allocation Request
