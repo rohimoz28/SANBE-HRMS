@@ -10,7 +10,8 @@
                     <sheet>
                         <header>
                             <button name="btn_approve" type="object" data-hotkey="shift+g" string="Approved" class="oe_highlight" invisible="permission_status != 'draft'"/>
-                            <button name="btn_draft" type="object" data-hotkey="shift+g" string="Draft" class="oe_highlight" invisible="permission_status != 'approved'"/>
+                            <!-- <button name="btn_draft" type="object" data-hotkey="shift+g" string="Draft" class="oe_highlight" invisible="permission_status != 'approved'"/> -->
+                            <button name="btn_cancel" type="object" data-hotkey="shift+g" string="Cancel" class="oe_highlight" invisible="permission_status != 'approved'"/>
                             <field name="permission_status" widget="statusbar" statusbar_visible="draft,approved,close,cancel" force_save="1"/>
                         </header>
                         <group string="PERMISSION ENTRY" name="permission_entry">
