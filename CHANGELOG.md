@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.136-2025w37.3 (2025-09-08)
+
+- 016c05a [IMP] TMS : Improvement Menu Permission Entry
+
+
 ## v0.0.134-2025w37.1 (2025-09-08)
 
 - 1acd240 [IMP] TMS : Update Calculate Tms
