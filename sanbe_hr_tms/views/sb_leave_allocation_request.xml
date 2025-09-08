@@ -44,6 +44,7 @@
                                     <field name="leave_remaining" />
                                     <field name="remarks" />
                                     <field name="description" />
+                                    <field name="permission_status" />
                                 </tree>
                             </field>
                         </page>
