@@ -160,27 +160,53 @@ begin
       and hts.branch_id = branch;
 
 --update time_in and time out with swap in out = True
-    with xx as (
-        select 
-            distinct dua.employee_id, 
-            dua.tgl, 
-            dua.tgl_masuk, 
-            dua.time_out time_in, 
-            (dua.tgl_masuk + interval '1 day')::date tgl_keluar, 
-            dua_next.time_in time_out
-        from sb_tms_tmsentry_details sttd 
-        join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id 
-        join hr_working_days hwd on sttd.workingday_id = hwd.id 
-        join data_upload_attendance dua on sttd.employee_id = dua.employee_id 
-        left join data_upload_attendance dua_next on dua.employee_id = dua_next.employee_id and dua_next.tgl_masuk = dua.tgl_masuk + interval '1 day'
-        where hwd.swap_in_out = True 
-            and dua.tgl_masuk = dua.tgl_keluar 
-            and dua.time_out > dua.time_in
-    )
-    update sb_tms_tmsentry_details sttd
-    set time_in = xx.time_in, date_out = xx.tgl_keluar, time_out = xx.time_out
-    from xx
-    where sttd.employee_id = xx.employee_id and sttd.details_date = xx.tgl;
+--    with xx as (
+--        select 
+--            distinct dua.employee_id, 
+--            dua.tgl, 
+--            dua.tgl_masuk, 
+--            dua.time_out time_in, 
+--            (dua.tgl_masuk + interval '1 day')::date tgl_keluar, 
+--            dua_next.time_in time_out
+--        from sb_tms_tmsentry_details sttd 
+--        join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id 
+--        join hr_working_days hwd on sttd.workingday_id = hwd.id 
+--        join data_upload_attendance dua on sttd.employee_id = dua.employee_id 
+--        left join data_upload_attendance dua_next on dua.employee_id = dua_next.employee_id and dua_next.tgl_masuk = dua.tgl_masuk + interval '1 day'
+--        where hwd.swap_in_out = True 
+--            and dua.tgl_masuk = dua.tgl_keluar 
+--            and dua.time_out > dua.time_in
+--    )
+--    update sb_tms_tmsentry_details sttd
+--    set time_in = xx.time_in, date_out = xx.tgl_keluar, time_out = xx.time_out
+--    from xx
+--    where sttd.employee_id = xx.employee_id and sttd.details_date = xx.tgl;
+
+--
+--update sb_tms_tmsentry_details set aot4 = time_in where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+-- update sb_tms_tmsentry_details set time_in = null where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+-- update sb_tms_tmsentry_details set time_in = time_out where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+-- update sb_tms_tmsentry_details set time_out = null where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+--  update sb_tms_tmsentry_details ts set time_out = ss.aot4 , date_out = (ts.details_date + INTERVAL '1 day')::date
+--  from
+--  (select (details_date - INTERVAL '1 day')::date as details_date, aot4 , sb_tms_tmsentry_details.employee_id 
+--  from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True) and aot4 is not null)ss
+--  where ss.details_date = ts.details_date and ts.employee_id = ss.employee_id;
+-- update sb_tms_tmsentry_details set aot4 = null where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+
+--swap in out GH 3 Sep 2025
+update sb_tms_tmsentry_details set aot4 = time_in where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
+update sb_tms_tmsentry_details set time_in = null where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
+update sb_tms_tmsentry_details set time_in = time_out where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
+update sb_tms_tmsentry_details set time_out = null where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
+update sb_tms_tmsentry_details ts set time_out = ss.aot4 , date_out = (ts.details_date + INTERVAL '1 day')::date
+  from
+  (select (details_date - INTERVAL '1 day')::date as details_date, aot4 , sb_tms_tmsentry_details.employee_id 
+from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True) and aot4 is not null)ss,
+hr_tmsentry_summary a where a.id = ts.tmsentry_id and a.periode_id = period and  a.branch_id = branch 
+and ss.details_date = ts.details_date and ts.employee_id = ss.employee_id;
+update sb_tms_tmsentry_details set aot4 = null where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
+
     
     --update hr_tms_summary from temp
     with temp_hts as (
