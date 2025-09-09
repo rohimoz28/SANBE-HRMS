@@ -13,10 +13,12 @@
                         <field name="name" />
                         <field name="parent_id" />
                         <field name="employee_id" />
+                        <field name="nik" />
                         <field name="department_id" />
                         <field name="job_id" />
                         <field name="job_status" />
                         <field name="emp_status_id" />
+                        <field name="join_date_contract" />
                         <field name="join_date" />
                         <field name="pension_date" />
                         <field name="retire_age" />

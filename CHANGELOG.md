@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.136-2025w37.3 (2025-09-08)
+
+- 016c05a [IMP] TMS : Improvement Menu Permission Entry
+
+
+## v0.0.134-2025w37.1 (2025-09-08)
+
+- 1acd240 [IMP] TMS : Update Calculate Tms
+
+
 ## v0.0.132-2025w36.1 (2025-09-03)
 
 - 391ab96 [IMP] PAM : Un Hide Field ' Night Shift' di Tab Sheet 'Benefit / Allowance' pada Branch Tamansari
