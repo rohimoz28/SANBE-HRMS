@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.138-2025w37.5 (2025-09-10)
+
+- 1e55619 [IMP] PAM : Penambahan Kolom 'NIK' dan 'Join Date Contract' List View HR Employee
+
+
 ## v0.0.136-2025w37.3 (2025-09-08)
 
 - 016c05a [IMP] TMS : Improvement Menu Permission Entry
