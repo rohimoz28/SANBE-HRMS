@@ -27,7 +27,10 @@
             <field name="name">TMS Permission Entry Branch Manager</field>
             <field name="model_id" ref="model_hr_permission_entry" />
             <field name="global" eval="True" />
-            <field name="domain_force">[(1,'=',1)]</field>
+            <!-- <field name="domain_force">[(1,'=',1)]</field> -->
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user_manager'))]" />
         </record>
 
@@ -35,8 +38,11 @@
             <field name="name">TMS Permission Entry Branch</field>
             <field name="model_id" ref="model_hr_permission_entry" />
             <field name="global" eval="True" />
+            <!-- <field name="domain_force">
+                ['|',('branch_id','=',False),('branch_id','=',user.branch_id.id)]</field> -->
             <field name="domain_force">
-                ['|',('branch_id','=',False),('branch_id','=',user.branch_id.id)]</field>
+                [('branch_id', 'in', branch_ids)]
+            </field>
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user'))]" />
         </record>
 
@@ -104,6 +110,29 @@
                 ['|',('branch_id','=',False),('branch_id','=',user.branch_id.id)]</field>
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user'))]" />
         </record>
+
+        <!-- Overtime Request -->
+        <record id="hr_overtime_planning_branch_view" model="ir.rule">
+            <field name="name">Overtime Planning Branch Group View</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_hr_overtime_planning"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record>
+
+        <!-- Monitoring Overtime -->
+        <record id="sb_employee_overtime_branch_view" model="ir.rule">
+            <field name="name">Monitoring Overtime Branch Group View</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_employee_overtime"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record>
+
 
         <!-- TMS Processing -->
         <record id="hr_tms_processing_branch_manager_rule" model="ir.rule">
@@ -183,7 +212,10 @@
             <field name="name">TMS Employee Group Settings Branch Manager</field>
             <field name="model_id" ref="model_hr_empgroup" />
             <field name="global" eval="True" />
-            <field name="domain_force">[(1,'=',1)]</field>
+            <!-- <field name="domain_force">[(1,'=',1)]</field> -->
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user_manager'))]" />
         </record>
 
@@ -191,15 +223,21 @@
             <field name="name">TMS Employee Group Settings Branch</field>
             <field name="model_id" ref="model_hr_empgroup" />
             <field name="global" eval="True" />
+            <!-- <field name="domain_force">
+                ['|',('branch_id','=',False),('branch_id','in',user.branch_ids.ids)]</field> -->
             <field name="domain_force">
-                ['|',('branch_id','=',False),('branch_id','in',user.branch_ids.ids)]</field>
+                [('branch_id', 'in', branch_ids)]
+            </field>
             <field name="groups" eval="[(4, ref('base_territory.group_branch_user'))]" />
         </record>
 
         <record id="hr_empgroup_branch_view_rule" model="ir.rule">
             <field name="name">TMS Employee Group Access</field>
             <field name="model_id" ref="model_hr_empgroup"/>
-            <field name="domain_force">['|',('branch_id','=',user.branch_id.id),('branch_id','in',user.branch_ids.ids)]</field>
+            <!-- <field name="domain_force">['|',('branch_id','=',user.branch_id.id),('branch_id','in',user.branch_ids.ids)]</field> -->
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
