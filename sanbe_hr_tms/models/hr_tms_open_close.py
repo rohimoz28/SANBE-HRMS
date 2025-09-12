@@ -196,24 +196,26 @@ class HRTmsOpenClose(models.Model):
                     "The 'Periode From' and 'Periode To' fields are required. Please enter values for both fields."
                 )
 
-            period_id = data.id
-            area_id = data.area_id
-            branch_id = data.branch_id
-
+            ''' buat pesan pada chatter 
+            ketika button opening process di klik '''
             body = _('Process Period: %s' % self.state_process)
             data.message_post(body=body)
 
-            ''' validasi : Seluruh employee group yg sesuai area & branch nya sama dengan
-            area & branch dari proses open period yg sedang dijalankan,
-            harus sudah berstatus approve '''
-            employee_group = self.env['hr.empgroup'].sudo().search([
-                ('area_id', '=', area_id.id),
-                ('branch_id', '=', branch_id.id),
-                ('state', '!=', 'approved')
-            ])
-
-            if len(employee_group) > 1:
-                raise UserError('Ensure all employee groups have been approved.')
+            # period_id = data.id
+            # area_id = data.area_id
+            # branch_id = data.branch_id
+            #
+            # ''' validasi : Seluruh employee group yg sesuai area & branch nya sama dengan
+            # area & branch dari proses open period yg sedang dijalankan,
+            # harus sudah berstatus approve '''
+            # employee_group = self.env['hr.empgroup'].sudo().search([
+            #     ('area_id', '=', area_id.id),
+            #     ('branch_id', '=', branch_id.id),
+            #     ('state', '!=', 'approved')
+            # ])
+            #
+            # if len(employee_group) > 1:
+            #     raise UserError('Ensure all employee groups have been approved.')
 
             data.isopen = True
             data.state_process = "running"
