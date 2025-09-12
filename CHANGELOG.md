@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.142-2025w37.9 (2025-09-11)
+
+- a6a598e [FIX] PAM : Authentication Bug – Invalid Password Still Allows Login
+
+
+## v0.0.140-2025w37.7 (2025-09-11)
+
+- f999ff6 [FEAT] TMS : 'Create New Menu : Break Time Setting'
+
+
 ## v0.0.138-2025w37.5 (2025-09-10)
 
 - 1e55619 [IMP] PAM : Penambahan Kolom 'NIK' dan 'Join Date Contract' List View HR Employee
