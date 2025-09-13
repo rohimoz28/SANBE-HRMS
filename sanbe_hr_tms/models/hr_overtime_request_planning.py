@@ -18,7 +18,9 @@ TMS_OVERTIME_STATE = [
     ('draft', 'Draft'),
     ('approved_mgr', "Approved By MGR"),
     ('approved_pmr', "Approved By PMR"),
-    ('approved', 'Approved By HCM'),
+    ('approved', 'Approved By MGR'),
+    ('verification', 'Verification by MGR'),
+    ('completed', 'Completed by HCM'),
     ('done', "Close"),
     ('reject', "Reject"),
 ]
@@ -169,10 +171,11 @@ class HREmpOvertimeRequest(models.Model):
     
     def btn_approved(self):
         for rec in self:
-            if rec.approve1 == True and rec.approve2 == True and rec.approve3 == True and rec.approve4 == True:
-                rec.state = 'approved'
-            else:
-                raise UserError('Approve Not Complete')
+            rec.state = 'approved'
+            # if rec.approve1 == True and rec.approve2 == True and rec.approve3 == True and rec.approve4 == True:
+            #     rec.state = 'approved'
+            # else:
+            #     raise UserError('Approve Not Complete')
     
     def btn_done(self):
         for rec in self:
@@ -187,25 +190,31 @@ class HREmpOvertimeRequest(models.Model):
         elif self.state == 'draft':
             return 'draft,approved_mgr,done,reject'
         elif self.state == 'approved_mgr':
-            return 'draft,approved_mgr,done,reject'
+            # return 'draft,approved_mgr,done,reject'
+            return 'approved_mgr'
         elif self.state == 'approved_pmr':
-            return 'draft,approved_pmr,done,reject'
+            # return 'draft,approved_pmr,done,reject'
+            return 'approved_pmr'
         elif self.state == 'approved':
             return 'draft,approved,done,reject'
+        elif self.state == 'verification':
+            return 'draft,verification,done,reject'
+        elif self.state == 'completed':
+            return 'draft,completed,done,reject'
         elif self.state == 'done':
             return 'draft,done,reject'
         elif self.state == 'reject':
             return 'draft,done,reject'
         else:
-            return 'draft,approved_mgr,approved_pmr,approved,done,reject'
+            return 'draft,approved,verification,completed,done,reject'
 
-    def btn_approved_mgr(self):
-        for rec in self:
-            rec.state = 'approved_mgr'
+    # def btn_approved_mgr(self):
+    #     for rec in self:
+    #         rec.state = 'approved_mgr'
             
-    def btn_approved_pmr(self):
-        for rec in self:
-            rec.state = 'approved_pmr'
+    # def btn_approved_pmr(self):
+    #     for rec in self:
+    #         rec.state = 'approved_pmr'
     
     def btn_reject(self):
         for rec in self:
@@ -214,6 +223,14 @@ class HREmpOvertimeRequest(models.Model):
     def btn_backdraft(self):
         for rec in self:
             rec.state = 'draft'
+
+    def btn_verification(self):
+        for rec in self:
+            rec.state = 'verification'
+    
+    def btn_completed(self):
+        for rec in self:
+            rec.state = 'completed'
 
     def btn_print_pdf(self):
         return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
@@ -328,6 +345,16 @@ class HREmpOvertimeRequestEmployee(models.Model):
     ot_plann_to = fields.Float('OT Plan To')
     approve_time_from = fields.Float('OT App From')
     approve_time_to = fields.Float('OT App To')
+    realization_time_from = fields.Float('Realization Time From')
+    realization_time_to = fields.Float('Realization Time To')
+    verify_time_from = fields.Float('Verify Time From')
+    verify_time_to = fields.Float('Verify Time To')
+    aot1 = fields.Float('AOT 1')
+    aot2 = fields.Float('AOT 2')
+    aot3 = fields.Float('AOT 3')
+    aot4 = fields.Float('AOT 4')
+    ans1 = fields.Float('ANS 1')
+    ans2 = fields.Float('ANS 2')
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plan')
     output_plann = fields.Char('Output Plan')
