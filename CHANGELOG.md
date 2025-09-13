@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.145-2025w37.12 (2025-09-13)
+
+- ae32491 [FIX] TMS : Fix Search & Group By Business Unit (BU) Filter
+
+
 ## v0.0.142-2025w37.9 (2025-09-11)
 
 - a6a598e [FIX] PAM : Authentication Bug – Invalid Password Still Allows Login
