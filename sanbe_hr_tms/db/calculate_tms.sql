@@ -535,7 +535,8 @@ set delay_level1 = bb.delay_level1,
 where s.employee_id = bb.employee_id
   and s.details_date = bb.details_date;
 
--- tes update aof aot
+-- Update aof aot
+-- hop.approve 1–3 not used (fields hidden in UI)
 WITH flag AS (SELECT hoe.employee_id,
                      hoe.approve_time_from,
                      hoe.approve_time_to,
@@ -548,9 +549,9 @@ WITH flag AS (SELECT hoe.employee_id,
                 AND hop.state = 'approved'
                 AND hop.branch_id = branch
                 AND hop.area_id = l_area
-                AND hop.approve1 = true
-                AND hop.approve2 = true
-                AND hop.approve3 = true
+                -- AND hop.approve1 = true 
+                -- AND hop.approve2 = true
+                -- AND hop.approve3 = true
                 AND (is_cancel = false or is_cancel is null))
 UPDATE sb_tms_tmsentry_details sttd
 SET approval_ot_from = f.approve_time_from,
