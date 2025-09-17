@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.150-2025w38.3 (2025-09-17)
+
+- 830109e [IMP] TMS : improvement calculate_tms.sql
+
+
 ## v0.0.148-2025w38.1 (2025-09-15)
 
 - 1005df5 [IMP] TMS : Enhancement Form Overtime Request
