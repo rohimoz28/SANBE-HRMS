@@ -136,7 +136,7 @@ WHERE ha.tmsentry_id = hts.id
   AND hts.branch_id = branch;
 
 
--- update W , employee_id, empgroup, workingday
+-- Fix Sementara GH kerja Sabtu 17 Sep 2025
 WITH flag AS (SELECT 'W'                                                                               AS cf,
                      hed.employee_id,
                      generate_series(hed.valid_from::date, hed.valid_to::date, interval '1 day')::date AS wd,
@@ -196,20 +196,20 @@ where hts.employee_id = f.employee_id
 
 --update time_in and time out with swap in out = True
 --    with xx as (
---        select 
---            distinct dua.employee_id, 
---            dua.tgl, 
---            dua.tgl_masuk, 
---            dua.time_out time_in, 
---            (dua.tgl_masuk + interval '1 day')::date tgl_keluar, 
+--        select
+--            distinct dua.employee_id,
+--            dua.tgl,
+--            dua.tgl_masuk,
+--            dua.time_out time_in,
+--            (dua.tgl_masuk + interval '1 day')::date tgl_keluar,
 --            dua_next.time_in time_out
---        from sb_tms_tmsentry_details sttd 
---        join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id 
---        join hr_working_days hwd on sttd.workingday_id = hwd.id 
---        join data_upload_attendance dua on sttd.employee_id = dua.employee_id 
+--        from sb_tms_tmsentry_details sttd
+--        join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id
+--        join hr_working_days hwd on sttd.workingday_id = hwd.id
+--        join data_upload_attendance dua on sttd.employee_id = dua.employee_id
 --        left join data_upload_attendance dua_next on dua.employee_id = dua_next.employee_id and dua_next.tgl_masuk = dua.tgl_masuk + interval '1 day'
---        where hwd.swap_in_out = True 
---            and dua.tgl_masuk = dua.tgl_keluar 
+--        where hwd.swap_in_out = True
+--            and dua.tgl_masuk = dua.tgl_keluar
 --            and dua.time_out > dua.time_in
 --    )
 --    update sb_tms_tmsentry_details sttd
@@ -224,10 +224,11 @@ where hts.employee_id = f.employee_id
 -- update sb_tms_tmsentry_details set time_out = null where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
 --  update sb_tms_tmsentry_details ts set time_out = ss.aot4 , date_out = (ts.details_date + INTERVAL '1 day')::date
 --  from
---  (select (details_date - INTERVAL '1 day')::date as details_date, aot4 , sb_tms_tmsentry_details.employee_id 
+--  (select (details_date - INTERVAL '1 day')::date as details_date, aot4 , sb_tms_tmsentry_details.employee_id
 --  from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True) and aot4 is not null)ss
 --  where ss.details_date = ts.details_date and ts.employee_id = ss.employee_id;
 -- update sb_tms_tmsentry_details set aot4 = null where id in  (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
+
 
 --swap in out GH 3 Sep 2025
 update sb_tms_tmsentry_details set aot4 = time_in where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
@@ -242,6 +243,11 @@ from
                             and ss.details_date = ts.details_date and ts.employee_id = ss.employee_id;
 update sb_tms_tmsentry_details set aot4 = null where id in  (select b.id from hr_tmsentry_summary a join sb_tms_tmsentry_details b on a.id = b.tmsentry_id and a.periode_id = period and  a.branch_id = branch  where workingday_id in (select id from hr_working_days where swap_in_out = True));
 
+--Realization form overtime GH 17 Sep 2025
+update hr_overtime_employees ho set realization_time_from = xx.msk, realization_time_to = xx.klr
+    from (select hts.employee_id ,sttd.details_date, coalesce(sttd.edited_time_in,sttd.time_in) msk, coalesce(sttd.edited_time_out ,sttd.time_out)klr  from hr_tmsentry_summary hts, sb_tms_tmsentry_details sttd
+             where hts.id = sttd.tmsentry_id and hts.branch_id = branch AND hts.periode_id = period) xx
+where ho.employee_id = xx.employee_id and xx.details_date = ho.plann_date_from;
 
 --update hr_tms_summary from temp
 with temp_hts as (
@@ -549,7 +555,7 @@ WITH flag AS (SELECT hoe.employee_id,
                 AND hop.state = 'approved'
                 AND hop.branch_id = branch
                 AND hop.area_id = l_area
-                -- AND hop.approve1 = true 
+                -- AND hop.approve1 = true
                 -- AND hop.approve2 = true
                 -- AND hop.approve3 = true
                 AND (is_cancel = false or is_cancel is null))
@@ -667,7 +673,7 @@ where sttd.employee_id = zz.employee_id and sttd.details_date = zz.details_date;
 --                when sttd.date_in = sttd.date_out then -- tidak pergantian hari
 --                    case
 --                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
---                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float 
+--                        when sttd.time_in <= sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.approval_ot_from) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
 --                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out >= sttd.approval_ot_to and (sttd.approval_ot_to - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
 --                        when sttd.time_in > sttd.approval_ot_from and sttd.time_out < sttd.approval_ot_to and (sttd.time_out - sttd.time_in) >= (hos.aot_to - hos.aot_from) then FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2 --hos.aot_to - hos.aot_from::float
 --                        else null
@@ -812,7 +818,7 @@ where sttd.employee_id = zz.employee_id and sttd.details_date = zz.details_date;
 --                        sttd.approval_ot_from > sttd.approval_ot_to AND
 --                        (24 + COALESCE(sttd.edited_time_out, sttd.time_out) - COALESCE(sttd.edited_time_in, sttd.time_in)) >= (hos.aot_to - hos.aot_from) THEN
 --                        GREATEST(FLOOR((hos.aot_to - hos.aot_from::float) * 2) / 2, 0)
---    
+--
 --                    -- durasi absen kurang dari durasi overtime setting OT 2
 --                    WHEN COALESCE(sttd.edited_time_in, sttd.time_in) <= sttd.approval_ot_from AND
 --                        COALESCE(sttd.edited_time_out, sttd.time_out) + 24 > sttd.approval_ot_to AND
