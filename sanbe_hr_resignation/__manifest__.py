@@ -23,9 +23,8 @@
     'data': [
         'security/hr_resignation_security.xml',
         'views/hr_resignation.xml',
-        # 'reports/rpt_paklaring.xml',
-        'reports/paklaring_report.xml',
-        'reports/paklaring_report_steril.xml',
+        'reports/paklaring_report_tamansari.xml',
+        'reports/paklaring_report_cimahi_cimareme.xml',
         'reports/FKPD_report.xml',
         'security/ir.model.access.csv',
     ],
