@@ -275,9 +275,17 @@
         />
 
         <menuitem
+                id="menu_sb_route_master"
+                name="Master Rute"
+                sequence="65"
+                parent="sanbe_hr_tms.hr_menu_tms_setting"
+                action="sanbe_hr_tms.sb_route_master_action"
+        />
+
+        <menuitem
                 id="menu_sb_leave_allocation"
                 name="Leave Allocation"
-                sequence="65"
+                sequence="70"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 action="sanbe_hr_tms.action_sb_leave_allocation"
         />
@@ -285,7 +293,7 @@
         <menuitem
                 id="menu_sb_break_master"
                 name="Break Time Setting"
-                sequence="70"
+                sequence="75"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 action="sanbe_hr_tms.sb_break_master_action"
         />

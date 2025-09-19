@@ -56,6 +56,7 @@
         'views/hr_tms_machine_setting.xml',
         'views/hr_machine_details.xml',
         'views/sb_break_master.xml',
+        'views/sb_route_master.xml',
         'report/report_kehadiran_templates.xml',
         'report/report_kehadiran_html.xml',
         'report/report_ot_attendance_html.xml',
