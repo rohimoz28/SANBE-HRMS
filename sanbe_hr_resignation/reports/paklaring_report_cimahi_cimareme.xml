@@ -1,14 +1,14 @@
 <odoo>
     <data>
         <record id="paperformat_parklaring_report" model="report.paperformat">
-            <field name="name">Print Out Paklaring</field>
+            <field name="name">Print Out Paklaring Cimahi &amp; Cimareme</field>
             <field name="default" eval="True" />
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">5</field>
             <field name="margin_bottom">15</field>
-            <field name="margin_left">25.4</field>
-            <field name="margin_right">25.4</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
             <field name="header_line" eval="False" />
             <field name="header_spacing">7</field>
             <field name="dpi">90</field>
@@ -16,10 +16,10 @@
         <record id="action_report_paklaring_steril" model="ir.actions.report">
             <field name="name">Surat Paklaring Cimahi &amp; Cimareme</field>
             <field name="model">hr.resignation</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">sanbe_hr_resignation.paklaring_report_cimahi_cimareme</field>
             <field name="report_file">sanbe_hr_resignation.paklaring_report_cimahi_cimareme</field>
-            <field name="print_report_name">('Paklaring - %s' % (object.emp_nos.name))</field>
+            <field name="print_report_name">('Paklaring - %s' % (object.employee_id.name))</field>
             <field name="binding_model_id" eval="False" />
             <!-- <field name="binding_type"></field> -->
             <field name="paperformat_id" ref="sanbe_hr_resignation.paperformat_parklaring_report" />
@@ -87,19 +87,58 @@
                 </style>
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="web.basic_layout">
-                        <div class="header">
+                        <thead>
                             <t t-set="company" t-value="res_company" />
-                            <div class="row">
-                                <div class="col-12">
-                                    <center>
+                            <div style="position: relative; width:100%;">
+                                <!-- logo & nama -->
+                                <div style="text-align:left; display:inline-block;">
                                     <img
-                                        src="/sanbe_hr_resignation/static/src/img/header_paklaring_steril.png"
-                                        style="width: 100%; height: auto; max-width: 180mm; max-height: 200mm;"
+                                        t-if="company.logo"
+                                        t-att-src="image_data_uri(company.logo)"
+                                        style="max-height: 100px; width: 200px;" alt="Logo"
                                     />
-                                    </center>
+                                </div>
+
+                                <!-- REGISTERED di pojok kanan -->
+                                <div style="position:absolute; top:30px; right:0; 
+                                            font-family: 'SpecialElite', sans-serif;
+                                            font-size:20px; font-weight:900; letter-spacing:-1px;">
+                                    REGISTERED
                                 </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div style="border-bottom: 1px solid black; margin-bottom: 2px;" />
+                                    <div style="border-bottom: 4px solid black;" />
+                                </div>
+                            </div>
+                            <table style="width=100%; margin-left: auto; border: 0px solid transparent;">
+                                <tr>
+                                    <td class="text-left" style="vertical-align: middle; font-family: 'Bookman Old Style', Georgia, serif;">
+                                        <strong>
+                                            <span style="font-size:17px;" t-field="company.name" />
+                                        </strong> Pharmaceutical Manufacturer
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" class="text-left">
+                                    <t t-if="doc.branch_id.street">
+                                        <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street" />
+                                    </t>
+                                    <t t-if="doc.branch_id.street2">
+                                        <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street2" />
+                                    </t>
+                                    <t t-if="doc.branch_id.city">
+                                        <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" />
+                                    </t>
+                                        <br /> Telp: <t t-if="doc.branch_id.phone"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.phone" /></t>
+                                        <br /> Fax: <t t-if="doc.branch_id.fax"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.fax" /></t>
+                                        <br />
+                                        <t t-if="doc.branch_id.city"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" /></t> <t t-if="doc.branch_id.zip"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.zip" /></t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </thead>
                         <br />
                         <div class="page">
                             <div class="oe_structure" />
@@ -169,7 +208,22 @@
                                     <td style="width: 15px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">:</td>
                                     <td style="width: 300px; padding: 0; margin: 0; font-size:15px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
                                         <t t-if="doc.emp_nos.private_street">
-                                            <t t-esc="doc.emp_nos.private_street" />
+                                            <t t-esc="doc.emp_nos.private_street"/>,
+                                        </t>
+                                        <t t-if="doc.emp_nos.private_street2">
+                                            <t t-esc="doc.emp_nos.private_street2"/>,
+                                        </t>
+                                        <t t-if="doc.emp_nos.private_city">
+                                            <t t-esc="doc.emp_nos.private_city"/>,
+                                        </t>
+                                        <t t-if="doc.emp_nos.private_state_id.name">
+                                            <t t-esc="doc.emp_nos.private_state_id.name"/>,
+                                        </t>
+                                        <t t-if="doc.emp_nos.private_zip">
+                                            <t t-esc="doc.emp_nos.private_zip"/>,
+                                        </t>
+                                        <t t-if="doc.emp_nos.private_country_id.name">
+                                            <t t-esc="doc.emp_nos.private_country_id.name"/>
                                         </t>
                                     </td>
                                 </tr>
