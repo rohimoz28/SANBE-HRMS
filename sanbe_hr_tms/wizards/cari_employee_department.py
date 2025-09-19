@@ -2,6 +2,15 @@
 from odoo import fields, models, api, _, Command
 from odoo.exceptions import ValidationError,UserError
 
+OT_HOURS_SELECTION = [
+    ('h_morning', "H - Lembur Pagi"),
+    ('h_afternoon', "H - Lembur Siang"),
+    ('h_night', "H - Lembur Malam"),
+    ('r_s1', "R - S1"),
+    ('r_s2', "R - S2"),
+    ('r_s3', "R - S3"),
+    ('others', "Others"),
+]
 
 class HrCariEmployeeDepartment(models.TransientModel):
     _name = 'hr.employeedepartment'
@@ -62,7 +71,34 @@ class HrCariEmployeeDepartment(models.TransientModel):
         compute='_isi_department_branch',
         store=False
     )
+    default_ot_hours = fields.Selection(
+        selection=OT_HOURS_SELECTION,
+        string='Default Jam OT')
+    
+    @api.onchange('default_ot_hours')
+    def _onchange_default_ot_hours(self):
 
+        default_ot_mapping = {
+            'h_morning': (7, 15),
+            'h_afternoon': (15, 22),
+            'h_night': (22, 6),
+            'r_s1': (15.5, 19.5),
+            'r_s2': (11, 15),
+            'r_s3': (19, 22),
+        }
+
+        if self.default_ot_hours in default_ot_mapping:
+            from_time, to_time = default_ot_mapping[self.default_ot_hours]
+            self.ot_plann_from = from_time
+            self.ot_plann_to = to_time
+            self.approve_time_from = from_time
+            self.approve_time_to = to_time
+        else:
+            self.ot_plann_from = False
+            self.ot_plann_to = False
+            self.approve_time_from = False
+            self.approve_time_to = False
+            
     @api.depends('area_id')
     def _isi_semua_branch(self):
         for allrecs in self:
