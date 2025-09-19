@@ -8,18 +8,22 @@
                 <form string="Overtime Request" create="0">
                 <!-- <sheet> -->
                     <header>
-                        <button string="Approved" name="btn_approved" type="object" class="oe_highlight" invisible="state != 'draft'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Approved" name="btn_approved" type="object" class="oe_highlight" invisible="state != 'verification'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Draft" name="btn_backdraft" type="object" invisible="state in ('draft', 'approved_mgr', 'approved_pmr')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Appv Plan SPV" name="btn_plan_spv" type="object" invisible="state != 'draft'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Appv Plan MGR" name="btn_plan_mgr" type="object" invisible="state != 'approved_plan_spv'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Appv Plan PM" name="btn_plan_pm" type="object" invisible="state != 'approved_plan_mgr'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Appv Plan HCM" name="btn_plan_hcm" type="object" invisible="state != 'approved_plan_pm'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <!-- <button string="Approved By Manager" name="btn_approved_mgr" type="object" class="oe_highlight" invisible="state != 'draft'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/> -->
                         <!-- <button string="Approved By Plan Manager" name="btn_approved_pmr" type="object" class="oe_highlight" invisible="state != 'approved_mgr'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/> -->
-                        <button string="Verification" name="btn_verification" type="object" class="oe_highlight" invisible="state != 'approved'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
-                        <button string="Completed" name="btn_completed" type="object" class="oe_highlight" invisible="state != 'verification'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Verification" name="btn_verification" type="object" class="oe_highlight" invisible="state != 'approved_plan_hcm'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
+                        <button string="Completed" name="btn_completed" type="object" class="oe_highlight" invisible="state != 'approved'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Close" name="btn_done" type="object" class="oe_highlight" invisible="state != 'completed'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Reject" name="btn_reject" type="object" class="btn-danger" invisible="state in ('reject', 'approved')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button name="btn_print_pdf" type="object" class="btn-bf" invisible="state in ('reject')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager">
                             <i class="fa fa-print"/> Print PDF
                         </button>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,verification,completed,done,reject"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved_plan_spv,approved_plan_mgr,approved_plan_pm,approved_plan_hcm,verification,approved,completed,done,reject"/>
                     </header>
                     <!--<sheet>-->
                     <group string="TMS Overtime Planning Entry" name="entry_planning">
@@ -43,6 +47,18 @@
                             <field name="department_id"
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                    readonly="state in ['approved','verification','completed','done']"/>
+                            <field name="supervisor_id" 
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="state in ['approved','verification','completed','done']"/>
+                            <field name="manager_id" 
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="state in ['approved','verification','completed','done']"/>
+                            <field name="plan_manager_id" 
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="state in ['approved','verification','completed','done']"/>
+                            <field name="hcm_id" 
+                                   options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="state in ['approved','verification','completed','done']"/>
                             <field name="approve1" invisible="1"/>
                             <field name="approve2" invisible="1"/>
                             <field name="approve4" invisible="1"/>
@@ -51,11 +67,11 @@
                         <group>
                             <field name="name" readonly="state in ['approved','verification','completed','done']"/>
                             <field name="request_date" readonly="state in ['approved','verification','completed','done']"/>
-                            <field name="periode_id" domain="[('state_process', '=', 'running')]" readonly="state in ['approved','verification','completed','done']" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
+                            <!-- <field name="periode_id" domain="[('state_process', '=', 'running')]" readonly="state in ['approved','verification','completed','done']" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/> -->
                             <!--field name="employee_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/-->
                             <field name="periode_from" readonly="state in ['approved','verification','completed','done']"/>
                             <field name="periode_to" readonly="state in ['approved','verification','completed','done']"/>
-                            <field name="ot_type" readonly="state in ['approved','verification','completed','done']" widget="radio" options="{'horizontal': true}"/>
+                            <field name="ot_type" string='OT Type' readonly="state in ['approved','verification','completed','done']" widget="radio" options="{'horizontal': true}"/>
                         </group>
                         <!-- <group>
                             <field name="approve1" readonly="state in ['approved','verification','completed','done']"/>
@@ -75,7 +91,7 @@
                         <page string="Request" name="overtime_request">
                             <field name="hr_ot_planning_ids"
                                    context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}">
-                                <tree editable="bottom">
+                                <tree editable="bottom" class="o_horizontal_scroll">
                                     <field name="state" force_save="1" column_invisible = "1"/>
                                     <field name="ot_type" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="planning_id" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
@@ -93,22 +109,22 @@
                                     <field name="ot_plann_to" string="Req Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="approve_time_from" string="App Time From" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="approve_time_to" string="App Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="realization_time_from" widget="float_time" optional="show"/>
-                                    <field name="realization_time_to" widget="float_time" optional="show"/>
-                                    <field name="verify_time_from" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="verify_time_to" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="aot1" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="aot2" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="aot3" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="aot4" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="ans1" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="ans2" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="work_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="output_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="meals" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="realization_time_from" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="realization_time_to" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="output_realization" optional="show"/>
+                                    <field name="explanation_deviation" optional="show"/>
+                                    <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
+                                    <field name="verify_time_from" widget="float_time" optional="show"/>
+                                    <field name="verify_time_to" widget="float_time" optional="show"/>
+                                    <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="area_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="areah_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                            column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
@@ -126,15 +142,12 @@
                                            column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="branch_id" context="{'default_branch_id': branch_id}"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="department_id" context="{'default_department_id': department_id}"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                           force_save="1" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="bundling_ot" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="meals" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="is_cancel" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
+                                    <button name="btn_view_overtime_details" type="object" string="Detail" class="fa fa-check"/>
                                 </tree>
                             </field>
                         </page>
@@ -154,20 +167,70 @@
             <field name="name">hr.overtime.planning.tree</field>
             <field name="model">hr.overtime.planning</field>
             <field name="arch" type="xml">
-                <tree string="Overtime Request" default_order="periode_id desc">
+                <tree string="Overtime Request">
                     <field name="area_id" optional="show"/>
                     <field name="name" optional="show"/>
                     <field name="request_date" optional="show"/>
                     <field name="state" string="Status" optional="show"/>
                     <field name="department_id" optional="show"/>
                     <field name="branch_id" optional="show"/>
-                    <field name="periode_id" optional="show"/>
+                    <!-- <field name="periode_id" optional="show"/> -->
                     <field name="periode_from" optional="show"/>
                     <field name="periode_to" optional="show"/>
                 </tree>
             </field>
         </record>
 
+        <record id="hr_overtime_employees_view_form" model="ir.ui.view">
+            <field name="name">hr.overtime.employees.view.form</field>
+            <field name="model">hr.overtime.employees</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="ot_type" readonly="1"/>
+                                <field name="planning_id" invisible="1" />
+                                <field name="employee_ids" invisible="1" />
+                                <field name="employee_id" readonly="1"/>
+                                <field name="nik" readonly="1"/>
+                                <field name="plann_date_from" readonly="1"/>
+                                <field name="plann_date_to" readonly="1"/>
+                                <field name="ot_plann_from" widget="float_time" string="Req Time From" readonly="1"/>
+                                <field name="ot_plann_to" widget="float_time" string="Req Time To" readonly="1"/>
+                                <field name="approve_time_from" widget="float_time" string="App Time From" readonly="1"/>
+                                <field name="approve_time_to" widget="float_time" string="App Time To" readonly="1"/>
+                                <field name="realization_time_from" widget="float_time" readonly="1"/>
+                                <field name="realization_time_to" widget="float_time" readonly="1"/>
+                                <field name="verify_time_from" widget="float_time"/>
+                                <field name="verify_time_to" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="machine" readonly="1"/>
+                                <field name="work_plann" readonly="1"/>
+                                <field name="output_plann" readonly="1"/>
+                                <field name="output_realization"/>
+                                <field name="explanation_deviation"/>
+                                <field name="area_id" readonly="1"/>
+                                <field name="areah_id" invisible="1"/>
+                                <field name="branch_ids" invisible="1" />
+                                <field name="branchh_id" invisible="1" />
+                                <field name="alldepartment" invisible="1" />
+                                <field name="departmenth_id" invisible="1" />
+                                <field name="branch_id" readonly="1"/>
+                                <field name="department_id" readonly="1"/>
+                                <field name="bundling_ot" readonly="1"/>
+                                <field name="transport" readonly="1"/>
+                                <field name="meals" readonly="1"/>
+                                <field name="meals_cash" readonly="1"/>
+                                <field name="is_approved_mgr" />
+                                <field name="is_cancel" string="Reject by MGR"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
         <record id="action_hr_overtime_planning" model="ir.actions.act_window">
             <field name="name">Overtime Request</field>
