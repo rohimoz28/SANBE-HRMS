@@ -41,5 +41,6 @@ from . import sb_employee_overtime
 from . import sb_leave_master
 from . import sb_leave_allocation_request
 from . import sb_break_master
+from . import sb_route_master
 #from . import idris
 
