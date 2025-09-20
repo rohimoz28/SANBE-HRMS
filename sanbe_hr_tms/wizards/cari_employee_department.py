@@ -3,12 +3,12 @@ from odoo import fields, models, api, _, Command
 from odoo.exceptions import ValidationError,UserError
 
 OT_HOURS_SELECTION = [
-    ('h_morning', "H - Lembur Pagi"),
-    ('h_afternoon', "H - Lembur Siang"),
-    ('h_night', "H - Lembur Malam"),
-    ('r_s1', "R - S1"),
-    ('r_s2', "R - S2"),
-    ('r_s3', "R - S3"),
+    ('h_morning', "H - Lembur Pagi : 07.00 - 15.00"),
+    ('h_afternoon', "H - Lembur Siang : 15.00 - 22.00"),
+    ('h_night', "H - Lembur Malam  : 22.00 - 06.00"),
+    ('r_s1', "R - S1 : 15.30 - 19.30"),
+    ('r_s2', "R - S2 : 11.00 - 15.00"),
+    ('r_s3', "R - S3 : 19.00 - 22.00"),
     ('others', "Others"),
 ]
 
@@ -74,6 +74,11 @@ class HrCariEmployeeDepartment(models.TransientModel):
     default_ot_hours = fields.Selection(
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
+    route_id = fields.Many2one(
+        'sb.route.master',
+        domain="[('branch_id','=',branch_id)]",
+        string='Rute'
+    )
     
     @api.onchange('default_ot_hours')
     def _onchange_default_ot_hours(self):
@@ -257,6 +262,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'ot_type': 'regular',
                     'approve_time_from': self.approve_time_from,
                     'approve_time_to': self.approve_time_to,
+                    'route_id': self.route_id.id,
                 })
 
             self.env['hr.overtime.employees'].sudo().create(employee_data)
@@ -272,7 +278,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
 
         else:
             # Ensure required fields are set
-            if not self.wdcode:
+            if self.modelname == 'hr.empgroup' and not self.wdcode:
                 raise UserError('WD Code must be selected.')
             if not self.valid_from:
                 raise UserError('Date Valid From must be selected.')

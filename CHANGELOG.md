@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.153-2025w38.6 (2025-09-19)
+
+- 3ff1f88 [IMP] TMS : Pembuatan Master Rute
+
+
 ## v0.0.150-2025w38.3 (2025-09-17)
 
 - 830109e [IMP] TMS : improvement calculate_tms.sql
