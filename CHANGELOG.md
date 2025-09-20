@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.156-2025w38.9 (2025-09-20)
+
+- f901074 [IMP] PAM: Improvement Surat Paklaring
+
+
 ## v0.0.153-2025w38.6 (2025-09-19)
 
 - 3ff1f88 [IMP] TMS : Pembuatan Master Rute
