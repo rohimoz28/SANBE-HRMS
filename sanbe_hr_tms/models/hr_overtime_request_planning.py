@@ -18,9 +18,13 @@ TMS_OVERTIME_STATE = [
     ('draft', 'Draft'),
     ('approved_mgr', "Approved By MGR"),
     ('approved_pmr', "Approved By PMR"),
-    ('approved', 'Approved By MGR'),
-    ('verification', 'Verification by MGR'),
-    ('completed', 'Completed by HCM'),
+    ('approved_plan_spv', "Appv Plan By SPV"),
+    ('approved_plan_mgr', "Appv Plan By MGR"),
+    ('approved_plan_pm', "Appv Plan By PM"),
+    ('approved_plan_hcm', "Appv Plan By HCM"),
+    ('verification', 'Verif by SPV'),
+    ('approved', 'Approved By HCM'),
+    ('completed', 'Completed HCM'),
     ('done', "Close"),
     ('reject', "Reject"),
 ]
@@ -30,13 +34,13 @@ class HREmpOvertimeRequest(models.Model):
     _rec_name = 'name'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
 
-    def _get_active_periode_from(self):
-        mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
-        return mycari.open_periode_from or False
+    # def _get_active_periode_from(self):
+    #     mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
+    #     return mycari.open_periode_from or False
 
-    def _get_active_periode_to(self):
-        mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
-        return mycari.open_periode_to or False
+    # def _get_active_periode_to(self):
+    #     mycari = self.env['hr.opening.closing'].sudo().search([('isopen','=',True)],limit=1)
+    #     return mycari.open_periode_to or False
 
     @api.depends('area_id')
     def _isi_semua_branch(self):
@@ -66,8 +70,8 @@ class HREmpOvertimeRequest(models.Model):
     branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]")
     alldepartment = fields.Many2many('hr.department','hr_department_plan_ot_rel', string='All Department',compute='_isi_department_branch',store=False)
     department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
-    periode_from = fields.Date('Tanggal OT Dari',default=_get_active_periode_from)
-    periode_to = fields.Date('Tanggal OT Hingga',default=_get_active_periode_to)
+    periode_from = fields.Date('Tanggal OT Dari',default=fields.Date.today)
+    periode_to = fields.Date('Tanggal OT Hingga',default=fields.Date.today)
     approve1 = fields.Boolean('Supervisor Department',default=False)
     approve2 = fields.Boolean('Manager Department',default=False)
     approve3 = fields.Boolean('HCM Department',default=False)
@@ -78,13 +82,17 @@ class HREmpOvertimeRequest(models.Model):
         readonly=True, copy=False, index=True,
         tracking=3,
         default='draft')
-    periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
+    # periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
     hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
     company_id = fields.Many2one('res.company', string="Company Name", index=True)
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
     count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
+    supervisor_id = fields.Many2one('hr.employee', string='Supervisor',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
+    manager_id = fields.Many2one('hr.employee', string='Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
+    plan_manager_id = fields.Many2one('hr.employee', string='Plan Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
+    hcm_id = fields.Many2one('hr.employee', string='HCM',domain="[('state','=','approved')]")
 
 
     @api.onchange('periode_id')
@@ -231,6 +239,22 @@ class HREmpOvertimeRequest(models.Model):
     def btn_completed(self):
         for rec in self:
             rec.state = 'completed'
+    
+    def btn_plan_spv(self):
+        for rec in self:
+            rec.state = 'approved_plan_spv'
+    
+    def btn_plan_mgr(self):
+        for rec in self:
+            rec.state = 'approved_plan_mgr'
+    
+    def btn_plan_pm(self):
+        for rec in self:
+            rec.state = 'approved_plan_pm'
+    
+    def btn_plan_hcm(self):
+        for rec in self:
+            rec.state = 'approved_plan_hcm'
 
     def btn_print_pdf(self):
         return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
@@ -252,7 +276,8 @@ class HREmpOvertimeRequest(models.Model):
             'name': _('Search Employee'),
             'res_model': 'hr.employeedepartment',
             'view_mode': 'form',
-            'target': 'current',
+            'target': 'new',
+            'domain': [('department_id', '=', self.department_id.id)],
             'context': {
                 'active_id': self.id, 
                 'fieldname':'plan_id', 
@@ -339,8 +364,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     nik = fields.Char('Employee NIK',index=True)
     employee_ids = fields.Many2many('hr.employee','ov_plan_emp_rel',compute='_ambil_employee',string='Employee Name',store=False)
     employee_id = fields.Many2one('hr.employee',domain="[('id','in',employee_ids),('state','=','approved')]",string='Employee Name',index=True)
-    plann_date_from = fields.Date('Plan Date From')
-    plann_date_to = fields.Date('Plan Date To')
+    plann_date_from = fields.Date('Plan Date From',default=fields.Date.today)
+    plann_date_to = fields.Date('Plan Date To',default=fields.Date.today)
     ot_plann_from = fields.Float('OT Plan From')
     ot_plann_to = fields.Float('OT Plan To')
     approve_time_from = fields.Float('OT App From')
@@ -349,12 +374,6 @@ class HREmpOvertimeRequestEmployee(models.Model):
     realization_time_to = fields.Float('Realization Time To')
     verify_time_from = fields.Float('Verify Time From')
     verify_time_to = fields.Float('Verify Time To')
-    aot1 = fields.Float('AOT 1')
-    aot2 = fields.Float('AOT 2')
-    aot3 = fields.Float('AOT 3')
-    aot4 = fields.Float('AOT 4')
-    ans1 = fields.Float('ANS 1')
-    ans2 = fields.Float('ANS 2')
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plan')
     output_plann = fields.Char('Output Plan')
@@ -368,6 +387,17 @@ class HREmpOvertimeRequestEmployee(models.Model):
     planning_req_name = fields.Char(string='Planning Request Name',required=False)
     is_cancel = fields.Boolean('Cancel')
     state = fields.Selection(related='planning_id.state', string='state', store=True)
+    output_realization = fields.Char('Output Realization')
+    explanation_deviation = fields.Char('Explanation Deviation')
+    is_approved_mgr = fields.Boolean('Approved by MGR')
+
+    @api.onchange('approve_time_from', 'approve_time_to')
+    def _onchange_meals(self):
+        for rec in self:
+            if rec.approve_time_to - rec.approve_time_from >= 4:
+                self.meals = True
+            else:
+                self.meals = False
 
     @api.onchange('employee_id')
     def rubah_employee(self):
@@ -405,3 +435,18 @@ class HREmpOvertimeRequestEmployee(models.Model):
         res = super(HREmpOvertimeRequestEmployee, self).write(vals)
         self.check_duplicate_record()
         return res
+    
+    def btn_view_overtime_details(self):
+        return {
+            'name': 'action_view_overtime_details',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'hr.overtime.employees',
+            # 'views': [(False, 'form')],
+            # 'view_id': False,
+            'view_id': self.env.ref('sanbe_hr_tms.hr_overtime_employees_view_form').id,
+            'target': 'new',
+            'res_id': self.id,
+            'context': False,
+        }
