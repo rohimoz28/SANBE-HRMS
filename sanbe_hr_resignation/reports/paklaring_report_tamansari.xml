@@ -1,14 +1,14 @@
 <odoo>
     <data>
-        <record id="paperformat_parklaring_report" model="report.paperformat">
-            <field name="name">Print Out Paklaring</field>
+        <record id="paperformat_parklaring_report_tamansari" model="report.paperformat">
+            <field name="name">Print Out Paklaring Tamansari</field>
             <field name="default" eval="True" />
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">5</field>
-            <field name="margin_bottom">17.5</field>
-            <field name="margin_left">25.4</field>
-            <field name="margin_right">25.4</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
             <field name="header_line" eval="False" />
             <field name="header_spacing">7</field>
             <field name="dpi">90</field>
@@ -16,10 +16,10 @@
         <record id="action_report_paklaring" model="ir.actions.report">
             <field name="name">Surat Paklaring tamansari</field>
             <field name="model">hr.resignation</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">sanbe_hr_resignation.paklaring_report_tamansari</field>
             <field name="report_file">sanbe_hr_resignation.paklaring_report_tamansari</field>
-            <field name="print_report_name">('Paklaring - %s' % (object.emp_nos.name))</field>
+            <field name="print_report_name">('Paklaring - %s' % (object.employee_id.name))</field>
             <field name="binding_model_id" eval="False" />
             <!-- <field name="binding_type"></field> -->
             <field name="paperformat_id" ref="sanbe_hr_resignation.paperformat_parklaring_report" />
@@ -88,7 +88,7 @@
                 <t t-foreach="docs" t-as="doc">
                     <!-- <t t-call="web.external_layout"> -->
                     <t t-call="web.basic_layout">
-                        <div class="header">
+                        <thead>
                             <t t-set="company" t-value="res_company" />
                             <table style="width=100%; margin-right: auto; border: 0px solid transparent;">
                                 <tr>
@@ -133,7 +133,7 @@
                                     </td>
                                 </tr>
                             </table>
-                        </div>
+                        </thead>
                         <br />
                         <br />
                         <div class="page">
@@ -143,18 +143,14 @@
                                     <br />
                                     <br />
                                     <br />
-                                    <h2 style="line-height: 1; font-size:21px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                        <strong>
-                                            <u>
-                                                <center>SURAT KETERANGAN</center>
-                                            </u>
-                                        </strong>
-                                    </h2>
-                                    <p style="font-size:12px; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
-                                        <center style="line-height: 0.1;">
-                                        <strong><t t-esc="doc.letter_no" /></strong>
-                                        </center>
-                                    </p>
+                                    <div style="text-align:center; line-height:1.2; font-family: 'Tahoma', Trebuchet MS, sans-serif;">
+                                        <h2 style="font-size:21px; margin:0;">
+                                            <strong><u>SURAT KETERANGAN</u></strong>
+                                        </h2>
+                                        <div style="font-size:20px; margin:0;">
+                                            <strong><t t-esc="doc.letter_no" /></strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <br />
