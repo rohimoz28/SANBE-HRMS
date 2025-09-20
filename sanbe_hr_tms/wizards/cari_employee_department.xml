@@ -21,7 +21,7 @@
                                     <field name="plan_id" invisible="1"/>
                                     <field name="modelname" invisible="1"/>
                                     <field name="branch_id" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="wdcode" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
+                                    <field name="wdcode" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'"/>
                                     <!--field name="periode_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/-->
                                     <field name="valid_from" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
@@ -38,7 +38,8 @@
                                     <field name="work_plann" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="output_plann" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="transport" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="meals" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <field name="meals" invisible="1"/>
+                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" invisible="modelname != 'hr.overtime.planning'"/>
                                 </group>
                                 <group>
                                     <button name="action_insert_empgroup" string="Apply" type="object" class="oe_highlight" data-hotkey="q" invisible="modelname != 'hr.overtime.planning'"/>
