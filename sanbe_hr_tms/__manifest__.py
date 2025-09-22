@@ -15,7 +15,7 @@
     'website': "http://www.yourcompany.com",
     "support": "xabre0010@gmail.com",
     'category': 'Human Resource',
-    'version': '17.0.0.0.0',
+    'version': '17.0.0.0.1',
     'license': 'LGPL-3',
     'price': 0,
     'currency': 'USD',
@@ -114,5 +114,7 @@
         'demo/demo.xml',
     ],
     "images": ["static/description/banner.png"],
-    'post_init_hook': 'post_init_hook',
+    'installable': True,
+    'auto_install': False,
+    'application': True,
 }

@@ -42,13 +42,6 @@ from . import sb_leave_master
 from . import sb_leave_allocation_request
 from . import sb_break_master
 from . import sb_route_master
-#from . import idris
+from . import fix_ir_model_access
+from . import hr_tms_init
 
-from odoo import api, SUPERUSER_ID
-import logging
-_logger = logging.getLogger(__name__)
-
-
-def post_init_hook(cr, registry):
-    cr.execute("CALL generate_after_upgrade()")
-    _logger.info("Successfully executed generate_after_upgrade()")
