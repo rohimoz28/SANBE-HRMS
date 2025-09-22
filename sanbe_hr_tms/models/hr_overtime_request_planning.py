@@ -89,10 +89,26 @@ class HREmpOvertimeRequest(models.Model):
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
     count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
-    supervisor_id = fields.Many2one('hr.employee', string='Supervisor',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
-    manager_id = fields.Many2one('hr.employee', string='Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
-    plan_manager_id = fields.Many2one('hr.employee', string='Plan Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
-    hcm_id = fields.Many2one('hr.employee', string='HCM',domain="[('state','=','approved')]")
+    supervisor_id = fields.Many2one(
+        'hr.employee', 
+        string='Supervisor',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        )
+    manager_id = fields.Many2one(
+        'hr.employee', 
+        string='Manager',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        )
+    plan_manager_id = fields.Many2one(
+        'hr.employee', 
+        string='Plan Manager',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]"
+        )
+    hcm_id = fields.Many2one(
+        'hr.employee', 
+        string='HCM',
+        # domain="[('state','=','approved')]"
+        )
     is_supervisor_user = fields.Boolean(compute='_compute_is_supervisor_user')
     is_manager_user = fields.Boolean(compute='_compute_is_manager_user')
     is_plan_manager_user = fields.Boolean(compute='_compute_is_plan_manager_user')

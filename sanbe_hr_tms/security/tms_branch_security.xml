@@ -117,9 +117,10 @@
             <field name="model_id" ref="sanbe_hr_tms.model_hr_overtime_planning"/>
             <field name="global" eval="True"/>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-            <field name="domain_force">
+            <!-- <field name="domain_force">
                 [('branch_id', 'in', branch_ids)]
-            </field>
+            </field> -->
+            <field name="domain_force">[(1, '=', 1)]</field>
         </record>
 
         <!-- Monitoring Overtime -->
