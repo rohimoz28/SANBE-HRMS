@@ -11,7 +11,7 @@ class SbLeaveMaster(models.Model):
     branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]")
     name = fields.Char('Name')
     code = fields.Char('Code')
-    days = fields.Integer('Days')
+    days = fields.Float('Days')
 
     @api.depends('area_id')
     def _isi_semua_branch(self):
