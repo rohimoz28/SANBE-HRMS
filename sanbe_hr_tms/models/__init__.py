@@ -44,4 +44,5 @@ from . import sb_break_master
 from . import sb_route_master
 from . import fix_ir_model_access
 from . import hr_tms_init
+from . import res_users
 

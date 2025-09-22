@@ -22,6 +22,8 @@ class HrTmsInit(models.Model):
         """
         try:
             self.env.cr.execute("CALL generate_after_upgrade();")
+            _logger.warning(">>> INIT CALLED ON MODULE UPGRADE <<<")
             _logger.warning("✅ Successfully executed generate_after_upgrade()")
         except Exception as e:
+            _logger.warning(">>> INIT CALLED ON MODULE UPGRADE <<<")
             _logger.error(f"❌ Error executing generate_after_upgrade: {e}")

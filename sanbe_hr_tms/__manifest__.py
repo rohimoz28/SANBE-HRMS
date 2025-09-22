@@ -89,6 +89,7 @@
         'db/generate_ot_request.sql',
         'db/temporary_table.sql',
         'db/generate_after_upgrade.sql',
+        'db/generate_update_role.sql',
         'db/functions.sql',
         'views/tmsentry_details.xml',
         'security/ir.model.access.csv',
