@@ -25,13 +25,13 @@
                                 <field name="job_id" readonly="1" force_save="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}" required="employee_id != False"/>
                                 <field name="handled_temp_to" readonly="permission_status != 'draft'" />
                                 <field name="remarks" readonly="permission_status != 'draft'" />
-                                <field name="leave_allocation" invisible="holiday_status_id not in [6,7]"/>
+                                <field name="leave_allocation"/>
                             </group>
                             <group>
                                 <field name="trans_number" readonly="permission_status != 'draft'"/>
                                 <field name="doc_number" readonly="permission_status != 'draft'"/>
                                 <field name="employee_company_id" invisible="1"/>
-                                <field name="holiday_status_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
+                                <!-- <field name="holiday_status_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" /> -->
                                 <field name="permission_type_id" readonly="permission_status != 'draft'" options="{'no_edit': True, 'no_create': True, 'no_open': True}" />
                                 <field name="total_leave_balance" readonly="1" invisible="not permission_type_id" force_save="1"/>
                                 <field name="permission_date_from" readonly="permission_status != 'draft'" required="True"/>
@@ -97,7 +97,7 @@
                     <field name="area_id" optional="show" />
                     <field name="employee_id" optional="show" />
                     <field name="nik" string="NIK" optional="show" />
-                    <field name="holiday_status_id" optional="show" />
+                    <!-- <field name="holiday_status_id" optional="show" /> -->
                     <field name="permission_date_from" optional="show" />
                     <field name="permission_date_To" optional="show" />
                     <field name="permission_status" string="Status" optional="show" />

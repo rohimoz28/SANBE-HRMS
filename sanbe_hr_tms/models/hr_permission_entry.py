@@ -72,7 +72,7 @@ class HRPermissionEntry(models.Model):
     approved2 = fields.Boolean(default=False, string='Approved2')
     approved3 = fields.Boolean(default=False, string='Approved3')
     holiday_status_id = fields.Many2one("hr.leave.type", store=True, string="Permission Code",
-                                        required=True, readonly=False, tracking=True)
+                                         readonly=False, tracking=True)
     nik = fields.Char(related='employee_id.nik')
     leave_allocation_id = fields.Many2one('sb.leave.allocation', string='Leave Allocation ID', compute='_compute_leave_allocation_id')
     leave_allocation = fields.Float(string='Leave Allocation', related='leave_allocation_id.leave_remaining',
@@ -207,7 +207,7 @@ class HRPermissionEntry(models.Model):
                     myleave = self.env['hr.leave'].sudo().create({'employee_id': alldata.employee_id.id,
                                                                   'date_from': alldata.permission_date_from,
                                                                   'date_to': alldata.permission_date_To,
-                                                                  'holiday_type': 'company',
+                                                                #   'holiday_type': 'company',
                                                                   'request_date_from': alldata.permission_date_from,
                                                                   'request_date_to': alldata.permission_date_To,
                                                                   'number_of_days_display': alldata.permission_date_To - alldata.permission_date_from,
@@ -215,7 +215,7 @@ class HRPermissionEntry(models.Model):
                                                                   'holiday_type': 'employee',
                                                                   'department_id': alldata.employee_id.department_id.id,
                                                                   'company_id': self.env.company.id,
-                                                                  'holiday_status_id': alldata.holiday_status_id.id,
+                                                                  'holiday_status_id': 6 or False,                       # Field ini punya relasi ke hr_leave hr_leave_type dan required tapi ada permintaan di hide | 6 Full Day Leave - Cuti 1 Hari
                                                                   'permition_id': alldata.id or alldata._origin.id})
                     alldata.leave_id = myleave.id
         return res
