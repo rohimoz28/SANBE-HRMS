@@ -15,7 +15,7 @@
     'website': "http://www.yourcompany.com",
     "support": "xabre0010@gmail.com",
     'category': 'Human Resource',
-    'version': '0.1',
+    'version': '17.0.0.0.0',
     'license': 'LGPL-3',
     'price': 0,
     'currency': 'USD',
@@ -88,6 +88,7 @@
         'db/generate_empgroup.sql',
         'db/generate_ot_request.sql',
         'db/temporary_table.sql',
+        'db/generate_after_upgrade.sql',
         'db/functions.sql',
         'views/tmsentry_details.xml',
         'security/ir.model.access.csv',
@@ -113,4 +114,5 @@
         'demo/demo.xml',
     ],
     "images": ["static/description/banner.png"],
+    'post_init_hook': 'post_init_hook',
 }
