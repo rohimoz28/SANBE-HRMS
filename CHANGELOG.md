@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.158-2025w39.1 (2025-09-22)
+
+- ba95ad6 [IMP] TMS: Delete Field Permission Code di Permission Entry
+
+
 ## v0.0.156-2025w38.9 (2025-09-20)
 
 - f901074 [IMP] PAM: Improvement Surat Paklaring
