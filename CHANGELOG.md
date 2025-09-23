@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.160-2025w39.3 (2025-09-23)
+
+- 888d3ec [IMP] TMS : Improvement Overtime - Fase 2 (Revisi)
+
+
 ## v0.0.158-2025w39.1 (2025-09-22)
 
 - ba95ad6 [IMP] TMS: Delete Field Permission Code di Permission Entry
