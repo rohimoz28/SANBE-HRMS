@@ -254,6 +254,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'output_plann': self.output_plann,
                     'transport': self.transport,
                     'meals': self.meals,
+                    'default_ot_hours':self.default_ot_hours,
                     'ot_type': 'regular',
                     'approve_time_from': self.approve_time_from,
                     'approve_time_to': self.approve_time_to,
@@ -323,6 +324,7 @@ class HrCariEmployeeDepartmentDetails(models.TransientModel):
     department_id = fields.Many2one('hr.department', string='Department ID', index=True)
     employee_id = fields.Many2one('hr.employee', string='Employee Name', index=True)
     nik = fields.Char('NIK')
+    default_ot_hours = fields.Selection(related='cari_id.default_ot_hours',store=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
     is_selected = fields.Boolean('Select', default=False)
     
