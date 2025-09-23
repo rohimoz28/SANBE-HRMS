@@ -75,13 +75,13 @@ class HREmpOvertimeRequest(models.Model):
     name = fields.Char('Planning Request',default=lambda self: _('New'),
        copy=False, readonly=True, tracking=True, requirement=True)
     request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
-    area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area', index=True, required=True)
+    area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area', index=True, required=True, default=lambda self: self._default_area_id())
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
                                   store=False)
 
-    branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]")
+    branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]", default=lambda self: self._default_branch_id())
     alldepartment = fields.Many2many('hr.department','hr_department_plan_ot_rel', string='All Department',compute='_isi_department_branch',store=False)
-    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department')
+    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department', default=lambda self: self._default_department_id())
     periode_from = fields.Date('Tanggal OT Dari',default=fields.Date.today)
     periode_to = fields.Date('Tanggal OT Hingga',default=fields.Date.today)
     approve1 = fields.Boolean('Supervisor Department',default=False)
@@ -101,16 +101,91 @@ class HREmpOvertimeRequest(models.Model):
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
     count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
-    supervisor_id = fields.Many2one('hr.employee', string='Supervisor',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
-    manager_id = fields.Many2one('hr.employee', string='Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]")
-    plan_manager_id = fields.Many2one('hr.employee', string='Plan Manager',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
-    hcm_id = fields.Many2one('hr.employee', string='HCM',domain="[('state','=','approved')]")
     time_from_char = fields.Char()
     time_to_char = fields.Char()
     default_ot_hours = fields.Selection(
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
+    supervisor_id = fields.Many2one(
+        'hr.employee', 
+        string='Supervisor',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        )
+    manager_id = fields.Many2one(
+        'hr.employee', 
+        string='Manager',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        )
+    plan_manager_id = fields.Many2one(
+        'hr.employee', 
+        string='Plan Manager',
+        # domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]"
+        )
+    hcm_id = fields.Many2one(
+        'hr.employee', 
+        string='HCM',
+        # domain="[('state','=','approved')]"
+        )
+    is_supervisor_user = fields.Boolean(compute='_compute_is_supervisor_user')
+    is_manager_user = fields.Boolean(compute='_compute_is_manager_user')
+    is_plan_manager_user = fields.Boolean(compute='_compute_is_plan_manager_user')
+    is_hcm_user = fields.Boolean(compute='_compute_is_hcm_user')
 
+    def _default_area_id(self):
+        emp = self.env.user.employee_id
+        return emp.area.id if emp and emp.area else False
+
+    def _default_branch_id(self):
+        emp = self.env.user.employee_id
+        return emp.branch_id.id if emp and emp.branch_id else False
+
+    def _default_department_id(self):
+        emp = self.env.user.employee_id
+        return emp.department_id.id if emp and emp.department_id else False
+
+    @api.depends('supervisor_id.user_id')
+    def _compute_is_supervisor_user(self):
+        for rec in self:
+            rec.is_supervisor_user = (rec.supervisor_id.user_id == self.env.user)
+    
+    @api.depends('manager_id.user_id')
+    def _compute_is_manager_user(self):
+        for rec in self:
+            rec.is_manager_user = (rec.manager_id.user_id == self.env.user)
+    
+    @api.depends('plan_manager_id.user_id')
+    def _compute_is_plan_manager_user(self):
+        for rec in self:
+            rec.is_plan_manager_user = (rec.plan_manager_id.user_id == self.env.user)
+    
+    @api.depends('hcm_id.user_id')
+    def _compute_is_hcm_user(self):
+        for rec in self:
+            rec.is_hcm_user = (rec.hcm_id.user_id == self.env.user)
+
+    @api.constrains('supervisor_id')
+    def _constrains_supervisor_id(self):
+        for rec in self:
+            if rec.supervisor_id and not rec.supervisor_id.user_id:
+                raise ValidationError(f"Supervisor: {rec.supervisor_id.name} does not have login access.")
+            
+    @api.constrains('manager_id')
+    def _constrains_manager_id(self):
+        for rec in self:
+            if rec.manager_id and not rec.manager_id.user_id:
+                raise ValidationError(f"Manager: {rec.manager_id.name} does not have login access.")
+    
+    @api.constrains('plan_manager_id')
+    def _constrains_plan_manager_id(self):
+        for rec in self:
+            if rec.plan_manager_id and not rec.plan_manager_id.user_id:
+                raise ValidationError(f"Plan Manager: {rec.plan_manager_id.name} does not have login access.")
+            
+    @api.constrains('hcm_id')
+    def _constrains_hcm_id(self):
+        for rec in self:
+            if rec.hcm_id and not rec.hcm_id.user_id:
+                raise ValidationError(f"HCM: {rec.hcm_id.name} does not have login access.")
 
     @api.onchange('periode_id')
     def _onchange_periode_id(self):
@@ -457,6 +532,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     output_realization = fields.Char('Output Realization')
     explanation_deviation = fields.Char('Explanation Deviation')
     is_approved_mgr = fields.Boolean('Approved by MGR')
+    route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
 
     @api.onchange('approve_time_from', 'approve_time_to')
     def _onchange_meals(self):

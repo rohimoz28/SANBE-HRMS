@@ -5,6 +5,7 @@ import logging
 class SbRouteMaster(models.Model):
     _name = 'sb.route.master'
 
+    name = fields.Char('Name', compute='_compute_name_route', store=True)
     branch_id = fields.Many2one('res.branch', string='Business Unit')
     route_code = fields.Char('Route Code')
     route_description = fields.Char('Route Description')
@@ -19,4 +20,10 @@ class SbRouteMaster(models.Model):
             ])
             if duplicate_code:
                 raise ValidationError(f"Duplicate route code found: {rec.route_code}.")
+    
+    @api.depends('route_code')
+    def _compute_name_route(self):
+        for rec in self:
+            if rec.route_code:
+                rec.name = f'{rec.route_code} - {rec.route_description}'
             
