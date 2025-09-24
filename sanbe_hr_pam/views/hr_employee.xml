@@ -38,6 +38,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
+                <field name="wd_type" />
                 <field name="workingday" />
              </xpath>
              <xpath expr="//field[@name='allowance_ot']" position="replace">

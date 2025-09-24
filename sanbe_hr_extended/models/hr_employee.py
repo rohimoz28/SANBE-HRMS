@@ -171,6 +171,16 @@ class HrEmployee(models.Model):
     nama_pekerjaans = fields.Char(related='job_id.name', store=True)
     initial = fields.Char('Inisial')
     work_unit = fields.Char('Work Unit')
+    work_unit_ids = fields.Many2many(comodel_name='res.branch',
+                                     relation='employee_branch_rel',
+                                     column1='employee_id',
+                                     column2='branch_id',
+                                     string='Work Unit',
+                                     index=True)
+    regu = fields.Selection(selection=[(f"{i}", f"{i}") for i in range(1, 11)],
+                            string='Regu',
+                            index=True,
+                            tracking=True)
     berat_badan = fields.Integer('Berat Badan (Kg)')
     tinggi_badan = fields.Integer('Tinggi Badan (Cm)')
     kpi_kategory = fields.Selection([('direct_spv', "Direct"),
@@ -183,6 +193,11 @@ class HrEmployee(models.Model):
                                     string="KPI Category", index=True, tracking=True, default='none')
     apoteker = fields.Boolean('Apoteker', default=False)
     first_date_join = fields.Date('First Date Of Joining')
+    wd_type = fields.Selection(selection=[('shift', 'Shift'),
+                                          ('non_shift', 'Non-Shift')],
+                               string='WD Shift/Non-Shift',
+                               default='non_shift',
+                               index=True)
     workingday = fields.Integer(
         string='Workingday',
         help='Total Working Day in a Month',
