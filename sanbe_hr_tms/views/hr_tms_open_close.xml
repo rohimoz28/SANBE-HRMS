@@ -10,14 +10,23 @@
                     <header>
                         <field name="isopen" invisible="1"/>
                         <button name="action_opening_periode" invisible="isopen == True or state_process == 'done'"
-                                string="Open" type="object" class="btn-primary"/>
+                                string="Open" type="object" class="btn-primary"
+                                groups="sanbe_hr_tms.group_processing_period_manager,
+                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
                         <button name="action_reproses" string="Process"
                                 type="object" class="btn-primary"
-                                invisible="state_process != 'running'"/>
+                                invisible="state_process != 'running'"
+                                groups="sanbe_hr_tms.group_processing_period_manager,
+                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
                         <button name="action_closing_periode" invisible="state_process != 'running'" string="Close" type="object"
-                                class="btn-primary" groups="sanbe_hr_tms.group_processing_period_manager"/>
+                                class="btn-primary"
+                                groups="sanbe_hr_tms.group_processing_period_manager,
+                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
                         <button name="transfer_payroll" type="object" data-hotkey="shift+g"
-                                string="Transfer To Payroll" class="oe_highlight" invisible="state_process != 'done'"/>
+                                string="Transfer To Payroll" class="oe_highlight" invisible="state_process != 'done'"
+                                groups="sanbe_hr_tms.group_processing_period_manager,
+                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
+
                         <field name="state_process" widget="statusbar"
                                statusbar_visible="draft,running,done,transfer_to_payroll" readonly="1"/>
                     </header>
