@@ -101,6 +101,11 @@ class HREmpOvertimeRequest(models.Model):
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
     count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
     ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
+    time_from_char = fields.Char()
+    time_to_char = fields.Char()
+    default_ot_hours = fields.Selection(
+        selection=OT_HOURS_SELECTION,
+        string='Default Jam OT')
     supervisor_id = fields.Many2one(
         'hr.employee',
         string='Supervisor',
@@ -235,6 +240,7 @@ class HREmpOvertimeRequest(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            area=False
             if vals.get('name', _('New')) == _('New'):
                 area_id = vals.get('area_id')
                 branch_id = vals.get('branch_id')
@@ -348,12 +354,12 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             rec.state = 'approved_plan_hcm'
 
-    def btn_print_pdf(self):
+    def btn_print_pdf(self):        
         if not self.hr_ot_planning_ids:
             raise UserError("Tidak ada data perencanaan lembur untuk dicetak.")
         first_line = self.hr_ot_planning_ids[0]
         self.time_from_char = '%02d:%02d' % (int(first_line.approve_time_from), int((first_line.approve_time_from % 1) * 60))
-        self.time_to_char = '%02d:%02d' % (int(first_line.approve_time_to), int((first_line.approve_time_to % 1) * 60))
+        self.time_to_char = '%02d:%02d' % (int(first_line.approve_time_to), int((first_line.approve_time_to % 1) * 60)) 
         self.default_ot_hours = first_line.default_ot_hours
         return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
 
@@ -464,28 +470,28 @@ class HREmpOvertimeRequestEmployee(models.Model):
     employee_id = fields.Many2one('hr.employee',domain="[('id','in',employee_ids),('state','=','approved')]",string='Employee Name',index=True)
     plann_date_from = fields.Date('Plan Date From',default=fields.Date.today)
     plann_date_to = fields.Date('Plan Date To',default=fields.Date.today)
-
+    
     # penambahan field char untuk penulisan waktu dari field float agar lebih mudah
     ot_plann_from = fields.Float('OT Plan From')
     ot_plann_to = fields.Float('OT Plan To')
     ot_plann_from_char = fields.Char('OT Plan From (Str)', compute="convert_float_to_time", store=True)
     ot_plann_to_char = fields.Char('OT Plan To (Str)', compute="convert_float_to_time", store=True)
-
+    
     approve_time_from = fields.Float('OT App From')
     approve_time_to = fields.Float('OT App To')
     approve_time_from_char = fields.Char('OT App From (Str)', compute="convert_float_to_time", store=True)
     approve_time_to_char = fields.Char('OT App To (Str)', compute="convert_float_to_time", store=True)
-
+    
     realization_time_from = fields.Float('Realization Time From')
     realization_time_to = fields.Float('Realization Time To')
     realization_time_from_char = fields.Char('Realization Time From (Str)', compute="convert_float_to_time", store=True)
     realization_time_to_char = fields.Char('Realization Time To (Str)', compute="convert_float_to_time", store=True)
-
+    
     verify_time_from = fields.Float('Verify Time From')
     verify_time_to = fields.Float('Verify Time To')
     verify_time_from_char = fields.Char('Verify Time From (Str)', compute="convert_float_to_time", store=True)
     verify_time_to_char = fields.Char('Verify Time To (Str)', compute="convert_float_to_time", store=True)
-
+    
     @api.depends('ot_plann_from','ot_plann_to',
                  'approve_time_from','approve_time_to',
                  'realization_time_from','realization_time_to',
@@ -494,16 +500,16 @@ class HREmpOvertimeRequestEmployee(models.Model):
         for line in self:
             line.ot_plann_from_char = self.float_to_time_str(line.ot_plann_from)
             line.ot_plann_to_char = self.float_to_time_str(line.ot_plann_to)
-
+            
             line.approve_time_from_char = self.float_to_time_str(line.approve_time_from)
             line.approve_time_to_char = self.float_to_time_str(line.approve_time_to)
-
+            
             line.realization_time_from_char = self.float_to_time_str(line.realization_time_from)
             line.realization_time_to_char = self.float_to_time_str(line.realization_time_to)
-
+            
             line.verify_time_from_char = self.float_to_time_str(line.verify_time_from)
             line.verify_time_to_char = self.float_to_time_str(line.verify_time_to)
-
+    
     def float_to_time_str(self, float_time):
         if float_time is None:
             return ''
