@@ -18,7 +18,9 @@
                 </xpath>
                 <xpath expr="//field[@name='department_id']" position="replace">
                     <field name="department_id" options="{'no_create': True,'no_create_edit': True}" />
-                    <field name="work_unit" />
+                    <field name="work_unit" invisible="1"/>
+                    <field name="regu"/>
+                    <field name="work_unit_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
                 </xpath>
                 <xpath expr="//field[@name='coach_id']" position="attributes">
                     <attribute name="string">Work Unit Superior</attribute>

@@ -107,22 +107,22 @@ class HREmpOvertimeRequest(models.Model):
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
     supervisor_id = fields.Many2one(
-        'hr.employee', 
+        'hr.employee',
         string='Supervisor',
         # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
         )
     manager_id = fields.Many2one(
-        'hr.employee', 
+        'hr.employee',
         string='Manager',
         # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
         )
     plan_manager_id = fields.Many2one(
-        'hr.employee', 
+        'hr.employee',
         string='Plan Manager',
         # domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]"
         )
     hcm_id = fields.Many2one(
-        'hr.employee', 
+        'hr.employee',
         string='HCM',
         # domain="[('state','=','approved')]"
         )
@@ -130,6 +130,11 @@ class HREmpOvertimeRequest(models.Model):
     is_manager_user = fields.Boolean(compute='_compute_is_manager_user')
     is_plan_manager_user = fields.Boolean(compute='_compute_is_plan_manager_user')
     is_hcm_user = fields.Boolean(compute='_compute_is_hcm_user')
+    time_from_char = fields.Char()
+    time_to_char = fields.Char()
+    default_ot_hours = fields.Selection(
+        selection=OT_HOURS_SELECTION,
+        string='Default Jam OT')
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -147,17 +152,17 @@ class HREmpOvertimeRequest(models.Model):
     def _compute_is_supervisor_user(self):
         for rec in self:
             rec.is_supervisor_user = (rec.supervisor_id.user_id == self.env.user)
-    
+
     @api.depends('manager_id.user_id')
     def _compute_is_manager_user(self):
         for rec in self:
             rec.is_manager_user = (rec.manager_id.user_id == self.env.user)
-    
+
     @api.depends('plan_manager_id.user_id')
     def _compute_is_plan_manager_user(self):
         for rec in self:
             rec.is_plan_manager_user = (rec.plan_manager_id.user_id == self.env.user)
-    
+
     @api.depends('hcm_id.user_id')
     def _compute_is_hcm_user(self):
         for rec in self:
@@ -168,19 +173,19 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             if rec.supervisor_id and not rec.supervisor_id.user_id:
                 raise ValidationError(f"Supervisor: {rec.supervisor_id.name} does not have login access.")
-            
+
     @api.constrains('manager_id')
     def _constrains_manager_id(self):
         for rec in self:
             if rec.manager_id and not rec.manager_id.user_id:
                 raise ValidationError(f"Manager: {rec.manager_id.name} does not have login access.")
-    
+
     @api.constrains('plan_manager_id')
     def _constrains_plan_manager_id(self):
         for rec in self:
             if rec.plan_manager_id and not rec.plan_manager_id.user_id:
                 raise ValidationError(f"Plan Manager: {rec.plan_manager_id.name} does not have login access.")
-            
+
     @api.constrains('hcm_id')
     def _constrains_hcm_id(self):
         for rec in self:
