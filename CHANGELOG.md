@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.165-2025w39.8 (2025-09-25)
+
+- e4ade70 [IMP] TMS : Bug Fix Button Open Closing Period - HRMS
+
+
 ## v0.0.162-2025w39.5 (2025-09-24)
 
 - 746d633 [IMP]TMS : revisi report ot
