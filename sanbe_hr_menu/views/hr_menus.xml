@@ -92,7 +92,7 @@
             action="sanbe_hr_extended.hr_approval_setting_action"
             parent="hr.menu_human_resources_configuration"
             sequence="2"
-            groups="hr.group_hr_manager"
+            groups="sanbe_hr_extended.group_hr_approval_setting_manager,sanbe_hr_extended.group_hr_approval_setting_supervisor,sanbe_hr_extended.group_hr_approval_setting_staff"
         />
         <menuitem
             id="menu_hr_pasal_pelanggaran"

@@ -28,6 +28,7 @@
     'depends': ['base', 'hr','sanbe_hr','hr_payroll_community','hr_contract'],
     'data': [
         'security/hr_branch_security.xml',
+        'security/hr_groups.xml',
         'security/ir.model.access.csv',
         'views/hr_employee.xml',
         'views/employee_level.xml',
