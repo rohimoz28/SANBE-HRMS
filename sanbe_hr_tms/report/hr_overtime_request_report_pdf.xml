@@ -579,10 +579,11 @@ Plant Manager / HOQ</td>
     <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
               Printed By&#160;:&#160;<span t-esc="user.name"></span>&#160;&#160;on&#160;<span id="current-datetime"></span>
     </div>
-    <br/>
+    <!-- Disable remark Page at footer -->
+    <!-- <br/>
     <div style="font-size: 10px; font-style: italic; text-align: center;">
       <span class="page"></span> of <span class="topage"></span>
-    </div>
+    </div> -->
   </div>
   <script>
               function updateDateTime() {
