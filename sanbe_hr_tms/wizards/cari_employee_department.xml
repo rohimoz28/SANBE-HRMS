@@ -14,6 +14,7 @@
                                 <field name="branch_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
                                 <field name="alldepartment" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="1"/>
                                 <field name="department_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="regu"/>
                                 <field name="empgroup_id" invisible="1"/>
                             </group>
                             <group col="3" id="planning">
@@ -27,7 +28,7 @@
                                     <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="plann_date_from" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="plann_date_to" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="default_ot_hours" />
+                                    <field name="default_ot_hours" invisible="1"/>
                                     <field name="ot_plann_from" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="ot_plann_to" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="approve_time_from" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>

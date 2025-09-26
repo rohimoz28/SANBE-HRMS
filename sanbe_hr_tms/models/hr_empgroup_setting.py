@@ -65,9 +65,13 @@ class HREmpGroupSetting(models.Model):
     value_name = fields.Char('value_name')
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True,
                                   ondelete='cascade', index=True)
-    # employee_ids = fields.One2many('hr.employee', 'emp_group_id', string='employee')
     empgroup_ids = fields.One2many('hr.empgroup.details','empgroup_id',auto_join=True,string='Employee Group Setting Details', copy=True,tracking=True)
     # periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
+    regu = fields.Selection(selection=[(f"{i}", f"{i}") for i in range(1, 11)],
+                            string='Regu',
+                            index=True,
+                            tracking=True)
+
 
     @api.depends('value_id')
     def _compute_value_id(self):
@@ -303,6 +307,7 @@ class HREmpGroupSetting(models.Model):
                     'default_area_id':self.area_id.id,
                     'default_branch_id':self.branch_id.id,
                     'default_department_id':self.department_id.id,
+                    'default_regu':self.regu,
                     #'default_periode_id':self.periode_id.id,
                     #'default_valid_from':self.valid_from,
                     #'default_valid_to':self.valid_to
@@ -477,6 +482,11 @@ class HREmpGroupSettingDetails(models.Model):
                                    ],string='Employment Status',related='employee_id.emp_status',store=False,tracking=True)
     #periode_id = fields.Many2one('hr.opening.closing',string='Periode ID',index=True)
     state = fields.Selection([('draft','Draft'),('approved','Approved'),('close','Close')], string='State',related='empgroup_id.state',store=True,tracking=True)
+    regu = fields.Selection(selection=[(f"{i}", f"{i}") for i in range(1, 11)],
+                            string='Regu',
+                            index=True,
+                            store=True)
+
 
     def _message_log(self, body='', subject=False, message_type='notification', **kwargs):
         print(body, subject, message_type, kwargs)
