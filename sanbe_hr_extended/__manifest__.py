@@ -38,6 +38,7 @@
         'views/hr_department.xml',
         'views/hr_contract_type.xml',
         'views/hr_pension_monitoring.xml',
+        'views/hr_approval_setting.xml',
 
         'wizards/hr_employee_wizard.xml',
         'wizards/employee_report_wizard.xml',
