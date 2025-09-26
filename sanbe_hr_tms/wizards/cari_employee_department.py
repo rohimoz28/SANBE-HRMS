@@ -79,6 +79,11 @@ class HrCariEmployeeDepartment(models.TransientModel):
         domain="[('branch_id','=',branch_id)]",
         string='Rute'
     )
+    regu = fields.Selection(selection=[(f"{i}", f"{i}") for i in range(1, 11)],
+                            string='Regu',
+                            index=True,
+                            tracking=True)
+
     
     @api.onchange('default_ot_hours')
     def _onchange_default_ot_hours(self):
@@ -236,6 +241,35 @@ class HrCariEmployeeDepartment(models.TransientModel):
                 datadetails |= datadetails.sudo().create(employee_data)
             alldata.employee_ids = datadetails.ids
 
+    @api.onchange('regu')
+    def _onchange_regu(self):
+        for rec in self:
+            if not rec.regu:
+                rec.employee_ids = [Command.clear()]
+
+            employees = self.env['hr.employee'].search([
+                ('state', '=', 'approved'),
+                ('department_id', '=', rec.department_id.id),
+                ('regu', '=', rec.regu),
+            ])
+
+            employee_data = []
+            for emp in employees:
+                employee_data.append({
+                    'cari_id': rec.id,
+                    'department_id': emp.department_id.id,
+                    'employee_id': emp.id,
+                    'nik': emp.nik,
+                    'job_id': emp.job_id.id,
+                    'is_selected': False,
+                })
+
+            rec.employee_ids = [Command.clear()]
+            if employee_data:
+                details = self.env['hr.employeedepartment.details'].sudo().create(employee_data)
+                rec.employee_ids = [Command.set(details.ids)]
+
+
     def action_insert_empgroup(self):
         context_field = self._context.get('fieldname')
         employee_data = []
@@ -333,6 +367,10 @@ class HrCariEmployeeDepartmentDetails(models.TransientModel):
     default_ot_hours = fields.Selection(related='cari_id.default_ot_hours',store=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
     is_selected = fields.Boolean('Select', default=False)
+    regu = fields.Selection(related='cari_id.regu',
+                            string='Regu',
+                            store=True)
+
     
     def btn_select_all(self):
         dt_emp = self.env['hr.employeedepartment.details'].sudo().search([('cari_id', '=', self.cari_id.id)])
