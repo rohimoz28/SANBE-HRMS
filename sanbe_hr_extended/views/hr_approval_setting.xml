@@ -8,13 +8,9 @@
             <field name="model">hr.approval.setting</field>
             <field name="arch" type="xml">
                 <form string="Approval">
-                <!-- <button string="TESTING" name="get_all_employee_domain" type="object" class="oe_highlight"/> -->
-                    <header>
-                        <button name="get_all_employee_domain" string="TESTING" type="object"
-                                class="btn-primary me-2"/>
-                    </header>
                     <sheet>
                         <group>
+                            <field name="allowed_employee_ids" invisible="1" />
                             <field name="branch_id" required="1"/>
                             <field name="department_id" required="1"/>
                             <field name="approval1_id" required="1"/>
@@ -76,7 +72,7 @@
                     Create New Approval Setting Records
                 </p>
             </field>
-        </record>    
+        </record>
         
     
     </data>
