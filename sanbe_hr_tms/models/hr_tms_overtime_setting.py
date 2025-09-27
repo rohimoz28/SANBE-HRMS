@@ -18,3 +18,4 @@ class HrTmsOvertimeSetting(models.Model):
     aot_to = fields.Integer(
         string='To',
         required=False)
+    branch_id = fields.Many2one(comodel_name='res.branch', string='Business Unit')
