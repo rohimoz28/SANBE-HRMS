@@ -9,6 +9,7 @@
                 <form string="hr_tms_overtime_setting_form">
                     <sheet>
                         <group>
+                            <field name="branch_id" options="{'no_create': True, 'no_create_edit': true}"/>
                             <field name="name"/>
                             <field name="type"/>
                             <field name="aot_from"/>
@@ -24,6 +25,7 @@
             <field name="model">hr.overtime.setting</field>
             <field name="arch" type="xml">
                 <tree string="Overtime Setting">
+                    <field name="branch_id"/>
                     <field name="name"/>
                     <field name="type"/>
                     <field name="aot_from" />
