@@ -10,6 +10,8 @@ class SbRouteMaster(models.Model):
     route_code = fields.Char('Route Code')
     route_description = fields.Char('Route Description')
     is_active = fields.Boolean('Active', default=True)
+    employee_ot_ids = fields.One2many('hr.overtime.employees', 'route_id', string='Overtime Employees')
+
 
     @api.constrains('route_code','route_description')
     def duplicate_route_check(self):

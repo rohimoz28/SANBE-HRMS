@@ -549,7 +549,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
         return f'{hours:02d}:{minutes:02d}'
 
     default_ot_hours = fields.Selection(
-        selection=OT_HOURS_SELECTION,
+        selection=  OT_HOURS_SELECTION,
         string='Default Jam OT')
     # -------------------------------------------------------
     machine = fields.Char('Machine')
@@ -569,6 +569,20 @@ class HREmpOvertimeRequestEmployee(models.Model):
     explanation_deviation = fields.Char('Explanation Deviation')
     is_approved_mgr = fields.Boolean('Approved by MGR')
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
+    address_employee = fields.Char('Employee Address', compute="_get_employee_address", store=True)
+    
+    def _get_employee_address(self): 
+        for rec in self:
+            if rec.employee_id:
+                rec.address_employee = (
+                        (rec.employee_id.private_street or '') + ' ' +
+                        (rec.employee_id.private_street2 or '') + ' ' +
+                        (rec.employee_id.private_city or '')+ ' ' +
+                        (rec.employee_id.private_state_id.name or '')
+                    ).strip()
+            else:
+                rec.address_employee = ''
+
 
     @api.onchange('is_approved_mgr','is_cancel')
     def _onchange_is_approved_mgr(self):

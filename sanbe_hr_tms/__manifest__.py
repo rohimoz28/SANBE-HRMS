@@ -27,6 +27,10 @@
     ],
     'data': [
         'data/ir_cron_data.xml',
+        'data/tms_seq_number.xml',
+        'report/report_ot_route_html.xml',
+        'report/report_ot_meals_html.xml',
+        'wizards/export_ot_meals_report.xml',
         'views/hr_disable_others.xml',
         'views/sb_employee_attendance.xml',
         'views/sb_overtime_attendance.xml',
@@ -81,7 +85,6 @@
         'views/sb_leave_master.xml',
         'views/sb_leave_allocation_request.xml',
         'views/tms_menu.xml',
-        'data/tms_seq_number.xml',
         'db/calculate_tms.sql',
         'db/function_calculate_leave_alloc.sql',
         'db/procedure_leave_alloc.sql',
