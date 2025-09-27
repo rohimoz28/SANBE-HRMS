@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.169-2025w39.12 (2025-09-27)
+
+- 8f8112d [FEAT] TMS: Penambahan Field 'Regu' & Hide Field 'Default Jam OT'- TMS
+
+
 ## v0.0.167-2025w39.10 (2025-09-26)
 
 - 4201523 [IMP] TMS : Update SP TMS by GH
