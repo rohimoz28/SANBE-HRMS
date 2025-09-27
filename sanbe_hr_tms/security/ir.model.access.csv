@@ -84,5 +84,7 @@ access_sb_leave_allocation_request,access.sb.leave.allocation.request,model_sb_l
 access_sb_leave_tracking,access.sb.leave.tracking,model_sb_leave_tracking,base.group_user,1,1,1,1
 access_sb_leave_benefit,access.sb.leave.benefit,model_sb_leave_benefit,base.group_user,1,1,1,1
 
+access_report_ot_meals_rute_wiz,access_report_ot_meals_rute_wiz,model_report_ot_meals_rute_wiz,base.group_user,1,1,1,1
+
 access_sb_break_master,access.sb.break.master,model_sb_break_master,base.group_user,1,1,1,1
 access_sb_route_master,access.sb.route.master,model_sb_route_master,base.group_user,1,1,1,1
