@@ -87,38 +87,46 @@
 
         <!-- Configuration Menu -->
         <menuitem
+            id="menu_hr_approval_setting"
+            name="Approval"
+            action="sanbe_hr_extended.hr_approval_setting_action"
+            parent="hr.menu_human_resources_configuration"
+            sequence="2"
+            groups="sanbe_hr_extended.group_hr_approval_setting_manager,sanbe_hr_extended.group_hr_approval_setting_supervisor,sanbe_hr_extended.group_hr_approval_setting_staff"
+        />
+        <menuitem
             id="menu_hr_pasal_pelanggaran"
             name="Article Violation"
             action="sanbe_hr_warning_letter.action_hr_pasal_pelanggaran"
             parent="hr.menu_human_resources_configuration"
-            sequence="2"
+            sequence="3"
         />
         <menuitem
             id="menu_certificate_type"
             name="Certificate Type"
             action="sanbe_hr_certification.act_open_certificated_type_view"
             parent="hr.menu_human_resources_configuration"
-            sequence="3"
+            sequence="4"
         />
         <menuitem
             id="hr.menu_hr_department_tree"
             name="Department"
             parent="hr.menu_human_resources_configuration"
-            sequence="4"
+            sequence="5"
         />
         <menuitem
             id="document_type_menu"
             name="Employee Document Type"
             action="oh_employee_documents_expiry.document_type_action"
             parent="hr.menu_human_resources_configuration"
-            sequence="5"
+            sequence="6"
         />
         <menuitem
             id="menu_employee_level_type"
             name="Employee Level"
             action="sanbe_hr_extended.action_employee_level"
             parent="hr.menu_human_resources_configuration"
-            sequence="6"
+            sequence="7"
         />
         <!-- (di hide) -->
         <!-- <menuitem
@@ -133,21 +141,21 @@
             name="Employee Status"
             action="sanbe_hr_pam.action_hr_emp_status"
             parent="hr.menu_human_resources_configuration"
-            sequence="7"
+            sequence="8"
         />
         <menuitem
             id="menu_view_hr_contract_type"
             name="Employment Type"
             action="hr.hr_contract_type_action"
             parent="hr.menu_human_resources_configuration"
-            sequence="8"
+            sequence="9"
             groups="hr.group_hr_user"
         />
         <menuitem
             id="hr.menu_view_hr_job"
             name="Job Position"
             parent="hr.menu_human_resources_configuration"
-            sequence="9"
+            sequence="10"
         />
         <!-- (di hide) -->
         <!-- <menuitem
