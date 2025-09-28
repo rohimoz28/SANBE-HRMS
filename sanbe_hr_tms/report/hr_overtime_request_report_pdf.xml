@@ -311,10 +311,10 @@
                       <td rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Sign</b>
                       </td>
-                      <td colspan="4" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                      <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Overtime Proposal</b>
                       </td>
-                      <td colspan="4" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                      <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Realization Checked</b>
                       </td>
                     </tr>
