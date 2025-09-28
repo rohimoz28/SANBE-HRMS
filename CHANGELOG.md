@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.179-2025w39.22 (2025-09-28)
+
+- 0fdf2af [FEAT] PAM : Create New Menu Setting Approval 2
+
+
 ## v0.0.177-2025w39.20 (2025-09-28)
 
 - 6f043a8 [FIX] TMS : fixing css syntax compatibility - delete class flex
