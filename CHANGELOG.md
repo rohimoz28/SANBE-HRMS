@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.177-2025w39.20 (2025-09-28)
+
+- 6f043a8 [FIX] TMS : fixing css syntax compatibility - delete class flex
+
+
 ## v0.0.175-2025w39.18 (2025-09-28)
 
 - 4e828fc [FIX] TMS : fixing css syntax compatibility
