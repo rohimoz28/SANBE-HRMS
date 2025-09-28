@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.175-2025w39.18 (2025-09-28)
+
+- 4e828fc [FIX] TMS : fixing css syntax compatibility
+
+
 ## v0.0.173-2025w39.16 (2025-09-27)
 
 - d142cfc [IMP] TMS: Improvement Overtime Setting, penambahan field Business Unit (branch_id)
