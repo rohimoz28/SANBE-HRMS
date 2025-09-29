@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.0.179-2025w39.22 (2025-09-28)
+
+- 0fdf2af [FEAT] PAM : Create New Menu Setting Approval 2
+
+
+## v0.0.177-2025w39.20 (2025-09-28)
+
+- 6f043a8 [FIX] TMS : fixing css syntax compatibility - delete class flex
+
+
+## v0.0.175-2025w39.18 (2025-09-28)
+
+- 4e828fc [FIX] TMS : fixing css syntax compatibility
+
+
+## v0.0.173-2025w39.16 (2025-09-27)
+
+- d142cfc [IMP] TMS: Improvement Overtime Setting, penambahan field Business Unit (branch_id)
+
+
+## v0.0.171-2025w39.14 (2025-09-27)
+
+- c8967ce [FIX]TMS : Disable Remark Footer
+
+
+## v0.0.169-2025w39.12 (2025-09-27)
+
+- 8f8112d [FEAT] TMS: Penambahan Field 'Regu' & Hide Field 'Default Jam OT'- TMS
+
+
 ## v0.0.167-2025w39.10 (2025-09-26)
 
 - 4201523 [IMP] TMS : Update SP TMS by GH

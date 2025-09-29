@@ -311,31 +311,31 @@
                       <td rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Sign</b>
                       </td>
-                      <td colspan="4" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                      <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Overtime Proposal</b>
                       </td>
-                      <td colspan="4" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                      <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                         <b>Realization Checked</b>
                       </td>
                     </tr>
                     <tr valign="top">
                       <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Time</b>
+                          <b>Time</b>
                       </td>
                       <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Work Plan</b>
+                          <b>Work Plan</b>
                       </td>
-                      <td rowspan="2" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Output Plan</b>
+                      <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                          <b>Output Plan</b>
                       </td>
-                      <td rowspan="2" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Output Realization</b>
+                      <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                          <b>Output Realization</b>
                       </td>
-                      <td rowspan="2" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Explanation Deviation</b>
+                      <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                          <b>Explanation Deviation</b>
                       </td>
-                      <td colspan="2" align="center" class="d-flex flex-wrap" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
-                        <b>Verification Time</b>
+                      <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                          <b>Verification Time</b>
                       </td>
                     </tr>
                     <tr valign="top">

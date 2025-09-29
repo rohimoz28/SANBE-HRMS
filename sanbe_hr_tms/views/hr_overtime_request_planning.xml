@@ -20,7 +20,7 @@
                         <button string="Completed" name="btn_completed" type="object" class="oe_highlight" invisible="state != 'approved' or not is_hcm_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Close" name="btn_done" type="object" class="oe_highlight" invisible="state != 'completed'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
                         <button string="Reject" name="btn_reject" type="object" class="btn-danger" invisible="state in ('reject', 'approved')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
-                        <button name="btn_print_pdf" type="object" class="btn-bf" invisible="state in ('reject')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager">
+                        <button name="btn_print_pdf" type="object" class="btn-bf" invisible="state not in ['approved']" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager">
                             <i class="fa fa-print"/> Print PDF
                         </button>
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved_plan_spv,approved_plan_mgr,approved_plan_pm,approved_plan_hcm,verification,approved,completed,done,reject"/>
@@ -49,16 +49,16 @@
                                    readonly="state in ['approved','verification','completed','done']"/>
                             <field name="supervisor_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="manager_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="plan_manager_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="hcm_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="approve1" invisible="1"/>
                             <field name="approve2" invisible="1"/>
                             <field name="approve4" invisible="1"/>
@@ -85,7 +85,7 @@
                         <group>
                             <button name="action_search_employee" string="Search Employee"
                                     type="object" class="oe_highlight" data-hotkey="q"
-                                    invisible="state in ['approved','verification','completed','done']"/>
+                                    invisible="state not in ['draft']"/>
                             <button name="action_generate_ot" string="Generate OT Request"
                                     type="object" class="oe_highlight" data-hotkey="q"
                                     invisible="state in ['approved','verification','completed','done']"/>

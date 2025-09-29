@@ -289,33 +289,29 @@ class HREmpGroupSetting(models.Model):
         for rec in self:
             if rec.empgroup_ids:
                 rec.empgroup_ids.unlink()
-            
-    #Function For PopUp Search Employee
+
+    # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
+    # param default_modelname pada function, digunakan di field modelname pada wizard model hr.employeedepartment
+    # fungsi default_modelname adalah untuk menentukan field hide / show pada form wizard pada view hr_employee_department_wizard_view_form
     def action_search_employee(self):
-            #if self.department_id:
-            return {
-                'type': 'ir.actions.act_window',
-                'name': _('Search Employee'),
-                'res_model': 'hr.employeedepartment',
-                'view_mode': 'form',
-                'target': 'new',
-                'limit': 1000,  # Limit to the first 100 records
-                'domain': [('department_id', '=', self.department_id.id)],
-                'context': {
-                    'active_id': self.id,
-                    'default_modelname':'hr.empgroup',
-                    'default_area_id':self.area_id.id,
-                    'default_branch_id':self.branch_id.id,
-                    'default_department_id':self.department_id.id,
-                    'default_regu':self.regu,
-                    #'default_periode_id':self.periode_id.id,
-                    #'default_valid_from':self.valid_from,
-                    #'default_valid_to':self.valid_to
-                    },
-                'views': [[False, 'form']]
-            }
-            #else:
-            #    raise UserError('Sub Department Not Selected')
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Search Employee'),
+            'res_model': 'hr.employeedepartment',
+            'view_mode': 'form',
+            'target': 'new',
+            'limit': 1000,  # Limit to the first 100 records
+            'domain': [('department_id', '=', self.department_id.id)],
+            'context': {
+                'active_id': self.id,
+                'default_modelname':'hr.empgroup', # param modelname
+                'default_area_id':self.area_id.id,
+                'default_branch_id':self.branch_id.id,
+                'default_department_id':self.department_id.id,
+                'default_regu':self.regu,
+                },
+            'views': [[False, 'form']]
+        }
 
     def action_generate_employee_group(self):
         try:
@@ -413,11 +409,7 @@ class HREmpGroupSetting(models.Model):
                         tgl = fields.Date.today()
                         tahun = str(tgl.year)[2:]
                         bulan = str(tgl.month)
-                        # vals['name'] = cdo + str(tahun) + str(self.env['ir.sequence'].next_by_code('hr.overtime.planning'))
                         vals['name'] = f"{tahun}/{bulan}/{branch_unit_id}/EG/{department_code}/{self.env['ir.sequence'].next_by_code('hr.empgroup')}"
-                        print(">>>>>>>>>>>>")
-                        print("sequence:",vals['name'])
-                        print(">>>>>>>>>>>>")
         res = super(HREmpGroupSetting,self).create(vals_list)
         return res
 
