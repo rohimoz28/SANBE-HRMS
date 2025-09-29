@@ -49,16 +49,16 @@
                                    readonly="state in ['approved','verification','completed','done']"/>
                             <field name="supervisor_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="manager_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="plan_manager_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="hcm_id" 
                                    options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
-                                   readonly="state in ['approved','verification','completed','done']"/>
+                                   readonly="1" force_save="1"/>
                             <field name="approve1" invisible="1"/>
                             <field name="approve2" invisible="1"/>
                             <field name="approve4" invisible="1"/>

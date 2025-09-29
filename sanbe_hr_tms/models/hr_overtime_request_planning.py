@@ -135,6 +135,24 @@ class HREmpOvertimeRequest(models.Model):
     default_ot_hours = fields.Selection(
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
+    
+    @api.onchange('branch_id','department_id')
+    def _onchange_approver(self):
+        for rec in self:
+            approval = self.env['hr.approval.setting'].search([
+                            ('branch_id', '=', rec.branch_id.id),
+                            ('department_id', '=', rec.department_id.id),
+                        ], limit=1)
+            if rec.branch_id and rec.department_id and approval:
+                rec.supervisor_id = approval.approval1_id.id
+                rec.manager_id = approval.approval2_id.id
+                rec.plan_manager_id = approval.approval3_id.id
+                rec.hcm_id = approval.approval4_id.id
+            else:
+                rec.supervisor_id = False
+                rec.manager_id = False
+                rec.plan_manager_id = False
+                rec.hcm_id = False
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -239,6 +257,13 @@ class HREmpOvertimeRequest(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        tz = pytz.timezone("Asia/Jakarta")  # GMT+7
+        now = datetime.now(tz)
+        # today = fields.Date.today() # check current hour for validation (>= 14:00)
+        # now = datetime(today.year, today.month, today.day, 14, 0, 0, tzinfo=tz) # check current hour for validation (>= 14:00)
+        if now.hour >= 14:
+            raise UserError(_("Pengajuan Overtime hanya bisa dilakukan jam 00:00 - 14:00"))
+        
         for vals in vals_list:
             area=False
             if vals.get('name', _('New')) == _('New'):
@@ -424,7 +449,12 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             if rec.ot_type and rec.hr_ot_planning_ids:
                 for line in rec.hr_ot_planning_ids:
-                    line.ot_type = rec.ot_type   
+                    if line.approve_time_to - line.approve_time_from >=4 and rec.ot_type == 'regular':
+                        line.ot_type = rec.ot_type
+                        line.meals = True
+                    else:
+                        line.ot_type = rec.ot_type
+                        line.meals = False
             
     
 class HREmpOvertimeRequestEmployee(models.Model):
@@ -540,10 +570,19 @@ class HREmpOvertimeRequestEmployee(models.Model):
     is_approved_mgr = fields.Boolean('Approved by MGR')
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
 
-    @api.onchange('approve_time_from', 'approve_time_to')
+    @api.onchange('is_approved_mgr','is_cancel')
+    def _onchange_is_approved_mgr(self):
+        for rec in self:
+            if rec.is_approved_mgr == True:
+                rec.is_cancel = False
+            if rec.is_cancel == True:
+                rec.is_approved_mgr = False
+
+
+    @api.onchange('approve_time_from', 'approve_time_to', 'ot_type')
     def _onchange_meals(self):
         for rec in self:
-            if rec.approve_time_to - rec.approve_time_from >= 4:
+            if rec.approve_time_to - rec.approve_time_from >= 4 and rec.ot_type == 'regular':
                 self.meals = True
             else:
                 self.meals = False

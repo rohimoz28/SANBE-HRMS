@@ -298,6 +298,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'approve_time_from': self.approve_time_from,
                     'approve_time_to': self.approve_time_to,
                     'route_id': self.route_id.id,
+                    'meals': True if self.approve_time_to - self.approve_time_from >= 4 else False,
                 })
 
             self.env['hr.overtime.employees'].sudo().create(employee_data)
