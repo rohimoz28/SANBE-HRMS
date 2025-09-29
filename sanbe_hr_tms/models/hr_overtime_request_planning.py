@@ -261,7 +261,7 @@ class HREmpOvertimeRequest(models.Model):
         now = datetime.now(tz)
         # today = fields.Date.today() # check current hour for validation (>= 14:00)
         # now = datetime(today.year, today.month, today.day, 14, 0, 0, tzinfo=tz) # check current hour for validation (>= 14:00)
-        if now.hour >= 14:
+        if now.hour >= 14 and not self.env.user.has_group('sanbe_hr_tms.group_tms_overtime_create'):
             raise UserError(_("Pengajuan Overtime hanya bisa dilakukan jam 00:00 - 14:00"))
         
         for vals in vals_list:
