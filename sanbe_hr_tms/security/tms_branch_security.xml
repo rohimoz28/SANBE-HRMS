@@ -274,6 +274,11 @@
             <field name="name">User Reopen TMS</field>
         </record>
 
+        <record id="group_tms_overtime_create" model="res.groups">
+            <field name="name">User TMS Overtime Create</field>
+            <field name="comment">This access right allows the user to create overtime records after 2:00 PM.</field>
+        </record>
+
         <!-- HR Mutation -->
         <record id="hr_employee_mutation_branch_manager_rule" model="ir.rule">
             <field name="name">HR Employee Mutation Branch Manager</field>

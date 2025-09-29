@@ -21,19 +21,16 @@
                             <label for="name" string="Employee Group"/>
                             <div class="mr8 oe_inline">
                                 <field name="name" class="mr8 oe_inline" readonly="1"/>
-                                <!-- <field name="description" class="mr8 oe_inline"/> -->
                             </div>
                         </group>
                         <group col="2">
                             <group>
-                                <!-- <field name="periode_id" readonly="state == 'approved' or state == 'close'"/> -->
                                 <field name="area_id" readonly="state == 'approved' or state == 'close'"
                                     options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1" />
                                 <field name="branch_ids" invisible="1" />
-                                <field name="branch_id"
+                                <field name="branch_id" string="Business Unit"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
                                        readonly="state == 'approved' or state == 'close'"/>
-                                <!--field name="periode_id" required="1"/-->
                                 <field name="alldepartment" invisible="1"/>
                                 <field name="department_id" readonly="state == 'approved' or state == 'close'"
                                        options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
@@ -53,24 +50,12 @@
                                 <field name="description" readonly="state == 'approved' or state == 'close'"/>
                             </group>
                         </group>
-                        <!--group col="2">
-                            <group>
-                                <field name="valid_from" required="1"/>
-                            </group>
-                            <group>
-                                <field name="valid_to" required="1" />
-                            <group />
-                        </group-->
                         <group col="2">
                             <group>
                                 <button name="action_search_employee" string="Search Employee"
                                     type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
                                 <button name="action_generate_employee_group" string="Generate Emp. Group"
                                         type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
-                                <!--button name="btn_clear_child" string="Clear Employees List"
-                                    type="object" class="oe_highlight" data-hotkey="q" invisible="state != 'approved'"/-->
-                                <!-- <button name="btn_process" string="Process Employee"
-                                    type="object" class="oe_highlight" data-hotkey="p" invisible="state != 'approved'"/> -->
                             </group>
                             <group>
                             <button name="action_export_excel" string="Export to Excel"
