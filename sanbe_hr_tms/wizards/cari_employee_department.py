@@ -84,7 +84,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                             index=True,
                             tracking=True)
 
-    
+
     @api.onchange('default_ot_hours')
     def _onchange_default_ot_hours(self):
 

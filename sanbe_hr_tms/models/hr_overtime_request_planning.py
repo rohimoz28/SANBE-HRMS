@@ -372,9 +372,11 @@ class HREmpOvertimeRequest(models.Model):
             numbering[record.id] = list(range(counter, counter + len(record.hr_ot_planning_ids))) #perbaikan disini
             counter += len(record.hr_ot_planning_ids)
         return numbering        
-            
+    
+    # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
+    # param default_modelname pada function, digunakan di field modelname pada wizard model hr.employeedepartment
+    # fungsi default_modelname adalah untuk menentukan field hide / show pada form wizard pada view hr_employee_department_wizard_view_form
     def action_search_employee(self):
-        #if self.department_id:
         return {
             'type': 'ir.actions.act_window',
             'name': _('Search Employee'),
@@ -385,7 +387,7 @@ class HREmpOvertimeRequest(models.Model):
             'context': {
                 'active_id': self.id, 
                 'fieldname':'plan_id', 
-                'default_modelname':'hr.overtime.planning',
+                'default_modelname':'hr.overtime.planning', # param modelname
                 'default_area_id':self.area_id.id,
                 'default_branch_id':self.branch_id.id,
                 'default_plann_date_from':self.periode_from,
@@ -394,8 +396,7 @@ class HREmpOvertimeRequest(models.Model):
                 },
             'views': [[False, 'form']]
         }
-        #else:
-        #    raise UserError('Sub Department Not Selected')
+
     def action_generate_ot(self):
         try:
             self.env.cr.execute("CALL generate_ot_request()")

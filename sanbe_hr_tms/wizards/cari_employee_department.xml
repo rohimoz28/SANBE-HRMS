@@ -11,24 +11,23 @@
                                 <field name="area_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
                                 <field name="branch_ids" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="1"/>
                                 <field name="wdcode_ids" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="1"/>
-                                <field name="branch_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
+                                <field name="branch_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" readonly="1" string="Business Unit"/>
                                 <field name="alldepartment" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="1"/>
                                 <field name="department_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
-                                <field name="regu"/>
+                                <field name="regu" invisible="modelname != 'hr.empgroup'"/>
                                 <field name="empgroup_id" invisible="1"/>
                             </group>
                             <group col="3" id="planning">
                                 <group>
                                     <field name="plan_id" invisible="1"/>
                                     <field name="modelname" invisible="1"/>
-                                    <field name="branch_id" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <field name="branch_id" invisible="1"/>
+                                    <field name="default_ot_hours" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="wdcode" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'"/>
-                                    <!--field name="periode_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/-->
                                     <field name="valid_from" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="plann_date_from" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="plann_date_to" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="default_ot_hours" invisible="1"/>
                                     <field name="ot_plann_from" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="ot_plann_to" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="approve_time_from" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
