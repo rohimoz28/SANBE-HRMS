@@ -5,7 +5,7 @@
         <field name="name">report.ot.meals.rute.wiz.form</field>
         <field name="model">report.ot.meals.rute.wiz</field>
         <field name="arch" type="xml">
-            <form string="OT Meals / Rute Report Wizard">
+            <form string="Monitoring Overtime">
                 <group>
                     <field name="branch_id" invisible="1" />                        
                     <field name="type_report" required="1" /> 
@@ -27,7 +27,7 @@
 
     <!-- Action to Open Wizard -->
     <record id="action_hr_wiz_ot_meals" model="ir.actions.act_window">
-        <field name="name">OT Meals / Rute Report</field>
+        <field name="name">Monitoring Overtime</field>
         <field name="res_model">report.ot.meals.rute.wiz</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
