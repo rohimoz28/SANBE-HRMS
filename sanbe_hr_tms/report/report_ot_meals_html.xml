@@ -3,20 +3,149 @@
     <!-- QWeb Report Template -->
     <template id="sanbe_hr_tms.report_ot_meals_html" name="OT Meals Report">
         <t t-call="web.html_container">
-            <t t-call="web.basic_layout">                <!-- Styles -->
+            <t t-call="web.basic_layout">
+                <!-- Styles -->
                 <style>
-                            .title { font-weight: bold; font-size: 16pt; }
-                            .table th, .table td {
-                                border: 1.5px solid black;
-                                padding: 8px;
-                                text-align: center;
-                                vertical-align: middle;
-                                font-size: 10px;
-                            }
-                            .metadata-table { font-size: 11px; line-height: 1.5; width: 100%; }
-                            .metadata-table td { border: none; padding: 2px 5px; text-align: left; }
-                            .header-table img { max-width: 200px; }
-                            hr.line { border: none; border-top: 1.5px solid black; margin: 2px 0; }
+                    .title {
+                        font-weight: bold;
+                        font-size: 16pt;
+                    }
+
+                    hr.line,
+                    .middle-line1,
+                    .middle-line2,
+                    .line-1,
+                    .footer-line1 {
+                        border: none;
+                        border-top: 1.5px solid black;
+                    }
+
+                    .middle-line1,
+                    .middle-line2 {
+                        margin: 2px 0;
+                    }
+
+                    .middle-line2 {
+                        margin-bottom: 5px;
+                    }
+
+                    .line-1 {
+                        margin-bottom: 5px;
+                    }
+
+                    .footer-line1 {
+                        position: running(footer);
+                    }
+
+                    .table th,
+                    .table td {
+                        border: 1.5px solid black;
+                        padding: 8px;
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 10px;
+                    }
+
+                    .metadata-table {
+                        font-size: 12px;
+                        line-height: 1.5;
+                        width: 100%;
+                        border: none;
+                        border-collapse: collapse;
+                        text-align: right;
+                    }
+
+                    .metadata-table td,
+                    .metadata-table th {
+                        border: none;
+                        padding: 2px 5px;
+                        text-align: left;
+                    }
+
+                    .metadata-table p {
+                        margin-bottom: 2px;
+                    }
+
+                    .metadata-table .label-cell {
+                        padding-right: 10px;
+                        text-align: left;
+                    }
+
+                    .metadata-table .value-cell {
+                        text-align: left;
+                    }
+
+                    /* Logo dan Header */
+                    .header {
+                        width: 100%;
+                        overflow: hidden;
+                    }
+
+                    .logo {
+                        margin-left: 20px;
+                    }
+
+                    .header-table {
+                        border: 1.5px solid black;
+                    }
+
+                    .header-table img {
+                        max-width: 200px;
+                    }
+
+                    .header1 {
+                        background-color: #d3d3d3;
+                        font-weight: bold;
+                    }
+
+                    .header1,
+                    .value1 {
+                        border: 1.5px solid black;
+                        padding: 8px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+
+                    .detail-table {
+                        border: 1.5px solid black;
+                    }
+
+                    .header2,
+                    .value2 {
+                        border: 1.5px solid black;
+                        padding: 8px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+
+                    .kotak {
+                        display: inline-block;
+                        border: 2px solid red;
+                        padding: 5px;
+                        font-size: 20px;
+                        font-family: Arial, sans-serif;
+                        color: red;
+                    }
+
+                    .footer-text {
+                        font-size: 10px;
+                        font-style: italic;
+                        position: running(footer);
+                    }
+
+                    @page {
+                        margin: 30px;
+                        @bottom-right {
+                            content: element(footer);
+                        }
+                    }
+                    .page {
+                        content: counter(page);
+                    }
+
+                    .topage {
+                        content: counter(pages);
+                    }
                 </style>
 
                 <!-- Header -->
@@ -28,7 +157,7 @@
                             <td style="width: 25%;">
                                 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
                             </td>
-                            <td style="width: 50%;" class="text-center" >
+                            <td style="width: 50%;" class="text-center">
                                 <span class="title">Employee Overtime Report</span>
                             </td>
                             <td style="width: 25%;">
@@ -64,168 +193,193 @@
                 <div class="page">
                     <t t-if="report_lines">
                         <t t-foreach="report_lines" t-as="dept">
-                        <t t-esc="dept['department']"/>
-                        <table class="table table-bordered table-striped" style="table-layout: auto; word-wrap: break-word; font-size: 11px;">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>No</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>NIK</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Name</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Address</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Shift</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Overtime Date</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Overtime Day</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" colspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>PLAN Proposal</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" colspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Realization</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Route</strong>
-                                        </span>
-                                    </th>
-                                    <th class="text-center" style="border-color:#000000;" rowspan="2">
-                                        <span style="font-size:18px;">
-                                            <strong>Meal</strong>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th style="border-color:#000000;">
-                                        <span style="font-size:18px;">
-                                            <strong>Start</strong>
-                                        </span>
-                                    </th>
-                                    <th style="border-color:#000000;">
-                                        <span style="font-size:18px;">
-                                            <strong>Finish</strong>
-                                        </span>
-                                    </th>
-                                    <th style="border-color:#000000;">
-                                        <span style="font-size:18px;">
-                                            <strong>Start</strong>
-                                        </span>
-                                    </th>
-                                    <th style="border-color:#000000;">
-                                        <span style="font-size:18px;">
-                                            <strong>Finish</strong>
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                            <t t-esc="dept['department']"/>
+                            <table class="table tabel-custom table-bordered table-striped" style="table-layout: auto; border-color:#000000; word-wrap: break-word; font-size: 11px;">
+
+                                <style>
+                                    table.tabel-custom {
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                    page-break-inside: auto;
+                                    }
+                                    table.tabel-custom thead {
+                                    display: table-header-group;
+                                    }
+                                    table.tabel-custom tfoot {
+                                    display: table-footer-group;
+                                    }
+                                    table.tabel-custom tr {
+                                    page-break-inside: avoid;
+                                    page-break-after: auto;
+                                    }
+                                    table.tabel-custom td {
+                                    border: 1px solid #000;
+                                    padding: 4px;
+                                    }
+                                </style>
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>No</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>NIK</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Name</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Address</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Shift</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Overtime Date</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Overtime Day</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" colspan="2">
+                                            <span style="font-size:14px;">
+                                                <strong>PLAN PROPOSAL</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" colspan="2">
+                                            <span style="font-size:14px;">
+                                                <strong>REALIZATION</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Route</strong>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" rowspan="2">
+                                            <span style="font-size:18px;">
+                                                <strong>Meal</strong>
+                                            </span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <span style="font-size:18px;">
+                                                <strong>Start</strong>
+                                            </span>
+                                        </th>
+                                        <th>
+                                            <span style="font-size:18px;">
+                                                <strong>Finish</strong>
+                                            </span>
+                                        </th>
+                                        <th>
+                                            <span style="font-size:18px;">
+                                                <strong>Start</strong>
+                                            </span>
+                                        </th>
+                                        <th>
+                                            <span style="font-size:18px;">
+                                                <strong>Finish</strong>
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <t t-foreach="dept['lines']" t-as="line">
                                         <tr>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['no']"/>
                                             </td>
-                                            <td style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td style="font-size:13px;">
                                                 <t t-out="line['nik']"/>
                                             </td>
-                                            <td style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td style="font-size:13px;">
                                                 <t t-out="line['employee_name']"/>
                                             </td>
-                                            <td style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td style="font-size:13px;">
                                                 <t t-out="line['address']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['shift']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['overtime_date']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['overtime_day']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['plan_start']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['plan_end']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px">
                                                 <t t-out="line['real_start']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['real_end']"/>
                                             </td>
-                                            <td style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td style="font-size:13px;">
                                                 <t t-out="line['route']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000;">
+                                            <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['meal']"/>
                                             </td>
                                         </tr>
                                     </t>
-                                <t t-if="not report_lines">
-                                    <tr>
-                                        <td colspan="13" class="text-center">
+                                    <t t-if="not report_lines">
+                                        <tr>
+                                            <td colspan="13" class="text-center">
                                             No Data Available
-                                        </td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
                         </t>
                     </t>
-                    <span style="font-size:18px;"><strong>Total Employees : </strong> <t t-out="total_lines"/></span>
+                    <span style="font-size:18px;">
+                        <strong>Total Employees : </strong>
+                        <t t-out="total_lines"/>
+                    </span>
                     <div style="margin-top: 30px;">
                         <table style="width:100%;">
                             <tr>
                                 <td style="width:34%; text-align:center;">
-                                        Administrasi HC<br/>
                                     <br/>
                                     <br/>
-                                    ________________________
+                                    <br/>
+                                    Administrasi HC
                                 </td>
                                 <td style="width:33%; text-align:center;">
-                                        Human Capital Manager<br/>
                                     <br/>
                                     <br/>
-                                        ________________________
+                                    <br/>
+                                    Human Capital Manager
                                 </td>
                                 <td style="width:33%; text-align:center;">
                                     <t t-out="area"/>
-    ,                                    <span id="current-datetime"></span>
-                                    <br/>
-                                        Plant Manager<br/>
+ ,                                    <span id="current-datetime"></span>
                                     <br/>
                                     <br/>
-                                        ________________________
+                                    <br/>
+                                    <br/>
+                                    Plant Manager
                                 </td>
                             </tr>
                         </table>
@@ -237,25 +391,39 @@
                                     day: '2-digit', month: 'long', year: 'numeric'
                                     });
                                     document.getElementById('current-datetime').textContent = `${formattedDate}`;
-                                }
+                                }                        <span class="page"></span> of <span class="topage"></span>
 
                                 updateDateTime();
                     </script>
                 </div>
-            </t>
-        </t>
-    </template>
+                <div class="footer">
+                    <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                    <div style="float: left; text-align: left;">
+                        <span style="font-size: 10px; font-style: italic;">
+                            <t t-out="area"/>
+ | Release | Corporate | COHR | COHR.FOR.034 - Employee Overtime Report
+                        </span>
+                    </div>
+                    <div style="float: right; font-size: 10px; font-style: italic; text-align: right;">
+                        Page <span class="page"/>
+ of <span class="topage"/>
+                </div>
 
-    <!-- Report Action -->
-    <record id="action_report_ot_meals" model="ir.actions.report">
-        <field name="name">OT Report Meals (HTML)</field>
-        <field name="type">ir.actions.report</field>
-        <field name="model">hr.overtime.employees</field>
-        <field name="report_type">qweb-html</field>
-        <field name="report_name">sanbe_hr_tms.report_ot_meals_html</field>
-        <field name="report_file">sanbe_hr_tms.report_ot_meals_html</field>
-        <field name="binding_model_id" ref="model_hr_overtime_employees"/>
-        <field name="binding_type">report</field>
-        <!-- <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_overtime_bundling_report"/> -->
-    </record>
+            </div>
+        </t>
+    </t>
+</template>
+
+<!-- Report Action -->
+<record id="action_report_ot_meals" model="ir.actions.report">
+    <field name="name">OT Report Meals (HTML)</field>
+    <field name="type">ir.actions.report</field>
+    <field name="model">hr.overtime.employees</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">sanbe_hr_tms.report_ot_meals_html</field>
+    <field name="report_file">sanbe_hr_tms.report_ot_meals_html</field>
+    <field name="binding_model_id" ref="model_hr_overtime_employees"/>
+    <field name="binding_type">report</field>
+    <!-- <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_overtime_bundling_report"/> -->
+</record>
 </odoo>

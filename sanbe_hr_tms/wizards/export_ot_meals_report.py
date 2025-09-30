@@ -1,37 +1,6 @@
 from odoo import fields, models, api, _, tools, Command
 from odoo.exceptions import ValidationError,UserError
 
-# TMS_OVERTIME_STATE = [
-#     ('draft', 'Draft'),
-#     ('approved_mgr', "Approved By MGR"),
-#     ('approved_pmr', "Approved By PMR"),
-#     ('approved_plan_spv', "Appv Plan By SPV"),
-#     ('approved_plan_mgr', "Appv Plan By MGR"),
-#     ('approved_plan_pm', "Appv Plan By PM"),
-#     ('approved_plan_hcm', "Appv Plan By HCM"),
-#     ('verification', 'Verif by SPV'),
-#     ('approved', 'Approved By HCM'),
-#     ('completed', 'Completed HCM'),
-#     ('done', "Close"),
-#     ('reject', "Reject"),
-# ]
-
-
-# class OTStatus(models.Model):
-#     _name = 'ot.status'
-#     _description = 'OT Status'
-
-#     code = fields.Char(string='Code', required=True)
-#     name = fields.Char(string='Name', required=True)
-#     active = fields.Boolean(default=True)
-
-#     _sql_constraints = [
-#         ('code_uniq', 'unique(code)', 'Code must be unique.'),
-#     ]
-    
-    
-#     def name_get(self):
-#         return [(rec.id, rec.name) for rec in self]
 
 class HRWizOTMeals(models.TransientModel):
     _name = 'report.ot.meals.rute.wiz'
@@ -41,8 +10,8 @@ class HRWizOTMeals(models.TransientModel):
     
     type_report = fields.Selection([('route', 'Route'), ('meal', 'Meals')], string='Report Type', required=True, default='route')
     branch_id = fields.Many2one('res.branch', string='Bisnis Unit', default=lambda self: self.env.user.branch_id.id)
-    date_from = fields.Date(string='Date From', required=True)
-    date_to = fields.Date(string='Date To', required=True)
+    date_from = fields.Date(string='Date From', required=True, default=lambda self: fields.Date.today())
+    date_to = fields.Date(string='Date To', required=True,default=lambda self: fields.Date.today())
     department_id = fields.Many2one('hr.department', string='Sub Department', 
         domain=lambda self: self._get_departments_domain(),
         options="{'no_create': True}"
@@ -73,7 +42,7 @@ class HRWizOTMeals(models.TransientModel):
         if self.type_report == 'route':
             ot_attendance_domain.append(('route_id', '!=', False))
         if self.type_report == 'meal':
-            ot_attendance_domain.append(('meals', 'ilike', 'dine'))
+            ot_attendance_domain.append(('meals', '!=', False))
         if self.date_from and self.date_to and self.date_from < self.date_to:
             ot_attendance_domain += [
                 ('plann_date_from', '>=', self.date_from),

@@ -39,7 +39,7 @@ class RouteReportHTML(models.Model):
                 'employee_name': obj.employee_id.name or '-',
                 'nik': obj.nik or '-',
                 'address': obj.address_employee or '-',
-                'shift': obj.default_ot_hours or '-',
+                'shift': dict(obj._fields['default_ot_hours'].selection).get(obj.default_ot_hours, '-'),
                 'overtime_date': obj.plann_date_from.strftime('%d %b %Y') if obj.plann_date_from else '-',
                 'overtime_day': obj.plann_date_from.strftime('%A') if obj.plann_date_from else '-',
                 'plan_start': obj.ot_plann_from_char or '-',
