@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.183-2025w40.3 (2025-10-01)
+
+- 14e4850 [FIX] TMS : Refactor query ini for view hr_employee on sb_view_hr_employee.py
+
+
 ## v0.0.181-2025w40.1 (2025-09-29)
 
 - 4245c88 [IMP] TMS : Improvement Overtime - Fase 3 (Update Task : Access Create Overtime Request)
