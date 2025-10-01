@@ -26,9 +26,11 @@
                         <group>
                             <field name="department_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1" readonly="True"/>
                             <field name="branch_ids" invisible="1"/>
+                            <field name="branch_id" invisible="1"/>
                             <field name="ot" readonly="True" string="OT"/>
                             <field name="ot_flat" readonly="True" string="OT Flat"/>
                             <field name="night_shift" readonly="True" string="Night Shift"/>
+                            <field name="remark" invisible="branch_id != 1"/>
                         </group>
                     </group>
                     <br></br>
@@ -837,7 +839,7 @@
                             </group>
                         </page>
 
-                        <page name="tmsentry_details_id" string="All">
+                        <page name="tmsentry_details_id" string="All" invisible="branch_id == 1">
                             <field name="tmsentry_details_ids">
                                 <tree default_order='details_date' decoration-info="type == 'H'" decoration-danger="status_attendance in ['Absent']" decoration-warning="status_attendance not in ['Absent', 'Attendee'] and status_attendance" create="False" delete="False" editable="tmsentry_id.state != 'transfer_payroll'">
                                     <field name="flag" readonly="0" optional='hide'/>
@@ -987,6 +989,230 @@
                                         <div class="o_row">
                                             <field name="meal_count" colspan="1" readonly="1"/>
                                             <label for="meal_count" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group colspan="8">
+                                    <group style="width:65%">
+                                        <div class="o_row">
+                                            <label for="is_deduction" string="Potongan?"/>
+                                            <div class="o_row">
+                                                <field name="is_deduction" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%" invisible="is_deduction != True">
+                                        <label for="total_deduction" string="Jumlah PG"/>
+                                        <div class="o_row">
+                                            <field name="total_deduction" colspan="2"/>
+                                            <label for="total_deduction" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%" invisible="is_deduction != True">
+                                        <label for="is_deduction_desc" string="Keterangan PG"/>
+                                        <div class="o_row">
+                                            <field name="is_deduction_desc" colspan="2"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <div class="clearfix"/>
+                            </group>
+                        </page>
+                        <page name="tmsentry_details_id" string="All" invisible="branch_id != 1">
+                            <field name="tmsentry_details_ids">
+                                <tree default_order='details_date' decoration-info="type == 'H'" decoration-danger="status_attendance in ['Absent']" decoration-warning="status_attendance not in ['Absent', 'Attendee'] and status_attendance" create="False" delete="False" editable="tmsentry_id.state != 'transfer_payroll'">
+                                    <field name="flag" readonly="0" optional='hide'/>
+
+                                    <field name="dayname" readonly="1"/>
+                                    <field name="details_date" readonly="1"/>
+                                    <field name="type" readonly="1"/>
+                                    <field name="empgroup_id" readonly="1"/>
+                                    <field name="workingday_id" readonly="1"/>
+                                    <field name="date_in" readonly="1"/>
+                                    <field name="schedule_time_in" widget="float_time" readonly="1" optional="hide"/>
+                                    <field name="time_in" widget="float_time" readonly="1"/>
+                                    <field name="edited_time_in" widget="float_time" readonly="1"/>
+                                    <field name="date_out" readonly="1"/>
+                                    <field name="schedule_time_out" widget="float_time" readonly="1" optional="hide"/>
+                                    <field name="time_out" widget="float_time" readonly="1"/>
+                                    <field name="edited_time_out" widget="float_time" readonly="1"/>
+                                    <field name="lk" string="LK (Libur Kecil)"/>
+                                    <field name="lb" string="LB (Libur Besar)"/>
+                                    <field name="ch" string="CH (Cuti Hamil)"/>
+                                    <field name="i30"/>
+                                    <field name="paid_leave"/>
+                                    <field name="status_attendance" readonly="1" width="170px" style="max-width:200px" decoration-danger="status_attendance in ['absent']"/>
+                                    <field name="positive_delay" readonly="1" string="Delay"/>
+                                    <field name="status" readonly="1" width="100px" style="max-width:200px"/>
+                                    <field name="tmsentry_id" column_invisible="1" readonly="1"/>
+                                    <field name="approval_ot_from" widget="float_time" readonly="1" optional="hide"/>
+                                    <field name="approval_ot_to" widget="float_time" readonly="1" optional="hide"/>
+                                    <field name="aot1" optional="hide" readonly="1"/>
+                                    <field name="aot2" optional="hide" readonly="1"/>
+                                    <field name="aot3" optional="hide" readonly="1"/>
+                                    <field name="aot4" optional="hide" readonly="1"/>
+                                    <field name="oto" optional="hide" readonly="1"/>
+                                    <field name="premi_attendee" string="ASHF" optional="hide" readonly="1"/>
+                                    <field name="night_shift" optional="hide" readonly="1" string="ANS1"/>
+                                    <field name="night_shift2" optional="hide" readonly="1" string="ANS2"/>
+                                    <field name="meal" optional="hide" readonly="1"/>
+                                    <field name="is_edited" readonly="1" />
+                                    <field name="approved" readonly="status == 'done'"/>
+                                    <field name="approved_by_ca" readonly="status == 'done'"/>
+                                    <field name="remark_edit_attn" readonly="1" optional="hide"/>
+                                    <button name="action_view_tms_details" type="object" string="Detail" class="fa fa-check" invisible="status == 'done'"/>
+                                </tree>
+                            </field>
+                            <group name="note_group" col="12" class="mt-4 mt-md-0">
+                                <div class="clearfix"/>
+                                <group colspan="4">
+                                    <group style="width:80%">
+                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <div class="o_row">
+                                            <field name="attendee_total" colspan="1" readonly="1"/>
+                                            <label for="attendee_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <div class="o_row">
+                                            <field name="attendee_count" colspan="1" readonly="1"/>
+                                            <label for="attendee_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <div class="o_row">
+                                            <field name="absent_count" colspan="1" readonly="1"/>
+                                            <label for="absent_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="leave_count" string="Total Cuti"/>
+                                        <div class="o_row">
+                                            <field name="leave_count" colspan="1" readonly="1"/>
+                                            <label for="leave_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="sick_count" string="Total Sakit"/>
+                                        <div class="o_row">
+                                            <field name="sick_count" colspan="1" readonly="1"/>
+                                            <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group colspan="4">
+                                    <group style="width:70%">
+                                        <label for="ot1_totalx" string="AOT1"/>
+                                        <div class="o_row">
+                                            <field name="ot1_totalx" colspan="1" readonly="1"/>
+                                            <label for="ot1_totalx" string="Hours"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:70%">
+                                        <label for="ot2_totalx" string="AOT2"/>
+                                        <div class="o_row">
+                                            <field name="ot2_totalx" colspan="1" readonly="1"/>
+                                            <label for="ot2_totalx" string="Hours"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:70%">
+                                        <label for="ot3_totalx" string="AOT3"/>
+                                        <div class="o_row">
+                                            <field name="ot3_totalx" colspan="1" readonly="1"/>
+                                            <label for="ot3_totalx" string="Hours"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:70%">
+                                        <label for="ot4_totalx" string="AOT4"/>
+                                        <div class="o_row">
+                                            <field name="ot4_totalx" colspan="1" readonly="1"/>
+                                            <label for="ot4_totalx" string="Hours"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="delay_total" string="Total Delay"/>
+                                        <div class="o_row">
+                                            <field name="delay_total" colspan="1" readonly="1"/>
+                                            <label for="delay_total" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <div class="o_row">
+                                            <field name="delay_count" colspan="1" readonly="1"/>
+                                            <label for="delay_count" string="Times"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group colspan="4">
+                                    <group style="width:90%">
+                                        <label for="pattendace_count" string="ASHF"/>
+                                        <div class="o_row">
+                                            <field name="pattendace_count" colspan="1" readonly="1"/>
+                                            <label for="pattendace_count" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:90%">
+                                        <label for="nightshift_count" string="ANS1"/>
+                                        <div class="o_row">
+                                            <field name="nightshift_count" colspan="1" readonly="1"/>
+                                            <label for="nightshift_count" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:90%">
+                                        <label for="nightshift2_count" string="ANS2"/>
+                                        <div class="o_row">
+                                            <field name="nightshift2_count" colspan="1" readonly="1"/>
+                                            <label for="nightshift2_count" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:90%">
+                                        <label for="meal_count" string="Meal"/>
+                                        <div class="o_row">
+                                            <field name="meal_count" colspan="1" readonly="1"/>
+                                            <label for="meal_count" string="Minutes"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <label for="lk" string="LK (Libur Kecil)"/>
+                                        <div class="o_row">
+                                            <field name="lk" colspan="1" readonly="1"/>
+                                            <span style="margin-left:8px;">days</span>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <label for="ch" string="CH (Cuti Hamil)"/>
+                                        <div class="o_row">
+                                            <field name="ch" colspan="1" readonly="1"/>
+                                            <span style="margin-left:8px;">days</span>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <label for="lb" string="LB (Libur besar)"/>
+                                        <div class="o_row">
+                                            <field name="lb" colspan="1" readonly="1"/>
+                                            <span style="margin-left:8px;">days</span>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <label for="i30" string="I30"/>
+                                        <div class="o_row">
+                                            <field name="i30" colspan="1" readonly="1"/>
+                                            <span>days</span>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <div class="o_row">
+                                            <span> </span>
+                                        </div>
+                                    </group>
+                                    <group style="width:45%">
+                                        <label for="paid_leave" string="CUTI BAYAR"/>
+                                        <div class="o_row">
+                                            <field name="paid_leave" colspan="1" readonly="1"/>
+                                            <span>days</span>
                                         </div>
                                     </group>
                                 </group>
