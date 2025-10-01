@@ -577,7 +577,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
         return f'{hours:02d}:{minutes:02d}'
 
     default_ot_hours = fields.Selection(
-        selection=OT_HOURS_SELECTION,
+        selection=  OT_HOURS_SELECTION,
         string='Default Jam OT')
     # -------------------------------------------------------
     machine = fields.Char('Machine')
@@ -597,6 +597,24 @@ class HREmpOvertimeRequestEmployee(models.Model):
     explanation_deviation = fields.Char('Explanation Deviation')
     is_approved_mgr = fields.Boolean('Approved by MGR')
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
+    address_employee = fields.Char('Employee Address', compute="_get_employee_address", store=True)
+    _sql_constraints = [
+        ('unique_employee_planning', 'unique(employee_id, planning_id)', 'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
+    ]
+    
+    @api.depends('employee_id')
+    def _get_employee_address(self): 
+        for rec in self:
+            if rec.employee_id:
+                rec.address_employee = (
+                        (rec.employee_id.private_street or '') + ' ' +
+                        (rec.employee_id.private_street2 or '') + ' ' +
+                        (rec.employee_id.private_city or '')+ ' ' +
+                        (rec.employee_id.private_state_id.name or '')
+                    ).strip()
+            else:
+                rec.address_employee = ''
+
 
     @api.onchange('is_approved_mgr','is_cancel')
     def _onchange_is_approved_mgr(self):
@@ -631,13 +649,17 @@ class HREmpOvertimeRequestEmployee(models.Model):
         for rec in self:
             '''Method to avoid duplicate overtime request'''
             duplicate_record = self.search([
-                ('id', '!=', rec.id),
+                ('planning_id', '!=', rec.planning_id.id),
                 ('nik','=',rec.nik),
-                ('plann_date_from','=',rec.plann_date_from),
-                ('plann_date_to','=',rec.plann_date_to),
+                ('plann_date_from', '<=', rec.plann_date_to),
+                ('plann_date_to', '>=', rec.plann_date_from),
             ])
-            if duplicate_record:
-                raise ValidationError(f"Duplicate record found for employee {rec.employee_id.name} in {rec.planning_id.name}. "
+            
+            if len(duplicate_record)> 0:
+                name = ''
+                for line_ot in duplicate_record:
+                    name += line_ot.planning_id.name + ', '
+                raise UserError(f"Duplicate record found for employee {rec.employee_id.name} in {name}. "
                                       f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
 
     @api.model

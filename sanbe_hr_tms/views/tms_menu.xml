@@ -154,6 +154,23 @@
                 parent="hr_menu_tms_root"
                 groups="base.group_user"
         />
+        <!-- MONITORING -->
+        <menuitem
+                id="hr_menu_tabel_reporting"
+                name="Reporting"
+                sequence="6"
+                parent="hr_menu_tms_root"
+                groups="base.group_user"
+        />
+                
+        <menuitem 
+                id="menu_hr_report_ot_meals" 
+                name="Report OT"
+                parent="hr_menu_tabel_reporting" 
+                sequence="1" 
+                action="action_hr_wiz_ot_meals" />
+                <!-- groups="group_processing_period_manager,group_processing_period_supervisor,group_processing_period_staff" /> -->
+
 
         <menuitem
                 id="menu_sb_incomplete_attendances"
@@ -214,7 +231,7 @@
         <menuitem
                 id="hr_menu_tms_setting"
                 name="Setting"
-                sequence="6"
+                sequence="7"
                 parent="hr_menu_tms_root"
                 groups="base.group_user"
         />
@@ -329,7 +346,7 @@
                 id="menu_hr_opening_closing_periode"
                 name="Processing and Period"
                 parent="hr_menu_tms_root"
-                sequence="7"
+                sequence="8"
                 action="action_hr_openin_closing"
                 groups="group_processing_period_manager,group_processing_period_supervisor,group_processing_period_staff"
         />
