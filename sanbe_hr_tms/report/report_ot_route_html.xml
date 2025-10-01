@@ -370,28 +370,28 @@
                                     Human Capital Manager
             </td>
             <td style="width:33%; text-align:center;">
-                <t t-out="area"/>
- ,                <span id="current-datetime"></span>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                                    <t t-out="area"/>
+ ,                                    <span><t t-out="current_datetime_server"/></span>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
                                     Plant Manager
-            </td>
-        </tr>
-    </table>
-</div>
-<script>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- <script>
                                 function updateDateTime() {
                                     const now = new Date();
                                     const formattedDate = now.toLocaleDateString('id-ID', {
                                     day: '2-digit', month: 'long', year: 'numeric'
                                     });
                                     document.getElementById('current-datetime').textContent = `${formattedDate}`;
-                                }    <span class="page"></span> of <span class="topage"></span>
+                                }                        <span class="page"></span> of <span class="topage"></span>
 
                                 updateDateTime();
-</script>
+                    </script> -->
 </div>
 <div class="footer">
 <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>

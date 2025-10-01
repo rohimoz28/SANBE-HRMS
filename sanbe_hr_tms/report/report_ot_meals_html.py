@@ -72,4 +72,5 @@ class MealsReportHTML(models.Model):
             'report_lines': report_lines,
             'area': area,
             'total_lines': total_lines,
+            'current_datetime_server': datetime.today().strftime('%d %B %Y'),
         }

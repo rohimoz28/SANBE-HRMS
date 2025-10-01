@@ -374,7 +374,7 @@
                                 </td>
                                 <td style="width:33%; text-align:center;">
                                     <t t-out="area"/>
- ,                                    <span id="current-datetime"></span>
+ ,                                    <span><t t-out="current_datetime_server"/></span>
                                     <br/>
                                     <br/>
                                     <br/>
@@ -384,7 +384,7 @@
                             </tr>
                         </table>
                     </div>
-                    <script>
+                    <!-- <script>
                                 function updateDateTime() {
                                     const now = new Date();
                                     const formattedDate = now.toLocaleDateString('id-ID', {
@@ -394,7 +394,7 @@
                                 }                        <span class="page"></span> of <span class="topage"></span>
 
                                 updateDateTime();
-                    </script>
+                    </script> -->
                 </div>
                 <div class="footer">
                     <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
