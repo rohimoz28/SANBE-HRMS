@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.185-2025w40.5 (2025-10-01)
+
+- 491ab79 [IMP] TMS : Create Menu Report dan Penambahan Fitur Report
+
+
 ## v0.0.183-2025w40.3 (2025-10-01)
 
 - 14e4850 [FIX] TMS : Refactor query ini for view hr_employee on sb_view_hr_employee.py
