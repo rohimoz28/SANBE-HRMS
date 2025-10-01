@@ -4,7 +4,7 @@ class SbViewHrEmployee(models.Model):
     _auto = False
     _name = 'sb.view.hr.employee'
     _description = 'View HR Employee'
-    
+
     id = fields.Integer('ID', required=True)
     name = fields.Char('Name')
     area_id = fields.Many2one('res.territory', string='Area')
@@ -19,9 +19,9 @@ class SbViewHrEmployee(models.Model):
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 select 
-                    he.id AS id, 
-                    he."name" name, 
-                    he.area area_id, 
+                    he.id as id, 
+                    he.name as name, 
+                    he.area as area_id, 
                     he.branch_id, 
                     he.department_id, 
                     he.job_id, 
