@@ -203,8 +203,14 @@ class HRTMSEntrySummary(models.Model):
     ot = fields.Boolean(compute='_compute_ot', store=True)
     ot_flat = fields.Boolean(compute='_compute_ot_flat', store=True)
     night_shift = fields.Boolean(compute='_compute_night_shift', store=True)
-
     periode_from_to = fields.Char(compute='_compute_concate', store=True)
+    lk = fields.Float(string='LK')
+    lb = fields.Float(string='LB')
+    ch = fields.Float(string='CH')
+    i30 = fields.Float(string='I30')
+    paid_leave = fields.Float(string='CUTI BAYAR')
+    remark = fields.Text(string="Remarks")
+
 
     @api.depends('periode_id','date_from','date_to')
     def _compute_concate(self):
