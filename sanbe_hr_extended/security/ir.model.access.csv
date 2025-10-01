@@ -14,3 +14,5 @@ access_employee_report_wizard,sanbe_hr_extended.employee.report.wizard,model_emp
 access_hr_approval_setting_staff,access.hr.approval.setting.staff,model_hr_approval_setting,sanbe_hr_extended.group_hr_approval_setting_staff,1,1,0,0
 access_hr_approval_setting_supervisor,access.hr.approval.setting.supervisor,model_hr_approval_setting,sanbe_hr_extended.group_hr_approval_setting_supervisor,1,1,1,0
 access_hr_approval_setting_manager,access.hr.approval.setting.manager,model_hr_approval_setting,sanbe_hr_extended.group_hr_approval_setting_manager,1,1,1,1
+
+access_sb_view_hr_employee,access.sb.view.hr.employee,model_sb_view_hr_employee,base.group_user,1,0,0,0

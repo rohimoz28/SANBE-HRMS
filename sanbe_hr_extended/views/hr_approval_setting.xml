@@ -10,14 +10,15 @@
                 <form string="Approval">
                     <sheet>
                         <group>
-                            <field name="allowed_employee_ids" invisible="1" />
-                            <field name="branch_id" required="1"/>
-                            <field name="department_id" required="1"/>
-                            <field name="approval1_id" required="1" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                            <field name="approval2_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                            <field name="approval3_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                            <field name="approval4_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
-                            <field name="approval5_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/>
+                            <!-- <field name="allowed_employee_ids" invisible="1" /> -->
+                            <field name="branch_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1"/>
+                            <field name="department_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" required="1"/>
+                            <field name="model" required="1"/>
+                            <field name="approval1_ids" required="1" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" widget="many2many_tags"/>
+                            <field name="approval2_ids" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" widget="many2many_tags"/>
+                            <field name="approval3_ids" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" widget="many2many_tags"/>
+                            <field name="approval4_ids" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" widget="many2many_tags"/>
+                            <field name="approval5_ids" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" widget="many2many_tags"/>
                             <field name="desc" required="1"/>
                         </group>
                     </sheet>
@@ -30,14 +31,15 @@
             <field name="model">hr.approval.setting</field>
             <field name="arch" type="xml">
                 <tree string="Approval">
-                    <field name="branch_id" required="1"/>
-                    <field name="department_id" required="1"/>
-                    <field name="approval1_id" required="1"/>
-                    <field name="approval2_id"/>
-                    <field name="approval3_id"/>
-                    <field name="approval4_id"/>
-                    <field name="approval5_id"/>
-                    <field name="desc" required="1"/>
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
+                    <field name="model" />
+                    <field name="approval1_ids" widget="many2many_tags"/>
+                    <field name="approval2_ids" widget="many2many_tags"/>
+                    <field name="approval3_ids" widget="many2many_tags"/>
+                    <field name="approval4_ids" widget="many2many_tags"/>
+                    <field name="approval5_ids" widget="many2many_tags"/>
+                    <field name="desc"/>
                 </tree>
             </field>
         </record>
@@ -49,11 +51,12 @@
                 <search string="Approval">
                     <field name="branch_id"/>
                     <field name="department_id"/>
-                    <field name="approval1_id"/>
-                    <field name="approval2_id"/>
-                    <field name="approval3_id"/>
-                    <field name="approval4_id"/>
-                    <field name="approval5_id"/>
+                    <field name="model" />
+                    <field name="approval1_ids"/>
+                    <field name="approval2_ids"/>
+                    <field name="approval3_ids"/>
+                    <field name="approval4_ids"/>
+                    <field name="approval5_ids"/>
                 </search>
             </field>
         </record>

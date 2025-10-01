@@ -14,3 +14,4 @@ from . import ir_sequence
 from . import hr_contract_type
 from . import hr_pension_monitoring
 from . import hr_approval_setting
+from . import sb_view_hr_employee
