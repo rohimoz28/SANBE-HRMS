@@ -43,7 +43,7 @@ class HRWizOTMeals(models.TransientModel):
             ot_attendance_domain.append(('route_id', '!=', False))
         if self.type_report == 'meal':
             ot_attendance_domain.append(('meals', '!=', False))
-        if self.date_from and self.date_to and self.date_from < self.date_to:
+        if self.date_from and self.date_to and self.date_from <= self.date_to:
             ot_attendance_domain += [
                 ('plann_date_from', '>=', self.date_from),
                 ('plann_date_from', '<=', self.date_to)

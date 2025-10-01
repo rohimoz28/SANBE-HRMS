@@ -39,7 +39,7 @@
 
                     .table th,
                     .table td {
-                        border: 1.5px solid black;
+                        border: none;
                         padding: 8px;
                         text-align: center;
                         vertical-align: middle;
@@ -175,7 +175,7 @@
                                         <td>: 02 Jan 2024</td>
                                     </tr>
                                     <tr>
-                                        <td>Next Review Date</td>
+                                        <td>Next Review</td>
                                         <td>: 02 Jan 2027</td>
                                     </tr>
                                     <tr>
@@ -193,124 +193,160 @@
                 <div class="page">
                     <t t-if="report_lines">
                         <t t-foreach="report_lines" t-as="dept">
-                            <t t-esc="dept['department']"/>
-                            <table class="table tabel-custom table-bordered table-striped" style="table-layout: auto; border-color:#000000; word-wrap: break-word; font-size: 11px;">
+                            <br />
+                            <strong style="font-size:16px;">
+                                <u>
+                                    <t t-esc="dept['department']"/>
+                                </u>
+                            </strong>
+                            <table class="table tabel-custom table-bordered table-striped" style="table-layout: auto; border-color:#000000; font-size: 11px;">
 
                                 <style>
-                                    table.tabel-custom {
-                                    border-collapse: collapse;
-                                    width: 100%;
-                                    page-break-inside: auto;
-                                    }
-                                    table.tabel-custom thead {
-                                    display: table-header-group;
-                                    }
-                                    table.tabel-custom tfoot {
-                                    display: table-footer-group;
-                                    }
-                                    table.tabel-custom tr {
-                                    page-break-inside: avoid;
-                                    page-break-after: auto;
-                                    }
-                                    table.tabel-custom td {
-                                    border: 1px solid #000;
-                                    padding: 4px;
-                                    }
+                                        table.tabel-custom {
+                                            border-collapse: collapse;
+                                            width: 100%;
+                                            page-break-inside: auto;
+                                            table-layout: auto; 
+                                            border-color: #000000; 
+                                            font-size: 11px;
+                                        }
+                                        table.tabel-custom thead {
+                                            display: table-header-group;
+                                        }
+                                        table.tabel-custom tfoot {
+                                            display: table-footer-group;
+                                        }
+                                        table.tabel-custom tr {
+                                            page-break-inside: avoid;
+                                            page-break-after: auto;
+                                            word-wrap: break-word; 
+                                            white-space: normal;
+                                        }
+                                        table.tabel-custom th, table.tabel-custom td {
+                                            border: 1px solid #000;
+                                            padding: 2px;
+                                            white-space: normal;
+                                            overflow-wrap: break-word; /* enable breaking long words */
+                                        }
+                                        table.tabel-custom th.name {
+                                            width: 220px;
+                                        }
+                                        table.tabel-custom td.name {
+                                            width: 220px;
+                                            text-align: left;
+                                        }
+                                        table.tabel-custom th.nik, table.tabel-custom td.nik {
+                                            width:120px;
+                                            white-space: nowrap;
+                                            text-align: center;
+                                            overflow: visible; 
+                                            text-overflow: clip;
+                                        }
+                                        table.tabel-custom th.address{
+                                            width: 120px; 
+                                            word-wrap: break-word;
+                                        }
+                                        table.tabel-custom td.address {
+                                            width: 120px; 
+                                            word-wrap: break-word;text-align: left;
+                                        }
+                                        table.tabel-custom th.no, table.tabel-custom td.no {
+                                            width: 40px;
+                                        }
+                                        table.tabel-custom th.nik, table.tabel-custom td.nik {
+                                            width: 80px;
+                                            white-space: nowrap;
+                                            text-align: center;
+                                        }
+                                        table.tabel-custom th.plan-start, table.tabel-custom td.plan-start,
+                                        table.tabel-custom th.plan-finish, table.tabel-custom td.plan-finish,
+                                        table.tabel-custom th.real-start, table.tabel-custom td.real-start,
+                                        table.tabel-custom th.real-finish, table.tabel-custom td.real-finish {
+                                            width: 30px;
+                                            white-space: nowrap;
+                                            text-align: center;
+                                        }
+
+                                        table.tabel-custom th.meal, table.tabel-custom td.meal {
+                                            width: 40px;
+                                            white-space: nowrap;
+                                            text-align: center;
+                                        }
                                 </style>
+
                                 <thead>
                                     <tr>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>No</strong>
-                                            </span>
+                                        <th class="text-center no" rowspan="2" style="font-size:18px;">
+                                            <strong>No</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>NIK</strong>
-                                            </span>
+                                        <th class="text-center nik" rowspan="2" style="font-size:18px;">
+                                            <strong>NIK</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Name</strong>
-                                            </span>
+                                        <th class="text-center name" rowspan="2" style="font-size:18px;">
+                                            <strong>Name</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Address</strong>
-                                            </span>
+                                        <th class="text-center address" rowspan="2" style="font-size:18px;">
+                                            <strong>Address</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Shift</strong>
-                                            </span>
+                                        <th class="text-center" rowspan="2" style="font-size:18px; border-color:#000000;">
+                                            <strong>Shift</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Overtime Date</strong>
-                                            </span>
+                                        <th class="text-center" rowspan="2" style="font-size:18px; border-color:#000000; word-wrap: break-word;">
+                                            <strong>Overtime Date</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Overtime Day</strong>
-                                            </span>
+                                        <th class="text-center" rowspan="2" style="font-size:18px; border-color:#000000; word-wrap: break-word;">
+                                            <strong>Overtime Day</strong>
                                         </th>
-                                        <th class="text-center" colspan="2">
-                                            <span style="font-size:14px;">
-                                                <strong>PLAN PROPOSAL</strong>
-                                            </span>
+                                        <th class="text-center" colspan="2" style="font-size:14px; border-color:#000000;">
+                                            <strong>PLAN / PROPOSAL</strong>
                                         </th>
-                                        <th class="text-center" colspan="2">
-                                            <span style="font-size:14px;">
-                                                <strong>REALIZATION</strong>
-                                            </span>
+                                        <th class="text-center" colspan="2" style="font-size:14px; border-color:#000000;">
+                                            <strong>REALIZATION</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Route</strong>
-                                            </span>
+                                        <th class="text-center" rowspan="2" style="font-size:18px; border-color:#000000;">
+                                            <strong>Route</strong>
                                         </th>
-                                        <th class="text-center" rowspan="2">
-                                            <span style="font-size:18px;">
-                                                <strong>Meal</strong>
-                                            </span>
+                                        <th class="text-center meal" rowspan="2" style="font-size:18px; border-color:#000000;">
+                                            <strong>Meal</strong>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>
-                                            <span style="font-size:18px;">
+                                        <th class="plan-start" style="border-color:#000000;">
+                                            <span style="font-size:13px;">
                                                 <strong>Start</strong>
                                             </span>
                                         </th>
-                                        <th>
-                                            <span style="font-size:18px;">
+                                        <th class="plan-finish" style="border-color:#000000;">
+                                            <span style="font-size:13px;">
                                                 <strong>Finish</strong>
                                             </span>
                                         </th>
-                                        <th>
-                                            <span style="font-size:18px;">
+                                        <th class="real-start" style="border-color:#000000;">
+                                            <span style="font-size:13px;">
                                                 <strong>Start</strong>
                                             </span>
                                         </th>
-                                        <th>
-                                            <span style="font-size:18px;">
+                                        <th class="real-finish" style="border-color:#000000;">
+                                            <span style="font-size:13px;">
                                                 <strong>Finish</strong>
                                             </span>
                                         </th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <t t-foreach="dept['lines']" t-as="line">
                                         <tr>
-                                            <td class="text-center" style="font-size:13px;">
+                                            <td class="text-center no" style="font-size:13px;">
                                                 <t t-out="line['no']"/>
                                             </td>
-                                            <td style="font-size:13px;">
+                                            <td class="text-center nik" style="font-size:13px;">
                                                 <t t-out="line['nik']"/>
                                             </td>
-                                            <td style="font-size:13px;">
+                                            <td class="name" style="font-size:13px;">
                                                 <t t-out="line['employee_name']"/>
                                             </td>
-                                            <td style="font-size:13px;">
+                                            <td class="address" style="font-size:13px; ">
                                                 <t t-out="line['address']"/>
                                             </td>
                                             <td class="text-center" style="font-size:13px;">
@@ -322,22 +358,22 @@
                                             <td class="text-center" style="font-size:13px;">
                                                 <t t-out="line['overtime_day']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px;">
+                                            <td class="text-center plan-start" style="font-size:13px;">
                                                 <t t-out="line['plan_start']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px;">
+                                            <td class="text-center plan-finish" style="font-size:13px;">
                                                 <t t-out="line['plan_end']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px">
+                                            <td class="text-center real-start" style="font-size:13px;">
                                                 <t t-out="line['real_start']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px;">
+                                            <td class="text-center real-finish" style="font-size:13px;">
                                                 <t t-out="line['real_end']"/>
                                             </td>
-                                            <td style="font-size:13px;">
+                                            <td class="text-center meal route" style="font-size:13px;">
                                                 <t t-out="line['route']"/>
                                             </td>
-                                            <td class="text-center" style="font-size:13px;">
+                                            <td class="text-center meal" style="font-size:13px;">
                                                 <t t-out="line['meal']"/>
                                             </td>
                                         </tr>
@@ -345,11 +381,12 @@
                                     <t t-if="not report_lines">
                                         <tr>
                                             <td colspan="13" class="text-center">
-                                            No Data Available
+                    No Data Available
                                             </td>
                                         </tr>
                                     </t>
                                 </tbody>
+
                             </table>
                         </t>
                     </t>
@@ -364,9 +401,11 @@
                                     <br/>
                                     <br/>
                                     <br/>
+                                    <br/>
                                     Administrasi HC
                                 </td>
                                 <td style="width:33%; text-align:center;">
+                                    <br/>
                                     <br/>
                                     <br/>
                                     <br/>
@@ -424,6 +463,6 @@
     <field name="report_file">sanbe_hr_tms.report_ot_meals_html</field>
     <field name="binding_model_id" ref="model_hr_overtime_employees"/>
     <field name="binding_type">report</field>
-    <!-- <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_overtime_bundling_report"/> -->
+    <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_overtime_bundling_report"/>
 </record>
 </odoo>
