@@ -107,24 +107,24 @@ class HREmpOvertimeRequest(models.Model):
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
     supervisor_id = fields.Many2one(
-        'hr.employee',
+        'sb.view.hr.employee',
         string='Supervisor',
-        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        domain="[('id', 'in', allowed_supervisor_ids)]"
         )
     manager_id = fields.Many2one(
-        'hr.employee',
+        'sb.view.hr.employee',
         string='Manager',
-        # domain="[('area','=',area_id),('branch_id','=',branch_id),('department_id','=',department_id),('state','=','approved')]"
+        domain="[('id', 'in', allowed_manager_ids)]"
         )
     plan_manager_id = fields.Many2one(
-        'hr.employee',
+        'sb.view.hr.employee',
         string='Plan Manager',
-        # domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]"
+        domain="[('id', 'in', allowed_plan_manager_ids)]"
         )
     hcm_id = fields.Many2one(
-        'hr.employee',
+        'sb.view.hr.employee',
         string='HCM',
-        # domain="[('state','=','approved')]"
+        domain="[('id', 'in', allowed_hcm_ids)]"
         )
     is_supervisor_user = fields.Boolean(compute='_compute_is_supervisor_user')
     is_manager_user = fields.Boolean(compute='_compute_is_manager_user')
@@ -135,24 +135,52 @@ class HREmpOvertimeRequest(models.Model):
     default_ot_hours = fields.Selection(
         selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
+    allowed_supervisor_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_allowed_approval_ids',
+        store=False
+    )
+    allowed_manager_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_allowed_approval_ids',
+        store=False
+    )
+    allowed_plan_manager_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_allowed_approval_ids',
+        store=False
+    )
+    allowed_hcm_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_allowed_approval_ids',
+        store=False
+    )
     
-    @api.onchange('branch_id','department_id')
-    def _onchange_approver(self):
+    @api.depends('branch_id', 'department_id')
+    def _compute_allowed_approval_ids(self):
         for rec in self:
-            approval = self.env['hr.approval.setting'].search([
-                            ('branch_id', '=', rec.branch_id.id),
-                            ('department_id', '=', rec.department_id.id),
-                        ], limit=1)
-            if rec.branch_id and rec.department_id and approval:
-                rec.supervisor_id = approval.approval1_id.id
-                rec.manager_id = approval.approval2_id.id
-                rec.plan_manager_id = approval.approval3_id.id
-                rec.hcm_id = approval.approval4_id.id
-            else:
-                rec.supervisor_id = False
-                rec.manager_id = False
-                rec.plan_manager_id = False
-                rec.hcm_id = False
+            spv_allowed_ids = []
+            mgr_allowed_ids = []
+            pm_allowed_ids = []
+            hcm_allowed_ids = []
+            if rec.branch_id and rec.department_id:
+                approval_setting = self.env['hr.approval.setting'].sudo().search([
+                    ('branch_id', '=', rec.branch_id.id),
+                    ('department_id', '=', rec.department_id.id),
+                    ('model', '=', 'overtime_request')
+                ], limit=1)
+                if approval_setting:
+                    spv_allowed_ids = approval_setting.approval1_ids.ids
+                    mgr_allowed_ids = approval_setting.approval2_ids.ids
+                    pm_allowed_ids = approval_setting.approval3_ids.ids
+                    hcm_allowed_ids = approval_setting.approval4_ids.ids
+                    
+            rec.allowed_supervisor_ids = [(6, 0, spv_allowed_ids)]
+            rec.allowed_manager_ids = [(6, 0, mgr_allowed_ids)]
+            rec.allowed_plan_manager_ids = [(6, 0, pm_allowed_ids)]
+            rec.allowed_hcm_ids = [(6, 0, hcm_allowed_ids)]
+    
+    
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -549,7 +577,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
         return f'{hours:02d}:{minutes:02d}'
 
     default_ot_hours = fields.Selection(
-        selection=OT_HOURS_SELECTION,
+        selection=  OT_HOURS_SELECTION,
         string='Default Jam OT')
     # -------------------------------------------------------
     machine = fields.Char('Machine')
@@ -569,6 +597,24 @@ class HREmpOvertimeRequestEmployee(models.Model):
     explanation_deviation = fields.Char('Explanation Deviation')
     is_approved_mgr = fields.Boolean('Approved by MGR')
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
+    address_employee = fields.Char('Employee Address', compute="_get_employee_address", store=True)
+    _sql_constraints = [
+        ('unique_employee_planning', 'unique(employee_id, planning_id)', 'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
+    ]
+    
+    @api.depends('employee_id')
+    def _get_employee_address(self): 
+        for rec in self:
+            if rec.employee_id:
+                rec.address_employee = (
+                        (rec.employee_id.private_street or '') + ' ' +
+                        (rec.employee_id.private_street2 or '') + ' ' +
+                        (rec.employee_id.private_city or '')+ ' ' +
+                        (rec.employee_id.private_state_id.name or '')
+                    ).strip()
+            else:
+                rec.address_employee = ''
+
 
     @api.onchange('is_approved_mgr','is_cancel')
     def _onchange_is_approved_mgr(self):
@@ -603,13 +649,17 @@ class HREmpOvertimeRequestEmployee(models.Model):
         for rec in self:
             '''Method to avoid duplicate overtime request'''
             duplicate_record = self.search([
-                ('id', '!=', rec.id),
+                ('planning_id', '!=', rec.planning_id.id),
                 ('nik','=',rec.nik),
-                ('plann_date_from','=',rec.plann_date_from),
-                ('plann_date_to','=',rec.plann_date_to),
+                ('plann_date_from', '<=', rec.plann_date_to),
+                ('plann_date_to', '>=', rec.plann_date_from),
             ])
-            if duplicate_record:
-                raise ValidationError(f"Duplicate record found for employee {rec.employee_id.name} in {rec.planning_id.name}. "
+            
+            if len(duplicate_record)> 0:
+                name = ''
+                for line_ot in duplicate_record:
+                    name += line_ot.planning_id.name + ', '
+                raise UserError(f"Duplicate record found for employee {rec.employee_id.name} in {name}. "
                                       f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
 
     @api.model
