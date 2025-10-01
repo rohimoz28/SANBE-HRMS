@@ -112,9 +112,19 @@ class ExportExcelTms(models.TransientModel):
         if not tms_summaries:
             raise UserError(_("Tidak Ada Data Record Dari periode atau department yang dipilih"))
         
+        report_name = 'sanbe_hr_tms.report_attendance_html'
+
+        if self.periode_id:
+            self.branch_id = self.periode_id.branch_id
+
+            if self.branch_id and self.branch_id.id == 1:
+                report_name = 'sanbe_hr_tms.report_attendance_html_tamansari'
+            else:
+                report_name = 'sanbe_hr_tms.report_attendance_html'
+        
         return {
             'type': 'ir.actions.report',
-            'report_name': 'sanbe_hr_tms.report_attendance_html',
+            'report_name': report_name,
             'report_type': 'qweb-html',
             'report_file': f'Rekap_Kehadiran_{self.periode_id.name or "All"}',
             'context': {
@@ -122,25 +132,4 @@ class ExportExcelTms(models.TransientModel):
                 'active_ids': tms_summaries.ids,  # semua record
             }
         }
-        # """
-        # Generate HTML report based on selected filters
         
-        # :return: Action for HTML report
-        # """
-        # self.ensure_one()
-        
-        # # Prepare domain for searching records
-        # tms_summary_domain = []
-        # if self.periode_id:
-        #     tms_summary_domain.append(('periode_id', '=', self.periode_id.id))
-        # if self.department_id:
-        #     tms_summary_domain.append(('department_id', '=', self.department_id.id))
-        
-        # # Search for TMS summaries
-        # tms_summaries = self.env['hr.tmsentry.summary'].search(tms_summary_domain)
-        
-        # if not tms_summaries:
-        #     raise UserError(_("No Records Found for the Selected Period or Department"))
-        
-        # # Return report action
-        # return self.env.ref('sanbe_hr_tms.action_report_attendance').report_action(tms_summaries)

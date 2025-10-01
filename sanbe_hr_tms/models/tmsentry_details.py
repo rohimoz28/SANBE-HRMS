@@ -107,6 +107,13 @@ class TmsentryDetails(models.Model):
         string='Delay1',
         help='delay more than ten minutes',
         required=False)
+    branch_id = fields.Many2one(comodel_name='res.branch', string='Business Unit', store=True)
+    lk = fields.Float(string='LK')
+    lb = fields.Float(string='LB')
+    ch = fields.Float(string='CH')
+    i30 = fields.Float(string='I30')
+    paid_leave = fields.Float(string='CUTI BAYAR')
+    
 
     @api.depends('edited_time_in', 'edited_time_out', 'date_in', 'date_out')
     def _compute_is_edited(self):
