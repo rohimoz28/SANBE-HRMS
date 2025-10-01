@@ -33,10 +33,6 @@
 ## v0.0.171-2025w39.14 (2025-09-27)
 
 - c8967ce [FIX]TMS : Disable Remark Footer
-
-
-## v0.0.169-2025w39.12 (2025-09-27)
-
 - 8f8112d [FEAT] TMS: Penambahan Field 'Regu' & Hide Field 'Default Jam OT'- TMS
 
 
