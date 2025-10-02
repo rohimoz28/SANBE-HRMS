@@ -230,13 +230,13 @@
                       <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                         <span t-field="doc.request_day_name"/>
                       </td>
-                      <td align="center" style="border: 1px solid #000000; padding: 4px; ">
+                      <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; ">
                         <b>Prepare by</b>
                       </td>
                       <td align="center" style="border: 1px solid #000000; padding: 4px;">
                         <b>Review By</b>
                       </td>
-                      <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">
+                      <td align="center" style="border: 1px solid #000000; padding: 4px;">
                         <b>Approved By</b>
                       </td>
                       <td align="center" style="border: 1px solid #000000; padding: 4px;">
@@ -256,13 +256,13 @@
                       <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                         <span t-field="doc.request_date" t-options='{"widget": "date"}'/>
                       </td>
-                      <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
-                        <div class="kotak">APPROVED</div>
-                      </td>
-                      <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
-                        <div class="kotak">APPROVED</div>
-                      </td>
                       <td colspan="2" rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
+                        <div class="kotak">APPROVED</div>
+                      </td>
+                      <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
+                        <div class="kotak">APPROVED</div>
+                      </td>
+                      <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                         <div class="kotak">APPROVED</div>
                       </td>
                       <td rowspan="2" style="border: 1px solid #000000; padding: 4px;">
@@ -290,9 +290,9 @@
                       <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                         <span t-field="doc.default_ot_hours"/>
                       </td>
-                      <td align="center" style="border: 1px solid #000000; padding: 4px;">Supervisor</td>
+                      <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">Supervisor</td>
                       <td align="center" style="border: 1px solid #000000; padding: 4px;">Manager</td>
-                      <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">Plant Manager</td>
+                      <td align="center" style="border: 1px solid #000000; padding: 4px;">Plant Manager</td>
                       <td align="center" style="border: 1px solid #000000; padding: 4px;">Supervisor</td>
                       <td align="center" style="border: 1px solid #000000; padding: 4px;">Manager</td>
                       <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">Plant Manager</td>
