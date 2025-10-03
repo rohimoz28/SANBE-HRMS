@@ -16,8 +16,9 @@ class HrEmployee(models.Model):
 class HrContract(models.Model):
     _inherit = 'hr.contract'
     
-    @api.onchange('state')
-    def update_employee_contract(self):
-        for line in self:
-            for contracts in self.env['hr.contract'].search([('employee_id','=',self.employee_id.id),('state','=','open')],limit=1,order='date_end desc'):
-                self.employee_id.contract_id = contracts.id
+    # deprecated
+    # @api.onchange('state')
+    # def update_employee_contract(self):
+    #     for line in self:
+    #         for contracts in self.env['hr.contract'].search([('employee_id','=',self.employee_id.id),('state','=','open')],limit=1,order='date_end desc'):
+    #             self.employee_id.contract_id = contracts.id
