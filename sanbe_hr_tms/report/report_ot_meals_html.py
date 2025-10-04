@@ -44,7 +44,7 @@ class MealsReportHTML(models.Model):
                 'plan_end': obj.ot_plann_to_char or '-',
                 'real_start': obj.realization_time_from_char or '-',
                 'real_end': obj.realization_time_to_char or '-',
-                'route': obj.route_id.route_code or '-',
+                'route': obj.route_id.name or '-',
                 'meal': 'Dine' if obj.meals else ('Cash' if obj.meals_cash else '-'),
             }
 
