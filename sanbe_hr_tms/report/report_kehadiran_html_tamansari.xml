@@ -3,12 +3,68 @@
     <!-- QWeb Report Template -->
     <template id="sanbe_hr_tms.report_attendance_html_tamansari" name="Attendance Report Tamansari">
         <t t-call="web.html_container">
-            <t t-call="web.external_layout">
+            <t t-call="web.basic_layout">
+                <style>
+                    table.table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    table.table th, 
+                    table.table td {
+                        border: 1px solid black !important;
+                        padding: 4px;
+                    }
+                </style>
+                <thead>
+                    <t t-set="company" t-value="res_company" />
+                    <table style="width:100%; padding:0; margin:0; border: 0px solid transparent;">
+                        <tr>
+                            <td>
+                                <img
+                                    t-if="company.logo"
+                                    t-att-src="image_data_uri(company.logo)"
+                                    style="max-height: 100px; width: 200px;" alt="Logo"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="border-bottom: 2px solid black; margin-bottom: 2px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" style="vertical-align: top; font-family: 'Bookman Old Style', Georgia, serif; text-align: left;">
+                                <strong>
+                                    <span style="font-size:17px;" t-field="company.name" />
+                                </strong> Pharmaceutical Manufacturer
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif; text-align:left;" class="text-left">
+                            <t t-if="doc.branch_id.street">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street" />
+                            </t>
+                            <t t-if="doc.branch_id.street2">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street2" />
+                            </t>
+                            <t t-if="doc.branch_id.city">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" />
+                            </t>
+                                <br /> Telp: <t t-if="doc.branch_id.phone"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.phone" /></t>
+                                <br /> Fax: <t t-if="doc.branch_id.fax"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.fax" /></t>
+                                <br />
+                                <t t-if="doc.branch_id.city"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" /></t> <t t-if="doc.branch_id.zip"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.zip" /></t>
+                            </td>
+                        </tr>
+                    </table>
+                </thead>
+                <br />
                 <div class="page">
-                    <h2 class="text-center mb-4">
-                        Rekap Perhitungan Kehadiran Tamansari
-                    </h2>
-                    
+                    <div style="text-align: center;">
+                        <h2 class="mb-4">
+                            Rekap Perhitungan Kehadiran Tamansari
+                        </h2>
+                    </div>
                     <table class="table table-bordered table-striped" style="table-layout: auto; word-wrap: break-word;">
                         <thead>
                             <tr>
@@ -61,15 +117,32 @@
         </t>
     </template>
 
+    <!-- paper format -->
+    <record id="paperformat_report_kehadiran_tamansari" model="report.paperformat">
+        <field name="name">Print Out PDF Rekap Kehadiran Tamansari</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">7</field>
+        <field name="dpi">90</field>
+    </record>
+
     <!-- Report Action -->
     <record id="action_report_attendance_tamansari" model="ir.actions.report">
-        <field name="name">Attendance Report (HTML)</field>
+        <field name="name">Attendance Report Tamansari</field>
         <field name="type">ir.actions.report</field>
         <field name="model">hr.tmsentry.summary</field>
-        <field name="report_type">qweb-html</field>
+        <field name="report_type">qweb-pdf</field>
         <field name="report_name">sanbe_hr_tms.report_attendance_html_tamansari</field>
-         <field name="report_file">sanbe_hr_tms.report_attendance_html_tamansari</field>
+        <field name="report_file">sanbe_hr_tms.report_attendance_html_tamansari</field>
+        <field name="print_report_name">('Attendance Report - %s' % (object.branch_id.name))</field>
         <field name="binding_model_id" ref="model_hr_tmsentry_summary"/>
         <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_report_kehadiran_tamansari"/>
     </record>
 </odoo>
