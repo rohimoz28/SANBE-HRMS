@@ -156,6 +156,16 @@
             </field>
         </record>
 
+        <!-- Overtime Review -->
+        <record id="sb_overtime_review_view" model="ir.rule">
+            <field name="name">Overtime Review Group View</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_view_overtime_review"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_overtime_review_hrd'))]"/>
+            <field name="domain_force">
+                [('branch_id', 'in', branch_ids)]
+            </field>
+        </record>
+
 
         <!-- TMS Processing -->
         <record id="hr_tms_processing_branch_manager_rule" model="ir.rule">
