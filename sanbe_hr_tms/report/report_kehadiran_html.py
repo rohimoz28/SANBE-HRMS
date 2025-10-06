@@ -65,5 +65,6 @@ class AttendanceReportHTML(models.AbstractModel):
         return {
             'doc_model': 'hr.tmsentry.summary',
             'docs': lines,
+            'doc': lines[0] if lines else None,
             'report_lines': report_lines,
         }

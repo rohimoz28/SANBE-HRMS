@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.190-2025w40.10 (2025-10-03)
+
+- 55c7c98 [FIX] PAM : Bugfix Employee Contract – Expired Contract Tidak Tersimpan
+
+
+## v0.0.188-2025w40.8 (2025-10-02)
+
+- 5766145 [IMP]TMS : Perbaikan Struktur Tabel FEOR Overtime Request
+
+
 ## v0.0.185-2025w40.5 (2025-10-01)
 
 - 491ab79 [IMP] TMS : Create Menu Report dan Penambahan Fitur Report
