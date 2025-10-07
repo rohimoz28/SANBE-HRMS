@@ -15,6 +15,8 @@ class HrTmsOvertimeSetting(models.Model):
     aot_from = fields.Integer(
         string='From',
         required=False)
+    mandays = fields.Integer(
+        string='man days')
     aot_to = fields.Integer(
         string='To',
         required=False)

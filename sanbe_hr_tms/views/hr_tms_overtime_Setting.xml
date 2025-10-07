@@ -11,6 +11,7 @@
                         <group>
                             <field name="branch_id" options="{'no_create': True, 'no_create_edit': true}"/>
                             <field name="name"/>
+                            <field name="mandays" string="Total Hari kerja"/>
                             <field name="type"/>
                             <field name="aot_from"/>
                             <field name="aot_to"/>
@@ -27,6 +28,7 @@
                 <tree string="Overtime Setting">
                     <field name="branch_id"/>
                     <field name="name"/>
+                    <field name="mandays" string="Total Hari kerja"/>
                     <field name="type"/>
                     <field name="aot_from" />
                     <field name="aot_to" />
