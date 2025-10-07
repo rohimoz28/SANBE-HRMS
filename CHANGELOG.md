@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.196-2025w41.5 (2025-10-07)
+
+- f3e9b08 [FEAT]TMS : revisi feor
+
+
 ## v0.0.194-2025w41.3 (2025-10-06)
 
 - aa4c18e [IMP] TMS : Penyesuaian Domain & Hak Akses Menu Overtime Request
