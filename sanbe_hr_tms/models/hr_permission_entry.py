@@ -81,8 +81,10 @@ class HRPermissionEntry(models.Model):
     leave_used = fields.Float('Leave Used', compute='_compute_permission_type', store=True)
     total_leave_balance = fields.Float('Total Leave Balance', compute='_compute_permission_type', store=True)
     remaining_leave = fields.Float('Remaining Leave', compute='_compute_permission_type', store=True)
+    is_half_day = fields.Boolean('Cuti Setengah Hari', default=False)
+    permission_type_code = fields.Char('Permission Code', related='permission_type_id.code')
 
-    @api.depends('permission_type_id', 'permission_date_from', 'permission_date_To')
+    @api.depends('permission_type_id', 'permission_date_from', 'permission_date_To','time_days')
     def _compute_permission_type(self):
         for rec in self:
             if rec.permission_type_id:
@@ -123,7 +125,7 @@ class HRPermissionEntry(models.Model):
             else:
                 record.leave_allocation_id = False
 
-    @api.depends('permission_date_from','permission_date_To')
+    @api.depends('permission_date_from','permission_date_To','is_half_day')
     def _get_days_duration(self):
         date_format = "%Y-%m-%d"
         for rec in self:
@@ -133,7 +135,7 @@ class HRPermissionEntry(models.Model):
                 tgl1 = datetime.strptime(ganti1, date_format)
                 tgl2 = datetime.strptime(ganti2, date_format)
                 total_days = (tgl1 - tgl2).days
-                rec.time_days = total_days + 1
+                rec.time_days = 0.5 if rec.is_half_day else total_days + 1
                 #rec.time_days = (tgl1 - tgl2).days
             else:
                 rec.time_days = 0
