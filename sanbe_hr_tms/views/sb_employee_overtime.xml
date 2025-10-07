@@ -30,6 +30,7 @@
                     <field name="aot_total" optional="show"/>
                     <field name="salary_allowance_total" optional="show"/>
                     <field name="aot_salary_percentage" optional="show"/>
+                    <field name="periode_id" optional="hide"/> 
                 </tree>
             </field>
         </record>

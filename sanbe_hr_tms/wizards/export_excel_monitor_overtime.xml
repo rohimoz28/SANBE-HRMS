@@ -10,7 +10,10 @@
                 <form string="Monitoring Overtime" options="{'no_close': True}">
                     <sheet>
                         <group>
+                            <field name="periode_id" options="{'no_create': True}" required="True"/>
                             <field name="area_id" no_close="1" readonly="0" options="{'no_create': True, 'no_close': True}"/>
+                            <field name="branch_id" options="{'no_create': True}"/>
+                            <field name="department_id" options="{'no_create': True}"/>
                         </group>
                         <!-- <field name="allowed_department_ids" invisible="1" /> -->
                     </sheet>
