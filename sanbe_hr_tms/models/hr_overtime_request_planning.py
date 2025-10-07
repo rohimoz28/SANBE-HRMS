@@ -403,9 +403,9 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             rec.state = 'approved_plan_pm'
     
-    def btn_plan_hcm(self):
-        for rec in self:
-            rec.state = 'approved_plan_hcm'
+    # def btn_plan_hcm(self):
+    #     for rec in self:
+    #         rec.state = 'approved_plan_hcm'
 
     # def btn_print_pdf(self):        
     #     if not self.hr_ot_planning_ids:
