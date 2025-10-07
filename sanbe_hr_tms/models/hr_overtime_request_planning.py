@@ -407,15 +407,42 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             rec.state = 'approved_plan_hcm'
 
-    def btn_print_pdf(self):        
+    # def btn_print_pdf(self):        
+    #     if not self.hr_ot_planning_ids:
+    #         raise UserError("Tidak ada data perencanaan lembur untuk dicetak.")
+    #     first_line = self.hr_ot_planning_ids[0]
+    #     self.time_from_char = '%02d:%02d' % (int(first_line.approve_time_from), int((first_line.approve_time_from % 1) * 60))
+    #     self.time_to_char = '%02d:%02d' % (int(first_line.approve_time_to), int((first_line.approve_time_to % 1) * 60)) 
+    #     self.default_ot_hours = first_line.default_ot_hours
+    #     return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
+
+    def btn_print_pdf(self):
         if not self.hr_ot_planning_ids:
             raise UserError("Tidak ada data perencanaan lembur untuk dicetak.")
-        first_line = self.hr_ot_planning_ids[0]
-        self.time_from_char = '%02d:%02d' % (int(first_line.approve_time_from), int((first_line.approve_time_from % 1) * 60))
-        self.time_to_char = '%02d:%02d' % (int(first_line.approve_time_to), int((first_line.approve_time_to % 1) * 60)) 
-        self.default_ot_hours = first_line.default_ot_hours
-        return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)   
 
+        first_line = self.hr_ot_planning_ids[0]
+
+        self.time_from_char = '%02d:%02d' % (
+            int(first_line.approve_time_from),
+            int((first_line.approve_time_from % 1) * 60)
+        )
+        self.time_to_char = '%02d:%02d' % (
+            int(first_line.approve_time_to),
+            int((first_line.approve_time_to % 1) * 60)
+        )
+        self.default_ot_hours = first_line.default_ot_hours
+
+        # Tambah context baru sebelum pemanggilan
+        new_context = dict(self.env.context)
+        new_context['printed_at'] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+
+        # Panggil report_action dengan context baru menggunakan with_context
+        return self.with_context(new_context).env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)
+
+
+        # return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self, data=data)
+
+    
     
     def get_dynamic_numbers(self):
         """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
