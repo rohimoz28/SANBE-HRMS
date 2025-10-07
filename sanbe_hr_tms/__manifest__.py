@@ -85,6 +85,7 @@
         'views/sb_employee_overtime.xml',
         'views/sb_leave_master.xml',
         'views/sb_leave_allocation_request.xml',
+        'views/sb_view_overtime_review.xml',
         'views/tms_menu.xml',
         'db/calculate_tms.sql',
         'db/function_calculate_leave_alloc.sql',
