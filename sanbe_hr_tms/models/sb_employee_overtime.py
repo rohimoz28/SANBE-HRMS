@@ -7,6 +7,7 @@ class SbEmployeeOvertime(models.Model):
     area_id = fields.Many2one('res.territory', string='Area')
     branch_id = fields.Many2one('res.branch', string='Unit')
     department_id = fields.Many2one('hr.department', string='Department')
+    period_id = fields.Many2one('hr.opening.closing', string='Period ID', index=True)
     nik = fields.Char('NIK')
     employee_id = fields.Many2one('hr.employee', string='Nama')
     attendee_total = fields.Integer('Jumlah Hari Hadir')
