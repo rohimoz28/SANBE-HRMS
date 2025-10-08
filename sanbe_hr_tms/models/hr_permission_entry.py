@@ -31,10 +31,10 @@ class HRPermissionEntry(models.Model):
             allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
             allrecs.alldepartment = [Command.set(allbranch.ids)]
 
-    area_id = fields.Many2one('res.territory', string='Area', index=True, domain=lambda self: [('id', '=', self.env.user.area.id)])
+    area_id = fields.Many2one('res.territory', string='Area', index=True, domain=lambda self: [('id', '=', self.env.user.area.id)], default=lambda self: self._default_area_id())
     branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
     alldepartment = fields.Many2many('hr.department', 'hr_employeelist_schedule_rel', string='All Department', compute='_isi_department_branch', store=False)
-    branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True,)
+    branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]", tracking=True, default=lambda self: self._default_branch_id())
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
     employee_id = fields.Many2one('hr.employee', domain="[('area','=',area_id),('branch_id','=',branch_id)]", string='Employee Name', index=True, tracking=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
@@ -58,11 +58,27 @@ class HRPermissionEntry(models.Model):
     doc_number = fields.Char('Ref Doc Number')
     trans_number = fields.Char('Transaction Number', default=lambda self: _('New'),
                                copy=False, readonly=True, tracking=True, requirement=True)
-    approve1_by = fields.Many2one('hr.employee', string='Approved 1 By')
+    approve1_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_approve_ids',
+        store=False,
+        default=[]
+    )
+    approve1_by = fields.Many2one('sb.view.hr.employee', string='Approved 1 By', domain="[('id', 'in', approve1_ids)]")
     approve1_job_title = fields.Many2one('hr.job', string='Job Title')
-    approve2_by = fields.Many2one('hr.employee', string='Approved 2 By')
+    approve2_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_approve_ids',
+        store=False
+    )
+    approve2_by = fields.Many2one('sb.view.hr.employee', string='Approved 2 By', domain="[('id', 'in', approve2_ids)]")
     approve2_job_title = fields.Many2one('hr.job', string='Job Title')
-    approve3_by = fields.Many2one('hr.employee', string='Approved 3 By')
+    approve3_ids = fields.Many2many(
+        'sb.view.hr.employee',
+        compute='_compute_approve_ids',
+        store=False
+    )
+    approve3_by = fields.Many2one('sb.view.hr.employee', string='Approved 3 By', domain="[('id', 'in', approve3_ids)]")
     approve3_job_title = fields.Many2one('hr.job', string='Job Title')
     is_holiday = fields.Boolean('Is Holiday', default=False)
     leave_id = fields.Many2one('hr.leave', string='Leaves ID',index=True)
@@ -83,6 +99,35 @@ class HRPermissionEntry(models.Model):
     remaining_leave = fields.Float('Remaining Leave', compute='_compute_permission_type', store=True)
     is_half_day = fields.Boolean('Cuti Setengah Hari', default=False)
     permission_type_code = fields.Char('Permission Code', related='permission_type_id.code')
+
+    @api.depends('branch_id','department_id')
+    def _compute_approve_ids(self):
+        for rec in self:
+            approve1_allowed_ids = []
+            approve2_allowed_ids = []
+            approve3_allowed_ids = []
+            if rec.branch_id and rec.department_id:
+                approval_setting = self.env['hr.approval.setting'].sudo().search([
+                    ('branch_id', '=', rec.branch_id.id),
+                    ('department_id', '=', rec.department_id.id),
+                    ('model', '=', 'permission_entry')
+                ], limit=1)
+                if approval_setting:
+                    approve1_allowed_ids = approval_setting.approval1_ids.ids
+                    approve2_allowed_ids = approval_setting.approval2_ids.ids
+                    approve3_allowed_ids = approval_setting.approval3_ids.ids
+                    
+            rec.approve1_ids = [(6, 0, approve1_allowed_ids)]
+            rec.approve2_ids = [(6, 0, approve2_allowed_ids)]
+            rec.approve3_ids = [(6, 0, approve3_allowed_ids)]
+
+    def _default_area_id(self):
+        emp = self.env.user.employee_id
+        return emp.area.id if emp and emp.area else False
+
+    def _default_branch_id(self):
+        emp = self.env.user.employee_id
+        return emp.branch_id.id if emp and emp.branch_id else False
 
     @api.depends('permission_type_id', 'permission_date_from', 'permission_date_To','time_days')
     def _compute_permission_type(self):
@@ -235,26 +280,26 @@ class HRPermissionEntry(models.Model):
             else:
                 allrec.is_approved = False
 
-    @api.onchange('approve1_by')
-    def set_approved_status1(self):
-        for allrec in self:
-            if not allrec.approve1_by:
-               return
-            allrec.approve1_job_title = allrec.approve1_by.job_id.id
+    # @api.onchange('approve1_by')
+    # def set_approved_status1(self):
+    #     for allrec in self:
+    #         if not allrec.approve1_by:
+    #            return
+    #         allrec.approve1_job_title = allrec.approve1_by.job_id.id
             
-    @api.onchange('approve2_by')
-    def set_approved_status2(self):
-        for allrec in self:
-            if not allrec.approve2_by:
-               return
-            allrec.approve2_job_title = allrec.approve2_by.job_id.id
+    # @api.onchange('approve2_by')
+    # def set_approved_status2(self):
+    #     for allrec in self:
+    #         if not allrec.approve2_by:
+    #            return
+    #         allrec.approve2_job_title = allrec.approve2_by.job_id.id
             
-    @api.onchange('approve3_by')
-    def set_approved_status3(self):
-            for allrec in self:
-                if not allrec.approve3_by:
-                    return
-                allrec.approve3_job_title = allrec.approve3_by.job_id.id
+    # @api.onchange('approve3_by')
+    # def set_approved_status3(self):
+    #         for allrec in self:
+    #             if not allrec.approve3_by:
+    #                 return
+    #             allrec.approve3_job_title = allrec.approve3_by.job_id.id
 
     def btn_approve(self):
         for rec in self:
