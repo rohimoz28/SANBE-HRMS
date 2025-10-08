@@ -21,7 +21,7 @@ class ExportExcelMonitorOvertime(models.TransientModel):
     department_id =  fields.Many2one('hr.department',
                                      domain=lambda self: self._get_departments_domain(),
                                      options="{'no_create': True}")
-    periode_id = fields.Many2one('hr.opening.closing', string='Periode', index=True)
+    period_id = fields.Many2one('hr.opening.closing', string='Period ID', index=True)
 
     def _get_areas_domain(self):
         """
@@ -50,8 +50,8 @@ class ExportExcelMonitorOvertime(models.TransientModel):
             employee_overtime_domain.append(('branch_id', '=', self.branch_id.id))
         if self.department_id:
             employee_overtime_domain.append(('department_id', '=', self.department_id.id))
-        if self.periode_id:
-            employee_overtime_domain.append(('periode_id', '=', self.periode_id.id))
+        if self.period_id:
+            employee_overtime_domain.append(('period_id', '=', self.period_id.id))
         
         employee_overtime = self.env['sb.employee.overtime'].search(employee_overtime_domain)
 
