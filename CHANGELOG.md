@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.0.204-2025w41.13 (2025-10-08)
+
+- 50c5553 [IMP] TMS : Penyesuaian Logika 'Cuti Setengah Hari' pada Permission Entry
+
+
+## v0.0.202-2025w41.11 (2025-10-08)
+
+- 6d9e212 [FIX]TMS : Revisi Nama Fields
+
+
+## v0.0.200-2025w41.9 (2025-10-08)
+
+- 3a3fece [IMP]TMS : remove approval plan by hcm at ot request
+
+
 ## v0.0.198-2025w41.7 (2025-10-07)
 
 - 6625125 [FEAT] TMS : Create Menu 'Overtime Review'
