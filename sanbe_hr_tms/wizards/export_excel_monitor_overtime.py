@@ -14,6 +14,14 @@ class ExportExcelMonitorOvertime(models.TransientModel):
                               string='Area',
                               domain=lambda self: self._get_areas_domain(),
                               options="{'no_create': True}")
+    branch_id = fields.Many2one('res.branch',
+                                string='Business Unit',
+                                domain=lambda self: self._get_branches_domain(),
+                                options="{'no_create': True}")
+    department_id =  fields.Many2one('hr.department',
+                                     domain=lambda self: self._get_departments_domain(),
+                                     options="{'no_create': True}")
+    period_id = fields.Many2one('hr.opening.closing', string='Period ID', index=True)
 
     def _get_areas_domain(self):
         """
@@ -23,6 +31,14 @@ class ExportExcelMonitorOvertime(models.TransientModel):
         area_ids = self.env['sb.employee.overtime'].search([]).mapped('area_id.id')
         return [('id', 'in', area_ids)]
     
+    def _get_branches_domain(self):
+        branch_ids = self.env['sb.employee.overtime'].search([]).mapped('branch_id.id')
+        return [('id', 'in', branch_ids)]
+    
+    def _get_departments_domain(self):
+        department_ids = self.env['sb.employee.overtime'].search([]).mapped('department_id.id')
+        return [('id', 'in', department_ids)]
+    
     def button_export_xlsx(self):
         self.ensure_one()
 
@@ -30,6 +46,12 @@ class ExportExcelMonitorOvertime(models.TransientModel):
 
         if self.area_id:
             employee_overtime_domain.append(('area_id', '=', self.area_id.id))
+        if self.branch_id:
+            employee_overtime_domain.append(('branch_id', '=', self.branch_id.id))
+        if self.department_id:
+            employee_overtime_domain.append(('department_id', '=', self.department_id.id))
+        if self.period_id:
+            employee_overtime_domain.append(('period_id', '=', self.period_id.id))
         
         employee_overtime = self.env['sb.employee.overtime'].search(employee_overtime_domain)
 
