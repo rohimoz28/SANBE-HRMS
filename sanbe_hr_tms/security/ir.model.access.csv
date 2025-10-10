@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_tmsentry_users,access.hr.tmsentry.users,model_hr_tmsentry_summary,base.group_user,1,1,1,1
+access_hr_tmsentry_users_staff,access.hr.tmsentry.users.staff,model_hr_tmsentry_summary,sanbe_hr_tms.module_sub_category_tmsentry_summary_staff,1,1,0,0
+access_hr_tmsentry_users_supervisor,access.hr.tmsentry.users.supervisor,model_hr_tmsentry_summary,sanbe_hr_tms.module_sub_category_tmsentry_summary_supervisor,1,1,1,0
+access_hr_tmsentry_users_manager,access.hr.tmsentry.users.manager,model_hr_tmsentry_summary,sanbe_hr_tms.module_sub_category_tmsentry_summary_manager,1,1,1,1
 
 access_hr_employeegroup_users,access.hr.employeegroup.users,model_hr_empgroup,base.group_user,1,1,1,1
 access_hr_employeegroup_details_users,access.hr.employeegroup.details.users,model_hr_empgroup_details,base.group_user,1,1,1,1
@@ -7,8 +9,6 @@ access_hr_employeegroup_details_users,access.hr.employeegroup.details.users,mode
 access_hr_overtime_request_planning_users,access.hr.request.planning.users,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_user,1,0,1,0
 access_hr_overtime_request_planning_approval,access.hr.request.planning.approval,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_approval,1,1,0,0
 access_hr_overtime_request_planning_manager,access.hr.request.planning.manager,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_manager,1,1,1,1
-
-
 
 access_hr_overtime_employees_users,access.hr.overtime.employees.users,model_hr_overtime_employees,base.group_user,1,1,1,1
 
@@ -19,17 +19,28 @@ access_sb_adjusment_request_details,access.sb.adjusment.request.details,model_sb
 
 access_hr_tms_processing_users,access.hr.tms.processing.users,model_hr_tms_processing,base.group_user,1,1,1,1
 access_hr_machine_setting_users,access.hr.machine.setting.users,model_hr_machine_setting,base.group_user,1,1,1,1
-access_hr_machine_details,access.hr.machine.details.users,model_hr_machine_details,base.group_user,1,1,1,1
+
+access_hr_machine_details_staff,access.hr.machine.details.users.staff,model_hr_machine_details,sanbe_hr_tms.module_sub_category_mapping_pincode_staff,1,1,0,0
+access_hr_machine_details_supervisor,access.hr.machine.details.supervisor.users,model_hr_machine_details,sanbe_hr_tms.module_sub_category_mapping_pincode_supervisor,1,1,1,0
+access_hr_machine_details_manager,access.hr.machine.details.users.manager,model_hr_machine_details,sanbe_hr_tms.module_sub_category_mapping_pincode_manager,1,1,1,1
+
+
 access_data_dbf,access.data.dbf.users,model_data_dbf,base.group_user,1,1,1,1
 access_data_dbf_checkinout,access.data.dbf.checkinout.users,model_data_dbf_checkinout,base.group_user,1,1,1,1
 access_data_dbf_userinfo,access.data.dbf.userinfo.users,model_data_dbf_userinfo,base.group_user,1,1,1,1
 access_hr_tmsentry_premicode_users,access.hr.tmsentry.premicode.users,model_hr_tmsentry_premicode,base.group_user,1,1,1,1
 access_hr_tms_entry_users,access.hr.tms.entry.users,model_hr_tms_entry,base.group_user,1,1,1,1
 access_sb_tms_tmsentry_details,access.sb.tms.tmsentry.details,model_sb_tms_tmsentry_details,base.group_user,1,1,1,1
-access_hr_tmsentry_sync_users,access.hr.tmsentry.sync.users,model_hr_tms_syncmachine,base.group_user,1,1,1,1
+
+access_hr_tmsentry_sync_staff,access.hr.tmsentry.sync.staff,model_hr_tms_syncmachine,sanbe_hr_tms.module_sub_category_upload_data_absen_staff,1,1,0,0
+access_hr_tmsentry_sync_supervisor,access.hr.tmsentry.sync.supervisor,model_hr_tms_syncmachine,sanbe_hr_tms.module_sub_category_upload_data_absen_supervisor,1,1,1,0
+access_hr_tmsentry_sync_manager,access.hr.tmsentry.sync.manager,model_hr_tms_syncmachine,sanbe_hr_tms.module_sub_category_upload_data_absen_manager,1,1,1,1
+
 access_hr_tms_entry_import_users,access.hr.tms.entry.import.users,model_hr_tmsimport_wiz,base.group_user,1,1,1,1
 
-access_data_upload_attendance,access.data.upload.attendance,model_data_upload_attendance,base.group_user,1,1,1,1
+access_data_upload_attendance_staff,access.data.upload.attendance.staff,model_data_upload_attendance,sanbe_hr_tms.module_sub_category_data_absen_staff,1,1,0,0
+access_data_upload_attendance_supervisor,access.data.upload.attendance.supervisor,model_data_upload_attendance,sanbe_hr_tms.module_sub_category_data_absen_supervisor,1,1,1,0
+access_data_upload_attendance_manager,access.data.upload.attendance.manager,model_data_upload_attendance,sanbe_hr_tms.module_sub_category_data_absen_manager,1,1,1,1
 
 access_sb_incomplete_attendances,access.sb.incomplete.attendances,model_sb_incomplete_attendances,base.group_user,1,1,1,1
 access_sb_incomplete_attendance_details,access.sb.incomplete.attendance.details,model_sb_incomplete_attendance_details,base.group_user,1,1,1,1
@@ -39,23 +50,39 @@ access_sb_attendance_correction_details,access.sb.attendance.correction.details,
 
 access_sb_employee_attendance,access.sb.employee.attendance,model_sb_employee_attendance,base.group_user,1,1,1,1
 
-access_sb_overtime_attendance,access.sb.overtime.attendance,model_sb_overtime_attendance,base.group_user,1,1,1,1
+access_sb_overtime_attendance_staff,access.sb.overtime.attendance.staff,model_sb_overtime_attendance,sanbe_hr_tms.module_sub_category_request_vs_realization_staff,1,1,0,0
+access_sb_overtime_attendance_supervisor,access.sb.overtime.attendance.supervisor,model_sb_overtime_attendance,sanbe_hr_tms.module_sub_category_request_vs_realization_supervisor,1,1,1,0
+access_sb_overtime_attendance_manager,access.sb.overtime.attendance.manager,model_sb_overtime_attendance,sanbe_hr_tms.module_sub_category_request_vs_realization_manager,1,1,1,1
 
-access_sb_overtime_bundling,access.sb.overtime.bundling,model_sb_overtime_bundling,base.group_user,1,1,1,1
+access_sb_overtime_bundling_staff,access.sb.overtime.bundling.staff,model_sb_overtime_bundling,sanbe_hr_tms.module_sub_category_overtime_bundling_staff,1,1,0,0
+access_sb_overtime_bundling_supervisor,access.sb.overtime.bundling.supervisor,model_sb_overtime_bundling,sanbe_hr_tms.module_sub_category_overtime_bundling_supervisor,1,1,1,0
+access_sb_overtime_bundling_manager,access.sb.overtime.bundling.manager,model_sb_overtime_bundling,sanbe_hr_tms.module_sub_category_overtime_bundling_manager,1,1,1,1
 
-access_hr_workingday_users,access.hr.working.days.users,model_hr_working_days,base.group_user,1,1,1,1
+access_hr_workingday_staff,access.hr.working.days.staff,model_hr_working_days,sanbe_hr_tms.module_sub_category_working_day_staff,1,1,0,0
+access_hr_workingday_supervisor,access.hr.working.days.supervisor,model_hr_working_days,sanbe_hr_tms.module_sub_category_working_day_supervisor,1,1,1,0
+access_hr_workingday_manager,access.hr.working.days.manager,model_hr_working_days,sanbe_hr_tms.module_sub_category_working_day_manager,1,1,1,1
 
 access_hr_hr.overtime.setting,access.hr.overtime.setting,model_hr_overtime_setting,base.group_user,1,1,1,0
 
-access_sb_allowances,access.sb.allowances,model_sb_allowances,base.group_user,1,1,1,1
+access_sb_allowances_staff,access.sb.allowances.staff,model_sb_allowances,sanbe_hr_tms.module_sub_category_allowance_setting_staff,1,1,0,0
+access_sb_allowances_supervisor,access.sb.allowances.supervisor,model_sb_allowances,sanbe_hr_tms.module_sub_category_allowance_setting_supervisor,1,1,1,0
+access_sb_allowances_manager,access.sb.allowances.manager,model_sb_allowances,sanbe_hr_tms.module_sub_category_allowance_setting_manager,1,1,1,1
 access_sb_allowance_details,access.sb.allowance.details,model_sb_allowance_details,base.group_user,1,1,1,1
+
 access_hr_allowance_list_users,access.hr.allowance.list.users,model_hr_allowance_list,base.group_user,1,1,1,1
+
+access_sb_leave_allocation_staff,access.sb.leave.allocation.staff,model_sb_leave_allocation,sanbe_hr_tms.module_sub_category_leave_allocation_staff,1,1,0,0
+access_sb_leave_allocation_supervisor,access.sb.leave.allocation.supervisor,model_sb_leave_allocation,sanbe_hr_tms.module_sub_category_leave_allocation_supervisor,1,1,1,0
 access_sb_leave_allocation_manager,access.sb.leave.allocation.manager,model_sb_leave_allocation,sanbe_hr_tms.module_sub_category_leave_allocation_manager,1,1,1,1
+
 access_hr_open_closing_periode_staff,access.hr.open.closing.periode.staff,model_hr_opening_closing,sanbe_hr_tms.group_processing_period_staff,1,1,0,0
 access_hr_open_closing_periode_supervisor,access.hr.open.closing.periode.supervisor,model_hr_opening_closing,sanbe_hr_tms.group_processing_period_supervisor,1,1,1,0
 access_hr_open_closing_periode_manager,access.hr.open.closing.periode.manager,model_hr_opening_closing,sanbe_hr_tms.group_processing_period_manager,1,1,1,1
 
-access_hr_holidays_status_employee,hr_holidays.hr.leave.type,model_hr_leave_type,base.group_user,1,1,1,1
+access_hr_holidays_status_employee_staff,hr_holidays.hr.leave.type.staff,model_hr_leave_type,sanbe_hr_tms.module_sub_category_permission_code_staff,1,1,0,0
+access_hr_holidays_status_employee_supervisor,hr_holidays.hr.leave.type.supervisor,model_hr_leave_type,sanbe_hr_tms.module_sub_category_permission_code_supervisor,1,1,1,0
+access_hr_holidays_status_employee_manager,hr_holidays.hr.leave.type.manager,model_hr_leave_type,sanbe_hr_tms.module_sub_category_permission_code_manager,1,1,1,1
+
 hr_holidays.access_hr_holidays_status_manager,hr.holidays.status manager,model_hr_leave_type,base.group_user,1,1,1,1
 hr_holidays.access_mail_activity_type_holidays_manager,mail.activity.type.holidays.manager,mail.model_mail_activity_type,base.group_user,1,1,1,1
 hr_holidays.access_hr_leave_mandatory_day_manager,access_hr_holidays_mandatory_day_manager,hr_holidays.model_hr_leave_mandatory_day,base.group_user,1,1,1,1
@@ -79,18 +106,35 @@ access_export_excel_ot_attendance,sanbe_hr_tms.export.excel.ot.attendance,model_
 access_export_excel_ot_bundling,sanbe_hr_tms.export.excel.ot.bundling,model_export_excel_ot_bundling,base.group_user,1,1,1,1
 access_value_group,sanbe_hr_tms.value.group,model_value_group,base.group_user,1,1,1,1
 
-access_stg_transform_absent,access.stg.transform.absent,model_stg_transform_absent,base.group_user,1,1,1,1
-access_sb_employee_overtime,access.sb.employee.overtime,model_sb_employee_overtime,base.group_user,1,1,1,1
+access_stg_transform_absent_staff,access.stg.transform.absent.staff,model_stg_transform_absent,sanbe_hr_tms.module_sub_category_data_absen_staging_staff,1,1,0,0
+access_stg_transform_absent_supervisor,access.stg.transform.supervisor.absent,model_stg_transform_absent,sanbe_hr_tms.module_sub_category_data_absen_staging_supervisor,1,1,1,0
+access_stg_transform_absent_manager,access.stg.transform.absent.manager,model_stg_transform_absent,sanbe_hr_tms.module_sub_category_data_absen_staging_manager,1,1,1,1
+
+access_sb_employee_overtime_staff,access.sb.employee.overtime.staff,model_sb_employee_overtime,sanbe_hr_tms.module_sub_category_monitor_overtime_staff,1,1,0,0
+access_sb_employee_overtime_supervisor,access.sb.employee.overtime.supervisor,model_sb_employee_overtime,sanbe_hr_tms.module_sub_category_monitor_overtime_supervisor,1,1,1,0
+access_sb_employee_overtime_manager,access.sb.employee.overtime.manager,model_sb_employee_overtime,sanbe_hr_tms.module_sub_category_monitor_overtime_manager,1,1,1,1
 
 access_export_excel_monitor_ot,sanbe_hr_tms.export.excel.monitor.ot,model_export_excel_monitor_ot,base.group_user,1,1,1,1
-access_sb_leave_master,access.sb.leave.master,model_sb_leave_master,base.group_user,1,1,1,1
 
-access_sb_leave_allocation_request,access.sb.leave.allocation.request,model_sb_leave_allocation_request,base.group_user,1,1,1,1
+access_sb_leave_master_staff,access.sb.leave.master.staff,model_sb_leave_master,sanbe_hr_tms.module_sub_category_master_cuti_staff,1,1,0,0
+access_sb_leave_master_supervisor,access.sb.leave.master.supervisor,model_sb_leave_master,sanbe_hr_tms.module_sub_category_master_cuti_supervisor,1,1,1,0
+access_sb_leave_master_manager,access.sb.leave.master.manager,model_sb_leave_master,sanbe_hr_tms.module_sub_category_master_cuti_manager,1,1,1,1
+
+access_sb_leave_allocation_request_staff,access.sb.leave.allocation.request.staff,model_sb_leave_allocation_request,sanbe_hr_tms.module_sub_category_leave_allocation_request_staff,1,1,0,0
+access_sb_leave_allocation_request_supervisor,access.sb.leave.allocation.request.supervisor,model_sb_leave_allocation_request,sanbe_hr_tms.module_sub_category_leave_allocation_request_supervisor,1,1,1,0
+access_sb_leave_allocation_request_manager,access.sb.leave.allocation.request.manager,model_sb_leave_allocation_request,sanbe_hr_tms.module_sub_category_leave_allocation_request_manager,1,1,1,1
+
 access_sb_leave_tracking,access.sb.leave.tracking,model_sb_leave_tracking,base.group_user,1,1,1,1
 access_sb_leave_benefit,access.sb.leave.benefit,model_sb_leave_benefit,base.group_user,1,1,1,1
 
 access_report_ot_meals_rute_wiz,access_report_ot_meals_rute_wiz,model_report_ot_meals_rute_wiz,base.group_user,1,1,1,1
 
-access_sb_break_master,access.sb.break.master,model_sb_break_master,base.group_user,1,1,1,1
-access_sb_route_master,access.sb.route.master,model_sb_route_master,base.group_user,1,1,1,1
+access_sb_break_master_staff,access.sb.break.master.staff,model_sb_break_master,sanbe_hr_tms.module_sub_category_break_time_setting_staff,1,1,0,0
+access_sb_break_master_supervisor,access.sb.break.master.supervisor,model_sb_break_master,sanbe_hr_tms.module_sub_category_break_time_setting_supervisor,1,1,1,0
+access_sb_break_master_manager,access.sb.break.master.manager,model_sb_break_master,sanbe_hr_tms.module_sub_category_break_time_setting_manager,1,1,1,1
+
+access_sb_route_master_staff,access.sb.route.master.staff,model_sb_route_master,sanbe_hr_tms.module_sub_category_master_rute_staff,1,1,0,0
+access_sb_route_master_supervisor,access.sb.route.master.supervisor,model_sb_route_master,sanbe_hr_tms.module_sub_category_master_rute_supervisor,1,1,1,0
+access_sb_route_master_manager,access.sb.route.master.manager,model_sb_route_master,sanbe_hr_tms.module_sub_category_master_rute_manager,1,1,1,1
+
 access_sb_view_overtime_review,access.sb.view.overtime.review,model_sb_view_overtime_review,sanbe_hr_tms.module_sub_category_overtime_review_hrd,1,0,0,0
