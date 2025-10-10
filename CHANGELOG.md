@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.207-2025w41.16 (2025-10-10)
+
+- 5dad085 [IMP] TMS : Improvement Permission Entry Form
+
+
 ## v0.0.204-2025w41.13 (2025-10-08)
 
 - 50c5553 [IMP] TMS : Penyesuaian Logika 'Cuti Setengah Hari' pada Permission Entry
