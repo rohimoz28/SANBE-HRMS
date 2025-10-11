@@ -29,7 +29,7 @@
                                     <field name="plann_date_from" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="plann_date_to" widget="date" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="ot_plann_from" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="ot_plann_to" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <field name="ot_plann_to" string="Req Time To" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="approve_time_from" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="approve_time_to" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                 </group>
