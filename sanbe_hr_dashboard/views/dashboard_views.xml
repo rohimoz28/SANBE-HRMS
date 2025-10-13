@@ -13,16 +13,16 @@
         <!-- Client action record for Dashboard -->
         <record id="hr_action_dashboard" model="ir.actions.client">
             <field name="name">Dashboard</field>
-            <field name="tag">hr_dashboard</field>
+            <field name="tag">default_discuss</field>
         </record>
 
         <!--  Menu record for dashboard  -->
         <menuitem
-                id="hrms_dashboard_menu_root"
-                name="Dashboard"
+                id="hrms_dashboard_menu_discuss"
+                name="Discuss"
                 action="mail.action_discuss"
                 web_icon="hrms_dashboard,static/description/icon.png"
-                sequence="-100"
+                sequence="-9999"
                 groups="base.group_user" />
     </data>
 </odoo>
