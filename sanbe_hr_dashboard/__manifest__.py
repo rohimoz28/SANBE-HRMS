@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'sanbe_hr_resignation', 'web'],
+    'depends': ['base', 'sale', 'sanbe_hr_resignation', 'web', 'mail'],
 
     # always loaded
     'data': [
@@ -28,7 +28,7 @@ Long description of module's purpose
         'views/templates.xml',
         'views/dashboard_views.xml',
         'views/dashboard_menu_views.xml',
-        'views/menu_items.xml',
+        # 'views/menu_items.xml',
     ],
     'assets': {
         'web.assets_backend': [
@@ -36,9 +36,9 @@ Long description of module's purpose
             ('include', 'web/static/lib/Chart/Chart.js'),
             #('include', '/web/static/lib/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js'),
             # Then load your module's files
-            '/sanbe_hr_dashboard/static/src/js/chart_renderer.js',
-            '/sanbe_hr_dashboard/static/src/js/sanbe_dashboard.js',
-            '/sanbe_hr_dashboard/static/src/xml/sanbe_dashboard.xml',
+            # '/sanbe_hr_dashboard/static/src/js/chart_renderer.js',
+            # '/sanbe_hr_dashboard/static/src/js/sanbe_dashboard.js',
+            # '/sanbe_hr_dashboard/static/src/xml/sanbe_dashboard.xml',
             # '/sanbe_hr_dashboard/static/src/js/sanbe_dashboard2.js',
             # '/sanbe_hr_dashboard/static/src/xml/sanbe_dashboard2.xml',
         ],
