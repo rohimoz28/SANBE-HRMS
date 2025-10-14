@@ -18,7 +18,7 @@
     <record id="overtime_request_report" model="ir.actions.report">
       <field name="name">Overtime Request form Report</field>
       <field name="model">hr.overtime.planning</field>
-      <field name="report_type">qweb-pdf</field>
+      <field name="report_type">qweb-html</field>
       <field name="report_name">sanbe_hr_tms.overtime_request_template</field>
       <field name="report_file">sanbe_hr_tms.overtime_request_template</field>
       <field name="print_report_name">'%s' % (object.name)</field>
@@ -145,36 +145,41 @@
               <t t-set="company" t-value="res_company"/>
               <table>
                 <tr>
-                  <td style="width: 25%; text-align:  left; border: none; padding: 0;">
+                  <td style="width: 22%; text-align:  left; border: none; padding: 0;">
                     <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-width: 200px; margin-left: 20px;"/>
                   </td>
-                  <td class="title" style="width: 60%; text-align: center; border: none; padding: 0;">
-                    <span style="font-size: 16pt; font-weight: bold; font-family: 'Times New Roman';">
+                  <td class="title" style="width: 55%; text-align: center; border: none; padding: 0; vertical-align: top;">
+                    <span style="font-size: 14pt; font-family: 'Times New Roman';">
     FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION <br/>
  (FEOR)
                     </span>
                   </td>
-                  <td style="width: 15%; text-align: right; border: none; padding: 0;">
-                    <table class="metadata-table" style="font-size: 11px; line-height: 1.5; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
+                  <td style="width: 23%; text-align: right; border: none; padding: 0;">
+                    <table class="metadata-table" style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1.5; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
                       <tbody >
                         <tr>
-                          <td class="label-cell" style="padding-right: 5px; text-align: left;">No.</td>
-                          <td class="value-cell" style="text-align: left;">: COHR/FOR/041</td>
+                          <td class="label-cell" style="padding-right: 2px; text-align: left;">No.</td>
+                          <t t-if="doc.area_id and doc.area_id.id == 2">
+                            <td class="value-cell" style="text-align: left;">: HRD-NS/FOR/LG/033</td>
+                          </t>
+                          <t t-else="">
+                            <td class="value-cell" style="text-align: left;">: COHR/FOR/041</td>
+                          </t>
                         </tr>
                         <tr>
-                          <td class="label-cell" style="padding-right: 5px; text-align: left; border: none;">Revision</td>
+                          <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">Revision</td>
                           <td class="value-cell" style="text-align: left;">: 01</td>
                         </tr>
                         <tr>
-                          <td class="label-cell" style="padding-right: 5px; text-align: left; border: none;">Effective Date</td>
+                          <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">Effective Date</td>
                           <td class="value-cell" style="text-align: left;">: 16 May 2022</td>
                         </tr>
                         <tr>
-                          <td class="label-cell" style="padding-right: 5px; text-align: left; border: none;">Next Review Date</td>
+                          <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">Next Review Date</td>
                           <td class="value-cell" style="text-align: left;">: 16 May 2025</td>
                         </tr>
                         <tr>
-                          <td class="label-cell" style="padding-right: 5px; text-align: left; border: none;">Page</td>
+                          <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">Page</td>
                           <td class="value-cell" style="text-align: left; ">: 1 of 1</td>
                         </tr>
                       </tbody>
@@ -194,19 +199,24 @@
                       border-collapse: collapse;
                       width: 100%;
                       page-break-inside: auto;
+                      font-size: 8pt;
                     }
                     thead {
                       display: table-header-group;
+                      font-size: 8pt;
                     }
                     tfoot {
                       display: table-footer-group;
+                      font-size: 8pt;
                     }
                     tr {
                       page-break-inside: avoid;
                       page-break-after: auto;
+                      font-size: 8pt;
                     }
                     td {
                       border: 1px solid #000;
+                      font-size: 8pt;
                       padding: 4px;
                     }
                   </style>
@@ -355,7 +365,7 @@
                       </td>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style="font-size: 8pt; font-family: 'Arial';">
                     <t t-set="counter" t-value="0"/>
                     <t t-foreach="doc.hr_ot_planning_ids" t-as="employee" t-foreach-index="index">
                       <t t-set="counter" t-value="counter + 1"/>
@@ -399,7 +409,7 @@
                       </tr>
                     </t>
                   </tbody>
-                  <tr valign="top">
+                  <tr valign="top" style="font-size: 8pt; font-family: 'Arial';">
                     <td colspan="9" style="border: 1px solid #000000; padding: 4px;">CC : 1. HRD 2. CA</td>
                     <td colspan="2" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
 			                Verified by HRD :
@@ -414,7 +424,7 @@
                   </tr>
                 </table>
                 <br/>
-                <div>
+                <div style="font-size: 7pt; font-family: 'Arial';">
                   <em>* Yang mempropose dan menyetujui harus paham, rasional dan bertanggung jawab dalam penentuan jumlah jam dan orang yang dibutuhkan untuk pekerjaan tersebut.</em>
                   <br/>
                   <em>** Form realisasi yang sudah diisi dan diverifikasi / ttd harus masuk ke bagian HRD maksimal 1 (satu) hari setelah pelaksanaan overtime (maksimal jam 09:00).</em>
@@ -571,7 +581,6 @@ Plant Manager / HOQ</td>
     </div>
   </t>
   <div class="footer">
-    <!-- Garis  Horizontal -->
     <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
     <div style="float: left;">
       <span style="font-size: 10px; font-style: italic;">
@@ -581,12 +590,12 @@ Plant Manager / HOQ</td>
     <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
         Printed By : <span t-esc="user.name"></span> on <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d-%m-%Y %H:%M:%S')"/>
     </div>
-              <!-- Disable remark Page at footer -->
     <br/>
-    <!-- <div style="font-size: 10px; font-style: italic; text-align: center;">
-      Page <span class="page"/> of <span class="topage"/>
-    </div> -->
   </div>
+<!-- <div style="font-size: 10px; font-style: italic; text-align: center;">
+      Page <span class="page"/> of <span class="topage"/>
+    </div>-->
+            
 </t>
 </t>
 </t>
