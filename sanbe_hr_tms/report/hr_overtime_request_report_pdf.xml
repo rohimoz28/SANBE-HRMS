@@ -179,7 +179,7 @@
                           </tr>
                           <tr>
                             <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">Page</td>
-                            <td class="value-cell" style="text-align: left; ">: <span class="page"></span> of <span class="topage"></span></td>
+                            <td class="value-cell" style="text-align: left; ">: <span t-esc="doc._get_pdf_page_info()"/></td>
                           </tr>
                         </tbody>
                       </table>

@@ -510,6 +510,10 @@ class HREmpOvertimeRequest(models.Model):
                     else:
                         line.ot_type = rec.ot_type
                         line.meals = False
+
+    def _get_pdf_page_info(self):
+        # Method ini akan dipanggil oleh QWeb
+        return f"Page {self.env.context.get('pdf_page_current', 1)} of {self.env.context.get('pdf_page_total', 1)}"
             
     
 class HREmpOvertimeRequestEmployee(models.Model):
