@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.212-2025w42.2 (2025-10-14)
+
+- f7883aa [FIX] TMS : restructure user access TMS - leave_allocation break_time_setting leave_master allowance_staff route_master report_ot hr_leave_type permission_code leave_alloc_req employee_overtime stg_transform_absent overtime_bundling overtime_attn data_upload_attn tmsentry_sync machine_detail tmsentry_summary from ir.model.access.csv
+
+
 ## v0.0.209-2025w41.18 (2025-10-11)
 
 - a41fa0c [FIX] TMS : Perbaikan Label 'Req Time From' - 'Req Time To'
