@@ -16,35 +16,40 @@ class HrApprovalSetting(models.Model):
         relation='approval_setting_view_employee_rel_1',
         column1='setting_id',   
         column2='employee_id',
-        string='Approval 1'
+        string='Approval 1',
+        domain=[('state', '=', 'approved'), ('active', '=', True)]
     )
     approval2_ids = fields.Many2many(
         comodel_name='sb.view.hr.employee',
         relation='approval_setting_view_employee_rel_2',
         column1='setting_id',
         column2='employee_id',
-        string='Approval 2'
+        string='Approval 2',
+        domain=[('state', '=', 'approved'), ('active', '=', True)]
     )
     approval3_ids = fields.Many2many(
         comodel_name='sb.view.hr.employee',
         relation='approval_setting_view_employee_rel_3',
         column1='setting_id',
         column2='employee_id',
-        string='Approval 3'
+        string='Approval 3',
+        domain=[('state', '=', 'approved'), ('active', '=', True)]
     )
     approval4_ids = fields.Many2many(
         comodel_name='sb.view.hr.employee',
         relation='approval_setting_view_employee_rel_4',
         column1='setting_id',
         column2='employee_id',
-        string='Approval 4'
+        string='Approval 4',
+        domain=[('state', '=', 'approved'), ('active', '=', True)]
     )
     approval5_ids = fields.Many2many(
         comodel_name='sb.view.hr.employee',
         relation='approval_setting_view_employee_rel_5',
         column1='setting_id',
         column2='employee_id',
-        string='Approval 5'
+        string='Approval 5',
+        domain=[('state', '=', 'approved'), ('active', '=', True)]
     )
     desc = fields.Text('Description')
 
