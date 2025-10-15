@@ -512,7 +512,16 @@ class HREmpOvertimeRequest(models.Model):
                         line.meals = False
 
     def _get_pdf_page_info(self):
-        # Method ini akan dipanggil oleh QWeb
+        """
+        Menghasilkan informasi penomoran halaman untuk template QWeb PDF.
+
+        Method ini digunakan sebagai alternatif dari fitur 'page of' bawaan Odoo
+        yang hanya dapat berfungsi dalam tag <header> atau <footer>. Dengan method
+        ini, penomoran halaman dapat ditampilkan di bagian body/content manapun.
+
+        Returns:
+            str: Format 'Page X of Y' (contoh: 'Page 1 of 3')
+        """
         return f"Page {self.env.context.get('pdf_page_current', 1)} of {self.env.context.get('pdf_page_total', 1)}"
             
     
