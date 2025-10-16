@@ -221,7 +221,7 @@
                                                                     style="padding-right: 2px; text-align: left; border: none;">
                                                                     Revision
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 01
+                                                                <td class="value-cell" style="text-align: left;">: 00
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -229,9 +229,7 @@
                                                                     style="padding-right: 2px; text-align: left; border: none;">
                                                                     Effective Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 16
-                                                                    May
-                                                                    2022
+                                                                <td class="value-cell" style="text-align: left;">: 02 Jan 2024
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -239,9 +237,7 @@
                                                                     style="padding-right: 2px; text-align: left; border: none;">
                                                                     Next Review Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 16
-                                                                    May
-                                                                    2025
+                                                                <td class="value-cell" style="text-align: left;">: 02 Jan 2027
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -534,6 +530,20 @@
                                         <div style="page-break-after: always;"></div>
                                     </t>
                                 </t>
+                            </div>
+                            <div class="footer">
+                                <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                                <div style="float: left;">
+                                    <span style="font-size: 10px; font-style: italic;">
+                                        <span t-field="doc.branch_id.name"></span>
+                                        \LAN\Release\SanbeU2\HRD\NS\FOR\HRD-NS.FOR.LG.033 - Form Employee Overtime Request an Realization (FEOR) - R00.doc
+                                    </span>
+                                </div>
+                                <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
+                                    Printed By : <span t-esc="user.name"></span> on
+                                    <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d-%m-%Y %H:%M:%S')"/>
+                                </div>
+                                <br/>
                             </div>
                         </t>
                         <t t-else="">
@@ -1073,22 +1083,22 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="footer">
+                                <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                                <div style="float: left;">
+                                    <span style="font-size: 10px; font-style: italic;">
+                                        <span t-field="doc.branch_id.name"></span>
+                                        | Release | Corporate | COHR | COHR.FOR.041 - Form Employee Overtime Request And
+                                        Realization (FEOR) - R01.doc
+                                    </span>
+                                </div>
+                                <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
+                                    Printed By : <span t-esc="user.name"></span> on
+                                    <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d-%m-%Y %H:%M:%S')"/>
+                                </div>
+                                <br/>
+                            </div>
                         </t>
-                        <div class="footer">
-                            <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
-                            <div style="float: left;">
-                                <span style="font-size: 10px; font-style: italic;">
-                                    <span t-field="doc.branch_id.name"></span>
-                                    | Release | Corporate | COHR | COHR.FOR.041 - Form Employee Overtime Request And
-                                    Realization (FEOR) - R01.doc
-                                </span>
-                            </div>
-                            <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
-                                Printed By : <span t-esc="user.name"></span> on
-                                <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d-%m-%Y %H:%M:%S')"/>
-                            </div>
-                            <br/>
-                        </div>
                     </t>
                 </t>
             </t>
