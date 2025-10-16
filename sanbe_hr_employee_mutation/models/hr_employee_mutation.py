@@ -19,7 +19,7 @@ class HrEmployeeMutation(models.Model):
         current_uid = context.get('uid')
         user = self.env['res.users'].browse(current_uid)
         for allrecs in self:
-            allemps = self.env['hr.employee'].sudo().search(
+            allemps = self.env['sb.view.hr.employee'].sudo().search(
                 [('state', '=', 'approved'), ('active', '=', True), ('branch_id', '=', user.branch_id.id)])
             allrecs.emp_nos_ids = [Command.set(allemps.ids)]
 
@@ -43,10 +43,10 @@ class HrEmployeeMutation(models.Model):
                                   store=False, tracking=True)
     idpeg = fields.Char('Employee ID', tracking=True)
     emp_no = fields.Char('Employee No', tracking=True)
-    emp_nos_ids = fields.Many2many('hr.employee', 'res_emp_nos_rel', string='AllEmpNos',
+    emp_nos_ids = fields.Many2many('sb.view.hr.employee', 'res_emp_nos_rel', string='AllEmpNos',
                                    compute='_isi_emps', store=False, tracking=True)
-    emp_nos = fields.Many2one('hr.employee', string='Employee Name', index=True, domain="[('id','in',emp_nos_ids)]", tracking=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee ID', index=True, tracking=True)
+    emp_nos = fields.Many2one('sb.view.hr.employee', string='Employee Name', index=True, domain="[('id','in',emp_nos_ids)]", tracking=True)
+    employee_id = fields.Many2one('sb.view.hr.employee', string='Employee ID', index=True, tracking=True)
     employee_name = fields.Char(string='Employee Name', tracking=True)
     emp_id_name = fields.Char(string='Employee Number', compute='_compute_emp_display', tracking=True)
     nik = fields.Char('NIK', tracking=True)
@@ -156,9 +156,9 @@ class HrEmployeeMutation(models.Model):
     service_birthday = fields.Date('Date of Birth')
     service_name = fields.Char('Name')
     service_previous_name = fields.Char('Previous Name')
-    service_parent_id = fields.Many2one('hr.employee', string='Immadiate Superior')
+    service_parent_id = fields.Many2one('sb.view.hr.employee', string='Immadiate Superior')
     service_work_unit = fields.Char('Work Unit')
-    service_coach_id = fields.Many2one('hr.employee', string='Work Unit Superior')
+    service_coach_id = fields.Many2one('sb.view.hr.employee', string='Work Unit Superior')
 
     _sql_constraints = [
         (
@@ -188,64 +188,65 @@ class HrEmployeeMutation(models.Model):
                                                      'trx_number': self.name,
                                                      'doc_number': self.letter_no,
                                                      })
+        employee = self.env['hr.employee'].sudo().search([('id', '=', self.employee_id.id)], limit=1)
         # mylogs = self.env['hr.employment.log'].sudo().search(
         #    [('employee_id', '=', self.employee_id.id), ('service_type', '=',self.service_type)])
         # if mylogs:
         #    for alllogs in mylogs:
         #        if alllogs.end_date == False:
         #            alllogs.write({'end_date': self.service_start})
-        # self.employee_id.write({'state': 'hold'})
-        if self.service_area.id != self.employee_id.area.id:
-            self.employee_id.write({'area': self.service_area.id})
+        # employee.write({'state': 'hold'})
+        if self.service_area.id != self.employee_id.area_id.id:
+            employee.write({'area': self.service_area.id})
         if self.service_bisnisunit.id != self.employee_id.branch_id.id:
             query = """ update hr_employee set branch_id = %s where id = %s"""
             
             self.env.cr.execute((query)%(self.service_bisnisunit.id,self.employee_id.id))
             # self.employee_id.sudo().write({'branch_id': self.service_bisnisunit.id})
         if self.service_departmentid.id != self.employee_id.department_id.id:
-            self.employee_id.write({'department_id': self.service_departmentid.id})
+            employee.write({'department_id': self.service_departmentid.id})
         if self.service_jobstatus != self.employee_id.job_status:
-            self.employee_id.write({'job_status': self.service_jobstatus})
+            employee.write({'job_status': self.service_jobstatus})
         if self.service_employementstatus != self.employee_id.emp_status:
-            self.employee_id.write({'emp_status': self.service_employementstatus})
+            employee.write({'emp_status': self.service_employementstatus})
         if self.service_jobtitle.id != self.employee_id.job_id.id:
-            self.employee_id.write({'job_id': self.service_jobtitle.id})
+            employee.write({'job_id': self.service_jobtitle.id})
         if self.service_empgroup1 != self.employee_id.employee_group1:
-            self.employee_id.write({'employee_group1': self.service_empgroup1})
+            employee.write({'employee_group1': self.service_empgroup1})
         # if self.service_employee_id != self.employee_id.employee_id:
-        #    self.employee_id.write({'employee_id': self.service_employee_id})
+        #    employee.write({'employee_id': self.service_employee_id})
         if self.service_no_npwp != self.employee_id.no_npwp:
-            self.employee_id.write({'no_npwp': self.service_no_npwp})
+            employee.write({'no_npwp': self.service_no_npwp})
         if self.service_no_ktp != self.employee_id.no_ktp:
-            self.employee_id.write({'no_ktp': self.service_no_ktp})
+            employee.write({'no_ktp': self.service_no_ktp})
         if self.service_identification != self.employee_id.identification_id:
-            self.employee_id.write({'identification_id': self.service_identification})
+            employee.write({'identification_id': self.service_identification})
         if self.service_nik != self.employee_id.nik:
-            self.employee_id.write({'nik_lama': self.employee_id.nik})
-            self.employee_id.write({'nik': self.service_nik})
+            employee.write({'nik_lama': self.employee_id.nik})
+            employee.write({'nik': self.service_nik})
             self.nik_lama = self.employee_id.nik_lama
             self.service_nik_lama = self.employee_id.nik_lama
             self.nik = self.employee_id.nik
         if self.service_name != self.employee_id.name:
-            self.employee_id.write({'name': self.service_name})
+            employee.write({'name': self.service_name})
         if self.service_parent_id != self.employee_id.parent_id.id:
-            self.employee_id.write({'parent_id': self.service_parent_id.id})
+            employee.write({'parent_id': self.service_parent_id.id})
         if self.join_date != self.employee_id.join_date:
-            self.employee_id.write({'join_date': self.join_date})
+            employee.write({'join_date': self.join_date})
         if self.marital != self.employee_id.marital:
-            self.employee_id.write({'marital': self.marital})
+            employee.write({'marital': self.marital})
         if self.service_employee_levels != self.employee_id.employee_levels:
-            self.employee_id.write({'employee_levels': self.service_employee_levels})
+            employee.write({'employee_levels': self.service_employee_levels})
         if self.service_birthday != self.employee_id.birthday:
-            self.employee_id.write({'birthday': self.service_birthday})
+            employee.write({'birthday': self.service_birthday})
         if self.service_work_unit != self.employee_id.work_unit:
-            self.employee_id.write({'work_unit': self.service_work_unit})
+            employee.write({'work_unit': self.service_work_unit})
         if self.service_coach_id != self.employee_id.coach_id.id:
-            self.employee_id.write({'coach_id': self.service_coach_id.id})
+            employee.write({'coach_id': self.service_coach_id.id})
         # if self.service_nik_lama != self.employee_id.nik_lama:
-        #     self.employee_id.write({'nik_lama': self.service_nik_lama})
+        #     employee.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
-        self.employee_id.write({'state': 'approved'})
+        employee.write({'state': 'approved'})
 
         return self.write({'state': 'approved',
                            'service_status': 'Approved'})
@@ -271,13 +272,14 @@ class HrEmployeeMutation(models.Model):
             if record.emp_status_to_pam and record.employee_id:
                 record.service_employementstatus = self.emp_status_to_pam
                 new_emp_status_id = self.env['hr.emp.status'].sudo().search([('emp_status', '=', self.emp_status_to_pam),('status', '=', False)])
+                employee = self.env['hr.employee'].sudo().search([('id', '=', self.employee_id.id)], limit=1)
                 if new_emp_status_id:
-                    record.employee_id.sudo().write({'emp_status_id': new_emp_status_id.id})
+                    employee.sudo().write({'emp_status_id': new_emp_status_id.id})
 
     def write(self, vals):
         res = super(HrEmployeeMutation, self).write(vals)
         for rec in self:
-            myemp = rec.emp_nos
+            myemp = self.env['hr.employee'].sudo().search([('id', '=', rec.emp_nos.id)], limit=1)
             if rec.state == 'draft':
                 # myemp.write({'state': 'hold'})
                 pass
@@ -303,7 +305,7 @@ class HrEmployeeMutation(models.Model):
         for existing in self:
             if not existing.emp_nos:
                 return
-            myemp = existing.emp_nos
+            myemp = self.env['hr.employee'].sudo().search([('id', '=', existing.emp_nos.id)], limit=1)
             empgroup = existing.emp_nos.employee_group1
             if existing.state == 'draft':
                 # myemp.write({'state': 'hold'})
