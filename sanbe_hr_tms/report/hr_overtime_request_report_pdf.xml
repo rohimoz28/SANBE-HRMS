@@ -636,6 +636,8 @@
                                     <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
 
                                     <table class="header-table" style="width: 100%; border-collapse: collapse;">
+                                        <t t-if="page_num + 1 == 1">
+
                                         <thead>
                                             <tr>
                                                 <th class="header1" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">Section</th>
@@ -685,6 +687,7 @@
                                                     Plant Manager / HOQ</td>
                         </tr>
                     </tbody>
+                    </t>
                 </table>
 
                 <br/>
@@ -793,9 +796,8 @@
                                         Realization (FEOR) - R01.doc
                 </span>
             </div>
-            <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
-                                    Printed By : <span t-esc="user.name"></span> on
-                <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d-%m-%Y %H:%M:%S')"/>
+            <div style="float: right; text-align: left; font-size: 10px; font-style: italic;">
+                <span class="page"></span> of <span class="topage"></span>
             </div>
             <br/>
         </div>
