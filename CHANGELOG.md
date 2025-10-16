@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.216-2025w42.6 (2025-10-16)
+
+- e0e7e53 [FIX] PAM : Penyesuaian Hak Akses Approval Lintas Branch (Cross Branch Approver)
+
+
 ## v0.0.214-2025w42.4 (2025-10-14)
 
 - 350516a [IMP] TMS : Bugfix temporary table on query calculate_tms.sql
