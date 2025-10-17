@@ -7,11 +7,12 @@
 #################################################################################
 
 from odoo import fields, models, api, _, Command
-from odoo.exceptions import ValidationError,UserError
+from odoo.exceptions import ValidationError, UserError
 from odoo.osv import expression
 import pytz
-from datetime import datetime,time, timedelta
+from datetime import datetime, time, timedelta
 import logging
+
 _logger = logging.getLogger(__name__)
 
 TMS_OVERTIME_STATE = [
@@ -65,29 +66,33 @@ class HREmpOvertimeRequest(models.Model):
             #     databranch.append(mybranch.id)
             # allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
             # allrecs.branch_ids = [Command.set(allbranch.ids)]
-            
-    @api.depends('area_id','branch_id')
+
+    @api.depends('area_id', 'branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
-            allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
-            allrecs.alldepartment =[Command.set(allbranch.ids)]
+            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id)])
+            allrecs.alldepartment = [Command.set(allbranch.ids)]
 
-    name = fields.Char('Planning Request',default=lambda self: _('New'),
-       copy=False, readonly=True, tracking=True, requirement=True)
+    name = fields.Char('Planning Request', default=lambda self: _('New'),
+                       copy=False, readonly=True, tracking=True, requirement=True)
     request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
-    area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area', index=True, required=True, default=lambda self: self._default_area_id())
+    area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area',
+                              index=True, required=True, default=lambda self: self._default_area_id())
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
                                   store=False)
 
-    branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]", default=lambda self: self._default_branch_id())
-    alldepartment = fields.Many2many('hr.department','hr_department_plan_ot_rel', string='All Department',compute='_isi_department_branch',store=False)
-    department_id = fields.Many2one('hr.department',domain="[('id','in',alldepartment)]",string='Sub Department', default=lambda self: self._default_department_id())
-    periode_from = fields.Date('Tanggal OT Dari',default=fields.Date.today)
-    periode_to = fields.Date('Tanggal OT Hingga',default=fields.Date.today)
-    approve1 = fields.Boolean('Supervisor Department',default=False)
-    approve2 = fields.Boolean('Manager Department',default=False)
-    approve3 = fields.Boolean('HCM Department',default=False)
-    approve4 = fields.Boolean('Plan Manager',default=False)
+    branch_id = fields.Many2one('res.branch', string='Business Unit', index=True, domain="[('id','in',branch_ids)]",
+                                default=lambda self: self._default_branch_id())
+    alldepartment = fields.Many2many('hr.department', 'hr_department_plan_ot_rel', string='All Department',
+                                     compute='_isi_department_branch', store=False)
+    department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department',
+                                    default=lambda self: self._default_department_id())
+    periode_from = fields.Date('Tanggal OT Dari', default=fields.Date.today)
+    periode_to = fields.Date('Tanggal OT Hingga', default=fields.Date.today)
+    approve1 = fields.Boolean('Supervisor Department', default=False)
+    approve2 = fields.Boolean('Manager Department', default=False)
+    approve3 = fields.Boolean('HCM Department', default=False)
+    approve4 = fields.Boolean('Plan Manager', default=False)
     state = fields.Selection(
         selection=TMS_OVERTIME_STATE,
         string="TMS Overtime Status",
@@ -95,12 +100,15 @@ class HREmpOvertimeRequest(models.Model):
         tracking=3,
         default='draft')
     # periode_id = fields.Many2one('hr.opening.closing',string='Period',index=True, required=True)
-    hr_ot_planning_ids = fields.One2many('hr.overtime.employees','planning_id',auto_join=True,index=True,required=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee',domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
+    hr_ot_planning_ids = fields.One2many('hr.overtime.employees', 'planning_id', auto_join=True, index=True,
+                                         required=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee',
+                                  domain="[('area','=',area_id),('branch_id','=',branch_id),('state','=','approved')]")
     company_id = fields.Many2one('res.company', string="Company Name", index=True)
     request_day_name = fields.Char('Request Day Name', compute='_compute_req_day_name', store=True)
-    count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees", store=True)
-    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')], string='Ot Type')
+    count_record_employees = fields.Integer(string="Total Employees on The List", compute="_compute_record_employees",
+                                            store=True)
+    ot_type = fields.Selection([('regular', 'Regular'), ('holiday', 'Holiday')], string='Ot Type')
     time_from_char = fields.Char()
     time_to_char = fields.Char()
     default_ot_hours = fields.Selection(
@@ -110,22 +118,22 @@ class HREmpOvertimeRequest(models.Model):
         'sb.view.hr.employee',
         string='Supervisor',
         domain="[('id', 'in', allowed_supervisor_ids)]"
-        )
+    )
     manager_id = fields.Many2one(
         'sb.view.hr.employee',
         string='Manager',
         domain="[('id', 'in', allowed_manager_ids)]"
-        )
+    )
     plan_manager_id = fields.Many2one(
         'sb.view.hr.employee',
         string='Plan Manager',
         domain="[('id', 'in', allowed_plan_manager_ids)]"
-        )
+    )
     hcm_id = fields.Many2one(
         'sb.view.hr.employee',
         string='HCM',
         domain="[('id', 'in', allowed_hcm_ids)]"
-        )
+    )
     is_supervisor_user = fields.Boolean(compute='_compute_is_supervisor_user')
     is_manager_user = fields.Boolean(compute='_compute_is_manager_user')
     is_plan_manager_user = fields.Boolean(compute='_compute_is_plan_manager_user')
@@ -155,7 +163,7 @@ class HREmpOvertimeRequest(models.Model):
         compute='_compute_allowed_approval_ids',
         store=False
     )
-    
+
     @api.depends('branch_id', 'department_id')
     def _compute_allowed_approval_ids(self):
         for rec in self:
@@ -174,13 +182,11 @@ class HREmpOvertimeRequest(models.Model):
                     mgr_allowed_ids = approval_setting.approval2_ids.ids
                     pm_allowed_ids = approval_setting.approval3_ids.ids
                     hcm_allowed_ids = approval_setting.approval4_ids.ids
-                    
+
             rec.allowed_supervisor_ids = [(6, 0, spv_allowed_ids)]
             rec.allowed_manager_ids = [(6, 0, mgr_allowed_ids)]
             rec.allowed_plan_manager_ids = [(6, 0, pm_allowed_ids)]
             rec.allowed_hcm_ids = [(6, 0, hcm_allowed_ids)]
-    
-    
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -291,9 +297,9 @@ class HREmpOvertimeRequest(models.Model):
         # now = datetime(today.year, today.month, today.day, 14, 0, 0, tzinfo=tz) # check current hour for validation (>= 14:00)
         if now.hour >= 14 and not self.env.user.has_group('sanbe_hr_tms.group_tms_overtime_create'):
             raise UserError(_("Pengajuan Overtime hanya bisa dilakukan jam 00:00 - 14:00"))
-        
+
         for vals in vals_list:
-            area=False
+            area = False
             if vals.get('name', _('New')) == _('New'):
                 area_id = vals.get('area_id')
                 branch_id = vals.get('branch_id')
@@ -327,7 +333,7 @@ class HREmpOvertimeRequest(models.Model):
                 # res = super(HREmpOvertimeRequest,self).create(vals_list)
 
         return super(HREmpOvertimeRequest, self).create(vals_list)
-    
+
     def btn_approved(self):
         for rec in self:
             rec.state = 'approved'
@@ -335,7 +341,7 @@ class HREmpOvertimeRequest(models.Model):
             #     rec.state = 'approved'
             # else:
             #     raise UserError('Approve Not Complete')
-    
+
     def btn_done(self):
         for rec in self:
             rec.state = 'done'
@@ -370,15 +376,15 @@ class HREmpOvertimeRequest(models.Model):
     # def btn_approved_mgr(self):
     #     for rec in self:
     #         rec.state = 'approved_mgr'
-            
+
     # def btn_approved_pmr(self):
     #     for rec in self:
     #         rec.state = 'approved_pmr'
-    
+
     def btn_reject(self):
         for rec in self:
             rec.state = 'reject'
-    
+
     def btn_backdraft(self):
         for rec in self:
             rec.state = 'draft'
@@ -386,23 +392,23 @@ class HREmpOvertimeRequest(models.Model):
     def btn_verification(self):
         for rec in self:
             rec.state = 'verification'
-    
+
     def btn_completed(self):
         for rec in self:
             rec.state = 'completed'
-    
+
     def btn_plan_spv(self):
         for rec in self:
             rec.state = 'approved_plan_spv'
-    
+
     def btn_plan_mgr(self):
         for rec in self:
             rec.state = 'approved_plan_mgr'
-    
+
     def btn_plan_pm(self):
         for rec in self:
             rec.state = 'approved_plan_pm'
-    
+
     # def btn_plan_hcm(self):
     #     for rec in self:
     #         rec.state = 'approved_plan_hcm'
@@ -439,21 +445,19 @@ class HREmpOvertimeRequest(models.Model):
         # Panggil report_action dengan context baru menggunakan with_context
         return self.with_context(new_context).env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)
 
-
         # return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self, data=data)
 
-    
-    
     def get_dynamic_numbers(self):
         """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
         numbering = {}
         counter = 1
         for record in self:
-            numbering[record.id] = list(range(counter, counter + len(record.hr_ot_planning_ids))) #perbaikan disini
+            numbering[record.id] = list(range(counter, counter + len(record.hr_ot_planning_ids)))  # perbaikan disini
             counter += len(record.hr_ot_planning_ids)
-        return numbering        
-    
-    # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
+        return numbering
+
+        # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
+
     # param default_modelname pada function, digunakan di field modelname pada wizard model hr.employeedepartment
     # fungsi default_modelname adalah untuk menentukan field hide / show pada form wizard pada view hr_employee_department_wizard_view_form
     def action_search_employee(self):
@@ -465,15 +469,15 @@ class HREmpOvertimeRequest(models.Model):
             'target': 'new',
             'domain': [('department_id', '=', self.department_id.id)],
             'context': {
-                'active_id': self.id, 
-                'fieldname':'plan_id', 
-                'default_modelname':'hr.overtime.planning', # param modelname
-                'default_area_id':self.area_id.id,
-                'default_branch_id':self.branch_id.id,
-                'default_plann_date_from':self.periode_from,
-                'default_plann_date_to':self.periode_to,
-                'default_department_id':self.department_id.id,
-                },
+                'active_id': self.id,
+                'fieldname': 'plan_id',
+                'default_modelname': 'hr.overtime.planning',  # param modelname
+                'default_area_id': self.area_id.id,
+                'default_branch_id': self.branch_id.id,
+                'default_plann_date_from': self.periode_from,
+                'default_plann_date_to': self.periode_to,
+                'default_department_id': self.department_id.id,
+            },
             'views': [[False, 'form']]
         }
 
@@ -504,14 +508,33 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             if rec.ot_type and rec.hr_ot_planning_ids:
                 for line in rec.hr_ot_planning_ids:
-                    if line.approve_time_to - line.approve_time_from >=4 and rec.ot_type == 'regular':
+                    if line.approve_time_to - line.approve_time_from >= 4 and rec.ot_type == 'regular':
                         line.ot_type = rec.ot_type
                         line.meals = True
                     else:
                         line.ot_type = rec.ot_type
                         line.meals = False
-            
-    
+
+    def _get_pdf_page_info(self, current_page=None, total_pages=None):
+        """
+        Menghasilkan informasi penomoran halaman untuk template QWeb PDF.
+
+        Method ini digunakan sebagai alternatif dari fitur 'page of' bawaan Odoo
+        yang hanya dapat berfungsi dalam tag <header> atau <footer>. Dengan method
+        ini, penomoran halaman dapat ditampilkan di bagian body/content manapun.
+
+        Returns:
+            str: Format 'Page X of Y' (contoh: 'Page 1 of 3')
+        """
+        if current_page is None:
+            current_page = self.env.context.get('pdf_page_current', 1)
+
+        if total_pages is None:
+            total_pages = self.env.context.get('pdf_page_total', 1)
+
+        return f"Page {current_page} of {total_pages}"
+
+
 class HREmpOvertimeRequestEmployee(models.Model):
     _name = "hr.overtime.employees"
     _description = 'HR Employee Overtime Planning Request Employee'
@@ -521,81 +544,89 @@ class HREmpOvertimeRequestEmployee(models.Model):
         for allrecs in self:
             databranch = []
             for allrec in allrecs.area_id.branch_id:
-                mybranch = self.env['res.branch'].search([('name','=', allrec.name)], limit=1)
+                mybranch = self.env['res.branch'].search([('name', '=', allrec.name)], limit=1)
                 databranch.append(mybranch.id)
-            allbranch = self.env['res.branch'].sudo().search([('id','in', databranch)])
-            allrecs.branch_ids =[Command.set(allbranch.ids)]
-            
+            allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
+            allrecs.branch_ids = [Command.set(allbranch.ids)]
+
     @api.depends('area_id', 'branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
             databranch = []
-            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id),('active','=',True)])
+            allbranch = self.env['hr.department'].sudo().search(
+                [('branch_id', '=', allrecs.branch_id.id), ('active', '=', True)])
             allrecs.alldepartment = [Command.set(allbranch.ids)]
-            
-    @api.depends('areah_id','branchh_id','departmenth_id')
+
+    @api.depends('areah_id', 'branchh_id', 'departmenth_id')
     def _ambil_employee(self):
         for rec in self:
             if rec.areah_id:
-                emp = self.env['hr.employee'].sudo().search([('area','=',rec.areah_id.id)])
+                emp = self.env['hr.employee'].sudo().search([('area', '=', rec.areah_id.id)])
                 if rec.branchh_id:
-                    emp = emp.filtered(lambda p:p.branch_id.id == rec.branchh_id.id)
+                    emp = emp.filtered(lambda p: p.branch_id.id == rec.branchh_id.id)
                 if rec.departmenth_id:
-                    emp = emp.filtered(lambda p:p.department_id.id == rec.departmenth_id.id)
+                    emp = emp.filtered(lambda p: p.department_id.id == rec.departmenth_id.id)
                 rec.employee_ids = [Command.set(emp.ids)]
 
-    branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch', compute='_isi_semua_branch', store=False)
-    alldepartment = fields.Many2many('hr.department','hr_employeelist_schedule_rel', string='All Department',compute='_isi_department_branch',store=False)
-    planning_id = fields.Many2one('hr.overtime.planning',string='HR Overtime Request Planning',index=True)
-    areah_id = fields.Many2one('res.territory', string='Area ID Header', related='planning_id.area_id',index=True, readonly=True)
-    area_id = fields.Many2one('res.territory', string='Area',index=True)
-    branchh_id = fields.Many2one('res.branch', related='planning_id.branch_id',string='Bisnis Unit Header', index=True, readonly=True)
-    departmenth_id = fields.Many2one('hr.department', related='planning_id.department_id',string='Department ID Header', index=True, readonly=True)
-    nik = fields.Char('Employee NIK',index=True)
-    employee_ids = fields.Many2many('hr.employee','ov_plan_emp_rel',compute='_ambil_employee',string='Employee Name',store=False)
-    employee_id = fields.Many2one('hr.employee',domain="[('id','in',employee_ids),('state','=','approved')]",string='Employee Name',index=True)
-    plann_date_from = fields.Date('Plan Date From',default=fields.Date.today)
-    plann_date_to = fields.Date('Plan Date To',default=fields.Date.today)
-    
+    branch_ids = fields.Many2many('res.branch', 'hr_permission_entry_rel', string='AllBranch',
+                                  compute='_isi_semua_branch', store=False)
+    alldepartment = fields.Many2many('hr.department', 'hr_employeelist_schedule_rel', string='All Department',
+                                     compute='_isi_department_branch', store=False)
+    planning_id = fields.Many2one('hr.overtime.planning', string='HR Overtime Request Planning', index=True)
+    areah_id = fields.Many2one('res.territory', string='Area ID Header', related='planning_id.area_id', index=True,
+                               readonly=True)
+    area_id = fields.Many2one('res.territory', string='Area', index=True)
+    branchh_id = fields.Many2one('res.branch', related='planning_id.branch_id', string='Bisnis Unit Header', index=True,
+                                 readonly=True)
+    departmenth_id = fields.Many2one('hr.department', related='planning_id.department_id',
+                                     string='Department ID Header', index=True, readonly=True)
+    nik = fields.Char('Employee NIK', index=True)
+    employee_ids = fields.Many2many('hr.employee', 'ov_plan_emp_rel', compute='_ambil_employee', string='Employee Name',
+                                    store=False)
+    employee_id = fields.Many2one('hr.employee', domain="[('id','in',employee_ids),('state','=','approved')]",
+                                  string='Employee Name', index=True)
+    plann_date_from = fields.Date('Plan Date From', default=fields.Date.today)
+    plann_date_to = fields.Date('Plan Date To', default=fields.Date.today)
+
     # penambahan field char untuk penulisan waktu dari field float agar lebih mudah
     ot_plann_from = fields.Float('OT Plan From')
     ot_plann_to = fields.Float('OT Plan To')
     ot_plann_from_char = fields.Char('OT Plan From (Str)', compute="convert_float_to_time", store=True)
     ot_plann_to_char = fields.Char('OT Plan To (Str)', compute="convert_float_to_time", store=True)
-    
+
     approve_time_from = fields.Float('OT App From')
     approve_time_to = fields.Float('OT App To')
     approve_time_from_char = fields.Char('OT App From (Str)', compute="convert_float_to_time", store=True)
     approve_time_to_char = fields.Char('OT App To (Str)', compute="convert_float_to_time", store=True)
-    
+
     realization_time_from = fields.Float('Realization Time From')
     realization_time_to = fields.Float('Realization Time To')
     realization_time_from_char = fields.Char('Realization Time From (Str)', compute="convert_float_to_time", store=True)
     realization_time_to_char = fields.Char('Realization Time To (Str)', compute="convert_float_to_time", store=True)
-    
+
     verify_time_from = fields.Float('Verify Time From')
     verify_time_to = fields.Float('Verify Time To')
     verify_time_from_char = fields.Char('Verify Time From (Str)', compute="convert_float_to_time", store=True)
     verify_time_to_char = fields.Char('Verify Time To (Str)', compute="convert_float_to_time", store=True)
-    
-    @api.depends('ot_plann_from','ot_plann_to',
-                 'approve_time_from','approve_time_to',
-                 'realization_time_from','realization_time_to',
-                 'verify_time_from','verify_time_to')
+
+    @api.depends('ot_plann_from', 'ot_plann_to',
+                 'approve_time_from', 'approve_time_to',
+                 'realization_time_from', 'realization_time_to',
+                 'verify_time_from', 'verify_time_to')
     def convert_float_to_time(self):
         for line in self:
             line.ot_plann_from_char = self.float_to_time_str(line.ot_plann_from)
             line.ot_plann_to_char = self.float_to_time_str(line.ot_plann_to)
-            
+
             line.approve_time_from_char = self.float_to_time_str(line.approve_time_from)
             line.approve_time_to_char = self.float_to_time_str(line.approve_time_to)
-            
+
             line.realization_time_from_char = self.float_to_time_str(line.realization_time_from)
             line.realization_time_to_char = self.float_to_time_str(line.realization_time_to)
-            
+
             line.verify_time_from_char = self.float_to_time_str(line.verify_time_from)
             line.verify_time_to_char = self.float_to_time_str(line.verify_time_to)
-    
+
     def float_to_time_str(self, float_time):
         if float_time is None:
             return ''
@@ -604,7 +635,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
         return f'{hours:02d}:{minutes:02d}'
 
     default_ot_hours = fields.Selection(
-        selection=  OT_HOURS_SELECTION,
+        selection=OT_HOURS_SELECTION,
         string='Default Jam OT')
     # -------------------------------------------------------
     machine = fields.Char('Machine')
@@ -616,8 +647,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     transport = fields.Boolean('Jemputan')
     meals = fields.Boolean(string='Meal Dine In')
     meals_cash = fields.Boolean(string='Meal Cash')
-    ot_type = fields.Selection([('regular','Regular'),('holiday','Holiday')],string='OT Type')
-    planning_req_name = fields.Char(string='Planning Request Name',required=False)
+    ot_type = fields.Selection([('regular', 'Regular'), ('holiday', 'Holiday')], string='OT Type')
+    planning_req_name = fields.Char(string='Planning Request Name', required=False)
     is_cancel = fields.Boolean('Cancel')
     state = fields.Selection(related='planning_id.state', string='state', store=True)
     output_realization = fields.Char('Output Realization')
@@ -626,31 +657,30 @@ class HREmpOvertimeRequestEmployee(models.Model):
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
     address_employee = fields.Char('Employee Address', compute="_get_employee_address", store=True)
     _sql_constraints = [
-        ('unique_employee_planning', 'unique(employee_id, planning_id)', 'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
+        ('unique_employee_planning', 'unique(employee_id, planning_id)',
+         'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
     ]
-    
+
     @api.depends('employee_id')
-    def _get_employee_address(self): 
+    def _get_employee_address(self):
         for rec in self:
             if rec.employee_id:
                 rec.address_employee = (
                         (rec.employee_id.private_street or '') + ' ' +
                         (rec.employee_id.private_street2 or '') + ' ' +
-                        (rec.employee_id.private_city or '')+ ' ' +
+                        (rec.employee_id.private_city or '') + ' ' +
                         (rec.employee_id.private_state_id.name or '')
-                    ).strip()
+                ).strip()
             else:
                 rec.address_employee = ''
 
-
-    @api.onchange('is_approved_mgr','is_cancel')
+    @api.onchange('is_approved_mgr', 'is_cancel')
     def _onchange_is_approved_mgr(self):
         for rec in self:
             if rec.is_approved_mgr == True:
                 rec.is_cancel = False
             if rec.is_cancel == True:
                 rec.is_approved_mgr = False
-
 
     @api.onchange('approve_time_from', 'approve_time_to', 'ot_type')
     def _onchange_meals(self):
@@ -664,30 +694,30 @@ class HREmpOvertimeRequestEmployee(models.Model):
     def rubah_employee(self):
         for rec in self:
             if rec.employee_id:
-                emp = self.env['hr.employee'].sudo().search([('id','=',rec.employee_id.id)],limit=1)
+                emp = self.env['hr.employee'].sudo().search([('id', '=', rec.employee_id.id)], limit=1)
                 if emp:
                     rec.nik = emp.nik
-                    #rec.branch_id = emp.branch_id.id
-                    #rec.department_id = emp.department_id.id
-                    #rec.area_id = emp.area.id
+                    # rec.branch_id = emp.branch_id.id
+                    # rec.department_id = emp.department_id.id
+                    # rec.area_id = emp.area.id
 
-    @api.constrains('nik','plann_date_from','plann_date_to')
+    @api.constrains('nik', 'plann_date_from', 'plann_date_to')
     def check_duplicate_record(self):
         for rec in self:
             '''Method to avoid duplicate overtime request'''
             duplicate_record = self.search([
                 ('planning_id', '!=', rec.planning_id.id),
-                ('nik','=',rec.nik),
+                ('nik', '=', rec.nik),
                 ('plann_date_from', '<=', rec.plann_date_to),
                 ('plann_date_to', '>=', rec.plann_date_from),
             ])
-            
-            if len(duplicate_record)> 0:
+
+            if len(duplicate_record) > 0:
                 name = ''
                 for line_ot in duplicate_record:
                     name += line_ot.planning_id.name + ', '
                 raise UserError(f"Duplicate record found for employee {rec.employee_id.name} in {name}. "
-                                      f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
+                                f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
 
     @api.model
     def create(self, vals):
@@ -700,7 +730,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
         res = super(HREmpOvertimeRequestEmployee, self).write(vals)
         self.check_duplicate_record()
         return res
-    
+
     def btn_view_overtime_details(self):
         return {
             'name': 'action_view_overtime_details',
