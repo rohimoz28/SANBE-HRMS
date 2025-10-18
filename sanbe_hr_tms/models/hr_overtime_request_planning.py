@@ -163,7 +163,28 @@ class HREmpOvertimeRequest(models.Model):
         compute='_compute_allowed_approval_ids',
         store=False
     )
-    
+
+    is_current_user = fields.Boolean('Is Current User', compute='_compute_is_current_user', store=False)
+    is_create_uid = fields.Char(compute='_compute_is_create_uid', string='Is Create UID')
+
+    # jika user yg saat ini login = create uid, is_create_uid = true
+    # digunakan untuk flag tombol verification
+    @api.depends('is_create_uid')
+    def _compute_is_create_uid(self):
+        for rec in self:
+            rec.is_create_uid = (rec.create_uid == self.env.user)
+
+    # cek user yg login saat ini
+    # jika user_id in (supervisor_id, manager_id, plan_manager_id, hcm_id, create_uid) maka is_current_user = True
+    # digunakan untuk kondisi invisible pada tombol print pdf
+    @api.depends('supervisor_id', 'manager_id', 'plan_manager_id', 'hcm_id', 'create_uid')
+    def _compute_is_current_user(self):
+        for rec in self:
+            allowed_user = [rec.supervisor_id.user_id, rec.manager_id.user_id, rec.plan_manager_id.user_id, rec.hcm_id.user_id, rec.create_uid]
+            user = self.env.user
+            rec.is_current_user = user in allowed_user
+            print(allowed_user)
+
     @api.depends('branch_id', 'department_id')
     def _compute_allowed_approval_ids(self):
         for rec in self:
