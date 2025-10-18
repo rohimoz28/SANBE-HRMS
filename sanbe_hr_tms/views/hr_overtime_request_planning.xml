@@ -9,18 +9,18 @@
                 <!-- <sheet> -->
                     <header>
                         <button string="Approved" name="btn_approved" type="object" class="oe_highlight" invisible="state != 'verification' or not is_hcm_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
-                        <button string="Draft" name="btn_backdraft" type="object" invisible="state in ('draft', 'approved_mgr', 'approved_pmr')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
+                        <button string="Draft" name="btn_backdraft" type="object" invisible="state not in ('approved_plan_spv','approved_plan_mgr','approved_plan_pm')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
                         <button string="Appv Plan SPV" name="btn_plan_spv" type="object" invisible="state != 'draft' or not is_supervisor_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
                         <button string="Appv Plan MGR" name="btn_plan_mgr" type="object" invisible="state != 'approved_plan_spv' or not is_manager_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
                         <button string="Appv Plan PM" name="btn_plan_pm" type="object" invisible="state != 'approved_plan_mgr' or not is_plan_manager_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
                         <!-- <button string="Appv Plan HCM" name="btn_plan_hcm" type="object" invisible="state != 'approved_plan_pm' or not is_hcm_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/> -->
                         <!-- <button string="Approved By Manager" name="btn_approved_mgr" type="object" class="oe_highlight" invisible="state != 'draft'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/> -->
                         <!-- <button string="Approved By Plan Manager" name="btn_approved_pmr" type="object" class="oe_highlight" invisible="state != 'approved_mgr'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/> -->
-                        <button string="Verification" name="btn_verification" type="object" class="oe_highlight" invisible="state not in ('approved_plan_hcm','approved_plan_pm') or not is_supervisor_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
+                        <button string="Verification" name="btn_verification" type="object" class="oe_highlight" invisible="state != 'approved_plan_pm' or not is_create_uid" />
                         <button string="Completed" name="btn_completed" type="object" class="oe_highlight" invisible="state != 'approved' or not is_hcm_user" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
                         <button string="Close" name="btn_done" type="object" class="oe_highlight" invisible="state != 'completed'" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
-                        <button string="Reject" name="btn_reject" type="object" class="btn-danger" invisible="state in ('reject', 'approved')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager"/>
-                        <button name="btn_print_pdf" type="object" class="btn-bf" invisible="state not in ['approved']" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager">
+                        <button string="Reject" name="btn_reject" type="object" class="btn-danger" invisible="state not in ('approved_plan_spv','approved_plan_mgr','approved_plan_pm')" groups="sanbe_hr_tms.module_sub_category_overtime_request_manager,sanbe_hr_tms.module_sub_category_overtime_request_approval"/>
+                        <button name="btn_print_pdf" type="object" class="btn-bf" invisible="state not in ['approved','completed','done','reject'] or not is_current_user" >
                             <i class="fa fa-print"/> Print PDF
                         </button>
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved_plan_spv,approved_plan_mgr,approved_plan_pm,verification,approved,completed,done,reject"/>
@@ -67,6 +67,9 @@
                             <field name="is_manager_user" invisible="1"/>
                             <field name="is_plan_manager_user" invisible="1"/>
                             <field name="is_hcm_user" invisible="1"/>
+                            <field name="create_uid" invisible="1"/>
+                            <field name="is_current_user" invisible="1"/>
+                            <field name="is_create_uid" invisible="1"/>
                         </group>
                         <group>
                             <field name="name" readonly="state in ['approved','verification','completed','done']"/>
@@ -124,8 +127,8 @@
                                     <field name="output_realization" optional="show"/>
                                     <field name="explanation_deviation" optional="show"/>
                                     <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
-                                    <field name="verify_time_from" widget="float_time" optional="show"/>
-                                    <field name="verify_time_to" widget="float_time" optional="show"/>
+                                    <field name="verify_time_from" widget="easy_timepicker" optional="show"/>
+                                    <field name="verify_time_to" widget="easy_timepicker" optional="show"/>
                                     <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="area_id"
                                            options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"

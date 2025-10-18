@@ -23,7 +23,7 @@ TMS_OVERTIME_STATE = [
     ('approved_plan_mgr', "Appv Plan By MGR"),
     ('approved_plan_pm', "Appv Plan By PM"),
     ('approved_plan_hcm', "Appv Plan By HCM"),
-    ('verification', 'Verif by SPV'),
+    ('verification', 'Verify by Admin'),
     ('approved', 'Approved By HCM'),
     ('completed', 'Completed HCM'),
     ('done', "Close"),
@@ -66,12 +66,12 @@ class HREmpOvertimeRequest(models.Model):
             #     databranch.append(mybranch.id)
             # allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
             # allrecs.branch_ids = [Command.set(allbranch.ids)]
-
-    @api.depends('area_id', 'branch_id')
+            
+    @api.depends('area_id','branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
-            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id)])
-            allrecs.alldepartment = [Command.set(allbranch.ids)]
+            allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
+            allrecs.alldepartment =[Command.set(allbranch.ids)]
 
     name = fields.Char('Planning Request', default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
@@ -163,7 +163,7 @@ class HREmpOvertimeRequest(models.Model):
         compute='_compute_allowed_approval_ids',
         store=False
     )
-
+    
     @api.depends('branch_id', 'department_id')
     def _compute_allowed_approval_ids(self):
         for rec in self:
@@ -187,6 +187,8 @@ class HREmpOvertimeRequest(models.Model):
             rec.allowed_manager_ids = [(6, 0, mgr_allowed_ids)]
             rec.allowed_plan_manager_ids = [(6, 0, pm_allowed_ids)]
             rec.allowed_hcm_ids = [(6, 0, hcm_allowed_ids)]
+    
+    
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -389,8 +391,15 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             rec.state = 'draft'
 
+    # check field details (output_realization,explanation_deviation,verify_time_from,verify_time_to) sebelum state = verification
     def btn_verification(self):
         for rec in self:
+            ot_details = rec.hr_ot_planning_ids
+            for details in ot_details:
+                if not details.output_realization or not details.explanation_deviation:
+                    raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
+                if not details.verify_time_from or not details.verify_time_to:
+                    raise ValidationError("Verify Time From/To wajib diisi sebelum melanjutkan ke tahap berikutnya.")
             rec.state = 'verification'
 
     def btn_completed(self):
@@ -445,8 +454,11 @@ class HREmpOvertimeRequest(models.Model):
         # Panggil report_action dengan context baru menggunakan with_context
         return self.with_context(new_context).env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)
 
+
         # return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self, data=data)
 
+    
+    
     def get_dynamic_numbers(self):
         """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
         numbering = {}
@@ -682,6 +694,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
             if rec.is_cancel == True:
                 rec.is_approved_mgr = False
 
+
     @api.onchange('approve_time_from', 'approve_time_to', 'ot_type')
     def _onchange_meals(self):
         for rec in self:
@@ -718,6 +731,23 @@ class HREmpOvertimeRequestEmployee(models.Model):
                     name += line_ot.planning_id.name + ', '
                 raise UserError(f"Duplicate record found for employee {rec.employee_id.name} in {name}. "
                                 f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
+
+    # constraint untuk create ot request backdate
+    # yang boleh create ot request backdate hanya user dengan group manager / user dengan flag create overtime backdate di personal admin = true
+    @api.constrains('plann_date_from','plann_date_to')
+    def _check_ot_backdate(self):
+        today = fields.Date.today()
+        user = self.env.user
+        is_manager = user.has_group('sanbe_hr_tms.module_sub_category_overtime_request_manager')
+        allow_by_employee = user.employee_id.is_ot_backdate
+        for rec in self:
+            if rec.plann_date_from < today or rec.plann_date_to < today:
+                if not (is_manager or allow_by_employee):
+                    raise ValidationError(
+                        "Unable to Create Overtime Document.\n"
+                        "The selected overtime date has already passed (back date).\n"
+                        "Please select a valid date or contact your manager for authorization."
+                    )
 
     @api.model
     def create(self, vals):
