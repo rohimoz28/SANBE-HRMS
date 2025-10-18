@@ -188,6 +188,7 @@
                                 <field name="allowance_meal" invisible="is_ts_user == True"/>
                                 <field name="allowance_night_shift"/>
                                 <field name="allowance_nightshift_amount" invisible="allowance_night_shift == False"/>
+                                <field name="is_ot_backdate" />
                             </group>
                             <group string="Remarks">
                                 <field name="attende_premie_amount" invisible="attende_premie == False" required="attende_premie == True"/>

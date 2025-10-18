@@ -22,7 +22,7 @@ TMS_OVERTIME_STATE = [
     ('approved_plan_mgr', "Appv Plan By MGR"),
     ('approved_plan_pm', "Appv Plan By PM"),
     ('approved_plan_hcm', "Appv Plan By HCM"),
-    ('verification', 'Verif by SPV'),
+    ('verification', 'Verify by Admin'),
     ('approved', 'Approved By HCM'),
     ('completed', 'Completed HCM'),
     ('done', "Close"),
@@ -155,6 +155,26 @@ class HREmpOvertimeRequest(models.Model):
         compute='_compute_allowed_approval_ids',
         store=False
     )
+    is_current_user = fields.Boolean('Is Current User', compute='_compute_is_current_user', store=False)
+    is_create_uid = fields.Char(compute='_compute_is_create_uid', string='Is Create UID')
+    
+    # jika user yg saat ini login = create uid, is_create_uid = true
+    # digunakan untuk flag tombol verification
+    @api.depends('is_create_uid')
+    def _compute_is_create_uid(self):
+        for rec in self:
+            rec.is_create_uid = (rec.create_uid == self.env.user)
+
+    # cek user yg login saat ini 
+    # jika user_id in (supervisor_id, manager_id, plan_manager_id, hcm_id, create_uid) maka is_current_user = True
+    # digunakan untuk kondisi invisible pada tombol print pdf
+    @api.depends('supervisor_id', 'manager_id', 'plan_manager_id', 'hcm_id', 'create_uid')
+    def _compute_is_current_user(self):
+        for rec in self:
+            allowed_user = [rec.supervisor_id.user_id, rec.manager_id.user_id, rec.plan_manager_id.user_id, rec.hcm_id.user_id, rec.create_uid]
+            user = self.env.user
+            rec.is_current_user = user in allowed_user
+            print(allowed_user)
     
     @api.depends('branch_id', 'department_id')
     def _compute_allowed_approval_ids(self):
@@ -383,8 +403,15 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             rec.state = 'draft'
 
+    # check field details (output_realization,explanation_deviation,verify_time_from,verify_time_to) sebelum state = verification
     def btn_verification(self):
         for rec in self:
+            ot_details = rec.hr_ot_planning_ids
+            for details in ot_details:
+                if not details.output_realization or not details.explanation_deviation:
+                    raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
+                if not details.verify_time_from or not details.verify_time_to:
+                    raise ValidationError("Verify Time From/To wajib diisi sebelum melanjutkan ke tahap berikutnya.")
             rec.state = 'verification'
     
     def btn_completed(self):
@@ -688,6 +715,23 @@ class HREmpOvertimeRequestEmployee(models.Model):
                     name += line_ot.planning_id.name + ', '
                 raise UserError(f"Duplicate record found for employee {rec.employee_id.name} in {name}. "
                                       f"Start date: {rec.plann_date_from} and end date: {rec.plann_date_to}.")
+
+    # constraint untuk create ot request backdate
+    # yang boleh create ot request backdate hanya user dengan group manager / user dengan flag create overtime backdate di personal admin = true
+    @api.constrains('plann_date_from','plann_date_to')
+    def _check_ot_backdate(self):
+        today = fields.Date.today()
+        user = self.env.user
+        is_manager = user.has_group('sanbe_hr_tms.module_sub_category_overtime_request_manager')
+        allow_by_employee = user.employee_id.is_ot_backdate
+        for rec in self:
+            if rec.plann_date_from < today or rec.plann_date_to < today:
+                if not (is_manager or allow_by_employee):
+                    raise ValidationError(
+                        "Unable to Create Overtime Document.\n"
+                        "The selected overtime date has already passed (back date).\n"
+                        "Please select a valid date or contact your manager for authorization."
+                    )
 
     @api.model
     def create(self, vals):
