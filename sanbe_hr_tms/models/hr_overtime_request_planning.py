@@ -489,8 +489,7 @@ class HREmpOvertimeRequest(models.Model):
             counter += len(record.hr_ot_planning_ids)
         return numbering
 
-        # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
-
+    # function dibawah digunakan pada view dengan id hr_tms_overtime_planning_form
     # param default_modelname pada function, digunakan di field modelname pada wizard model hr.employeedepartment
     # fungsi default_modelname adalah untuk menentukan field hide / show pada form wizard pada view hr_employee_department_wizard_view_form
     def action_search_employee(self):
