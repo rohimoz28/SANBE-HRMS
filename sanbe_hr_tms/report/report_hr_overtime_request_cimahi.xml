@@ -15,6 +15,7 @@
             <field name="dpi">90</field>
         </record>
 
+        <!-- Disable binding_model_id untuk hide button print report pada roda gigi -->
         <record id="overtime_request_report" model="ir.actions.report">
             <field name="name">Overtime Request form Report</field>
             <field name="model">hr.overtime.planning</field>
@@ -22,7 +23,7 @@
             <field name="report_name">sanbe_hr_tms.overtime_request_template</field>
             <field name="report_file">sanbe_hr_tms.overtime_request_template</field>
             <field name="print_report_name">'%s' % (object.name)</field>
-            <field name="binding_model_id" ref="model_hr_overtime_planning"></field>
+            <!-- <field name="binding_model_id" ref="model_hr_overtime_planning"></field> -->
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_overtime_request_report"/>
         </record>
@@ -145,7 +146,8 @@
                                 <!-- Hitung total halaman berdasarkan data employees -->
                                 <t t-set="total_employees" t-value="len(doc.hr_ot_planning_ids)"/>
                                 <t t-set="employees_per_page" t-value="14"/>
-                                <t t-set="total_pages" t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
+                                <t t-set="total_pages"
+                                   t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
 
                                 <!-- Loop untuk setiap halaman -->
                                 <t t-foreach="range(total_pages)" t-as="page_num">
@@ -184,51 +186,63 @@
                                         <thead>
                                             <!-- HEADER - Tampilkan di setiap halaman -->
                                             <tr>
-                                                <td colspan="3" style="width: 22%; text-align:  left; border: none; padding: 0;">
+                                                <td colspan="3"
+                                                    style="width: 22%; text-align:  left; border: none; padding: 0;">
                                                     <br/>
-                                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-width: 200px; margin-left: 20px;"/>
+                                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                                         alt="Logo" style="max-width: 200px; margin-left: 20px;"/>
                                                 </td>
 
-                                                <td colspan="7" class="title" style="width: 55%; text-align: center; border: none; padding: 0; vertical-align: top;">
+                                                <td colspan="7" class="title"
+                                                    style="width: 55%; text-align: center; border: none; padding: 0; vertical-align: top;">
                                                     <span style="font-size: 14pt; font-family: 'Times New Roman';">
                                                         FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION
                                                         <br/>
                                                         (FEOR)
                                                     </span>
                                                 </td>
-                                                <td colspan="3" style="width: 23%; text-align: right; border: none; padding: 0;">
-                                                    <table class="metadata-table" style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
+                                                <td colspan="3"
+                                                    style="width: 23%; text-align: right; border: none; padding: 0;">
+                                                    <table class="metadata-table"
+                                                           style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
                                                         <tbody style="border: none;">
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left;">No.
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left;">No.
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left;">:
                                                                     HRD-NS/FOR/LG/033
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Revision
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left;">: 00
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Effective Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 02 Jan 2024
+                                                                <td class="value-cell" style="text-align: left;">: 02
+                                                                    Jan 2024
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Next Review Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 02 Jan 2027
+                                                                <td class="value-cell" style="text-align: left;">: 02
+                                                                    Jan 2027
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Page
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left; ">:
@@ -240,33 +254,42 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="13" style="width: 22%; text-align:  left; border: none; padding: 0;">
-                                                    <hr class="middle-line1" style="border: none; border-top: 1.5px solid black; margin: 2px 0;"/>
-                                                    <hr class="middle-line2" style="border: none; border-top: 1.5px solid black; margin-top: 2px; margin-bottom: 5px;"/>
+                                                <td colspan="13"
+                                                    style="width: 22%; text-align:  left; border: none; padding: 0;">
+                                                    <hr class="middle-line1"
+                                                        style="border: none; border-top: 1.5px solid black; margin: 2px 0;"/>
+                                                    <hr class="middle-line2"
+                                                        style="border: none; border-top: 1.5px solid black; margin-top: 2px; margin-bottom: 5px;"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" style="width: 9%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2"
+                                                    style="width: 9%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Section</b>
                                                 </td>
-                                                <td colspan="3" style="width: 27%; border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="3"
+                                                    style="width: 27%; border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="doc.department_id.name"/>
                                                 </td>
-                                                <td colspan="4" align="center" style="width: 27%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="4" align="center"
+                                                    style="width: 27%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Plan/Proposal</b>
                                                 </td>
-                                                <td colspan="4" align="center" style="width: 36%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="4" align="center"
+                                                    style="width: 36%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Realization</b>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Day</b>
                                                 </td>
                                                 <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="doc.request_day_name"/>
                                                 </td>
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; ">
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; ">
                                                     <b>Prepare by</b>
                                                 </td>
                                                 <td align="center" style="border: 1px solid #000000; padding: 4px;">
@@ -281,24 +304,29 @@
                                                 <td align="center" style="border: 1px solid #000000; padding: 4px;">
                                                     <b>Review By</b>
                                                 </td>
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px;">
                                                     <b>Approved By</b>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Date</b>
                                                 </td>
                                                 <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
-                                                    <span t-field="doc.period_from" t-options='{"widget": "date"}'/>
+                                                    <span t-field="doc.periode_from" t-options='{"widget": "date"}'/>
                                                 </td>
-                                                <td colspan="2" rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
+                                                <td colspan="2" rowspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                     <div class="kotak">APPROVED</div>
                                                 </td>
-                                                <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
+                                                <td rowspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                     <div class="kotak">APPROVED</div>
                                                 </td>
-                                                <td rowspan="2" style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
+                                                <td rowspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                     <div class="kotak">APPROVED</div>
                                                 </td>
                                                 <td rowspan="2" style="border: 1px solid #000000; padding: 4px;">
@@ -307,12 +335,14 @@
                                                 <td rowspan="2" style="border: 1px solid #000000; padding: 4px;">
                                                     <br/>
                                                 </td>
-                                                <td rowspan="2" colspan="2" style="border: 1px solid #000000; padding: 4px;">
+                                                <td rowspan="2" colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px;">
                                                     <br/>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Total Personil</b>
                                                 </td>
                                                 <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
@@ -320,13 +350,15 @@
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Shift</b>
                                                 </td>
                                                 <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="doc.default_ot_hours"/>
                                                 </td>
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">Supervisor
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px;">Supervisor
                                                 </td>
                                                 <td align="center" style="border: 1px solid #000000; padding: 4px;">
                                                     Manager
@@ -341,61 +373,78 @@
                                                 <td align="center" style="border: 1px solid #000000; padding: 4px;">
                                                     Manager
                                                 </td>
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px;">Plant Manager
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px;">Plant Manager
                                                 </td>
                                             </tr>
 
                                             <tr valign="top">
-                                                <td rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="3"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>No</b>
                                                 </td>
-                                                <td rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="3"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>NIK</b>
                                                 </td>
-                                                <td colspan="2" rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2" rowspan="3"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Name</b>
                                                 </td>
-                                                <td rowspan="3" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="3"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Sign</b>
                                                 </td>
-                                                <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="4" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Overtime Proposal</b>
                                                 </td>
-                                                <td colspan="4" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="4" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Realization Checked</b>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Time</b>
                                                 </td>
-                                                <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Work Plan</b>
                                                 </td>
-                                                <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Output Plan</b>
                                                 </td>
-                                                <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Output Realization</b>
                                                 </td>
-                                                <td rowspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td rowspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Explanation Deviation</b>
                                                 </td>
-                                                <td colspan="2" align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td colspan="2" align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Verification Time</b>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
-                                                <td align="center" style="border: 1px solid #000000; background-color: #c2f7f7">
+                                                <td align="center"
+                                                    style="border: 1px solid #000000; background-color: #c2f7f7">
                                                     <b>Start</b>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000; background-color: #c2f7f7">
+                                                <td align="center"
+                                                    style="border: 1px solid #000000; background-color: #c2f7f7">
                                                     <b>Finish</b>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Start</b>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                                <td align="center"
+                                                    style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                     <b>Finish</b>
                                                 </td>
                                             </tr>
@@ -448,10 +497,12 @@
                                                 2.
                                                 CA
                                             </td>
-                                            <td colspan="1" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+                                            <td colspan="1"
+                                                style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
                                                 Verified by HRD :
                                             </td>
-                                            <td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: none; border-right: 1px solid #000000; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0in; padding-right: 0.04in">
+                                            <td colspan="3"
+                                                style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: none; border-right: 1px solid #000000; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0in; padding-right: 0.04in">
                                                 <strong>
                                                     <font color="#ff0000">
                                                         <b>Approved</b>
@@ -468,23 +519,25 @@
                                 </t>
                                 <div style="font-size: 7pt; font-family: 'Arial';">
                                     <em>* Yang mempropose dan menyetujui harus paham, rasional dan bertanggung jawab
-                                            dalam penentuan jumlah jam dan orang yang dibutuhkan untuk pekerjaan
-                                            tersebut.
+                                        dalam penentuan jumlah jam dan orang yang dibutuhkan untuk pekerjaan
+                                        tersebut.
                                     </em>
                                     <br/>
                                     <em>** Form realisasi yang sudah diisi dan diverifikasi / ttd harus masuk ke
-                                            bagian
-                                            HRD maksimal 1 (satu) hari setelah pelaksanaan overtime (maksimal jam
-                                            09:00).
+                                        bagian
+                                        HRD maksimal 1 (satu) hari setelah pelaksanaan overtime (maksimal jam
+                                        09:00).
                                     </em>
                                 </div>
                             </div>
                             <div class="footer">
-                                <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                                <hr class="footer-line1"
+                                    style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
                                 <div style="float: left;">
                                     <span style="font-size: 10px; font-style: italic;">
                                         <span t-field="doc.branch_id.name"></span>
-                                        \LAN\Release\SanbeU2\HRD\NS\FOR\HRD-NS.FOR.LG.033 - Form Employee Overtime Request an Realization (FEOR) - R00.doc
+                                        \LAN\Release\SanbeU2\HRD\NS\FOR\HRD-NS.FOR.LG.033 - Form Employee Overtime
+                                        Request an Realization (FEOR) - R00.doc
                                     </span>
                                 </div>
                                 <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
@@ -501,7 +554,8 @@
                                 <!-- Hitung total halaman berdasarkan data employees -->
                                 <t t-set="total_employees" t-value="len(doc.hr_ot_planning_ids)"/>
                                 <t t-set="employees_per_page" t-value="10"/>
-                                <t t-set="total_pages" t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
+                                <t t-set="total_pages"
+                                   t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
 
                                 <!-- Loop untuk setiap halaman -->
                                 <t t-foreach="range(total_pages)" t-as="page_num">
@@ -513,50 +567,62 @@
                                     <table class="detail-table" style="width: 100%; border-collapse: collapse;">
                                         <thead>
                                             <tr style="border: none;">
-                                                <td colspan="3" style="width: 22%; text-align:  left; border: none; padding: 0;">
-                                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-width: 200px; margin-left: 20px;"/>
+                                                <td colspan="3"
+                                                    style="width: 22%; text-align:  left; border: none; padding: 0;">
+                                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                                         alt="Logo" style="max-width: 200px; margin-left: 20px;"/>
                                                 </td>
 
-                                                <td colspan="7" class="title" style="width: 55%; text-align: center; border: none; padding: 0; vertical-align: top;">
+                                                <td colspan="7" class="title"
+                                                    style="width: 55%; text-align: center; border: none; padding: 0; vertical-align: top;">
                                                     <span style="font-size: 14pt; font-family: 'Times New Roman';">
                                                         FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION
                                                         <br/>
                                                         (FEOR)
                                                     </span>
                                                 </td>
-                                                <td colspan="3" style="width: 23%; text-align: right; border: none; padding: 0;">
-                                                    <table class="metadata-table" style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
+                                                <td colspan="3"
+                                                    style="width: 23%; text-align: right; border: none; padding: 0;">
+                                                    <table class="metadata-table"
+                                                           style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
                                                         <tbody style="border: none;">
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left;">No.
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left;">No.
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left;">:
                                                                     COHR/FOR/041
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Revision
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left;">: 01
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Effective Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 16 May 2022
+                                                                <td class="value-cell" style="text-align: left;">: 16
+                                                                    May 2022
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Next Review Date
                                                                 </td>
-                                                                <td class="value-cell" style="text-align: left;">: 16 May 2025
+                                                                <td class="value-cell" style="text-align: left;">: 16
+                                                                    May 2025
                                                                 </td>
                                                             </tr>
                                                             <tr style="border: none;">
-                                                                <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                <td class="label-cell"
+                                                                    style="padding-right: 2px; text-align: left; border: none;">
                                                                     Page
                                                                 </td>
                                                                 <td class="value-cell" style="text-align: left; ">:
@@ -568,61 +634,78 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     No.
                                                 </th>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     NIK
                                                 </th>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Name
                                                 </th>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Trans.
                                                 </th>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Meal
                                                 </th>
-                                                <th rowspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Sign
                                                 </th>
-                                                <th colspan="3" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th colspan="3" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Overtime Proposal
                                                 </th>
-                                                <th colspan="4" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th colspan="4" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Realization Checked
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <th colspan="2" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th colspan="2" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Time
                                                 </th>
-                                                <th rowspan="2" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="2" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Task Description
                                                 </th>
-                                                <th rowspan="2" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="2" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Ok/
                                                     <br/>
                                                     Not Ok
                                                 </th>
-                                                <th rowspan="2" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th rowspan="2" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Explanation
                                                 </th>
-                                                <th colspan="2" class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th colspan="2" class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Verification Time
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <th class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Start
                                                 </th>
-                                                <th class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Finish
                                                 </th>
-                                                <th class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Start
                                                 </th>
-                                                <th class="header2" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                <th class="header2"
+                                                    style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
                                                     Finish
                                                 </th>
                                             </tr>
@@ -644,9 +727,12 @@
                                                     <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;">
                                                         <span t-field="employee.employee_id.name"/>
                                                     </td>
-                                                    <td t-esc="'Yes' if employee.transport else 'No'" style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
-                                                    <td t-esc="'Dine' if employee.meals else ('Cash' if employee.meals_cash else '')" style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
-                                                    <td style="border: 1.5px solid black; text-align: center;">&#160;</td>
+                                                    <td t-esc="'Yes' if employee.transport else 'No'"
+                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
+                                                    <td t-esc="'Dine' if employee.meals else ('Cash' if employee.meals_cash else '')"
+                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
+                                                    <td style="border: 1.5px solid black; text-align: center;">&#160;
+                                                    </td>
                                                     <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;">
                                                         <span t-field="employee.ot_plann_from_char"/>
                                                     </td>
@@ -656,7 +742,8 @@
                                                     <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;">
                                                         <span t-field="employee.work_plann"/>
                                                     </td>
-                                                    <td t-esc="'OK' if employee.output_realization else ''" style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
+                                                    <td t-esc="'OK' if employee.output_realization else ''"
+                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 8pt;"/>
                                                     <td style="border: 1.5px solid black; text-align: center;">
                                                         <span t-field="employee.explanation_deviation"/>
                                                     </td>
@@ -707,7 +794,8 @@
                                 </t>
                             </div>
                             <div class="footer">
-                                <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                                <hr class="footer-line1"
+                                    style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
                                 <div style="float: left;">
                                     <span style="font-size: 10px; font-style: italic;">
                                         <span t-field="doc.branch_id.name"></span>
