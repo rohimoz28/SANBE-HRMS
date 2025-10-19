@@ -870,54 +870,37 @@
                                         </thead>
                                         <!-- <t t-set="dynamic_numbers" t-value="doc.get_dynamic_numbers()"/> -->
                                         <tbody>
-                                            <t t-foreach="page_employees" t-as="employee" t-foreach-index="index">
-                                                <!-- <t t-foreach="doc.hr_ot_planning_ids" t-as="employee" t-foreach-index="index"> -->
-                                                <tr>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <!-- <span t-esc="doc.get_dynamic_numbers()"/> -->
-                                                        <t t-set="counter" t-value="counter + 1"/>
-                                                        <t t-esc="counter"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.nik"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.employee_id.name"/>
-                                                    </td>
-                                                    <td t-esc="'Yes' if employee.transport else 'No'"
-                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;"/>
-                                                    <td t-esc="'Dine' if employee.meals else ('Cash' if employee.meals_cash else '')"
-                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;"/>
-                                                    <td style="border: 1.5px solid black; text-align: center;">&#160;
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.ot_plann_from_char"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.ot_plann_to_char"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.work_plann"/>
-                                                    </td>
-                                                    <td t-esc="'OK' if employee.output_realization else ''"
-                                                        style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;"/>
-                                                    <td style="border: 1.5px solid black; text-align: center;">
-                                                        <span t-field="employee.explanation_deviation"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.verify_time_from_char"/>
-                                                    </td>
-                                                    <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                        <span t-field="employee.verify_time_to_char"/>
-                                                    </td>
-                                                </tr>
-                                            </t>
-                                        </tbody>
-                                    </table>
-                                    <t t-if="page_num + 1 != total_pages">
-                                        <div style="page-break-after: always;"></div>
-                                    </t>
-                                </t>
+                                            <tr>
+                                                <td class="value1" style="border: 1.5px solid black; padding: 8px; text-align: center; vertical-align: middle;">
+                                                    <span t-field="doc.department_id.name"/>
+                                                </td>
+                                                <td class="value1">
+                                                    <span t-field="doc.request_day_name"/>
+                                                </td>
+                                                <td class="value1">
+                                                    <span t-field="doc.periode_from" />
+                                                </td>
+                                                <td class="value1">
+                                                    <span t-field="doc.time_from_char"/>
+                                                    s/d <span t-field="doc.time_to_char"/>
+                                                    WIB<br/>
+                                            <br/>
+                                            <span t-field="doc.default_ot_hours"/>
+                                        </td>
+                                        <td class="value1">
+                                            <span t-field="doc.count_record_employees"/>
+                                                    Persons</td>
+                                        <td class="value1">Prepared by,<br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                                    Supervisor</td>
+                                    <td class="value1">Reviewed by,<br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                                    Manager</td>
+                                <td class="value1">Acknowledge by,<br/>
                                 <br/>
 
                                 <table class="detail-table-2" style="width: 100%; border-collapse: collapse;">
