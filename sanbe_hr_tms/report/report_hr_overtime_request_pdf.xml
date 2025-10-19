@@ -15,6 +15,7 @@
             <field name="dpi">90</field>
         </record>
 
+        <!-- Hide button print report default odoo pada roda gigi dengan cara comment param binding_model_id -->
         <record id="overtime_request_report" model="ir.actions.report">
             <field name="name">Overtime Request form Report</field>
             <field name="model">hr.overtime.planning</field>

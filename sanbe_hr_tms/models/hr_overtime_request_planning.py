@@ -66,12 +66,12 @@ class HREmpOvertimeRequest(models.Model):
             #     databranch.append(mybranch.id)
             # allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
             # allrecs.branch_ids = [Command.set(allbranch.ids)]
-
-    @api.depends('area_id', 'branch_id')
+            
+    @api.depends('area_id','branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
-            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id)])
-            allrecs.alldepartment = [Command.set(allbranch.ids)]
+            allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
+            allrecs.alldepartment =[Command.set(allbranch.ids)]
 
     name = fields.Char('Planning Request', default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
@@ -208,6 +208,8 @@ class HREmpOvertimeRequest(models.Model):
             rec.allowed_manager_ids = [(6, 0, mgr_allowed_ids)]
             rec.allowed_plan_manager_ids = [(6, 0, pm_allowed_ids)]
             rec.allowed_hcm_ids = [(6, 0, hcm_allowed_ids)]
+    
+    
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
