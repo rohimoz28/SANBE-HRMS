@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.219-2025w43.2 (2025-10-20)
+
+- 54dc1e2 [IMP] TMS : Update SP TMS 2010205
+
+
 ## v0.0.216-2025w42.6 (2025-10-16)
 
 - e0e7e53 [FIX] PAM : Penyesuaian Hak Akses Approval Lintas Branch (Cross Branch Approver)
