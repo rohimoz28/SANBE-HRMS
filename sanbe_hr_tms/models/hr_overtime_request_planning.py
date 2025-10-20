@@ -92,7 +92,7 @@ class HREmpOvertimeRequest(models.Model):
     approve1 = fields.Boolean('Supervisor Department', default=False)
     approve2 = fields.Boolean('Manager Department', default=False)
     approve3 = fields.Boolean('HCM Department', default=False)
-    approve4 = fields.Boolean('Plan Manager', default=False)
+    approve4 = fields.Boolean('Plant Manager', default=False)
     state = fields.Selection(
         selection=TMS_OVERTIME_STATE,
         string="TMS Overtime Status",
