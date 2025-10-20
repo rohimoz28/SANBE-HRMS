@@ -92,7 +92,7 @@ class HREmpOvertimeRequest(models.Model):
     approve1 = fields.Boolean('Supervisor Department', default=False)
     approve2 = fields.Boolean('Manager Department', default=False)
     approve3 = fields.Boolean('HCM Department', default=False)
-    approve4 = fields.Boolean('Plan Manager', default=False)
+    approve4 = fields.Boolean('Plant Manager', default=False)
     state = fields.Selection(
         selection=TMS_OVERTIME_STATE,
         string="TMS Overtime Status",
@@ -522,11 +522,11 @@ class HREmpOvertimeRequest(models.Model):
             _logger.error("Error calling stored procedure: %s", str(e))
             raise UserError("Error executing the function: %s" % str(e))
 
-    @api.depends('request_date')
+    @api.depends('periode_from')
     def _compute_req_day_name(self):
         for record in self:
-            if record.request_date:
-                record.request_day_name = record.request_date.strftime('%A')
+            if record.periode_from:
+                record.request_day_name = record.periode_from.strftime('%A')
             else:
                 record.request_day_name = False
 
@@ -564,7 +564,7 @@ class HREmpOvertimeRequest(models.Model):
         if total_pages is None:
             total_pages = self.env.context.get('pdf_page_total', 1)
 
-        return f"Page {current_page} of {total_pages}"
+        return f"{current_page} of {total_pages}"
 
 
 class HREmpOvertimeRequestEmployee(models.Model):
