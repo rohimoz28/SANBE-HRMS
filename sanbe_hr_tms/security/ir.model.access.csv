@@ -6,7 +6,7 @@ access_hr_tmsentry_users_manager,access.hr.tmsentry.users.manager,model_hr_tmsen
 access_hr_employeegroup_users,access.hr.employeegroup.users,model_hr_empgroup,base.group_user,1,1,1,1
 access_hr_employeegroup_details_users,access.hr.employeegroup.details.users,model_hr_empgroup_details,base.group_user,1,1,1,1
 
-access_hr_overtime_request_planning_users,access.hr.request.planning.users,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_user,1,0,1,0
+access_hr_overtime_request_planning_users,access.hr.request.planning.users,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_user,1,1,1,0
 access_hr_overtime_request_planning_approval,access.hr.request.planning.approval,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_approval,1,1,0,0
 access_hr_overtime_request_planning_manager,access.hr.request.planning.manager,model_hr_overtime_planning,sanbe_hr_tms.module_sub_category_overtime_request_manager,1,1,1,1
 

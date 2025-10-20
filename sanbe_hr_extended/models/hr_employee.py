@@ -221,6 +221,7 @@ class HrEmployee(models.Model):
     ], string='Golongan Darah')
     race = fields.Char('Ras')
     is_ts_user = fields.Boolean('Is TS User', compute='_compute_is_ts_user', store=False)
+    is_ot_backdate = fields.Boolean('Create Overtime Backdate')
     # wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.", group_operator="avg")
     # contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
     # hra = fields.Monetary(string='HRA', tracking=True,
