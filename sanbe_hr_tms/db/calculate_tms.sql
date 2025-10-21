@@ -4525,6 +4525,81 @@ and*/ aa.department_id = sia.department_id
       and hts.branch_id = branch;
 
 
+-- monitoring overtime
+-- hapus dari sb_employee_overtime
+delete from sb_employee_overtime where period_id=period; 
+
+-- insert sb_employee_overtime
+INSERT INTO public.sb_employee_overtime (
+    area_id,
+    branch_id,
+    department_id,
+    employee_id,
+    attendee_total,
+    job_id,
+    create_uid,
+    write_uid,
+    nik,
+    create_date,
+    write_date,
+    net_salary,
+    pharma_allowance,
+    work_allowance,
+    family_allowance,
+    salary_total,
+    aot1,
+    aot2,
+    aot3,
+    aot4,
+    rp_aot1,
+    rp_aot2,
+    rp_aot3,
+    rp_aot4,
+    aot_total,
+    salary_allowance_total,
+    aot_salary_percentage,
+    period_id,
+    period_from,
+    period_to
+)
+SELECT 
+    hts.area_id,
+    hts.branch_id,
+    hts.department_id,
+    hts.employee_id,
+    hts.attendee_total,
+    hts.job_id,
+    88 AS create_uid,
+    88 AS write_uid,
+    hts.nik,
+    NOW() AS create_date,
+    NOW() AS write_date,
+    NULL AS net_salary,
+    NULL AS pharma_allowance,
+    NULL AS work_allowance,
+    NULL AS family_allowance,
+    NULL AS salary_total,
+    sttd.aot1,
+    sttd.aot2,
+    sttd.aot3,
+    sttd.aot4,
+    NULL AS rp_aot1,
+    NULL AS rp_aot2,
+    NULL AS rp_aot3,
+    NULL AS rp_aot4,
+    (COALESCE(sttd.aot1, 0) + COALESCE(sttd.aot2, 0) + COALESCE(sttd.aot3, 0) + COALESCE(sttd.aot4, 0)) AS aot_total,
+    NULL AS salary_allowance_total,
+    NULL AS aot_salary_percentage,
+    hts.periode_id,
+    sttd.plann_date_from,
+    sttd.plann_date_to
+FROM hr_tmsentry_summary hts
+JOIN sb_tms_tmsentry_details sttd
+    ON hts.id = sttd.tmsentry_id
+WHERE 
+    sttd.aot1 IS NOT NULL
+    AND hts.periode_id = period;
+
 END;
 
 $procedure$

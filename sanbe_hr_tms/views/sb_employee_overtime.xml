@@ -31,6 +31,8 @@
                     <field name="aot_total" optional="show"/>
                     <field name="salary_allowance_total" optional="show"/>
                     <field name="aot_salary_percentage" optional="show"/>
+                    <field name="period_from" />
+                    <field name="period_to" />
                 </tree>
             </field>
         </record>
