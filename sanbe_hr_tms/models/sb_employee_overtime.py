@@ -30,5 +30,7 @@ class SbEmployeeOvertime(models.Model):
                                           help='TOTAL NET + TUNJ KEFARMASIAN + TMK + TUN KEL+ LEMBUR')
     aot_salary_percentage = fields.Float('% Lembur vs Total Gaji', 
                                          help='% LEMBUR / NET+TUNJ KEFARMASIAN + TMK + TUNJ KEL')
+    period_from = fields.Date('Tanggal OT Dari')
+    period_to = fields.Date('Tanggal OT Hingga')
 
 
