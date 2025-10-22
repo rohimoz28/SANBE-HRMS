@@ -6,12 +6,12 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Landscape</field>
-            <field name="margin_top">7</field>
+            <field name="margin_top">30</field>
             <field name="margin_bottom">15</field>
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
-            <field name="header_line" eval="True"/>
-            <field name="header_spacing">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">5</field>
             <field name="dpi">90</field>
         </record>
 
@@ -19,7 +19,7 @@
         <record id="overtime_request_report" model="ir.actions.report">
             <field name="name">Overtime Request form Report</field>
             <field name="model">hr.overtime.planning</field>
-            <field name="report_type">qweb-html</field>
+            <field name="report_type">qweb-pdf</field>
             <field name="report_name">sanbe_hr_tms.overtime_request_template</field>
             <field name="report_file">sanbe_hr_tms.overtime_request_template</field>
             <field name="print_report_name">'%s' % (object.name)</field>
@@ -31,6 +31,8 @@
         <template id="overtime_request_template">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
+                    <t t-set="company" t-value="res_company"/>
+
                     <t t-call="web.basic_layout">
                         <style>
                             .header {
@@ -209,98 +211,98 @@
                             text-align: left;
                             border: none;
                             }
+                            @page {
+                                counter-increment: page;
+                                counter-reset: page;
+                            }
+
+                            .page-number::after {
+                                content: "Page " counter(page);
+                                font-size: 8pt;
+                                font-style: italic;
+                            }
                         </style>
                         <t t-set="counter" t-value="0"/>
                         <t t-if="doc.area_id and doc.area_id.id == 2">
+                            <div class="header">
+                                <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
+                                <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+                                <table style="width: 100%; border: none; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 16.66%; text-align: center; border: none; padding: 5px;">
+                                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-width: 150px; height: auto;"/>
+                                        </td>
+
+                                        <td colspan="7" class="title" style="width: 55%; text-align: center; border: none; padding: 0;">
+                                            <span style="font-size: 14pt; font-family: 'Times New Roman';">
+                                                    FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION
+                                                <br/>
+                                                    (FEOR)
+                                            </span>
+                                        </td>
+
+                                        <!-- Metadata -->
+                                        <td colspan="3" style="width: 23%; text-align: right; border: none; padding: 0;">
+                                            <table class="metadata-table" style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
+                                                <tbody style="border: none;">
+                                                    <tr style="border: none;">
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left;">No.
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left;">:
+                                                                HRD-NS/FOR/LG/033
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border: none;">
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                Revision
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left;">: 00
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border: none;">
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                Effective Date
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left;">: 02 Jan
+                                                                2024
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border: none;">
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                Next Review Date
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left;">: 02 Jan
+                                                                2027
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border: none;">
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                Page
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left; ">:
+                                                            <span class="page"></span> of <span class="topage"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
+                                <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+                            </div>
                             <div class="page">
-                                <div class="line-1" style="border-top: 2px solid black; margin-bottom: 5px;"></div>
-                                <t t-set="company" t-value="res_company"/>
-                                <!-- Hitung total halaman berdasarkan data employees -->
                                 <t t-set="total_employees" t-value="len(doc.hr_ot_planning_ids)"/>
-                                <t t-set="employees_per_page" t-value="14"/>
-                                <t t-set="total_pages"
-                                   t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
+                                <t t-set="employees_per_page" t-value="len(doc.hr_ot_planning_ids)"/>
+                                <t t-set="total_pages" t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
+                                <div class="line-1" style="border-top: 2px solid black; margin-bottom: 5px;"></div>
+                                <!-- Hitung total halaman berdasarkan data employees -->
 
                                 <!-- Loop untuk setiap halaman -->
                                 <t t-foreach="range(total_pages)" t-as="page_num">
                                     <t t-set="start_index" t-value="page_num * employees_per_page"/>
                                     <t t-set="end_index" t-value="(page_num + 1) * employees_per_page"/>
                                     <t t-set="page_employees" t-value="doc.hr_ot_planning_ids[start_index:end_index]"/>
-
-
-                                    <table style="width: 100%; border: none; border-collapse: collapse;">
-                                        <tr>
-                                            <td style="width: 16.66%; text-align: center; border: none; padding: 5px;">
-                                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                                     alt="Logo" style="max-width: 150px; height: auto;"/>
-                                            </td>
-
-                                            <td colspan="7" class="title"
-                                                style="width: 55%; text-align: center; border: none; padding: 0;">
-                                                <span style="font-size: 14pt; font-family: 'Times New Roman';">
-                                                    FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION
-                                                    <br/>
-                                                    (FEOR)
-                                                </span>
-                                            </td>
-
-                                            <!-- Metadata -->
-                                            <td colspan="3"
-                                                style="width: 23%; text-align: right; border: none; padding: 0;">
-                                                <table class="metadata-table"
-                                                       style="font-size: 7pt; font-family: 'Times New Roman'; line-height: 1; width: 100%; border: none; border-collapse: collapse; padding-right: 10px; text-align: left;">
-                                                    <tbody style="border: none;">
-                                                        <tr style="border: none;">
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left;">No.
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left;">:
-                                                                HRD-NS/FOR/LG/033
-                                                            </td>
-                                                        </tr>
-                                                        <tr style="border: none;">
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left; border: none;">
-                                                                Revision
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left;">: 00
-                                                            </td>
-                                                        </tr>
-                                                        <tr style="border: none;">
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left; border: none;">
-                                                                Effective Date
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left;">: 02 Jan
-                                                                2024
-                                                            </td>
-                                                        </tr>
-                                                        <tr style="border: none;">
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left; border: none;">
-                                                                Next Review Date
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left;">: 02 Jan
-                                                                2027
-                                                            </td>
-                                                        </tr>
-                                                        <tr style="border: none;">
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left; border: none;">
-                                                                Page
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left; ">:
-                                                                <span t-esc="doc._get_pdf_page_info(page_num + 1, total_pages)"/>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
-                                    <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
-
                                     <!-- <table class="table table-bordered" style="width: 100%; border-collapse: collapse;"> -->
                                     <table style="width: 100%;">
                                         <style>
@@ -618,9 +620,81 @@
                             </div>
                         </t>
                         <t t-else="">
+                            <div class="header">
+                                <div class="line-1" style="border-top: 1px solid black; margin-bottom: 1px;"></div>
+                                <div class="line-2" style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+
+                                <table style="width: 100%; border: none; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 16.66%; text-align: center; vertical-align: middle; border: none; padding: 5px;">
+                                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-width: 150px; height: auto;"/>
+                                        </td>
+
+                                        <td style="width: 66.66%; text-align: center; vertical-align: middle; border: none; padding: 5px;">
+                                            <div style="font-size: 14pt; font-family: 'Times New Roman'; line-height: 1.3; font-weight: bold; display: flex; align-items: center; justify-content: center; height: auto;">
+                                                    FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION (FEOR)
+                                            </div>
+                                        </td>
+
+                                        <!-- Metadata -->
+                                        <td style="width: 16.66%; text-align: right; vertical-align: top; border: none; padding: 5px;">
+                                            <table style="font-size: 10pt; font-family: 'Times New Roman'; line-height: 1.2; border: none; border-collapse: collapse; text-align: left; width: 100%;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
+                                                                No.
+                                                        </td>
+                                                        <td style="text-align: left; border: none; white-space: nowrap;">
+                                                                : COHR/FOR/041
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
+                                                                Revision
+                                                        </td>
+                                                        <td style="text-align: left; border: none; white-space: nowrap;">
+                                                                : 01
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
+                                                                Effective Date
+                                                        </td>
+                                                        <td style="text-align: left; border: none; white-space: nowrap;">
+                                                                : 16 May 2022
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
+                                                                Next Review Date
+                                                        </td>
+                                                        <td style="text-align: left; border: none; white-space: nowrap;">
+                                                                : 16 May 2025
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <!-- <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">Page</td>
+                                                            <td style="text-align: left; border: none; white-space: nowrap;">: <span class="page"></span> of <span class="topage"></span></td> -->
+                                                        <td class="label-cell" style="padding-right: 2px; text-align: left; border: none;">
+                                                                Page
+                                                        </td>
+                                                        <td class="value-cell" style="text-align: left; ">:
+                                                            <span class="page"></span> of <span class="topage"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- Garis pembatas -->
+                                <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
+                                <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+                            </div>    
                             <div class="page">
                                 <t t-set="total_employees" t-value="len(doc.hr_ot_planning_ids)"/>
-                                <t t-set="employees_per_page" t-value="14"/>
+                                <t t-set="employees_per_page" t-value="len(doc.hr_ot_planning_ids)"/>
                                 <t t-set="total_pages"
                                    t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
                                 <!-- Loop untuk setiap halaman -->
@@ -628,82 +702,6 @@
                                     <t t-set="start_index" t-value="page_num * employees_per_page"/>
                                     <t t-set="end_index" t-value="(page_num + 1) * employees_per_page"/>
                                     <t t-set="page_employees" t-value="doc.hr_ot_planning_ids[start_index:end_index]"/>
-
-                                    <t t-set="company" t-value="res_company"/>
-
-                                    <div class="line-1" style="border-top: 1px solid black; margin-bottom: 1px;"></div>
-                                    <div class="line-2" style="border-top: 1px solid black; margin-bottom: 5px;"></div>
-
-                                    <table style="width: 100%; border: none; border-collapse: collapse;">
-                                        <tr>
-                                            <td style="width: 16.66%; text-align: center; vertical-align: middle; border: none; padding: 5px;">
-                                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                                     alt="Logo" style="max-width: 150px; height: auto;"/>
-                                            </td>
-
-                                            <td style="width: 66.66%; text-align: center; vertical-align: middle; border: none; padding: 5px;">
-                                                <div style="font-size: 14pt; font-family: 'Times New Roman'; line-height: 1.3; font-weight: bold; display: flex; align-items: center; justify-content: center; height: auto;">
-                                                    FORM EMPLOYEE OVERTIME REQUEST AND REALIZATION (FEOR)
-                                                </div>
-                                            </td>
-
-                                            <!-- Metadata -->
-                                            <td style="width: 16.66%; text-align: right; vertical-align: top; border: none; padding: 5px;">
-                                                <table style="font-size: 10pt; font-family: 'Times New Roman'; line-height: 1.2; border: none; border-collapse: collapse; text-align: left; width: 100%;">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
-                                                                No.
-                                                            </td>
-                                                            <td style="text-align: left; border: none; white-space: nowrap;">
-                                                                : COHR/FOR/041
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
-                                                                Revision
-                                                            </td>
-                                                            <td style="text-align: left; border: none; white-space: nowrap;">
-                                                                : 01
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
-                                                                Effective Date
-                                                            </td>
-                                                            <td style="text-align: left; border: none; white-space: nowrap;">
-                                                                : 16 May 2022
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">
-                                                                Next Review Date
-                                                            </td>
-                                                            <td style="text-align: left; border: none; white-space: nowrap;">
-                                                                : 16 May 2025
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <!-- <td style="padding-right: 1px; text-align: left; border: none; white-space: nowrap;">Page</td>
-                                                            <td style="text-align: left; border: none; white-space: nowrap;">: <span class="page"></span> of <span class="topage"></span></td> -->
-                                                            <td class="label-cell"
-                                                                style="padding-right: 2px; text-align: left; border: none;">
-                                                                Page
-                                                            </td>
-                                                            <td class="value-cell" style="text-align: left; ">:
-                                                                <span t-esc="doc._get_pdf_page_info(page_num + 1, total_pages)"/>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <!-- Garis pembatas -->
-                                    <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
-                                    <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
-
                                     <table class="header-table" style="width: 100%; border-collapse: collapse;">
                                         <t t-if="page_num + 1 == 1">
 
@@ -759,7 +757,7 @@
                                                         <span t-field="doc.default_ot_hours"/>
                                                     </td>
                                                     <td class="value1">
-                                                        <span t-field="doc.count_record_employees"/>
+                                                        <span t-esc="total_employees"/>
                                                         Persons
                                                     </td>
                                                     <td class="value1">Prepared by,
