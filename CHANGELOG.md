@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.222-2025w43.5 (2025-10-22)
+
+- 55c506f [IMP] TMS : Improvement Pengaturan Akses Field pada Form Overtime Request
+
+
 ## v0.0.219-2025w43.2 (2025-10-20)
 
 - 54dc1e2 [IMP] TMS : Update SP TMS 2010205
