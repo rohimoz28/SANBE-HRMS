@@ -159,6 +159,7 @@ class HrEmployeeMutation(models.Model):
     service_parent_id = fields.Many2one('sb.view.hr.employee', string='Immadiate Superior')
     service_work_unit = fields.Char('Work Unit')
     service_coach_id = fields.Many2one('sb.view.hr.employee', string='Work Unit Superior')
+    service_replacement_id = fields.Many2one('sb.view.hr.employee', string='Posisi Pengganti')
 
     _sql_constraints = [
         (
@@ -247,6 +248,14 @@ class HrEmployeeMutation(models.Model):
         #     employee.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
         employee.write({'state': 'approved'})
+        if self.service_replacement_id:
+            try:
+                self.env.cr.execute("CALL updateIntermediate(%s, %s)", (self.emp_nos.id, self.service_replacement_id.id))
+                self.env.cr.commit()
+                _logger.info("Stored procedure executed successfully for employee: %s", self.emp_nos.name)
+            except Exception as e:
+                _logger.error("Error calling stored procedure: %s", str(e))
+                raise UserError("Error executing the function: %s" % str(e))
 
         return self.write({'state': 'approved',
                            'service_status': 'Approved'})

@@ -159,6 +159,7 @@
                             <field name="service_employementstatus" readonly="state in ['approved']" 
                                 invisible="job_status !='permanent'" required="job_status =='permanent'" force_save="1" />
                             <field name="service_empgroup1" readonly="state in ['approved']" invisible="service_type == 'conf'" required="service_type not in ['conf']" force_save="1" />
+                            <field name="service_replacement_id" force_save="1"/>
                             <field name="company_id" invisible="1"/>
                             <!-- <field name="join_date" /> -->
                             <field name="contract_no" invisible="service_type not in ['corr','actv']" />

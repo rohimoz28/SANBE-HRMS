@@ -17,6 +17,7 @@
 		'views/hr_employee_mutation.xml',
 		'data/cron_hr_check_mutation.xml',
 		'data/mutation_seq_number.xml',
+        'db/update_intermediate.sql',
         # report
         'reports/FKPM_report.xml',
 	],
