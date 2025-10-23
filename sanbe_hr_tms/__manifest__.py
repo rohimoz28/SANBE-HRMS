@@ -54,7 +54,7 @@
         'views/hr_tms_sync_machine.xml',
         'views/hr_tms_processing.xml',
         'views/hr_overtime_request_planning.xml',
-        'report/report_hr_overtime_request_pdf.xml',
+        'report/report_feor_default.xml',
         'views/tms_entry.xml',
         'views/hr_tms_open_close.xml',
         'views/hr_tms_machine_setting.xml',
@@ -69,6 +69,7 @@
         'report/report_ot_bundling_html.xml',
         'report/report_ot_bundling_excel.xml',
         'report/report_monitor_overtime_excel.xml',
+        'report/report_feor_cimahi.xml',
         'wizards/export_excel_tms.xml',
         'wizards/export_excel_ot_attendance.xml',
         'wizards/export_excel_ot_bundling_wizard.xml',
@@ -98,20 +99,20 @@
         'security/ir.model.access.csv',
     ],
     'assets': {
-            'web.assets_backend': [
-                'hr_holidays/static/src/**/*',
-                'sanbe_hr_tms/static/src/xml/export_button.xml',
-                'sanbe_hr_tms/static/src/xml/export_button_ot_attendance.xml',
-                'sanbe_hr_tms/static/src/xml/export_button_ot_bundling.xml',
-                'sanbe_hr_tms/static/src/xml/export_button_monitor_ot.xml',
-                'sanbe_hr_tms/static/src/js/export_button.js',
-                'sanbe_hr_tms/static/src/js/export_button_ot_attendance.js',
-                'sanbe_hr_tms/static/src/js/export_button_ot_bundling.js',
-                'sanbe_hr_tms/static/src/js/export_button_monitor_ot.js',
-                'sanbe_hr_tms/static/src/js/report_esm.js',
-                'sanbe_hr_tms/static/src/js/report_action.js'
-                
-            ],
+        'web.assets_backend': [
+            'hr_holidays/static/src/**/*',
+            'sanbe_hr_tms/static/src/xml/export_button.xml',
+            'sanbe_hr_tms/static/src/xml/export_button_ot_attendance.xml',
+            'sanbe_hr_tms/static/src/xml/export_button_ot_bundling.xml',
+            'sanbe_hr_tms/static/src/xml/export_button_monitor_ot.xml',
+            'sanbe_hr_tms/static/src/js/export_button.js',
+            'sanbe_hr_tms/static/src/js/export_button_ot_attendance.js',
+            'sanbe_hr_tms/static/src/js/export_button_ot_bundling.js',
+            'sanbe_hr_tms/static/src/js/export_button_monitor_ot.js',
+            'sanbe_hr_tms/static/src/js/report_esm.js',
+            'sanbe_hr_tms/static/src/js/report_action.js'
+
+        ],
     },
     # only loaded in demonstration mode
     'demo': [
