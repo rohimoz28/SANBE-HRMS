@@ -6,12 +6,12 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Landscape</field>
-            <field name="margin_top">30</field>
+            <field name="margin_top">26</field>
             <field name="margin_bottom">15</field>
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">5</field>
+            <field name="header_spacing">13</field>
             <field name="dpi">90</field>
         </record>
 
@@ -214,6 +214,7 @@
                                     </td>
                                 </tr>
                             </table>
+                            <div style="height: 6px;"></div>
                             <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
                             <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
                         </div>
@@ -222,7 +223,7 @@
                             <t t-set="employees_per_page" t-value="len(doc.hr_ot_planning_ids)"/>
                             <t t-set="total_pages"
                                t-value="((total_employees + employees_per_page - 1) // employees_per_page) or 1"/>
-                            <div class="line-1" style="border-top: 2px solid black; margin-bottom: 5px;"></div>
+                            <!-- <div class="line-1" style="border-top: 2px solid black; margin-bottom: 5px;"></div> -->
                             <!-- Hitung total halaman berdasarkan data employees -->
 
                             <!-- Loop untuk setiap halaman -->
