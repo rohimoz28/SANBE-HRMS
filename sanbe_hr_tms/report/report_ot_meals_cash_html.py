@@ -8,8 +8,8 @@ _logger = logging.getLogger(__name__)
 
 
 
-class MealsReportHTML(models.Model):
-    _name = 'report.sanbe_hr_tms.report_ot_meals_html'
+class MealsCashReportHTML(models.Model):
+    _name = 'report.sanbe_hr_tms.report_ot_meals_cash_html'
     _description = 'HTML Bundling Report'
     
     @api.model
