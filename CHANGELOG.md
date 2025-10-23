@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.224-2025w43.7 (2025-10-23)
+
+- 3473d79 [IMP] TMS : Refactor report FEOR
+
+
 ## v0.0.222-2025w43.5 (2025-10-22)
 
 - 55c506f [IMP] TMS : Improvement Pengaturan Akses Field pada Form Overtime Request
