@@ -66,12 +66,12 @@ class HREmpOvertimeRequest(models.Model):
             #     databranch.append(mybranch.id)
             # allbranch = self.env['res.branch'].sudo().search([('id', 'in', databranch)])
             # allrecs.branch_ids = [Command.set(allbranch.ids)]
-            
-    @api.depends('area_id','branch_id')
+
+    @api.depends('area_id', 'branch_id')
     def _isi_department_branch(self):
         for allrecs in self:
-            allbranch = self.env['hr.department'].sudo().search([('branch_id','=', allrecs.branch_id.id)])
-            allrecs.alldepartment =[Command.set(allbranch.ids)]
+            allbranch = self.env['hr.department'].sudo().search([('branch_id', '=', allrecs.branch_id.id)])
+            allrecs.alldepartment = [Command.set(allbranch.ids)]
 
     name = fields.Char('Planning Request', default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
@@ -180,7 +180,8 @@ class HREmpOvertimeRequest(models.Model):
     @api.depends('supervisor_id', 'manager_id', 'plan_manager_id', 'hcm_id', 'create_uid')
     def _compute_is_current_user(self):
         for rec in self:
-            allowed_user = [rec.supervisor_id.user_id, rec.manager_id.user_id, rec.plan_manager_id.user_id, rec.hcm_id.user_id, rec.create_uid]
+            allowed_user = [rec.supervisor_id.user_id, rec.manager_id.user_id, rec.plan_manager_id.user_id, rec.hcm_id.user_id,
+                            rec.create_uid]
             user = self.env.user
             rec.is_current_user = user in allowed_user
             print(allowed_user)
@@ -208,8 +209,6 @@ class HREmpOvertimeRequest(models.Model):
             rec.allowed_manager_ids = [(6, 0, mgr_allowed_ids)]
             rec.allowed_plan_manager_ids = [(6, 0, pm_allowed_ids)]
             rec.allowed_hcm_ids = [(6, 0, hcm_allowed_ids)]
-    
-    
 
     def _default_area_id(self):
         emp = self.env.user.employee_id
@@ -472,14 +471,13 @@ class HREmpOvertimeRequest(models.Model):
         new_context = dict(self.env.context)
         new_context['printed_at'] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
 
-        # Panggil report_action dengan context baru menggunakan with_context
-        return self.with_context(new_context).env.ref('sanbe_hr_tms.overtime_request_report').report_action(self)
+        if self.area_id.id == 2:
+            """Report FEOR untuk branch CIMAHI"""
+            return self.with_context(new_context).env.ref('sanbe_hr_tms.report_feor_cimahi').report_action(self)
+        else:
+            """Report FEOR selain CIMAHI"""
+            return self.with_context(new_context).env.ref('sanbe_hr_tms.report_feor_default').report_action(self)
 
-
-        # return self.env.ref('sanbe_hr_tms.overtime_request_report').report_action(self, data=data)
-
-    
-    
     def get_dynamic_numbers(self):
         """ Menghasilkan nomor urut untuk digunakan dalam QWeb report. """
         numbering = {}
@@ -714,7 +712,6 @@ class HREmpOvertimeRequestEmployee(models.Model):
             if rec.is_cancel == True:
                 rec.is_approved_mgr = False
 
-
     @api.onchange('approve_time_from', 'approve_time_to', 'ot_type')
     def _onchange_meals(self):
         for rec in self:
@@ -754,7 +751,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
 
     # constraint untuk create ot request backdate
     # yang boleh create ot request backdate hanya user dengan group manager / user dengan flag create overtime backdate di personal admin = true
-    @api.constrains('plann_date_from','plann_date_to')
+    @api.constrains('plann_date_from', 'plann_date_to')
     def _check_ot_backdate(self):
         today = fields.Date.today()
         user = self.env.user
