@@ -126,7 +126,7 @@ class HREmpOvertimeRequest(models.Model):
     )
     plan_manager_id = fields.Many2one(
         'sb.view.hr.employee',
-        string='Plan Manager',
+        string='Plant Manager',
         domain="[('id', 'in', allowed_plan_manager_ids)]"
     )
     hcm_id = fields.Many2one(
@@ -730,6 +730,20 @@ class HREmpOvertimeRequestEmployee(models.Model):
                     # rec.branch_id = emp.branch_id.id
                     # rec.department_id = emp.department_id.id
                     # rec.area_id = emp.area.id
+    
+    # jika meals = True, maka meals_cash = False
+    @api.onchange('meals')
+    def _onchange_meals_update(self):
+        for rec in self:
+            if rec.meals == True:
+                rec.meals_cash =  False
+    
+    # jika meals_cash = True, maka meals = False
+    @api.onchange('meals_cash')
+    def _onchange_meals_cash_update(self):
+        for rec in self:
+            if rec.meals_cash == True:
+                rec.meals =  False
 
     @api.constrains('nik', 'plann_date_from', 'plann_date_to')
     def check_duplicate_record(self):
