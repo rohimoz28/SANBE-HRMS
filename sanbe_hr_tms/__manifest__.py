@@ -30,6 +30,7 @@
         'data/tms_seq_number.xml',
         'report/report_ot_route_html.xml',
         'report/report_ot_meals_html.xml',
+        'report/report_ot_meals_cash_html.xml',
         'wizards/export_ot_meals_report.xml',
         'views/hr_disable_others.xml',
         'views/sb_employee_attendance.xml',
