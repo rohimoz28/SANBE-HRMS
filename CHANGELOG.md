@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.229-2025w43.12 (2025-10-24)
+
+- f5f5816 [FIX] TMS : bugfix template feor default page setting
+
+
 ## v0.0.228-2025w43.11 (2025-10-24)
 
 - a533427 [IMP] PAM : Penambahan Field 'Posisi Pengganti' di Form Mutasi Karyawan
