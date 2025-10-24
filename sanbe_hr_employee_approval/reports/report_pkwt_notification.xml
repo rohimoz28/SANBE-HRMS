@@ -69,7 +69,7 @@
                             </table>
                         </thead>
                         <div class="page">
-                            <div class="text-center" style="text-align: center; font-family: 'Times New Roman', Times, serif;">
+                            <div class="text-center" style="text-align: center; font-family: 'Times New Roman', Times, serif; margin-top: -10mm;">
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <t t-set="date" t-value="doc.write_date"/>
@@ -116,10 +116,10 @@
                                     </div>
                                 </div>
                                 <br/>
-                                <p style="text-align:justify; font-size:12pt;"> Dengan hormat, <br/>
+                                <p style="text-align:justify; font-size:13pt;"> Dengan hormat, <br/>
                                     Melalui surat ini kami sampaikan mengenai Perjanjian Kerja Waktu Tertentu (PKWT), atas nama :
                                 </p>
-                                <ol style="text-align:justify; font-size:12pt; margin-top: 10px;">
+                                <ol style="text-align:justify; font-size:13pt; margin-top: 10px;">
                                     <li>
                                         <strong>
                                             <span t-field="doc.employee_id.name"/>
@@ -139,13 +139,13 @@
                                         </ul>
                                     </li>
                                 </ol>
-                                <p style="text-align:justify; font-size:12pt;">
+                                <p style="text-align:justify; font-size:13pt;">
                                                     Untuk itu, kami mohon informasi selanjutnya terkait status yang bersangkutan, Jika PKWT-nya tidak diperpanjang, kami akan menghitungkan hari kerja dan sisa cutinya untuk dibayarkan.
                                 </p>
-                                <p style="text-align:justify; font-size:12pt;">
+                                <p style="text-align:justify; font-size:13pt;">
                                                     Jika diperpanjang maka sertakan:
                                     
-                                    <ol style="text-align:justify; font-size:12pt;">
+                                    <ol style="text-align:justify; font-size:13pt;">
                                         <li>
                                                                     Surat permohonan perpanjangan kontrak karyawan yang ditujukan kepada 
                                             <strong>Personalia &amp; G.A. Manager</strong> serta mengisi "
@@ -157,7 +157,7 @@
                                         </li>
                                     </ol>
                                 </p>
-                                <p style="text-align:justify; font-size:12pt;">
+                                <p style="text-align:justify; font-size:13pt;">
                                                         Jawaban dapat langsung ditulis pada tempat yang kosong di surat ini dan 
                                     <strong>
                                         <u>segera dikembalikan ke Personalia</u>
@@ -165,19 +165,19 @@
                                     <strong>7 hari</strong> sebelum berakhirnya jangka waktu PKWT yang bersangkutan.
                                 
                                 </p>
-                                <p style="text-align:justify; font-size:12pt;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
-                                <p style="text-align:justify; font-size:12pt;">
+                                <p style="text-align:justify; font-size:13pt;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
+                                <p style="text-align:justify; font-size:13pt;">
                                                     Selanjutnya seluruh permohonan kontrak akan kami sampaikan kepada Owner untuk dimohonkan persetujuannya.</p>
-                                <p style="text-align:justify; font-size:12pt;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
+                                <p style="text-align:justify; font-size:13pt;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
                             </div>
                             <br/>
                             <div class="text-right" style="font-family: 'Times New Roman', Times, serif;">
-                                <p style="font-size:12pt;">Hormat kami,</p>
+                                <p style="font-size:13pt;">Hormat kami,</p>
                                 <br/>
                                 <br/>
                                 <p style="line-height: 0.9;">
                                     <strong>
-                                        <span style="font-size: 13pt; text-decoration: underline;">
+                                        <span style="font-size: 14pt; text-decoration: underline;">
                                             Asep Rohman, SH.
                                         </span>
                                     </strong>
