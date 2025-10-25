@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.230-2025w43.13 (2025-10-25)
+
+- 9b25fb4 [FIX]TMS : load inside manifest and init
+
+
 ## v0.0.229-2025w43.12 (2025-10-24)
 
 - f5f5816 [FIX] TMS : bugfix template feor default page setting
