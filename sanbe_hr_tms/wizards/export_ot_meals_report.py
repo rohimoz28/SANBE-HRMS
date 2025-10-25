@@ -6,9 +6,7 @@ class HRWizOTMeals(models.TransientModel):
     _name = 'report.ot.meals.rute.wiz'
     _description = 'HR OT Meals Rute Report Wizard'
     
-    
-    
-    type_report = fields.Selection([('route', 'Route'), ('meal', 'Meals')], string='Report Type', required=True, default='route')
+    type_report = fields.Selection([('route', 'Route'), ('meal', 'Meals'), ('cash_meal', 'Cash Meals')], string='Report Type', required=True, default='route')
     branch_id = fields.Many2one('res.branch', string='Bisnis Unit', default=lambda self: self.env.user.branch_id.id)
     date_from = fields.Date(string='Date From', required=True, default=lambda self: fields.Date.today())
     date_to = fields.Date(string='Date To', required=True,default=lambda self: fields.Date.today())
@@ -36,13 +34,17 @@ class HRWizOTMeals(models.TransientModel):
                 'approved_plan_mgr', 'approved_plan_pm',
                 'approved_plan_hcm', 'verification',
                 'approved', 'completed', 'done'
-            ))
-        ]
+            ))]
+        
 
         if self.type_report == 'route':
             ot_attendance_domain.append(('route_id', '!=', False))
         if self.type_report == 'meal':
             ot_attendance_domain.append(('meals', '!=', False))
+            ot_attendance_domain.append(('meals_cash', '=', False))
+        elif self.type_report == 'cash_meal':
+            ot_attendance_domain.append(('meals_cash', '!=', False))
+            ot_attendance_domain.append(('meals', '=', False))
         if self.date_from and self.date_to and self.date_from <= self.date_to:
             ot_attendance_domain += [
                 ('plann_date_from', '>=', self.date_from),
@@ -67,12 +69,23 @@ class HRWizOTMeals(models.TransientModel):
                 'active_ids': ot_attendance.ids,  # semua record
                 }
             }
-        else:
+        elif self.type_report == 'meal':
             return {
                 'type': 'ir.actions.report',
                 'report_name': 'sanbe_hr_tms.report_ot_meals_html',
                 'report_type': 'qweb-html',
                 'report_file': f'Rekap_Overtime_Meals_{self.department_id.complete_name or "All"}',
+                'context': {
+                    'active_model': 'hr.overtime.employees',
+                    'active_ids': ot_attendance.ids,
+                }
+            }
+        elif self.type_report == 'cash_meal':
+            return {
+                'type': 'ir.actions.report',
+                'report_name': 'sanbe_hr_tms.report_ot_meals_cash_html',
+                'report_type': 'qweb-html',
+                'report_file': f'Rekap_Overtime_Cash_Meals_{self.department_id.complete_name or "All"}',
                 'context': {
                     'active_model': 'hr.overtime.employees',
                     'active_ids': ot_attendance.ids,
