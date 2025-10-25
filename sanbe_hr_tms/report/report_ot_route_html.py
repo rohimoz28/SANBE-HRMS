@@ -31,7 +31,13 @@ class RouteReportHTML(models.Model):
 
         for obj in lines:
             route_name = obj.route_id.name or 'Tidak Diketahui'
-
+            meals = '-'
+            if obj.meals:                
+                meals = 'Dine'
+            elif obj.meals_cash:                
+                meals = 'Cash'
+            else:
+                meals = '-'
             line_data = {
                 'area': self.env.user.area.name or 'Tidak Diketahui',
                 'branch': obj.branch_id.name or 'Tidak Diketahui',
@@ -47,7 +53,7 @@ class RouteReportHTML(models.Model):
                 'plan_end': obj.ot_plann_to_char or '-',
                 'real_start': obj.realization_time_from_char or '-',
                 'real_end': obj.realization_time_to_char or '-',
-                'meal': 'Dine' if obj.meals else ('Cash' if obj.meals_cash else '-'),
+                'meal': meals,
             }
 
             if route_name not in grouped_lines:
