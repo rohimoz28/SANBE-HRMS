@@ -41,6 +41,8 @@
                                     <div class="column">
                                         <label for="is_half_day" readonly="permission_status != 'draft'" invisible="permission_type_code != 'A1'"/> 
                                         <field name="is_half_day" readonly="permission_status != 'draft'" invisible="permission_type_code != 'A1'"/>
+                                        <label for="is_replacement_half_day" readonly="permission_status != 'draft'" invisible="permission_type_code != 'G1'"/> 
+                                        <field name="is_replacement_half_day" readonly="permission_status != 'draft'" invisible="permission_type_code != 'G1'"/>
                                     </div>
                                 </div>
                                 <field name="total_leave_balance" readonly="1" invisible="not permission_type_id" force_save="1"/>
