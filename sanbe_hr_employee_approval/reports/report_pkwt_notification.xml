@@ -1,186 +1,200 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <template id="eoc_pdf_format">
-            <t t-call="web.basic_layout">
-                <div class="header">
-                    <t t-set="company" t-value="res_company" />
-                    <table style="width=100%; margin-right: auto; border: 0px solid transparent;">
-                        <tr>
-                            <td>
-                                <img
-                                    t-if="company.logo"
-                                    t-att-src="image_data_uri(company.logo)"
-                                    style="max-height: 100px; width: 200px;" alt="Logo"
-                                />
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="row">
-                        <div class="col-12">
-                            <div style="border-bottom: 1px solid black; margin-bottom: 2px;" />
-                            <div style="border-bottom: 4px solid black;" />
-                        </div>
-                    </div>
-                    <table style="width=100%; margin-left: auto; border: 0px solid transparent;">
-                        <tr>
-                            <td class="text-left" style="vertical-align: middle; font-family: 'Bookman Old Style', Georgia, serif;">
-                                <strong>
-                                    <span style="font-size:17px;" t-field="company.name" />
-                                    Pharmaceutical Manufacturer
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" class="text-left">
-                            <t t-if="o.employee_id.branch_id.street">
-                                <strong>
-                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.street" />
-                                </strong>
-                            </t>
-                            <t t-if="o.employee_id.branch_id.street2">
-                                <strong>
-                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.street2" />
-                                </strong>
-                            </t>
-                            <t t-if="o.employee_id.branch_id.city">
-                                <strong>
-                                    <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.city" />
-                                </strong>
-                            </t>
-                                <strong>
-                                    <br /> Telp: <t t-if="o.employee_id.branch_id.phone"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.phone" /></t>
-                                    <br /> Fax: <t t-if="o.employee_id.branch_id.fax"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.fax" /></t>
-                                    <br />
-                                    <t t-if="o.employee_id.branch_id.city"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.city" /></t> <t t-if="o.employee_id.branch_id.zip"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="o.employee_id.branch_id.zip" /></t>
-                                </strong>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="page">
-                    <div class="text-center" style="text-align: center;">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <t t-set="date" t-value="o.write_date"/>
-                                <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
-                                <br/>
-                                <br/>
-                                <p style="text-align: justify; font-size:16px;">
-                                    <strong>Bandung, 
-                                        <t t-esc="dates"/>
-                                    </strong>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div style="text-align: left; font-size:16px;" class="col-xs-12">
-                                <strong>
-                                    <p>Kepada
-                                        <br/>
-                                    Yth. 
-                                        <span t-field="o.receiver_id.name"/>
-                                        <br/>
-                                        <span t-field="o.receiver_id.job_id.name"/>
-                                        <br/>
-                                    Di Tempat.
-                                    </p>
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <p style="text-align:justify; font-size:16px;">Nomor: 
-                                    <strong>
-                                        <span t-field="o.name"/>
-                                    </strong>
-                                    <br/>
-                                    Perihal: 
-                                    <strong>
-                                        <u>Pemberitahuan berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT)</u>
-                                    </strong>
-                                </p>
-                            </div>
-                        </div>
-                    <br/>
-                        <p style="text-align:justify; font-size:16px;"> Dengan hormat, <br/>
-                            Melalui surat ini kami sampaikan mengenai Perjanjian Kerja Waktu Tertentu (PKWT), atas nama :
-                        </p>
-                        <ol style="text-align:justify; font-size:16px; margin-top: 10px;">
-                            <li>
-                                <strong>
-                                    <span t-field="o.employee_id.name"/>
-                                </strong> - 
-                                <strong>
-                                    <span t-field="o.employee_id.job_id.name"/>
-                                </strong>
-                                <ul>
-                                    <li> PKWT ybs berakhir pada tanggal 
-                                        <strong>
-                                            <span t-field="o.char_eoc_date"/>
-                                        </strong>. 
-                                    </li>
-                                    <li> Perpanjangan PKWT tahun ke 
-                                        <span t-field="o.employee_id.contract_year"/>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
-                        <p style="text-align:justify; font-size:16px;">
-                                            Untuk itu, kami mohon informasi selanjutnya terkait status yang bersangkutan, Jika PKWT-nya tidak diperpanjang, kami akan menghitungkan hari kerja dan sisa cutinya untuk dibayarkan.
-                        </p>
-                        <p style="text-align:justify; font-size:16px;">
-                                            Jika diperpanjang maka sertakan:
-                            
-                            <ol style="text-align:justify; font-size:16px;">
-                                <li>
-                                                            Surat permohonan perpanjangan kontrak karyawan yang ditujukan kepada 
-                                    <strong>Personalia &amp; G.A. Manager</strong> serta mengisi "
-                                    <strong>Form Tenaga Kerja</strong>".
-                                
-                                </li>
-                                <li>
-                                                            Mengisi formulir analisa perpanjangan kontrak karyawan untuk di review oleh HRD Corporate.
-                                </li>
-                            </ol>
-                        </p>
-                        <p style="text-align:justify; font-size:16px;">
-                                                Jawaban dapat langsung ditulis pada tempat yang kosong di surat ini dan 
-                            <strong>
-                                <u>segera dikembalikan ke Personalia</u>
-                            </strong> paling lambat 
-                            <strong>7 hari</strong> sebelum berakhirnya jangka waktu PKWT yang bersangkutan.
-                        
-                        </p>
-                        <p style="text-align:justify; font-size:16px;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
-                        <p style="text-align:justify; font-size:16px;">
-                                            Selanjutnya seluruh permohonan kontrak akan kami sampaikan kepada Owner untuk dimohonkan persetujuannya.</p>
-                        <p style="text-align:justify; font-size:16px;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
-                    </div>
-                    <br/>
-                    <div class="text-right">
-                        <p style="font-size:16px;">Hormat kami,</p>
-                        <br/>
-                        <br/>
-                        <p style="font-size:16px;">
-                            <strong>
-                                <span>Asep Rohman, SH.</span>
-                            </strong>
-                            <br/>
-                            <br/>
-                            <span>Personnel &amp; General Affairs Manager</span>
-                        </p>
-                    </div>
-                </div>
-            </t>
-        </template>
         <template id="report_skk_eoc_pdf_template">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="sanbe_hr_employee_approval.eoc_pdf_format"/>
+                <style>
+                    .page {
+                        font-family: 'Times New Roman', Times, serif !important;
+                    }
+                    body {
+                        font-family: 'Times New Roman', Times, serif !important;
+                    } 
+                </style>
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.basic_layout">
+                        <thead>
+                            <t t-set="company" t-value="res_company"/>
+                            <table style="width=100%; margin-right: auto; border: 0px solid transparent;">
+                                <tr>
+                                    <td>
+                                        <img
+                                            t-if="company.logo"
+                                            t-att-src="image_data_uri(company.logo)"
+                                            style="max-height: 100px; width: 200px;" alt="Logo"
+                                        />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div style="border-bottom: 1px solid black; margin-bottom: 2px;"/>
+                                    <div style="border-bottom: 4px solid black;"/>
+                                </div>
+                            </div>
+                            <table style="width=100%; margin-left: auto; border: 0px solid transparent;">
+                                <tr>
+                                    <td class="text-left" style="vertical-align: middle; font-family: 'Times New Roman', Times, serif;">
+                                        <strong>
+                                            <span style="font-size:18px;" t-field="company.name"/>
+                                            <span style="font-size:14px;">Pharmaceutical Manufacturer</span> 
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:13px; font-family: 'Times New Roman', Times, serif;" class="text-left">
+                                    <t t-if="doc.employee_id.branch_id.street">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.street"/>
+                                        </strong>
+                                    </t>
+                                    <t t-if="doc.employee_id.branch_id.street2">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.street2"/>
+                                        </strong>
+                                    </t>
+                                    <t t-if="doc.employee_id.branch_id.city">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.city"/>
+                                        </strong>
+                                    </t>
+                                        <strong>
+                                            <br/> Telp: <t t-if="doc.employee_id.branch_id.phone"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.phone"/></t>
+                                            <br/> Fax: <t t-if="doc.employee_id.branch_id.fax"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.fax"/></t>
+                                            <br/>
+                                            <t t-if="doc.employee_id.branch_id.city"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.city"/></t> <t t-if="doc.employee_id.branch_id.zip"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.zip"/></t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </thead>
+                        <div class="page">
+                            <style>
+                                p {
+                                    line-height: 1.1;
+                                }
+                            </style>
+                            <div class="text-center" style="text-align: center; font-family: 'Times New Roman', Times, serif; margin-top: -10mm;">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <t t-set="date" t-value="doc.write_date"/>
+                                        <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                        <br/>
+                                        <br/>
+                                        <p style="text-align: justify; font-size:12pt;">
+                                            <strong>Bandung, 
+                                                <t t-esc="dates"/>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div style="text-align: left; font-size:12pt;" class="col-xs-12">
+                                        <strong>
+                                            <p>Kepada
+                                                <br/>
+                                            Yth. Bapak/Ibu 
+                                                <span t-field="doc.receiver_id.name"/>
+                                                <br/>
+                                                <span t-field="doc.receiver_id.job_id.name"/>
+                                                <br/>
+                                            Di Tempat.
+                                            </p>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="content" style="font-family: 'Times New Roman', Times, serif;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p style="text-align:justify; font-size:12pt;">Nomor: 
+                                            <strong>
+                                                <span t-field="doc.name"/>
+                                            </strong>
+                                            <br/>
+                                            Perihal: 
+                                            <strong>
+                                                <u>Pemberitahuan berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT)</u>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <p style="text-align:justify; font-size:13pt;"> Dengan hormat, <br/>
+                                    Melalui surat ini kami sampaikan mengenai Perjanjian Kerja Waktu Tertentu (PKWT), atas nama :
+                                </p>
+                                <ol style="text-align:justify; font-size:13pt; margin-top: 10px;">
+                                    <li>
+                                        <strong>
+                                            <span t-field="doc.employee_id.name"/>
+                                        </strong> - 
+                                        <strong>
+                                            <span t-field="doc.employee_id.job_id.name"/>
+                                        </strong>
+                                        <ul>
+                                            <li> PKWT ybs berakhir pada tanggal 
+                                                <strong>
+                                                    <span t-field="doc.char_eoc_date"/>
+                                                </strong>. 
+                                            </li>
+                                            <li> Perpanjangan PKWT tahun ke 
+                                                <span t-field="doc.employee_id.contract_year"/>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                    Untuk itu, kami mohon informasi selanjutnya terkait status yang bersangkutan, Jika PKWT-nya tidak diperpanjang, kami akan menghitungkan hari kerja dan sisa cutinya untuk dibayarkan.
+                                </p>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                    Jika diperpanjang maka sertakan:
+                                    
+                                    <ol style="text-align:justify; font-size:13pt;">
+                                        <li>
+                                                                    Surat permohonan perpanjangan kontrak karyawan yang ditujukan kepada 
+                                            <strong>Personalia &amp; G.A. Manager</strong> serta mengisi "
+                                            <strong>Form Tenaga Kerja</strong>".
+                                        
+                                        </li>
+                                        <li>
+                                                                    Mengisi formulir analisa perpanjangan kontrak karyawan untuk di review oleh HRD Corporate.
+                                        </li>
+                                    </ol>
+                                </p>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                        Jawaban dapat langsung ditulis pada tempat yang kosong di surat ini dan 
+                                    <strong>
+                                        <u>segera dikembalikan ke Personalia</u>
+                                    </strong> paling lambat 
+                                    <strong>7 hari</strong> sebelum berakhirnya jangka waktu PKWT yang bersangkutan.
+                                
+                                </p>
+                                <p style="text-align:justify; font-size:13pt;">Terlampir data absensi selama 1 tahun sebagai bahan pertimbangan.</p>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                    Selanjutnya seluruh permohonan kontrak akan kami sampaikan kepada Owner untuk dimohonkan persetujuannya.</p>
+                                <p style="text-align:justify; font-size:13pt;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
+                            </div>
+                            <br/>
+                            <div class="text-right" style="font-family: 'Times New Roman', Times, serif;">
+                                <p style="font-size:13pt;">Hormat kami,</p>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p style="line-height: 0.9;">
+                                    <strong>
+                                        <span style="font-size: 14pt; text-decoration: underline; display: block;">
+                                            Asep Rohman, SH.
+                                        </span>
+                                    </strong>
+                                    <span style="font-size: 11pt; display: block; margin-top: -8px;">
+                                        Personnel &amp; General Affairs Manager
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </t>
                 </t>
             </t>
         </template>
