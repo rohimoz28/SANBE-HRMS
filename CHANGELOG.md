@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.232-2025w44.1 (2025-10-27)
+
+- de88d5e [IMP] TMS : Enhancement Permission Entry
+
+
 ## v0.0.230-2025w43.13 (2025-10-25)
 
 - 9b25fb4 [FIX]TMS : load inside manifest and init
