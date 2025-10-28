@@ -525,14 +525,16 @@
                                     <field name="dayname" string="Day Approval From" readonly="1" optional="show"/>
                                     <field name="plann_date_from" string="Approval Date From" readonly="1" optional="show"/>
                                     <field name="plann_date_to" string="Approval Date to" readonly="1" optional="show"/>
-                                    <field name="approval_ot_from" string="Approval Time From" widget="float_time" readonly="1" optional="show"/>
-                                    <field name="approval_ot_to" string="Approval Time To" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="approval_ot_from" string="Verify Time From" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="approval_ot_to" string="Verify Time To" widget="float_time" readonly="1" optional="show"/>
                                     <field name="time_in" string="Realisasi Time From" widget="float_time" readonly="1" optional="show"/>
                                     <field name="edited_time_in" string="Edited Time From" widget="float_time" readonly="1" optional="hide"/>
                                     <field name="time_out" string="Realisasi Time To" widget="float_time" readonly="1" optional="show"/>
                                     <field name="edited_time_out" string="Edited Time To" widget="float_time" readonly="1" optional="hide"/>
-                                    <field name="aot1" string="OT 1" widget="float_time" readonly="1" optional="show"/>
-                                    <field name="aot2" string="OT 2" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="aot1" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="aot2" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="aot3" widget="float_time" readonly="1" optional="show"/>
+                                    <field name="aot4" widget="float_time" readonly="1" optional="show"/>
                                     <field name="type" readonly="1" column_invisible='1'/>
 
                                     <field name="status_attendance" column_invisible="1" width="170px" style="max-width:200px" decoration-danger="status_attendance in ['absent']"/>
