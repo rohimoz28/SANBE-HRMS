@@ -142,17 +142,48 @@ class HRPermissionEntry(models.Model):
                 rec.leave_used = 0
                 rec.remaining_leave = 0
     
+    # Validasi jumlah hari cuti > saldo cuti
+    # Berlaku ketika potong saldo cuti = True pada master cuti
     @api.constrains('leave_used','total_leave_balance')
     def _constrains_leave_balance(self):
         for rec in self:
-            if rec.leave_used and rec.total_leave_balance and rec.leave_used > rec.total_leave_balance:
-                raise ValidationError('Insufficient leave balance.')
+            leave_master = self.env['sb.leave.master'].search([
+                ('code', '=', rec.permission_type_code)
+            ], limit=1)
+            leave_master_deduct = leave_master.is_deduct_balance
+            if rec.leave_used and rec.total_leave_balance and rec.leave_used > rec.total_leave_balance and leave_master_deduct == True:
+                raise ValidationError('Insufficient leave balance for Annual Leave.')
     
+    # Validasi saldo cuti = 0
+    # Berlaku ketika potong saldo cuti = True pada master cuti
     @api.constrains('total_leave_balance','permission_type_id')
     def _constraint_leave_balance_zero(self):
         for rec in self:
-            if rec.permission_type_id and rec.total_leave_balance == 0:
+            leave_master = self.env['sb.leave.master'].search([
+                ('code', '=', rec.permission_type_code)
+            ], limit=1)
+            leave_master_deduct = leave_master.is_deduct_balance
+            if rec.permission_type_id and rec.total_leave_balance == 0 and leave_master_deduct == True:
                 raise ValidationError('You cannot create a Permission Entry. Leave balance is 0.')
+
+    # Validasi special leave, ketika jumlah hari cuti > saldo cuti
+    @api.constrains('leave_used','permission_type_id')
+    def _constraint_special_leave(self):
+        for rec in self:
+            leave_master = self.env['sb.leave.master'].search([
+                ('code', '=', rec.permission_type_code)
+            ], limit=1)
+            leave_master_days = leave_master.days
+            leave_master_deduct = leave_master.is_deduct_balance
+            if leave_master_days > 0 and leave_master_deduct == False and rec.leave_used > leave_master_days:
+                raise ValidationError(f"Insufficient leave balance. Maximum available for this leave type is {leave_master_days} days.")
+
+    # Validasi time from / time to, ketika setengah hari = True
+    @api.constrains('is_half_day', 'is_replacement_half_day')
+    def _constrains_time_from_to(self):
+        for rec in self:
+            if (rec.is_half_day or rec.is_replacement_half_day) and (rec.permission_time_from == 0.0 or rec.permission_time_from == 0.0):
+                raise ValidationError("Please specify both Time From and Time To for half-day permissions.")
 
     @api.onchange('holiday_status_id', 'time_days')
     def set_remarks(self):
@@ -181,7 +212,7 @@ class HRPermissionEntry(models.Model):
                 tgl1 = datetime.strptime(ganti1, date_format)
                 tgl2 = datetime.strptime(ganti2, date_format)
                 total_days = (tgl1 - tgl2).days
-                rec.time_days = 0.5 if rec.is_half_day or rec.is_replacement_half_day else total_days + 1
+                rec.time_days = (total_days + 1) * 0.5 if rec.is_half_day or rec.is_replacement_half_day else total_days + 1
                 #rec.time_days = (tgl1 - tgl2).days
             else:
                 rec.time_days = 0
@@ -306,10 +337,17 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             if rec.is_approved == True:
                 rec.permission_status = 'approved'
+                
+                leave_master = self.env['sb.leave.master'].search([
+                    ('code', '=', rec.permission_type_code)
+                ], limit=1)
+                leave_master_deduct = leave_master.is_deduct_balance
 
                 if rec.permission_type_id:
                     benefit = rec.permission_type_id
-                    benefit.total_leave_balance = rec.remaining_leave
+                    
+                    if leave_master_deduct == True:
+                        benefit.total_leave_balance = rec.remaining_leave
 
                     self.env['sb.leave.tracking'].create({  
                         'leave_req_id': benefit.leave_req_id.id,
