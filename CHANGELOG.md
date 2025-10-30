@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.237-2025w44.6 (2025-10-29)
+
+- c747b65 [IMP] TMS : Perubahan Label dan Penambahan Kolom di Menu Overtime TMS Summary Entry
+
+
+## v0.0.235-2025w44.4 (2025-10-28)
+
+- a7643a1 [FIX] TMS : improvement calculate_tms.sql
+
+
 ## v0.0.232-2025w44.1 (2025-10-27)
 
 - de88d5e [IMP] TMS : Enhancement Permission Entry

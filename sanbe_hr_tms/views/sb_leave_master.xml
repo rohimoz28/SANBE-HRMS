@@ -15,6 +15,7 @@
                             <field name="area_id" options="{'no_create': True,'no_create_edit': True}"/>
                             <field name="branch_ids" invisible="1"/>
                             <field name="branch_id" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="is_deduct_balance" />
                             <field name="days" />
                         </group>
                     </sheet>
@@ -31,6 +32,7 @@
                     <field name="code" />
                     <field name="area_id" />
                     <field name="branch_id" />
+                    <field name="is_deduct_balance" />
                     <field name="days" />        
                 </tree>
             </field>
