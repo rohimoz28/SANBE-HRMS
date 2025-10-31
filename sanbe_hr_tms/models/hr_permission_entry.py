@@ -256,6 +256,7 @@ class HRPermissionEntry(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        """ Insert ke hr_leave dikomen agar validasi hr_leave tidak muncul ketika create permission entry"""
         for vals in vals_list:
             if vals.get('trans_number', _('New')) == _('New'):
                 if 'area_id' in vals:
@@ -274,29 +275,28 @@ class HRPermissionEntry(models.Model):
                         vals[
                             'trans_number'] = f"{tahun}/{bulan}/{branch_unit_id}/PE/{department_code}/{self.env['ir.sequence'].next_by_code('hr.permission.entry')}"
         res = super(HRPermissionEntry, self).create(vals_list)
-
-        for alldata in res:
-            # Search if data is holiday based on tmsentry data
-            if not alldata.is_holiday:
-                # Search if employee data already exist
-                myleave = self.env['hr.leave'].sudo().search([('permition_id', '=', alldata.id)])
-                if not myleave:
-                    # IF Hr Leave no Data Permition Id than created it
-                    myleave = self.env['hr.leave'].sudo().create({'employee_id': alldata.employee_id.id,
-                                                                  'date_from': alldata.permission_date_from,
-                                                                  'date_to': alldata.permission_date_To,
-                                                                  #   'holiday_type': 'company',
-                                                                  'request_date_from': alldata.permission_date_from,
-                                                                  'request_date_to': alldata.permission_date_To,
-                                                                  'number_of_days_display': alldata.permission_date_To - alldata.permission_date_from,
-                                                                  'is_permition': True,
-                                                                  'holiday_type': 'employee',
-                                                                  'department_id': alldata.employee_id.department_id.id,
-                                                                  'company_id': self.env.company.id,
-                                                                  'holiday_status_id': 6 or False,
-                                                                  # Field ini punya relasi ke hr_leave hr_leave_type dan required tapi ada permintaan di hide | 6 Full Day Leave - Cuti 1 Hari
-                                                                  'permition_id': alldata.id or alldata._origin.id})
-                    alldata.leave_id = myleave.id
+        # for alldata in res:
+        #     # Search if data is holiday based on tmsentry data
+        #     if not alldata.is_holiday:
+        #         # Search if employee data already exist
+        #         myleave = self.env['hr.leave'].sudo().search([('permition_id', '=', alldata.id)])
+        #         if not myleave:
+        #             # IF Hr Leave no Data Permition Id than created it
+        #             myleave = self.env['hr.leave'].sudo().create({'employee_id': alldata.employee_id.id,
+        #                                                           'date_from': alldata.permission_date_from,
+        #                                                           'date_to': alldata.permission_date_To,
+        #                                                           #   'holiday_type': 'company',
+        #                                                           'request_date_from': alldata.permission_date_from,
+        #                                                           'request_date_to': alldata.permission_date_To,
+        #                                                           'number_of_days_display': alldata.permission_date_To - alldata.permission_date_from,
+        #                                                           'is_permition': True,
+        #                                                           'holiday_type': 'employee',
+        #                                                           'department_id': alldata.employee_id.department_id.id,
+        #                                                           'company_id': self.env.company.id,
+        #                                                           'holiday_status_id': 6 or False,
+        #                                                           # Field ini punya relasi ke hr_leave hr_leave_type dan required tapi ada permintaan di hide | 6 Full Day Leave - Cuti 1 Hari
+        #                                                           'permition_id': alldata.id or alldata._origin.id})
+        #             alldata.leave_id = myleave.id
         return res
 
     @api.onchange('approved1', 'approved2', 'approved3')
