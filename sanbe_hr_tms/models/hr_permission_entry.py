@@ -109,6 +109,27 @@ class HRPermissionEntry(models.Model):
     is_replacement_half_day = fields.Boolean('Setengah Hari', default=False)
     permission_type_code = fields.Char('Permission Code', related='permission_type_id.code')
 
+    @api.constrains('permission_date_from', 'permission_date_To')
+    def _constrains_leave_date(self):
+        """ Validasi start date > end date """
+        for rec in self:
+            if rec.permission_date_from > rec.permission_date_To:
+                raise ValidationError('The start date must be before the end date.')
+
+    @api.constrains('employee_id', 'permission_date_from', 'permission_date_To')
+    def _constrains_overlapping(self):
+        """ Validasi tanggal overlapping """
+        for rec in self:
+            overlapping_record = self.search([
+                ('id', '!=', rec.id),
+                ('employee_id','=',rec.employee_id.id),
+                ('permission_date_from','<=',rec.permission_date_from),
+                ('permission_date_To','>=',rec.permission_date_To),
+                ('permission_status','=','approved')
+            ])
+            if overlapping_record:
+                raise ValidationError('You already have a leave request for these dates.')
+
     @api.constrains('leave_used', 'total_leave_balance')
     def _constrains_leave_balance(self):
         """ Validasi jumlah hari cuti > saldo cuti
