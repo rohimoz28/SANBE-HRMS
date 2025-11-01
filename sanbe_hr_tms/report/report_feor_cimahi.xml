@@ -7,11 +7,11 @@
             <field name="format">A4</field>
             <field name="orientation">Landscape</field>
             <field name="margin_top">27</field>
-            <field name="margin_bottom">15</field>
+            <field name="margin_bottom">5</field>
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">21</field>
+            <field name="header_spacing">2</field>
             <field name="dpi">90</field>
         </record>
 
@@ -142,8 +142,8 @@
                         </style>
                         <t t-set="counter" t-value="0"/>
                         <div class="header">
-                            <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
-                            <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+                            <div style="border-top: 1px solid black; margin-bottom: 1px;"/>
+                            <div style="border-top: 1px solid black; margin-bottom: 5px;"/>
                             <table style="width: 100%; border-collapse: collapse;">
                                 <tr>
                                     <td style="width: 15%; text-align: center; border: none; padding: 5px;">
@@ -190,9 +190,9 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div style="height: 6px;"></div>
-                            <div style="border-top: 1px solid black; margin-bottom: 1px;"></div>
-                            <div style="border-top: 1px solid black; margin-bottom: 5px;"></div>
+                            <div style="height: 6px;"/>
+                            <div style="border-top: 1px solid black; margin-bottom: 1px;"/>
+                            <div style="border-top: 1px solid black; margin-bottom: 5px;"/>
                         </div>
                         <div class="page">
                             <t t-set="total_employees" t-value="len(doc.hr_ot_planning_ids)"/>
@@ -208,7 +208,7 @@
                                 <t t-set="end_index" t-value="(page_num + 1) * employees_per_page"/>
                                 <t t-set="page_employees" t-value="doc.hr_ot_planning_ids[start_index:end_index]"/>
                                 <!-- <table class="table table-bordered" style="width: 100%; border-collapse: collapse;"> -->
-                                <table style="width: 100%;">
+                                <table style="table-layout: fixed; width: 100%; border-collapse: collapse;">
                                     <style>
                                         table {
                                         border-collapse: collapse;
@@ -235,167 +235,192 @@
                                         padding: 4px;
                                         }
                                     </style>
+                                    <colgroup>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                        <col style="width: 3.85%;"/>
+                                    </colgroup>
                                     <thead>
                                         <tr valign="top">
-                                            <td colspan="2"
-                                                style="width: 9%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                            <td colspan="3"
+                                                style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Section</b>
                                             </td>
-                                            <td colspan="3"
-                                                style="width: 27%; border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="5" style="border: 1px solid #000000; padding: 4px;">
                                                 <span t-field="doc.department_id.name"/>
                                             </td>
-                                            <td colspan="4" align="center"
-                                                style="width: 27%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                            <td colspan="9" align="center"
+                                                style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Plan/Proposal</b>
                                             </td>
-                                            <td colspan="4" align="center"
-                                                style="width: 36%; border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
+                                            <td colspan="9" align="center"
+                                                style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Realization</b>
                                             </td>
                                         </tr>
                                         <tr valign="top">
-                                            <td colspan="2"
+                                            <td colspan="3"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Day</b>
                                             </td>
-                                            <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="5" style="border: 1px solid #000000; padding: 4px;">
                                                 <span t-field="doc.request_day_name"/>
                                             </td>
-                                            <td colspan="2" align="center"
-                                                style="border: 1px solid #000000; padding: 4px; ">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px; ">
                                                 <b>Prepare by</b>
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                 <b>Review By</b>
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                 <b>Approved By</b>
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                 <b>Checked By</b>
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                 <b>Review By</b>
                                             </td>
-                                            <td colspan="2" align="center"
-                                                style="border: 1px solid #000000; padding: 4px;">
+                                            <td align="center" colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                 <b>Approved By</b>
                                             </td>
                                         </tr>
                                         <tr valign="top">
-                                            <td colspan="2"
+                                            <td colspan="3"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Date</b>
                                             </td>
-                                            <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
-                                                <span t-field="doc.periode_from" t-options='{"widget": "date"}'/>
+                                            <td colspan="5" style="border: 1px solid #000000; padding: 4px;">
+                                                <span t-field="doc.periode_from" t-options="{'widget': 'date'}"/>
                                             </td>
-                                            <td colspan="2" rowspan="2"
+                                            <td colspan="3" rowspan="2"
                                                 style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                 <div class="kotak">APPROVED</div>
                                             </td>
-                                            <td rowspan="2"
+                                            <td colspan="3" rowspan="2"
                                                 style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                 <div class="kotak">APPROVED</div>
                                             </td>
-                                            <td rowspan="2"
+                                            <td colspan="3" rowspan="2"
                                                 style="border: 1px solid #000000; padding: 4px; height: 50px; text-align: center; vertical-align: middle; font-weight: bold; color: red;">
                                                 <div class="kotak">APPROVED</div>
                                             </td>
-                                            <td rowspan="2" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" rowspan="2" style="border: 1px solid #000000; padding: 4px;">
                                                 <br/>
                                             </td>
-                                            <td rowspan="2" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" rowspan="2" style="border: 1px solid #000000; padding: 4px;">
                                                 <br/>
                                             </td>
-                                            <td rowspan="2" colspan="2"
-                                                style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" rowspan="2" style="border: 1px solid #000000; padding: 4px;">
                                                 <br/>
                                             </td>
                                         </tr>
                                         <tr valign="top">
-                                            <td colspan="2"
+                                            <td colspan="3"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Total Personil</b>
                                             </td>
-                                            <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="5" style="border: 1px solid #000000; padding: 4px;">
                                                 <span t-field="doc.count_record_employees"/>
                                             </td>
                                         </tr>
                                         <tr valign="top">
-                                            <td colspan="2"
+                                            <td colspan="3"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Shift</b>
                                             </td>
-                                            <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="5" style="border: 1px solid #000000; padding: 4px;">
                                                 <span t-field="doc.default_ot_hours"/>
                                             </td>
-                                            <td colspan="2" align="center"
-                                                style="border: 1px solid #000000; padding: 4px;">Supervisor
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">
+                                                Supervisor
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                 Manager
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                 Plant
                                                 Manager
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                 Supervisor
                                             </td>
-                                            <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                 Manager
                                             </td>
-                                            <td colspan="2" align="center"
-                                                style="border: 1px solid #000000; padding: 4px;">Plant Manager
+                                            <td colspan="3" align="center" style="border: 1px solid #000000; padding: 4px;">Plant
+                                                Manager
                                             </td>
                                         </tr>
-
                                         <tr valign="top">
-                                            <td rowspan="3"
+                                            <td colspan="1" rowspan="3" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>No</b>
                                             </td>
-                                            <td rowspan="3"
+                                            <td colspan="2" rowspan="3" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>NIK</b>
                                             </td>
-                                            <td colspan="2" rowspan="3"
+                                            <td colspan="4" rowspan="3" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Name</b>
                                             </td>
-                                            <td rowspan="3"
+                                            <td colspan="1" rowspan="3" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Sign</b>
                                             </td>
-                                            <td colspan="4" align="center"
+                                            <td colspan="9" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Overtime Proposal</b>
                                             </td>
-                                            <td colspan="4" align="center"
+                                            <td colspan="9" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Realization Checked</b>
                                             </td>
                                         </tr>
+                                        <!--SEKARANG YANG INI-->
+
                                         <tr valign="top">
                                             <td colspan="2" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Time</b>
                                             </td>
-                                            <td rowspan="2" align="center"
+                                            <td colspan="4" rowspan="2" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Work Plan</b>
                                             </td>
-                                            <td rowspan="2" align="center"
+                                            <td colspan="3" rowspan="2" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Output Plan</b>
                                             </td>
-                                            <td rowspan="2" align="center"
+                                            <td colspan="4" rowspan="2" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Output Realization</b>
                                             </td>
-                                            <td rowspan="2" align="center"
+                                            <td colspan="3" rowspan="2" align="center"
                                                 style="border: 1px solid #000000; padding: 4px; background-color: #c2f7f7">
                                                 <b>Explanation Deviation</b>
                                             </td>
@@ -405,12 +430,10 @@
                                             </td>
                                         </tr>
                                         <tr valign="top">
-                                            <td align="center"
-                                                style="border: 1px solid #000000; background-color: #c2f7f7">
+                                            <td align="center" style="border: 1px solid #000000; background-color: #c2f7f7">
                                                 <b>Start</b>
                                             </td>
-                                            <td align="center"
-                                                style="border: 1px solid #000000; background-color: #c2f7f7">
+                                            <td align="center" style="border: 1px solid #000000; background-color: #c2f7f7">
                                                 <b>Finish</b>
                                             </td>
                                             <td align="center"
@@ -424,43 +447,43 @@
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 8pt; font-family: 'Arial';">
-                                        <!-- Tampilkan employees untuk halaman ini -->
                                         <t t-foreach="page_employees" t-as="employee">
                                             <tr valign="top">
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="1" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-esc="start_index + employee_index + 1"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="2"
+                                                    style="border: 1px solid #000000; padding: 4px; white-space: normal; word-wrap: break-word; padding-right: 30px;">
                                                     <span t-field="employee.nik"/>
                                                 </td>
-                                                <td colspan="2" style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="4" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.employee_id.name"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
-                                                    <br/>
+                                                <td colspan="1" style="border: 1px solid #000000; padding: 4px;">
+
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000;">
+                                                <td colspan="1" align="center" style="border: 1px solid #000000;">
                                                     <span t-field="employee.ot_plann_from_char"/>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000;">
+                                                <td colspan="1" align="center" style="border: 1px solid #000000;">
                                                     <span t-field="employee.ot_plann_to_char"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="4" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.work_plann"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.output_plann"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="4" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-esc="employee.output_realization if employee.output_realization else ''"/>
                                                 </td>
-                                                <td style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="3" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.explanation_deviation"/>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="1" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.verify_time_from_char"/>
                                                 </td>
-                                                <td align="center" style="border: 1px solid #000000; padding: 4px;">
+                                                <td colspan="1" align="center" style="border: 1px solid #000000; padding: 4px;">
                                                     <span t-field="employee.verify_time_to_char"/>
                                                 </td>
                                             </tr>
@@ -468,17 +491,17 @@
                                     </tbody>
                                     <t t-if="page_num + 1 == total_pages">
                                         <tr valign="top" style="font-size: 8pt; font-family: 'Arial';">
-                                            <td colspan="9" style="border: 1px solid #000000; padding: 4px;">CC : 1.
+                                            <td colspan="21" style="border: 1px solid #000000; padding: 4px;">CC : 1.
                                                 HRD
                                                 2.
                                                 CA
                                             </td>
-                                            <td colspan="2"
+                                            <td colspan="3"
                                                 style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
                                                 Verified by HRD :
                                             </td>
-                                            <td colspan="2"
-                                                style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: none; border-right: 1px solid #000000; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0in; padding-right: 0.04in">
+                                            <td colspan="2" align="right"
+                                                style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: none; border-right: 1px solid #000000; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0in; padding-right: 0.30in">
                                                 <strong>
                                                     <font color="#ff0000">
                                                         <b>Approved</b>
@@ -491,7 +514,7 @@
                                 <br/>
                                 <!-- Tambahkan page break setelah setiap halaman kecuali yang terakhir -->
                                 <t t-if="page_num + 1 != total_pages">
-                                    <div style="page-break-after: always;"></div>
+                                    <div style="page-break-after: always;"/>
                                 </t>
                             </t>
                             <div style="font-size: 7pt; font-family: 'Arial';">
@@ -508,8 +531,7 @@
                             </div>
                         </div>
                         <div class="footer">
-                            <hr class="footer-line1"
-                                style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
+                            <hr class="footer-line1" style="border: none; border-top: 2px solid black; margin: 2px 0;"/>
                             <div style="float: left;">
                                 <span style="font-size: 10px; font-style: italic;">
                                     \LAN\Release\SanbeU2\HRD\NS\FOR\HRD-NS.FOR.LG.033 - Form Employee Overtime
@@ -517,7 +539,9 @@
                                 </span>
                             </div>
                             <div style="float: right; text-align: right; font-size: 10px; font-style: italic;">
-                                Printed By : <span t-esc="user.name"></span> on
+                                Printed By :
+                                <span t-esc="user.name"/>
+                                on
                                 <span t-esc="(datetime.datetime.now() + datetime.timedelta(hours=7)).strftime('%d/%m/%Y %H:%M:%S')"/>
                             </div>
                             <br/>
@@ -526,5 +550,6 @@
                 </t>
             </t>
         </template>
+
     </data>
 </odoo>
