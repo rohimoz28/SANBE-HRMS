@@ -72,7 +72,7 @@
                             <field name="is_create_uid" invisible="1"/>
                         </group>
                         <group>
-                            <field name="name" readonly="state in ['approved','verification','completed','done']"/>
+                            <field name="name" readonly="1"/>
                             <field name="request_date" readonly="state in ['approved','verification','completed','done']"/>
                             <!-- <field name="periode_id" domain="[('state_process', '=', 'running')]" readonly="state in ['approved','verification','completed','done']" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/> -->
                             <!--field name="employee_id" options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"/-->
@@ -97,8 +97,72 @@
                     <notebook>
                         <page string="Request" name="overtime_request">
                             <field name="hr_ot_planning_ids"
-                                   context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}">
+                                   context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}"
+                                   invisible="state != 'draft'">
                                 <tree editable="bottom" class="o_horizontal_scroll">
+                                    <field name="state" force_save="1" column_invisible = "1"/>
+                                    <field name="ot_type" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="planning_id" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="employee_ids" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="employee_id"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="nik" readonly="state in ['approved','verification','completed','done']" force_save="1" optional="show"/>
+                                    <field name="plann_date_from" widget="date" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="plann_date_to" widget="date" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <!-- <field name="ot_plann_from" widget="easy_timepicker"/>
+                                    <field name="ot_plann_to" widget="easy_timepicker"/>
+                                    <field name="approve_time_from" widget="easy_timepicker"/>
+                                    <field name="approve_time_to" widget="easy_timepicker"/> -->
+                                    <field name="ot_plann_from" string="Req Time From" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="ot_plann_to" string="Req Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="approve_time_from" string="App Time From" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="approve_time_to" string="App Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="work_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="output_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="meals" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="realization_time_from" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="realization_time_to" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
+                                    <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
+                                    <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
+                                    <field name="verify_time_from" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
+                                    <field name="verify_time_to" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
+                                    <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="area_id"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="areah_id"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="branch_ids"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="branchh_id"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="alldepartment"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="departmenth_id"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="branch_id" context="{'default_branch_id': branch_id}"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="department_id" context="{'default_department_id': department_id}"
+                                           options="{'no_create': True,'no_quick_create': True, 'no_create_edit': True}"
+                                           force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="bundling_ot" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <button name="btn_view_overtime_details" type="object" string="Detail" class="fa fa-check"/>
+                                </tree>
+                            </field>
+                            <field name="hr_ot_planning_ids"
+                                   context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}"
+                                   invisible="state == 'draft'">
+                                <tree editable="bottom" class="o_horizontal_scroll" create="0" edit="1" delete="1">
                                     <field name="state" force_save="1" column_invisible = "1"/>
                                     <field name="ot_type" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="planning_id" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>

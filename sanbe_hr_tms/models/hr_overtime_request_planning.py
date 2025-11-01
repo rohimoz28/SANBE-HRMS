@@ -358,6 +358,8 @@ class HREmpOvertimeRequest(models.Model):
 
     def btn_approved(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'approved'
             # if rec.approve1 == True and rec.approve2 == True and rec.approve3 == True and rec.approve4 == True:
             #     rec.state = 'approved'
@@ -366,6 +368,8 @@ class HREmpOvertimeRequest(models.Model):
 
     def btn_done(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'done'
 
     @api.model
@@ -405,6 +409,8 @@ class HREmpOvertimeRequest(models.Model):
 
     def btn_reject(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'reject'
 
     def btn_backdraft(self):
@@ -415,6 +421,8 @@ class HREmpOvertimeRequest(models.Model):
     def btn_verification(self):
         for rec in self:
             ot_details = rec.hr_ot_planning_ids
+            if not ot_details:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             for details in ot_details:
                 if not details.output_realization or not details.explanation_deviation:
                     raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
@@ -424,18 +432,26 @@ class HREmpOvertimeRequest(models.Model):
 
     def btn_completed(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'completed'
 
     def btn_plan_spv(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'approved_plan_spv'
 
     def btn_plan_mgr(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'approved_plan_mgr'
 
     def btn_plan_pm(self):
         for rec in self:
+            if not rec.hr_ot_planning_ids:
+                raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             rec.state = 'approved_plan_pm'
 
     # def btn_plan_hcm(self):
@@ -779,6 +795,26 @@ class HREmpOvertimeRequestEmployee(models.Model):
                         "The selected overtime date has already passed (back date).\n"
                         "Please select a valid date or contact your manager for authorization."
                     )
+    
+    @api.constrains('employee_id', 'plann_date_from', 'plann_date_to', 'approve_time_from')
+    def _constrains_working_day(self):
+        """ Validasi emp group dan jam kerja employee """
+        for rec in self:
+            emp_group = self.env['hr.empgroup.details'].sudo().search([
+                ('employee_id', '=', rec.employee_id.id),
+                ('valid_from', '<=', rec.plann_date_from),
+                ('valid_to', '>=', rec.plann_date_to),
+            ], limit=1)
+            wdcode = emp_group.wdcode.id
+            working_day = self.env['hr.working.days'].sudo().search([
+                ('id', '=', wdcode)
+            ], limit=1)
+
+            if not emp_group:
+                raise ValidationError(f"Karyawan {rec.employee_id.name} tidak memiliki Emp Group")
+            
+            if rec.approve_time_from < working_day.fullday_to:
+                raise ValidationError(f"Waktu lembur {rec.employee_id.name} tidak valid. Masih dalam jadwal kerja.")
 
     @api.model
     def create(self, vals):
