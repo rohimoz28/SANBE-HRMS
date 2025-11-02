@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.239-2025w45.1 (2025-11-03)
+
+- ae25402 [FIX] TMS : fix layout feor cimahi
+
+
 ## v0.0.237-2025w44.6 (2025-10-29)
 
 - c747b65 [IMP] TMS : Perubahan Label dan Penambahan Kolom di Menu Overtime TMS Summary Entry
