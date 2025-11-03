@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.241-2025w45.3 (2025-11-03)
+
+- 15cbca1 [FIX] TMS : updating calculate_tms.sql by Gilang
+
+
 ## v0.0.239-2025w45.1 (2025-11-03)
 
 - ae25402 [FIX] TMS : fix layout feor cimahi
