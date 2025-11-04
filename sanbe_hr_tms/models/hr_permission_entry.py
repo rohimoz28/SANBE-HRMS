@@ -123,8 +123,8 @@ class HRPermissionEntry(models.Model):
             overlapping_record = self.search([
                 ('id', '!=', rec.id),
                 ('employee_id','=',rec.employee_id.id),
-                ('permission_date_from','<=',rec.permission_date_from),
-                ('permission_date_To','>=',rec.permission_date_To),
+                ('permission_date_from','<=',rec.permission_date_To),
+                ('permission_date_To','>=',rec.permission_date_from),
                 ('permission_status','=','approved')
             ])
             if overlapping_record:

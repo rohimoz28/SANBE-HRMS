@@ -1,4 +1,8 @@
 from odoo import fields, models, api, _, Command
+from odoo.exceptions import UserError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class SbLeaveAllocationRequest(models.Model):
     _name = 'sb.leave.allocation.request'
@@ -20,6 +24,18 @@ class SbLeaveAllocationRequest(models.Model):
         ('running', 'Running'),
         ('hold', 'Hold'),
     ], string='State', default='draft')
+
+    @api.model
+    def _cron_add_monthly_leave(self):
+        """Run add_monthly_leave setiap tanggal 1"""
+        _logger.info("Running cron: Add Monthly Leave Balance")
+        try:
+            self.env.cr.execute("SELECT add_monthly_leave();")
+            self.env.cr.commit()
+            _logger.info("add_monthly_leave() executed successfully.")
+        except Exception as e:
+            _logger.error("Error calling function: %s", str(e))
+            raise UserError("Error executing the function: %s" % str(e))
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
