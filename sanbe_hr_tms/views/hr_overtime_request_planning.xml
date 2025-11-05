@@ -278,11 +278,12 @@
                                 <field name="verify_time_to" widget="float_time"/>
                             </group>
                             <group>
+                                <field name="state" invisible="1"/>
                                 <field name="machine" readonly="1"/>
                                 <field name="work_plann" readonly="1"/>
                                 <field name="output_plann" readonly="1"/>
-                                <field name="output_realization"/>
-                                <field name="explanation_deviation"/>
+                                <field name="output_realization" readonly="state == 'approved'"/>
+                                <field name="explanation_deviation" readonly="state == 'approved'"/>
                                 <field name="area_id" readonly="1"/>
                                 <field name="areah_id" invisible="1"/>
                                 <field name="branch_ids" invisible="1" />
