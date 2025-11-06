@@ -11,6 +11,7 @@ class SbLeaveMaster(models.Model):
     branch_id = fields.Many2one('res.branch', string='Business Unit', domain="[('id','in',branch_ids)]")
     name = fields.Char('Name')
     code = fields.Char('Code')
+    is_deduct_balance = fields.Boolean('Potong Saldo Cuti')
     days = fields.Float('Days')
 
     @api.depends('area_id')
