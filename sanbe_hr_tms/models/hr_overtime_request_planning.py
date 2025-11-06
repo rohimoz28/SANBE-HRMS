@@ -428,6 +428,8 @@ class HREmpOvertimeRequest(models.Model):
                     raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
                 if not details.verify_time_from or not details.verify_time_to:
                     raise ValidationError("Verify Time From/To wajib diisi sebelum melanjutkan ke tahap berikutnya.")
+                if details.realization_time_from == 0 or details.realization_time_from == 0:
+                    raise ValidationError("Realization Time From & Realization Time To belum ada, silahkan kontak HRD.")
             rec.state = 'verification'
 
     def btn_completed(self):
@@ -800,21 +802,22 @@ class HREmpOvertimeRequestEmployee(models.Model):
     def _constrains_working_day(self):
         """ Validasi emp group dan jam kerja employee """
         for rec in self:
-            emp_group = self.env['hr.empgroup.details'].sudo().search([
-                ('employee_id', '=', rec.employee_id.id),
-                ('valid_from', '<=', rec.plann_date_from),
-                ('valid_to', '>=', rec.plann_date_to),
-            ], limit=1)
-            wdcode = emp_group.wdcode.id
-            working_day = self.env['hr.working.days'].sudo().search([
-                ('id', '=', wdcode)
-            ], limit=1)
+            if rec.ot_type == 'regular':
+                emp_group = self.env['hr.empgroup.details'].sudo().search([
+                    ('employee_id', '=', rec.employee_id.id),
+                    ('valid_from', '<=', rec.plann_date_from),
+                    ('valid_to', '>=', rec.plann_date_to),
+                ], limit=1)
+                wdcode = emp_group.wdcode.id
+                working_day = self.env['hr.working.days'].sudo().search([
+                    ('id', '=', wdcode)
+                ], limit=1)
 
-            if not emp_group:
-                raise ValidationError(f"Karyawan {rec.employee_id.name} tidak memiliki Emp Group")
-            
-            if rec.approve_time_from < working_day.fullday_to:
-                raise ValidationError(f"Waktu lembur {rec.employee_id.name} tidak valid. Masih dalam jadwal kerja.")
+                if not emp_group:
+                    raise ValidationError(f"Karyawan {rec.employee_id.name} tidak memiliki Emp Group")
+                
+                if working_day.fullday_from < rec.approve_time_to and working_day.fullday_to > rec.approve_time_from:
+                    raise ValidationError(f"Waktu lembur {rec.employee_id.name} tidak valid. Masih dalam jadwal kerja.")
 
     @api.model
     def create(self, vals):
