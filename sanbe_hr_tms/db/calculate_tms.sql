@@ -3295,7 +3295,7 @@ AND*/ hts.periode_id = period
 
                              and sttd.workingday_id is not null
 
-                             and hwd.type_hari = 'shift' --tambahan
+                             --  and hwd.type_hari = 'shift' --tambahan
 
                              and hwd.code like '%2%'), --tambahan
 
@@ -3578,9 +3578,9 @@ AND*/ hts.periode_id = period
 
                              and sttd.workingday_id is not null
 
-                             and hwd.type_hari = 'shift' --tambahan
+                             --and hwd.type_hari = 'shift' --tambahan
 
-                             and hwd.code like '%3%'     --tambahan
+                             and hwd.code like '%3%' --tambahan
 
                              and sttd.date_in != sttd.date_out),
 
