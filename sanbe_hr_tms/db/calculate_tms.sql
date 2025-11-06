@@ -1524,12 +1524,12 @@ and s.details_date = cc.details_date;
                     AND hop.branch_id = branch
 
                     AND hop.area_id = l_area
-
-                    AND hop.approve1 = true
-
-                    AND hop.approve2 = true
-
-                    AND hop.approve3 = true
+--
+--                    AND hop.approve1 = true
+--
+--                    AND hop.approve2 = true
+--
+--                    AND hop.approve3 = true
 
                     AND (is_cancel = false or is_cancel is null))
 
