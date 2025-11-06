@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.245-2025w45.7 (2025-11-06)
+
+- 20ee43f [FIX] TMS : updating calculate_tms.sql by Gilang
+
+
 ## v0.0.243-2025w45.5 (2025-11-03)
 
 - 8630ff1 [IMP] TMS : Improvement Overtime Request
