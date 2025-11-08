@@ -525,6 +525,7 @@ class HREmpOvertimeRequest(models.Model):
                 'default_plann_date_from': self.periode_from,
                 'default_plann_date_to': self.periode_to,
                 'default_department_id': self.department_id.id,
+                'default_ot_type': self.ot_type,
             },
             'views': [[False, 'form']]
         }

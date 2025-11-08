@@ -83,7 +83,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                             string='Regu',
                             index=True,
                             tracking=True)
-
+    ot_type = fields.Selection([('regular', 'Regular'), ('holiday', 'Holiday')], string='Ot Type')
 
     @api.onchange('default_ot_hours')
     def _onchange_default_ot_hours(self):
@@ -269,7 +269,18 @@ class HrCariEmployeeDepartment(models.TransientModel):
                 details = self.env['hr.employeedepartment.details'].sudo().create(employee_data)
                 rec.employee_ids = [Command.set(details.ids)]
 
-
+    def _compute_meals_flag(self, employee_id, approve_from, approve_to, ot_type):
+            emp = self.env['hr.employee'].sudo().browse(employee_id)
+            if emp and not emp.allowance_meal and approve_to - approve_from >= 4 and ot_type == 'regular':
+                return True
+            return False
+    
+    def _compute_meals_cash_flag(self, employee_id, approve_from, approve_to):
+        emp = self.env['hr.employee'].sudo().browse(employee_id)
+        if emp and emp.allowance_meal and approve_to - approve_from >= 2:
+            return True
+        return False
+    
     def action_insert_empgroup(self):
         context_field = self._context.get('fieldname')
         employee_data = []
@@ -277,6 +288,17 @@ class HrCariEmployeeDepartment(models.TransientModel):
         if context_field == 'plan_id':
             # Processing for 'plan_id' context
             for emp in self.employee_ids.filtered(lambda e: e.is_selected):
+                meals_flag = self._compute_meals_flag(
+                    emp.employee_id.id,
+                    self.approve_time_from,
+                    self.approve_time_to,
+                    self.ot_type
+                )
+                meals_cash_flag = self._compute_meals_cash_flag(
+                    emp.employee_id.id,
+                    self.approve_time_from,
+                    self.approve_time_to,
+                )
                 employee_data.append({
                     'planning_id': self.plan_id.id,
                     'area_id': emp.employee_id.area.id,
@@ -292,13 +314,13 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'work_plann': self.work_plann,
                     'output_plann': self.output_plann,
                     'transport': self.transport,
-                    'meals': self.meals,
+                    'meals': meals_flag,
                     'default_ot_hours':self.default_ot_hours,
-                    'ot_type': 'regular',
+                    'ot_type': self.ot_type,
                     'approve_time_from': self.approve_time_from,
                     'approve_time_to': self.approve_time_to,
                     'route_id': self.route_id.id,
-                    'meals': True if self.approve_time_to - self.approve_time_from >= 4 else False,
+                    'meals_cash': meals_cash_flag,
                 })
 
             self.env['hr.overtime.employees'].sudo().create(employee_data)
