@@ -709,6 +709,13 @@ class HREmpOvertimeRequestEmployee(models.Model):
          'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
     ]
 
+    @api.onchange('employee_id', 'approve_time_from', 'approve_time_to')
+    def _onchange_allowance_meals_cash(self):
+        for rec in self:
+            emp = self.env['hr.employee'].sudo().search([('id', '=', rec.employee_id.id)], limit=1)
+            if emp and emp.allowance_meal and rec.approve_time_to - rec.approve_time_from >= 2:
+                rec.meals_cash = True
+
     @api.depends('employee_id')
     def _get_employee_address(self):
         for rec in self:
@@ -730,10 +737,11 @@ class HREmpOvertimeRequestEmployee(models.Model):
             if rec.is_cancel == True:
                 rec.is_approved_mgr = False
 
-    @api.onchange('approve_time_from', 'approve_time_to', 'ot_type')
+    @api.onchange('employee_id', 'approve_time_from', 'approve_time_to', 'ot_type')
     def _onchange_meals(self):
         for rec in self:
-            if rec.approve_time_to - rec.approve_time_from >= 4 and rec.ot_type == 'regular':
+            emp = self.env['hr.employee'].sudo().search([('id', '=', rec.employee_id.id)], limit=1)
+            if emp and emp.allowance_meal == False and rec.approve_time_to - rec.approve_time_from >= 4 and rec.ot_type == 'regular':
                 self.meals = True
             else:
                 self.meals = False
