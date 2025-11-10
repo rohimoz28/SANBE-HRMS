@@ -114,11 +114,14 @@
                     </group>
                     <group name="emp_service_det" string="Mutation Details" readonly="state in ['approved']">
                         <group>
+                            <field name="is_join_date" invisible="1"/>
+                            <field name="is_join_date_contract" invisible="1"/>
                             <field name="service_type" readonly="state in ['approved']"/>
                             <field name="emp_status_to_pam" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="service_name" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="state in ['approved']" force_save="1" />
                             <field name="service_previous_name" invisible="service_type not in ['corr']" required="service_type in ['corr']" readonly="1" force_save="1" />
-                            <field name="join_date" invisible="service_type not in ['corr']" required="job_status =='permanent' or service_type in ['corr']" readonly="state in ['approved']"/>
+                            <field name="join_date" invisible="not is_join_date" required="is_join_date == True" readonly="state in ['approved']"/>
+                            <field name="join_date_contract" invisible="not is_join_date_contract" required="is_join_date_contract == True" readonly="state in ['approved']"/>
                             <field name="marital" invisible="service_type not in ['corr']" required="job_status =='permanent' or service_type in ['corr']" readonly="state in ['approved']"/>
                             <field name="emp_status_actv" invisible="service_type not in ['actv']" required="service_type in ['actv']"  readonly="state in ['approved']" force_save="1" />
                             <field name="emp_status_other" invisible="service_type not in ['conf']" required="service_type in ['conf']" readonly="state in ['approved']" force_save="1" />
