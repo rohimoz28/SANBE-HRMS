@@ -1,6 +1,5 @@
-
 from odoo import fields, models, api, _, Command
-from odoo.exceptions import ValidationError,UserError
+from odoo.exceptions import ValidationError, UserError
 
 OT_HOURS_SELECTION = [
     ('h_morning', "H - Lembur Pagi : 07.00 - 15.00"),
@@ -11,6 +10,7 @@ OT_HOURS_SELECTION = [
     ('r_s3', "R - S3 : 19.00 - 22.00"),
     ('others', "Others"),
 ]
+
 
 class HrCariEmployeeDepartment(models.TransientModel):
     _name = 'hr.employeedepartment'
@@ -108,7 +108,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
             self.ot_plann_to = False
             self.approve_time_from = False
             self.approve_time_to = False
-            
+
     @api.depends('area_id')
     def _isi_semua_branch(self):
         for allrecs in self:
@@ -157,10 +157,11 @@ class HrCariEmployeeDepartment(models.TransientModel):
 
             # Fetch employees in a single SQL query
             self.env.cr.execute("""
-                SELECT id, department_id, nik, job_id
-                FROM hr_employee
-                WHERE state = 'approved' AND area = %s
-            """, (alldata.area_id.id,))
+                                SELECT id, department_id, nik, job_id
+                                FROM hr_employee
+                                WHERE state = 'approved'
+                                  AND area = %s
+                                """, (alldata.area_id.id,))
             myemp = self.env.cr.fetchall()
 
             # Batch create employee details records
@@ -188,10 +189,12 @@ class HrCariEmployeeDepartment(models.TransientModel):
 
             # Fetch employees for both area and branch
             self.env.cr.execute("""
-                SELECT id, department_id, nik, job_id
-                FROM hr_employee
-                WHERE state = 'approved' AND area = %s AND branch_id = %s
-            """, (alldata.area_id.id, alldata.branch_id.id))
+                                SELECT id, department_id, nik, job_id
+                                FROM hr_employee
+                                WHERE state = 'approved'
+                                  AND area = %s
+                                  AND branch_id = %s
+                                """, (alldata.area_id.id, alldata.branch_id.id))
             myemp = self.env.cr.fetchall()
 
             # Batch create employee details records
@@ -219,10 +222,11 @@ class HrCariEmployeeDepartment(models.TransientModel):
 
             # Fetch employees by department in a single query
             self.env.cr.execute("""
-                SELECT id, department_id, nik, job_id
-                FROM hr_employee
-                WHERE state = 'approved' AND department_id = %s
-            """, (alldata.department_id.id,))
+                                SELECT id, department_id, nik, job_id
+                                FROM hr_employee
+                                WHERE state = 'approved'
+                                  AND department_id = %s
+                                """, (alldata.department_id.id,))
             myemp = self.env.cr.fetchall()
 
             # Batch create employee details records
@@ -269,18 +273,18 @@ class HrCariEmployeeDepartment(models.TransientModel):
                 details = self.env['hr.employeedepartment.details'].sudo().create(employee_data)
                 rec.employee_ids = [Command.set(details.ids)]
 
-    def _compute_meals_flag(self, employee_id, approve_from, approve_to, ot_type):
-            emp = self.env['hr.employee'].sudo().browse(employee_id)
-            if emp and not emp.allowance_meal and approve_to - approve_from >= 4 and ot_type == 'regular':
-                return True
-            return False
-    
-    def _compute_meals_cash_flag(self, employee_id, approve_from, approve_to):
+    def _check_meals_flag(self, employee_id, approve_from, approve_to, ot_type):
+        emp = self.env['hr.employee'].sudo().browse(employee_id)
+        if emp and not emp.allowance_meal and approve_to - approve_from >= 4 and ot_type == 'regular':
+            return True
+        return False
+
+    def _check_meals_cash_flag(self, employee_id, approve_from, approve_to):
         emp = self.env['hr.employee'].sudo().browse(employee_id)
         if emp and emp.allowance_meal and approve_to - approve_from >= 2:
             return True
         return False
-    
+
     def action_insert_empgroup(self):
         context_field = self._context.get('fieldname')
         employee_data = []
@@ -288,13 +292,13 @@ class HrCariEmployeeDepartment(models.TransientModel):
         if context_field == 'plan_id':
             # Processing for 'plan_id' context
             for emp in self.employee_ids.filtered(lambda e: e.is_selected):
-                meals_flag = self._compute_meals_flag(
+                meals_flag = self._check_meals_flag(
                     emp.employee_id.id,
                     self.approve_time_from,
                     self.approve_time_to,
                     self.ot_type
                 )
-                meals_cash_flag = self._compute_meals_cash_flag(
+                meals_cash_flag = self._check_meals_cash_flag(
                     emp.employee_id.id,
                     self.approve_time_from,
                     self.approve_time_to,
@@ -315,7 +319,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'output_plann': self.output_plann,
                     'transport': self.transport,
                     'meals': meals_flag,
-                    'default_ot_hours':self.default_ot_hours,
+                    'default_ot_hours': self.default_ot_hours,
                     'ot_type': self.ot_type,
                     'approve_time_from': self.approve_time_from,
                     'approve_time_to': self.approve_time_to,
@@ -367,16 +371,16 @@ class HrCariEmployeeDepartment(models.TransientModel):
             dt_emp.write({
                 'is_selected': True
             })
-        
+
         return {
-                'type': 'ir.actions.act_window',
-                'name': _('Search Employee'),
-                'res_model': 'hr.employeedepartment',
-                'view_mode': 'form',
-                'target': 'new',
-                'res_id': self.id,
-                'views': [[False, 'form']]
-            }
+            'type': 'ir.actions.act_window',
+            'name': _('Search Employee'),
+            'res_model': 'hr.employeedepartment',
+            'view_mode': 'form',
+            'target': 'new',
+            'res_id': self.id,
+            'views': [[False, 'form']]
+        }
 
 
 class HrCariEmployeeDepartmentDetails(models.TransientModel):
@@ -387,18 +391,16 @@ class HrCariEmployeeDepartmentDetails(models.TransientModel):
     department_id = fields.Many2one('hr.department', string='Department ID', index=True)
     employee_id = fields.Many2one('hr.employee', string='Employee Name', index=True)
     nik = fields.Char('NIK')
-    default_ot_hours = fields.Selection(related='cari_id.default_ot_hours',store=True)
+    default_ot_hours = fields.Selection(related='cari_id.default_ot_hours', store=True)
     job_id = fields.Many2one('hr.job', string='Job Position', index=True)
     is_selected = fields.Boolean('Select', default=False)
     regu = fields.Selection(related='cari_id.regu',
                             string='Regu',
                             store=True)
 
-    
     def btn_select_all(self):
         dt_emp = self.env['hr.employeedepartment.details'].sudo().search([('cari_id', '=', self.cari_id.id)])
         if dt_emp:
             dt_emp.write({
                 'is_selected': True
             })
-            
