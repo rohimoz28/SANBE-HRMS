@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.251-2025w46.1 (2025-11-10)
+
+- a8fd339 [IMP] TMS : Improvement Overtime - Fase 6
+
+
 ## v0.0.249-2025w45.11 (2025-11-06)
 
 - 69f8e75 [IMP] TMS : Improvement Permission Entry (CR 3)
