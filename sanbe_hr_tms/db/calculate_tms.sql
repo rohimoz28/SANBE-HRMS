@@ -617,27 +617,6 @@ begin
                  where workingday_id in (select id from hr_working_days where swap_in_out = True));
 
 
---Realization form overtime GH 17 Sep 2025
-
-    update hr_overtime_employees ho
-    set realization_time_from = xx.msk,
-        realization_time_to   = xx.klr
-
-    from (select hts.employee_id,
-                 sttd.details_date,
-                 coalesce(sttd.edited_time_in, sttd.time_in)   msk,
-                 coalesce(sttd.edited_time_out, sttd.time_out) klr
-          from hr_tmsentry_summary hts,
-               sb_tms_tmsentry_details sttd
-
-          where hts.id = sttd.tmsentry_id
-            and hts.branch_id = branch
-            AND hts.periode_id = period) xx
-
-    where ho.employee_id = xx.employee_id
-      and xx.details_date = ho.plann_date_from;
-
-
 --update hr_tms_summary from temp
 
     with temp_hts as (select employee_id,
@@ -3975,6 +3954,28 @@ END AS total_deduction*/
       and hts.area_id = l_area
 
       and hts.branch_id = branch;
+
+
+--Realization form overtime GH 12 Nov 2025
+
+    update hr_overtime_employees ho
+    set realization_time_from      = xx.msk,
+        realization_time_from_char = to_char(make_time(floor(xx.msk)::int, ((xx.msk - floor(xx.msk)) * 60)::int, 0), 'HH24:MI'),
+        realization_time_to        = xx.klr,
+        realization_time_to_char   = to_char(make_time(floor(xx.klr)::int, ((xx.klr - floor(xx.klr)) * 60)::int, 0), 'HH24:MI')
+    from (select hts.employee_id,
+                 sttd.details_date,
+                 coalesce(sttd.edited_time_in, sttd.time_in)   msk,
+                 coalesce(sttd.edited_time_out, sttd.time_out) klr
+          from hr_tmsentry_summary hts,
+               sb_tms_tmsentry_details sttd
+
+          where hts.id = sttd.tmsentry_id
+            and hts.branch_id = branch
+            AND hts.periode_id = period) xx
+
+    where ho.employee_id = xx.employee_id
+      and xx.details_date = ho.plann_date_from;
 
 
 --update total summary detail (footer) || code ini harus selalu paling bawah
