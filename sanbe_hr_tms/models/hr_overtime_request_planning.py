@@ -428,7 +428,7 @@ class HREmpOvertimeRequest(models.Model):
                     raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
                 if not details.verify_time_from or not details.verify_time_to:
                     raise ValidationError("Verify Time From/To wajib diisi sebelum melanjutkan ke tahap berikutnya.")
-                if details.realization_time_from == 0 or details.realization_time_from == 0:
+                if details.is_realization_empty:
                     raise ValidationError("Realization Time From & Realization Time To belum ada, silahkan kontak HRD.")
             rec.state = 'verification'
 
@@ -705,10 +705,40 @@ class HREmpOvertimeRequestEmployee(models.Model):
     is_approved_mgr = fields.Boolean('Approved by MGR')
     route_id = fields.Many2one('sb.route.master', domain="[('branch_id','=',branch_id)]", string='Rute')
     address_employee = fields.Char('Employee Address', compute="_get_employee_address", store=True)
+    is_realization_empty = fields.Boolean(
+        string="Realization Empty",
+        compute="_compute_realization_empty",
+        store=False
+    )
+
     _sql_constraints = [
         ('unique_employee_planning', 'unique(employee_id, planning_id)',
          'An employee cannot have duplicate overtime planning within the same date range and planning request.'),
     ]
+
+    @api.depends('realization_time_from', 'realization_time_to')
+    def _compute_realization_empty(self):
+        """
+        Fungsi ini digunakan untuk menentukan flag 'is_realization_empty',
+        yaitu penanda apakah field realization_time_from / realization_time_to
+        benar-benar masih kosong (NULL di database).
+
+        Fungsi ini menggunakan query karena:
+        - Jika menggunakan pengecekan False, maka jam 00:00 (yang nilainya = 0.0) akan dianggap sebagai False dan terkena validasi
+        - Jika menggunakan pengecekan None tanpa query, validasinya tidak membaca NULL secara langsung di tabel, sehingga validasi selalu lolos
+        """
+        for rec in self:
+            self.env.cr.execute("""
+                SELECT realization_time_from, realization_time_to
+                FROM hr_overtime_employees
+                WHERE id = %s
+            """, (rec.id,))
+            raw_from, raw_to = self.env.cr.fetchone()
+
+            rec.is_realization_empty = (
+                raw_from is None or 
+                raw_to is None
+            )
 
     @api.onchange('employee_id', 'approve_time_from', 'approve_time_to')
     def _onchange_allowance_meals_cash(self):

@@ -123,8 +123,10 @@
                                     <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="realization_time_from" widget="float_time" optional="show" readonly="1"/>
-                                    <field name="realization_time_to" widget="float_time" optional="show" readonly="1"/>
+                                    <field name="realization_time_from" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
+                                    <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
+                                    <field name="realization_time_from_char" optional="show" readonly="1"/>
+                                    <field name="realization_time_to_char" optional="show" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
@@ -157,6 +159,7 @@
                                            force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="bundling_ot" optional="show" readonly="state in ['approved','verification','completed','done']" />
                                     <button name="btn_view_overtime_details" type="object" string="Detail" class="fa fa-check"/>
+                                    <field name="is_realization_empty" column_invisible="1"/>
                                 </tree>
                             </field>
                             <field name="hr_ot_planning_ids"
@@ -186,8 +189,10 @@
                                     <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="realization_time_from" widget="float_time" optional="show" readonly="1"/>
-                                    <field name="realization_time_to" widget="float_time" optional="show" readonly="1"/>
+                                    <field name="realization_time_from" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
+                                    <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
+                                    <field name="realization_time_from_char" optional="show" readonly="1"/>
+                                    <field name="realization_time_to_char" optional="show" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
@@ -220,6 +225,7 @@
                                            force_save="1" column_invisible="1" readonly="state in ['approved','verification','completed','done']" />
                                     <field name="bundling_ot" optional="show" readonly="state in ['approved','verification','completed','done']" />
                                     <button name="btn_view_overtime_details" type="object" string="Detail" class="fa fa-check"/>
+                                    <field name="is_realization_empty" column_invisible="1"/>
                                 </tree>
                             </field>
                         </page>
