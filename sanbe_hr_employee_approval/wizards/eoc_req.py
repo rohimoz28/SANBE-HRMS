@@ -16,6 +16,7 @@ class SkkEmployeeEOCWizard(models.TransientModel):
     date_print = fields.Date("Date Print", default=fields.Date.context_today)
     oec_date = fields.Date("End of Contract", default=lambda self:self.employee_id.contract_dateto)
     char_eoc_date = fields.Char(store=True)
+    contract_year = fields.Integer('Contract Year', store=True)
     
     def month_to_roman(self,month):
         roman_list = [
@@ -44,6 +45,9 @@ class SkkEmployeeEOCWizard(models.TransientModel):
             res['employee_id'] = self.env.context['active_ids'][0]
             employee = self.env['hr.employee'].browse(self.env.context['active_ids'][0])
             res['receiver_id'] = employee.parent_id.id
+            if employee.contract_id and employee.contract_id.contract_year:
+                res['contract_year'] = int(employee.contract_id.contract_year) + 1
+
             if employee.contract_dateto:
                 res['char_eoc_date'] = employee.contract_dateto.strftime('%d %B %Y').replace(
                         'January', 'Januari'
