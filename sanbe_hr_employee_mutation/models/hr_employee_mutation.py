@@ -141,7 +141,8 @@ class HrEmployeeMutation(models.Model):
     employee_level = fields.Char('Employee Level', tracking=True)
     employee_levels = fields.Many2one('employee.level', string='Employee Level', tracking=True)
     service_employee_levels = fields.Many2one('employee.level', string='Employee Level', tracking=True)
-    join_date = fields.Date('Join Date', tracking=True)
+    join_date = fields.Date('Join Date Permanent', tracking=True)
+    join_date_contract = fields.Date('Join Date Contract', tracking=True)
     marital = fields.Selection([
         ('single', 'Single'),
         ('married', 'Married'),
@@ -160,6 +161,8 @@ class HrEmployeeMutation(models.Model):
     service_work_unit = fields.Char('Work Unit')
     service_coach_id = fields.Many2one('sb.view.hr.employee', string='Work Unit Superior')
     service_replacement_id = fields.Many2one('sb.view.hr.employee', string='Posisi Pengganti')
+    is_join_date = fields.Boolean('Show Join Date', compute="_compute_show_join_date")
+    is_join_date_contract = fields.Boolean('Show Join Date Contract', compute="_compute_show_join_date")
 
     _sql_constraints = [
         (
@@ -168,6 +171,16 @@ class HrEmployeeMutation(models.Model):
             'The combination of Employee Number, Service Type, Service Date, and State already exists!'
         ),
     ]
+
+    @api.depends('service_jobstatus', 'service_type')
+    def _compute_show_join_date(self):
+        for rec in self:
+            rec.is_join_date = (
+                rec.service_jobstatus == 'permanent' and rec.service_type in ['corr']
+            )
+            rec.is_join_date_contract = (
+                rec.service_jobstatus == 'contract' and rec.service_type in ['corr']
+            )
 
     def button_approve(self):
         self.ensure_one()
@@ -247,6 +260,8 @@ class HrEmployeeMutation(models.Model):
         # if self.service_nik_lama != self.employee_id.nik_lama:
         #     employee.write({'nik_lama': self.service_nik_lama})
         # if not mylogs:
+        if self.join_date_contract != self.employee_id.join_date_contract:
+            employee.write({'join_date_contract': self.join_date_contract})
         employee.write({'state': 'approved'})
         if self.service_replacement_id:
             try:
@@ -359,7 +374,7 @@ class HrEmployeeMutation(models.Model):
             existing.service_birthday = myemp.birthday
             existing.service_work_unit = myemp.work_unit
             existing.service_coach_id = myemp.coach_id.id
-
+            existing.join_date_contract = myemp.join_date_contract
             existing.service_status = 'Draft'
 
     @api.model
