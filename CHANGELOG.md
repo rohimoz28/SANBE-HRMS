@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.0.256-2025w46.6 (2025-11-12)
+
+- a784a78 [IMP] TMS : updating calculate_tms.sql by Gilang
+
+
+## v0.0.254-2025w46.4 (2025-11-12)
+
+- 58dda68 [IMP] TMS : Read Only Field 'Realization Time From' dan 'Realization Time To'
+
+
 ## v0.0.251-2025w46.1 (2025-11-10)
 
 - a8fd339 [IMP] TMS : Improvement Overtime - Fase 6
