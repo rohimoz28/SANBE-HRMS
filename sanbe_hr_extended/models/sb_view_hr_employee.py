@@ -69,6 +69,7 @@ class SbViewHrEmployee(models.Model):
     contract_datefrom = fields.Date('Contract From')
     contract_dateto = fields.Date('Contract To')
     employee_id = fields.Char('Employee ID')
+    join_date_contract = fields.Date('Join Date Contract')
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -102,7 +103,8 @@ class SbViewHrEmployee(models.Model):
                     he.contract_id,
                     he.contract_datefrom,
                     he.contract_dateto,
-                    he.employee_id
+                    he.employee_id,
+                    he.join_date_contract
                 from hr_employee he 
         )
         """ % (self._table, ))
