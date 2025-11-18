@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.259-2025w47.4 (2025-11-18)
+
+- 6c6cee9 [IMP] PAM : Tambah field join date contract di view hr_employee
+
+
 ## v0.0.258-2025w47.3 (2025-11-17)
 
 - 89a48c1 [IMP] PAM : Penambahan Join Date Contract di Form Mutasi
