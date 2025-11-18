@@ -140,7 +140,7 @@
                                                 </strong>. 
                                             </li>
                                             <li> Perpanjangan PKWT tahun ke 
-                                                <span t-field="doc.employee_id.contract_year"/>
+                                                <span t-field="doc.contract_year"/>
                                             </li>
                                         </ul>
                                     </li>
