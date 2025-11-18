@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.261-2025w47.6 (2025-11-18)
+
+- 6ba695d [IMP] PAM : Improvement Print Out Surat Habis Kontrak - Fase 3
+
+
 ## v0.0.259-2025w47.4 (2025-11-18)
 
 - 6c6cee9 [IMP] PAM : Tambah field join date contract di view hr_employee
