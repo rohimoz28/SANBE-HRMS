@@ -10,7 +10,9 @@
             <form string="Rekap Overtime Attendance" options="{'no_close': True}">
                 <sheet>
                     <group>
+                        <field name="branch_id" no_close="1" readonly="0" options="{'no_create': True, 'no_close': True}"/>
                         <field name="department_id" no_close="1" readonly="0" options="{'no_create': True, 'no_close': True}"/>
+                        <field name="department_ids" invisible="1"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                         <field name="ot_request_id"/>

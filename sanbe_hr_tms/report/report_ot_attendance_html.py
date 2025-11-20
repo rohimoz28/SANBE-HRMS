@@ -61,7 +61,11 @@ class AttendanceReportHTML(models.AbstractModel):
                     'aot2' : obj.aot2,
                     'aot3' : obj.aot3,
                     'aot4' : obj.aot4,
-                    'overtime' : obj.overtime
+                    'overtime' : obj.overtime,
+                    'ot_type': obj.ot_type or None, #NIK
+                    'verify_time_from': self.float_to_time(obj.verify_time_from) or 0, #Verify Time From
+                    'verify_time_to': self.float_to_time(obj.verify_time_to) or 0, #Verify Time To
+                    'aot_total': obj.aot_total or 0.0 #Total Jam Lembur
                     # 'delay_total': obj.delay_total or 0,
                     # 'delay_count': obj.delay_count or 0
                 }

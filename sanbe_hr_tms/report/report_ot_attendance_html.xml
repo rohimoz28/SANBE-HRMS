@@ -14,11 +14,11 @@
                             <td>:</td>
                             <td><span t-esc="report_lines[0]['branch_id']"/></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td style="font-weight: bold; padding-right: 8px;">Sub Department</td>
                             <td>:</td>
                             <td><span t-esc="report_lines[0]['department']"/></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td style="font-weight: bold; padding-right: 8px;">Period</td>
                             <td>:</td>
@@ -30,7 +30,7 @@
                             <t t-set="sorted_lines" t-value="sorted(report_lines, key=lambda l: l['req_date'])"/>
                             <td> <span t-esc="report_lines[0]['req_date']"/> - <span t-esc="report_lines[-1]['req_date']"/></td>
                         </tr>
-                        <t t-set="unique_requests" t-value="list(set(line['no_request'] for line in report_lines))"/>
+                        <!-- <t t-set="unique_requests" t-value="list(set(line['no_request'] for line in report_lines))"/>
                         <t t-set="sorted_requests" t-value="sorted(unique_requests)"/>
                         <tr>
                             <td style="font-weight: bold; padding-right: 8px;">Request Number</td>
@@ -50,7 +50,7 @@
                                     </t>
                                 </table>
                             </td>
-                        </tr>
+                        </tr> -->
                     </table>
                     <table class="table table-bordered table-striped" style="table-layout: auto; word-wrap: break-word;">
                         <thead>
@@ -61,16 +61,22 @@
                                 <!-- <th style="text-align: center; white-space: nowrap;">Request Number</th> -->
                                 <!-- <th style="text-align: center; white-space: nowrap;">Request Date</th> -->
                                 <th style="text-align: center; white-space: nowrap;">Employee Name</th>
+                                <th style="text-align: center; white-space: nowrap;">Sub Department</th>
+                                <th style="text-align: center; white-space: nowrap;">Request Number</th>
                                 <th style="text-align: center; white-space: nowrap;">NIK</th>
+                                <th style="text-align: center; white-space: nowrap;">OT Type</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Date From</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">Req Time To</th>
                                 <th style="text-align: center; white-space: nowrap;">App Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">App Time To</th>
+                                <th style="text-align: center; white-space: nowrap;">Verify Time From</th>
+                                <th style="text-align: center; white-space: nowrap;">Verify Time To</th>
                                 <th style="text-align: center; white-space: nowrap;">Realization Date</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time Fr</th>
                                 <th style="text-align: center; white-space: nowrap;">Rel Time To</th>
                                 <th style="text-align: center; white-space: nowrap;">Overtime</th>
+                                <th style="text-align: center; white-space: nowrap;">Total Jam Lembur</th>
                                 <th style="text-align: center; white-space: nowrap;">OT 1</th>
                                 <th style="text-align: center; white-space: nowrap;">OT 2</th>
                                 <th style="text-align: center; white-space: nowrap;">OT 3</th>
@@ -94,16 +100,22 @@
                                     <!-- <td class="text-wrap"><span t-esc="line['no_request']"/></td> -->
                                     <!-- <td><span t-esc="line['req_date']"/></td> -->
                                     <td><span t-esc="line['employee_id']"/></td>
+                                    <td><span t-esc="line['department']"/></td>
+                                    <td><span t-esc="line['no_request']"/></td>
                                     <td><span t-esc="line['nik']"/></td>
+                                    <td><span t-esc="line['ot_type']"/></td>
                                     <td><span t-esc="line['req_date']"/></td>
                                     <td><span t-esc="line['req_time_fr']" widget="float_time"/></td>
                                     <td><span t-esc="line['req_time_to']" widget="float_time"/></td>
                                     <td><span t-esc="line['approve_time_from']" widget="float_time"/></td>
                                     <td><span t-esc="line['approve_time_to']" widget="float_time"/></td>
+                                    <td><span t-esc="line['verify_time_from']" widget="float_time"/></td>
+                                    <td><span t-esc="line['verify_time_to']" widget="float_time"/></td>
                                     <td><span t-esc="line['rlz_date']" /></td>
                                     <td><span t-esc="line['rlz_time_fr']" widget="float_time"/></td>
                                     <td><span t-esc="line['rlz_time_to']" widget="float_time"/></td>
                                     <td><span t-esc="line['overtime']" /></td>
+                                    <td><span t-esc="line['aot_total']" /></td>
                                     <td><span t-esc="line['aot1']" /></td>
                                     <td><span t-esc="line['aot2']" /></td>
                                     <td><span t-esc="line['aot3']" /></td>
