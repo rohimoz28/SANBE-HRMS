@@ -37,59 +37,59 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
 
             # Create worksheet
             sheet = workbook.add_worksheet("Rekap Overtime")
-            sheet.merge_range('A1:M1', 'Rekap Overtime Attendance - HRMS', format_header)
+            sheet.merge_range('A1:Y1', 'Rekap Overtime Attendance - HRMS', format_header)
             row = 1
             sheet.merge_range('A2:B2', 'Business Unit:', format_data)
             sheet.merge_range('C2:D2', lines[0].branch_id.name if lines and lines[0].branch_id else '', format_data)
             row += 1
-            sheet.merge_range('A3:B3', 'Sub Department:', format_data)
-            sheet.merge_range('C3:D3', lines[0].department_id.complete_name if lines and lines[0].department_id else '', format_data)
-            row += 1
-            sheet.merge_range('A4:B4', 'Period:', format_data)
-            sheet.merge_range('C4:D4', lines[0].periode_id.name if lines and lines[0].periode_id else '', format_data)
+            # sheet.merge_range('A3:B3', 'Sub Department:', format_data)
+            # sheet.merge_range('C3:D3', lines[0].department_id.complete_name if lines and lines[0].department_id else '', format_data)
+            # row += 1
+            sheet.merge_range('A3:B3', 'Period:', format_data)
+            sheet.merge_range('C3:D3', lines[0].periode_id.name if lines and lines[0].periode_id else '', format_data)
             row += 1
             sorted_lines = sorted(lines, key=lambda l: l.req_date)
             req_date_from = sorted_lines[0].req_date.strftime('%Y-%m-%d') if sorted_lines[0].req_date else ''
             req_date_to = sorted_lines[-1].req_date.strftime('%Y-%m-%d') if sorted_lines[-1].req_date else ''
             
-            sheet.merge_range('A5:B5', 'Request Date:', format_data)
-            sheet.merge_range('C5:D5', f'{req_date_from} - {req_date_to}', format_data)
+            sheet.merge_range('A4:B4', 'Request Date:', format_data)
+            sheet.merge_range('C4:D4', f'{req_date_from} - {req_date_to}', format_data)
             row += 1
 
             # Buat list unique & sorted request number
-            unique_requests = list(set(line.no_request for line in lines if line.no_request))
-            sorted_requests = sorted(unique_requests)
+            # unique_requests = list(set(line.no_request for line in lines if line.no_request))
+            # sorted_requests = sorted(unique_requests)
 
             # Atur posisi awal
-            start_row = row  # baris saat ini
-            label_col = 0    # kolom A
-            data_start_col = 2  # mulai dari kolom C
-            max_cols = 3     # maksimal 3 per baris
+            # start_row = row  # baris saat ini
+            # label_col = 0    # kolom A
+            # data_start_col = 2  # mulai dari kolom C
+            # max_cols = 3     # maksimal 3 per baris
 
             # Tulis label "Request Number:" di kolom A
-            sheet.merge_range('A6:B6', 'Request Number:', format_data)
+            # sheet.merge_range('A6:B6', 'Request Number:', format_data)
 
            # Tulis data ke kolom C, D, E dst per 3 item per baris
-            row_offset = 0
-            for i in range(0, len(sorted_requests), max_cols):
-                chunk = sorted_requests[i:i+max_cols]
-                for j, req in enumerate(chunk):
-                    sheet.write(start_row + row_offset, data_start_col + j, req, format_data)
+            # row_offset = 0
+            # for i in range(0, len(sorted_requests), max_cols):
+            #     chunk = sorted_requests[i:i+max_cols]
+            #     for j, req in enumerate(chunk):
+            #         sheet.write(start_row + row_offset, data_start_col + j, req, format_data)
 
-                # hanya tulis label di baris pertama
-                if row_offset > 0:
-                    sheet.write(start_row + row_offset, label_col, '', format_data)
+            #     # hanya tulis label di baris pertama
+            #     if row_offset > 0:
+            #         sheet.write(start_row + row_offset, label_col, '', format_data)
 
-                row_offset += 1
+            #     row_offset += 1
 
             # Geser row ke bawah kalau mau lanjut tulis data lain
-            row = start_row + row_offset
+            # row = start_row + row_offset
 
             # Headers
             headers = [
-                'No', 'Employee Name', 
-                'NIK', 'Req Date From', 'Req Time Fr', 'Req Time To', 'App Time Fr', 
-                'App Time To', 'Rel Time Fr', 'Rel Time To', 'Overtime', 'OT 1', 'OT 2', 'OT 3', 'OT 4', 
+                'No', 'Employee Name', 'Sub Department','Request Number', 'OT Type',
+                'NIK', 'Req Date From', 'Req Time Fr', 'Req Time To', 'App Time Fr', 'App Time To', 'Verify Time From', 'Verify Time To',
+                'Rel Time Fr', 'Rel Time To', 'Overtime', 'Total Jam Lembur', 'OT 1', 'OT 2', 'OT 3', 'OT 4', 
                 'Shuttle Car', 'Dine In', 'Meal Cash', 'Cancel?' #'State', 'Period' 
                 # 'Total Delay', 'Total Times Delay'
             ]
@@ -122,15 +122,21 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
                         # obj.no_request or 'Tidak Diketahui', #No Request
                         # obj.req_date.strftime('%Y-%m-%d') or 'Tidak Diketahui', #Tanggal Request
                         obj.employee_id.name or None, #Employee
+                        obj.department_id.complete_name or None, #Department
+                        obj.no_request or None, #No Request
+                        obj.ot_type or None,
                         obj.nik or None, #NIK
                         obj.req_date.strftime('%Y-%m-%d'),
                         self.float_to_time(obj.req_time_fr) or 0, #Req Time FR
                         self.float_to_time(obj.req_time_to) or 0, #Req Time To
                         self.float_to_time(obj.approve_time_from) or 0, #Approve Time From
                         self.float_to_time(obj.approve_time_to) or 0, #Approve Time To
+                        self.float_to_time(obj.verify_time_from) or 0, #Verify Time From
+                        self.float_to_time(obj.verify_time_to) or 0, #Verify Time To
                         self.float_to_time(obj.rlz_time_fr) or 0, #Rel Time From
                         self.float_to_time(obj.rlz_time_to) or 0, #Rel TIme To
                         obj.overtime,
+                        obj.aot_total,
                         obj.aot1,
                         obj.aot2,
                         obj.aot3,
