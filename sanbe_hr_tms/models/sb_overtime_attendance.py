@@ -62,5 +62,17 @@ class SbOvertimeAttendance(models.Model):
     overtime = fields.Char(
         string='Overtime',
         required=False)
+    ot_type = fields.Selection([('regular', 'Regular'), ('holiday', 'Holiday')], string='Ot Type')
+    verify_time_from = fields.Float('Verify Time From')
+    verify_time_to = fields.Float('Verify Time To')
+    aot_total = fields.Float(string='Total Jam Lembur', compute='_compute_aot_total')
+    
+    @api.depends('verify_time_from', 'verify_time_to')
+    def _compute_aot_total(self):
+        for rec in self:
+            if rec.verify_time_from and rec.verify_time_to:
+                rec.aot_total = rec.verify_time_to - rec.verify_time_from
+            else:
+                rec.aot_total = 0.0
     
     
