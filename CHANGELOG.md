@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.265-2025w47.10 (2025-11-21)
+
+- f4398d5 [IMP] TMS : Improvement Menu Request vs Realization
+
+
 ## v0.0.263-2025w47.8 (2025-11-21)
 
 - 9970e13 [IMP] TMS : Improvement Validasi Overtime
