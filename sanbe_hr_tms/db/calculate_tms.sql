@@ -1,6 +1,6 @@
 -- DROP PROCEDURE public.calculate_tms_test2(int4, int4, int4);
 
-CREATE OR REPLACE PROCEDURE public.calculate_tms_test4(period integer, l_area integer, branch integer)
+CREATE OR REPLACE PROCEDURE public.calculate_tms(period integer, l_area integer, branch integer)
     LANGUAGE plpgsql
 AS
 $procedure$
