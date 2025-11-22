@@ -145,6 +145,28 @@
             <!-- <field name="domain_force">[(1, '=', 1)]</field> -->
         </record>
 
+        <!-- Request vs Realization -->
+        <record id="sb_overtime_attedance_staff_rule" model="ir.rule">
+            <field name="name">Request vs Realization Staff Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_overtime_attendance"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_request_vs_realization_staff'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
+        <record id="sb_overtime_attedance_supervisor_rule" model="ir.rule">
+            <field name="name">Request vs Realization Supervisor Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_overtime_attendance"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_request_vs_realization_supervisor'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
+        <record id="sb_overtime_attedance_manager_rule" model="ir.rule">
+            <field name="name">Request vs Realization Manager Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_overtime_attendance"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_request_vs_realization_manager'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
         <!-- Monitoring Overtime -->
         <record id="sb_employee_overtime_branch_view" model="ir.rule">
             <field name="name">Monitoring Overtime Branch Group View</field>
