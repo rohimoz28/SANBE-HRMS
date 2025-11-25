@@ -47,3 +47,4 @@ Project initial @2024
     - `git rebase production`
     - `git push origin main --force`
 9. Terimakasih!
+10. Testing CICD 1
