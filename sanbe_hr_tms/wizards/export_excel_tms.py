@@ -32,6 +32,10 @@ class ExportExcelTms(models.TransientModel):
         options="{'no_create': True}"
     )
     employee_group1 = fields.Selection(selection=EMP_GROUP1,string='Employee P Group')
+    type = fields.Selection([
+        ('attendance', 'Rekap Kehadiran'),
+        ('finance', 'Keungan')
+    ], string='Type')
 
     @api.onchange('periode_id')
     def _onchange_periode_id(self):
@@ -84,9 +88,16 @@ class ExportExcelTms(models.TransientModel):
         if not tms_summaries:
             raise UserError(_("Tidak ada data record dari Periode, Department atau Employee P Group yang dipilih"))
         
+        if self.type == "attendance":
+            report_name = 'sanbe_hr_tms.rekap_kehadiran_xls'
+        elif self.type == "finance":
+            report_name = 'sanbe_hr_tms.rekap_keuangan_xls'
+        else:
+            raise UserError(_("Silakan pilih Type report!"))
+        
         return {
             'type': 'ir.actions.report',
-            'report_name': 'sanbe_hr_tms.rekap_kehadiran_xls',
+            'report_name': report_name,
             'report_type': 'xlsx',
             'report_file': f'Rekap_Kehadiran_{self.periode_id.name or "All"}',
             'context': {
@@ -112,16 +123,21 @@ class ExportExcelTms(models.TransientModel):
         if not tms_summaries:
             raise UserError(_("Tidak Ada Data Record Dari periode atau department yang dipilih"))
         
-        report_name = 'sanbe_hr_tms.report_attendance_html'
+        if self.type == "attendance":
+            report_name = 'sanbe_hr_tms.report_attendance_html'
 
-        if self.periode_id:
-            self.branch_id = self.periode_id.branch_id
+            if self.periode_id:
+                self.branch_id = self.periode_id.branch_id
 
-            if self.branch_id and self.branch_id.id == 1:
-                report_name = 'sanbe_hr_tms.report_attendance_html_tamansari'
-            else:
-                report_name = 'sanbe_hr_tms.report_attendance_html'
-        
+                if self.branch_id and self.branch_id.id == 1:
+                    report_name = 'sanbe_hr_tms.report_attendance_html_tamansari'
+                else:
+                    report_name = 'sanbe_hr_tms.report_attendance_html'
+        elif self.type == "finance":
+            report_name = 'sanbe_hr_tms.report_finance_html'
+        else:
+             raise UserError(_("Silakan pilih Type report!"))
+
         return {
             'type': 'ir.actions.report',
             'report_name': report_name,

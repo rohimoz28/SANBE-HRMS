@@ -24,6 +24,17 @@
             <field name="binding_model_id" ref="model_hr_tmsentry_summary"/>
             <field name="binding_type">report</field>
         </record>
+
+        <record id="rekap_keuangan_report_xlsx" model="ir.actions.report">
+            <field name="name">Rekap Keuangan</field>
+            <field name="model">hr.tmsentry.summary</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">sanbe_hr_tms.rekap_keuangan_xls</field>
+            <field name="report_file">sanbe_hr_tms.rekap_keuangan_xls</field>
+            <field name="print_report_name">"Rekap"</field>
+            <field name="binding_model_id" ref="model_hr_tmsentry_summary"/>
+            <field name="binding_type">report</field>
+        </record>
     
     </data>
     
