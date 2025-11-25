@@ -10,3 +10,5 @@ from . import report_kehadiran_html_tamansari
 from . import report_ot_route_html
 from . import report_ot_meals_html
 from . import report_ot_meals_cash_html
+from . import report_keuangan_html
+from . import report_keuangan
