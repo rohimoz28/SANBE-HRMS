@@ -71,6 +71,7 @@
         'report/report_ot_bundling_excel.xml',
         'report/report_monitor_overtime_excel.xml',
         'report/report_feor_cimahi.xml',
+        'report/report_keuangan_html.xml',
         'wizards/export_excel_tms.xml',
         'wizards/export_excel_ot_attendance.xml',
         'wizards/export_excel_ot_bundling_wizard.xml',
