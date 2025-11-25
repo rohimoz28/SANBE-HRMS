@@ -152,7 +152,7 @@ update_project_production:
       ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
       if [ -d "$PROJECT_DIR_PROD" ]; then
         echo "Project directory exists. Pulling latest changes...";
-        cd "$PROJECT_DIR" && git pull origin $BRANCH_PROD
+        cd "$PROJECT_DIR_PROD" && git pull origin $BRANCH_PROD
         if [ $? -ne 0 ]; then
           git merge --abort
           echo "Error: Failed to pull from origin/$BRANCH_PROD"
