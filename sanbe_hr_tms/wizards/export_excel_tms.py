@@ -122,7 +122,7 @@ class ExportExcelTms(models.TransientModel):
         
         if not tms_summaries:
             raise UserError(_("Tidak Ada Data Record Dari periode atau department yang dipilih"))
-        
+
         if self.type == "attendance":
             report_name = 'sanbe_hr_tms.report_attendance_html'
 
@@ -136,7 +136,7 @@ class ExportExcelTms(models.TransientModel):
         elif self.type == "finance":
             report_name = 'sanbe_hr_tms.report_finance_html'
         else:
-             raise UserError(_("Silakan pilih Type report!"))
+            raise UserError(_("Silakan pilih Type report!"))
 
         return {
             'type': 'ir.actions.report',

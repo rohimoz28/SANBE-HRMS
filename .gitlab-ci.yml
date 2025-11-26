@@ -142,237 +142,237 @@ notify_staging_failed:
 # END STAGING
 
 # PRODUCTION
-#update_project_production:
-#  stage: build
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - echo "Deploying latest updates via SSH..."
-#    - |
-#      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
-#      if [ -d "$PROJECT_DIR_PROD" ]; then
-#        echo "Project directory exists. Pulling latest changes...";
-#        cd "$PROJECT_DIR" && git pull origin $BRANCH_PROD
-#        if [ $? -ne 0 ]; then
-#          git merge --abort
-#          echo "Error: Failed to pull from origin/$BRANCH_PROD"
-#          exit 1
-#        fi
-#        echo "Success: Pulled latest project version";
-#        echo "$(date +%s)" > "$RESTART_FLAG"
-#      else
-#        echo "Error: Project directory does not exist!"
-#        exit 1
-#      fi
-#      EOF
-#  rules:
-#    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
-#      when: always
-#    - when: never
-#
-#generate_version_tag:
-#  stage: versioning
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - echo "Generating version tag via SSH..."
-#    - |
-#      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD bash <<'EOF'
-#      set -euo pipefail
-#
-#      export PROJECT_DIR_PROD="/opt/OdooSanbe/sanbe-hrms"
-#      export CHANGELOG_FILE="CHANGELOG.md"
-#      export TMP_BRANCH="feature/changelog"
-#
-#      cd "$PROJECT_DIR_PROD"
-#      git checkout production
-#      git pull origin production
-#      git fetch --tags
-#
-#      PREFIX_REGEX="^\[(FEAT|FIX|IMP)\]"
-#
-#      LAST_MERGE_COMMIT=$(git log origin/production --merges --pretty=format:"%H" -n 1)
-#      if [[ -z "$LAST_MERGE_COMMIT" ]]; then
-#        echo "Tidak menemukan merge commit di branch production."
-#        exit 1
-#      fi
-#      echo "Merge commit terakhir: $LAST_MERGE_COMMIT"
-#
-#      PARENT2=$(git rev-parse "$LAST_MERGE_COMMIT"^2)
-#      MERGE_MESSAGE=$(git log -1 --pretty=format:"%s" "$PARENT2")
-#      echo "Merge message: $MERGE_MESSAGE"
-#
-#      if git name-rev --name-only --tags --no-undefined "$LAST_MERGE_COMMIT" > /dev/null 2>&1; then
-#        echo "Tidak perlu membuat tag baru. Merge commit sudah memiliki tag."
-#        exit 0
-#      fi
-#
-#      LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0-$(date +'%Yw%V').1")
-#      echo "Tag terakhir: $LAST_TAG"
-#
-#      TAG_COMMIT=$(git rev-list -n 1 "$LAST_TAG" 2>/dev/null || echo "")
-#      if [[ -z "$TAG_COMMIT" ]]; then
-#        echo "Tag $LAST_TAG belum digunakan. Menyematkan tag ke merge commit."
-#        git tag -a "$LAST_TAG" "$LAST_MERGE_COMMIT" -m "$MERGE_MESSAGE"
-#        git push origin "$LAST_TAG"
-#        echo "Tag $LAST_TAG berhasil disematkan ke merge commit $LAST_MERGE_COMMIT."
-#        exit 0
-#      fi
-#
-#      VERSION=$(echo "$LAST_TAG" | cut -d'-' -f1 | tr -d 'v')
-#      MAJOR=$(echo "$VERSION" | cut -d'.' -f1)
-#      MINOR=$(echo "$VERSION" | cut -d'.' -f2)
-#      PATCH=$(echo "$VERSION" | cut -d'.' -f3)
-#
-#      PATCH=$((PATCH + 1))
-#
-#      WEEK=$(date +%V)
-#      YEAR=$(date +%Y)
-#      WEEK_ID="${YEAR}w${WEEK}"
-#
-#      TAG_COUNT_WEEK=$(git tag --list "v*-$WEEK_ID.*" | wc -l)
-#      TAG_ORDER=$((TAG_COUNT_WEEK + 1))
-#
-#      NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}-$WEEK_ID.${TAG_ORDER}"
-#      echo "Membuat tag baru: $NEW_TAG"
-#
-#      git tag -a "$NEW_TAG" "$LAST_MERGE_COMMIT" -m "$MERGE_MESSAGE"
-#      git push origin "$NEW_TAG"
-#      echo "Tag $NEW_TAG berhasil disematkan ke merge commit $LAST_MERGE_COMMIT."
-#
-#      echo "Mulai Update Changelog..."
-#
-#      if git show-ref --verify --quiet refs/heads/$TMP_BRANCH; then
-#        echo "Branch $TMP_BRANCH already exists, checking it out..."
-#        git checkout $TMP_BRANCH
-#      else
-#        echo "Branch $TMP_BRANCH not found, creating it..."
-#        git checkout -b $TMP_BRANCH
-#      fi
-#
-#      TODAY=$(date +%F)
-#      if [ ! -f "$CHANGELOG_FILE" ]; then
-#        echo "# Changelog" > "$CHANGELOG_FILE"
-#      fi
-#
-#      RELEASED_MSG=$(git log -1 --format="- %h %s" "$PARENT2")
-#      CHANGELOG_MSG=$(git log -1 --format="%s" "$PARENT2")
-#
-#      # Validasi prefix
-#      if [[ ! "$CHANGELOG_MSG" =~ ^\[(FEAT|FIX|IMP)\] ]]; then
-#        echo "Commit message tidak memiliki prefix yang valid. Tidak menulis ke changelog."
-#        exit 0
-#      fi
-#
-#      ENTRY="## $NEW_TAG ($TODAY)
-#
-#      $RELEASED_MSG
-#      "
-#          {
-#            head -n 1 $CHANGELOG_FILE
-#            echo ""
-#            echo "$ENTRY"
-#      tail -n +2 $CHANGELOG_FILE
-#      } > temp_changelog.md && mv temp_changelog.md $CHANGELOG_FILE
-#
-#      git add $CHANGELOG_FILE
-#      git commit -m "changelog : $NEW_TAG - $CHANGELOG_MSG"
-#
-#      git checkout production
-#      git merge $TMP_BRANCH --no-ff -m "Release $NEW_TAG"
-#      git push origin production
-#
-#      git tag -a "$NEW_TAG" -m "$CHANGELOG_MSG" || echo "Tag sudah dibuat sebelumnya"
-#      git push origin "$NEW_TAG" || echo "Tag sudah dipush sebelumnya"
-#      EOF
-#  rules: *default_prod_rule
-#
-#sync_main_with_production:
-#  stage: versioning
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - echo "Syncing main with production via SSH..."
-#    - |
-#      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
-#      set -e
-#      export REPO_URL="$CI_REPOSITORY_URL"
-#
-#      echo "== Checking project directory =="
-#      if [ ! -d "$PROJECT_DIR_PROD/.git" ]; then
-#        echo "No .git directory found in $PROJECT_DIR_PROD"
-#        echo "Cloning repository..."
-#        git clone "$REPO_URL" "$PROJECT_DIR_PROD"
-#      fi
-#
-#      cd "$PROJECT_DIR_PROD"
-#      git fetch origin
-#
-#      echo "== Checkout production =="
-#      git checkout production
-#
-#      echo "== Create branch feature/changelog if not exists =="
-#      if git rev-parse --verify feature/changelog >/dev/null 2>&1; then
-#        echo "Branch feature/changelog already exists"
-#      else
-#        git checkout -b feature/changelog
-#      fi
-#
-#      echo "== Checkout main =="
-#      git checkout main
-#
-#      echo "== Rebase main onto production =="
-#      git rebase origin/production
-#
-#      echo "== Pushing main with force-with-lease =="
-#      git push origin main --force-with-lease
-#
-#      echo "== Checkout production =="
-#      git checkout production
-#
-#      echo "== Delete branch feature/changelog if exists =="
-#      if git show-ref --verify --quiet refs/heads/feature/changelog; then
-#        git branch -D feature/changelog
-#      else
-#        echo "Branch feature/changelog not found, skipping deletion"
-#      fi
-#      EOF
-#  rules: *default_prod_rule
-#
-#restart_production:
-#  stage: deploy
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD "
-#      sudo systemctl restart $DOCKER_SERVICE_PROD
-#      "
-#  rules:
-#    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
-#      when: always
-#    - when: never
-#
-#notify_production_success:
-#  stage: notify
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - /tmp/scripts/send_notification.sh "✅ Production Deployment Successful!" "Success" 3066993 "$APP_PROD" "$WEBHOOK_URL"
-#  rules:
-#    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
-#      when: on_success
-#    - when: never
-#  needs: [update_project_production, restart_production]
-#
-#notify_production_failed:
-#  stage: notify
-#  tags: [test4]
-#  <<: *default_before_script
-#  script:
-#    - /tmp/scripts/send_notification.sh "❌ Production Deployment Failed!" "Error" 15158332 "$APP_RPOD" "$WEBHOOK_URL"
-#  rules:
-#    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
-#      when: on_failure
-#    - when: never
-#  needs: [update_project_production, restart_production]
+update_project_production:
+  stage: build
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - echo "Deploying latest updates via SSH..."
+    - |
+      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
+      if [ -d "$PROJECT_DIR_PROD" ]; then
+        echo "Project directory exists. Pulling latest changes...";
+        cd "$PROJECT_DIR_PROD" && git pull origin $BRANCH_PROD
+        if [ $? -ne 0 ]; then
+          git merge --abort
+          echo "Error: Failed to pull from origin/$BRANCH_PROD"
+          exit 1
+        fi
+        echo "Success: Pulled latest project version";
+        echo "$(date +%s)" > "$RESTART_FLAG"
+      else
+        echo "Error: Project directory does not exist!"
+        exit 1
+      fi
+      EOF
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
+      when: always
+    - when: never
+
+generate_version_tag:
+  stage: versioning
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - echo "Generating version tag via SSH..."
+    - |
+      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD bash <<'EOF'
+      set -euo pipefail
+
+      export PROJECT_DIR_PROD="/opt/OdooSanbe/sanbe-hrms"
+      export CHANGELOG_FILE="CHANGELOG.md"
+      export TMP_BRANCH="feature/changelog"
+
+      cd "$PROJECT_DIR_PROD"
+      git checkout production
+      git pull origin production
+      git fetch --tags
+
+      PREFIX_REGEX="^\[(FEAT|FIX|IMP)\]"
+
+      LAST_MERGE_COMMIT=$(git log origin/production --merges --pretty=format:"%H" -n 1)
+      if [[ -z "$LAST_MERGE_COMMIT" ]]; then
+        echo "Tidak menemukan merge commit di branch production."
+        exit 1
+      fi
+      echo "Merge commit terakhir: $LAST_MERGE_COMMIT"
+
+      PARENT2=$(git rev-parse "$LAST_MERGE_COMMIT"^2)
+      MERGE_MESSAGE=$(git log -1 --pretty=format:"%s" "$PARENT2")
+      echo "Merge message: $MERGE_MESSAGE"
+
+      if git name-rev --name-only --tags --no-undefined "$LAST_MERGE_COMMIT" > /dev/null 2>&1; then
+        echo "Tidak perlu membuat tag baru. Merge commit sudah memiliki tag."
+        exit 0
+      fi
+
+      LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0-$(date +'%Yw%V').1")
+      echo "Tag terakhir: $LAST_TAG"
+
+      TAG_COMMIT=$(git rev-list -n 1 "$LAST_TAG" 2>/dev/null || echo "")
+      if [[ -z "$TAG_COMMIT" ]]; then
+        echo "Tag $LAST_TAG belum digunakan. Menyematkan tag ke merge commit."
+        git tag -a "$LAST_TAG" "$LAST_MERGE_COMMIT" -m "$MERGE_MESSAGE"
+        git push origin "$LAST_TAG"
+        echo "Tag $LAST_TAG berhasil disematkan ke merge commit $LAST_MERGE_COMMIT."
+        exit 0
+      fi
+
+      VERSION=$(echo "$LAST_TAG" | cut -d'-' -f1 | tr -d 'v')
+      MAJOR=$(echo "$VERSION" | cut -d'.' -f1)
+      MINOR=$(echo "$VERSION" | cut -d'.' -f2)
+      PATCH=$(echo "$VERSION" | cut -d'.' -f3)
+
+      PATCH=$((PATCH + 1))
+
+      WEEK=$(date +%V)
+      YEAR=$(date +%Y)
+      WEEK_ID="${YEAR}w${WEEK}"
+
+      TAG_COUNT_WEEK=$(git tag --list "v*-$WEEK_ID.*" | wc -l)
+      TAG_ORDER=$((TAG_COUNT_WEEK + 1))
+
+      NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}-$WEEK_ID.${TAG_ORDER}"
+      echo "Membuat tag baru: $NEW_TAG"
+
+      git tag -a "$NEW_TAG" "$LAST_MERGE_COMMIT" -m "$MERGE_MESSAGE"
+      git push origin "$NEW_TAG"
+      echo "Tag $NEW_TAG berhasil disematkan ke merge commit $LAST_MERGE_COMMIT."
+
+      echo "Mulai Update Changelog..."
+
+      if git show-ref --verify --quiet refs/heads/$TMP_BRANCH; then
+        echo "Branch $TMP_BRANCH already exists, checking it out..."
+        git checkout $TMP_BRANCH
+      else
+        echo "Branch $TMP_BRANCH not found, creating it..."
+        git checkout -b $TMP_BRANCH
+      fi
+
+      TODAY=$(date +%F)
+      if [ ! -f "$CHANGELOG_FILE" ]; then
+        echo "# Changelog" > "$CHANGELOG_FILE"
+      fi
+
+      RELEASED_MSG=$(git log -1 --format="- %h %s" "$PARENT2")
+      CHANGELOG_MSG=$(git log -1 --format="%s" "$PARENT2")
+
+      # Validasi prefix
+      if [[ ! "$CHANGELOG_MSG" =~ ^\[(FEAT|FIX|IMP)\] ]]; then
+        echo "Commit message tidak memiliki prefix yang valid. Tidak menulis ke changelog."
+        exit 0
+      fi
+
+      ENTRY="## $NEW_TAG ($TODAY)
+
+      $RELEASED_MSG
+      "
+          {
+            head -n 1 $CHANGELOG_FILE
+            echo ""
+            echo "$ENTRY"
+      tail -n +2 $CHANGELOG_FILE
+      } > temp_changelog.md && mv temp_changelog.md $CHANGELOG_FILE
+
+      git add $CHANGELOG_FILE
+      git commit -m "changelog : $NEW_TAG - $CHANGELOG_MSG"
+
+      git checkout production
+      git merge $TMP_BRANCH --no-ff -m "Release $NEW_TAG"
+      git push origin production
+
+      git tag -a "$NEW_TAG" -m "$CHANGELOG_MSG" || echo "Tag sudah dibuat sebelumnya"
+      git push origin "$NEW_TAG" || echo "Tag sudah dipush sebelumnya"
+      EOF
+  rules: *default_prod_rule
+
+sync_main_with_production:
+  stage: versioning
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - echo "Syncing main with production via SSH..."
+    - |
+      ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD <<EOF
+      set -e
+      export REPO_URL="$CI_REPOSITORY_URL"
+
+      echo "== Checking project directory =="
+      if [ ! -d "$PROJECT_DIR_PROD/.git" ]; then
+        echo "No .git directory found in $PROJECT_DIR_PROD"
+        echo "Cloning repository..."
+        git clone "$REPO_URL" "$PROJECT_DIR_PROD"
+      fi
+
+      cd "$PROJECT_DIR_PROD"
+      git fetch origin
+
+      echo "== Checkout production =="
+      git checkout production
+
+      echo "== Create branch feature/changelog if not exists =="
+      if git rev-parse --verify feature/changelog >/dev/null 2>&1; then
+        echo "Branch feature/changelog already exists"
+      else
+        git checkout -b feature/changelog
+      fi
+
+      echo "== Checkout main =="
+      git checkout main
+
+      echo "== Rebase main onto production =="
+      git rebase origin/production
+
+      echo "== Pushing main with force-with-lease =="
+      git push origin main --force-with-lease
+
+      echo "== Checkout production =="
+      git checkout production
+
+      echo "== Delete branch feature/changelog if exists =="
+      if git show-ref --verify --quiet refs/heads/feature/changelog; then
+        git branch -D feature/changelog
+      else
+        echo "Branch feature/changelog not found, skipping deletion"
+      fi
+      EOF
+  rules: *default_prod_rule
+
+restart_production:
+  stage: deploy
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - ssh -i /tmp/deploy_key $SSH_USER_PROD@$DEPLOY_SERVER_PROD "
+      docker container restart $DOCKER_SERVICE_PROD
+      "
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
+      when: always
+    - when: never
+
+notify_production_success:
+  stage: notify
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - /tmp/scripts/send_notification.sh "✅ Production Deployment Successful!" "Success" 3066993 "$APP_PROD" "$WEBHOOK_URL"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
+      when: on_success
+    - when: never
+  needs: [ update_project_production, restart_production ]
+
+notify_production_failed:
+  stage: notify
+  tags: [ test4 ]
+  <<: *default_before_script
+  script:
+    - /tmp/scripts/send_notification.sh "❌ Production Deployment Failed!" "Error" 15158332 "$APP_RPOD" "$WEBHOOK_URL"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_MESSAGE !~ /^Release/'
+      when: on_failure
+    - when: never
+  needs: [ update_project_production, restart_production ]
 # END PRODUCTION
