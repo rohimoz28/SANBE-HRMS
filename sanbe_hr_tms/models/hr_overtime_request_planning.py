@@ -728,6 +728,10 @@ class HREmpOvertimeRequestEmployee(models.Model):
         - Jika menggunakan pengecekan None tanpa query, validasinya tidak membaca NULL secara langsung di tabel, sehingga validasi selalu lolos
         """
         for rec in self:
+            if not rec.id or isinstance(rec.id, models.NewId):
+                rec.is_realization_empty = True
+                continue
+
             self.env.cr.execute("""
                 SELECT realization_time_from, realization_time_to
                 FROM hr_overtime_employees
