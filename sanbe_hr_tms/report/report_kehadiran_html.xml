@@ -9,7 +9,7 @@
                         border-collapse: collapse;
                         width: 100%;
                     }
-                    table.table th, 
+                    table.table th,
                     table.table td {
                         border: 1px solid black !important;
                         padding: 4px;

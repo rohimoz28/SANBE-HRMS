@@ -9,7 +9,7 @@
                         border-collapse: collapse;
                         width: 100%;
                     }
-                    table.table th, 
+                    table.table th,
                     table.table td {
                         border: 1px solid black !important;
                         padding: 4px;
@@ -197,7 +197,7 @@
     </record>
 
     <!-- Report Action -->
-    <record id="action_report_attendance" model="ir.actions.report">
+    <record id="action_report_attendance_finance" model="ir.actions.report">
         <field name="name">Attendance Report (HTML)</field>
         <field name="type">ir.actions.report</field>
         <field name="model">hr.tmsentry.summary</field>
