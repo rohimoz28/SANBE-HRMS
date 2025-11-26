@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- QWeb Report Template -->
+    <template id="sanbe_hr_tms.report_finance_html" name="Attendance Report">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <style>
+                    table.table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    table.table th,
+                    table.table td {
+                        border: 1px solid black !important;
+                        padding: 4px;
+                    }
+                </style>
+                <thead>
+                    <t t-set="company" t-value="res_company" />
+                    <table style="width:100%; padding:0; margin:0; border: 0px solid transparent;">
+                        <tr>
+                            <td>
+                                <img
+                                    t-if="company.logo"
+                                    t-att-src="image_data_uri(company.logo)"
+                                    style="max-height: 100px; width: 200px;" alt="Logo"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="border-bottom: 2px solid black; margin-bottom: 2px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" style="vertical-align: top; font-family: 'Bookman Old Style', Georgia, serif; text-align: left;">
+                                <strong>
+                                    <span style="font-size:17px;" t-field="company.name" />
+                                </strong> Pharmaceutical Manufacturer
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif; text-align:left;" class="text-left">
+                            <t t-if="doc.branch_id.street">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street" />
+                            </t>
+                            <t t-if="doc.branch_id.street2">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.street2" />
+                            </t>
+                            <t t-if="doc.branch_id.city">
+                                <span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" />
+                            </t>
+                                <br /> Telp: <t t-if="doc.branch_id.phone"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.phone" /></t>
+                                <br /> Fax: <t t-if="doc.branch_id.fax"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.fax" /></t>
+                                <br />
+                                <t t-if="doc.branch_id.city"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.city" /></t> <t t-if="doc.branch_id.zip"><span style="font-size:13px; font-family: 'Bookman Old Style', Georgia, serif;" t-field="doc.branch_id.zip" /></t>
+                            </td>
+                        </tr>
+                    </table>
+                </thead>
+                <br />
+                <div class="page">
+                    <div style="text-align: center;">
+                        <h2 class="mb-4">
+                            Rekap Perhitungan Kehadiran dan Overtime - HRMS
+                        </h2>
+                    </div>
+                    <table class="table table-bordered table-striped" style="table-layout: auto; word-wrap: break-word;">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">No</th>
+                                <th>FKELOMPOK</th>
+                                <th>FBAGIAN</th>
+                                <th>FSALARY_KE</th>
+                                <th>F NIK</th>
+                                <th>EMPLOYEE NAME</th>
+                                <th>FSP</th>
+                                <th>FMASAKRJ</th>
+                                <th>FSTATUS</th>
+                                <th>FNPWP</th>
+                                <th>FTANGGUNG</th>
+                                <th>FKONTRAK</th>
+                                <th>FHRNORMAL</th>
+                                <th>FHARIBYR</th>
+                                <th>FHADIR</th>
+                                <th>FHARILMB</th>
+                                <th>FDINAS1</th>
+                                <th>FDINAS2</th>
+                                <th>FLEMBUR1</th>
+                                <th>FLEMBUR2</th>
+                                <th>FLEMBUR3</th>
+                                <th>FLEMBUR4</th>
+                                <th>FSAKIT</th>
+                                <th>FIJIN</th>
+                                <th>FSUKA</th>
+                                <th>FCCLKOP</th>
+                                <th>FBUNGA</th>
+                                <th>FHTRANS</th>
+                                <th>FHMAKAN</th>
+                                <th>FCUTIHML</th>
+                                <th>FCUTIBYR</th>
+                                <th>FKOPERASI</th>
+                                <th>FCCLBAKO</th>
+                                <th>FTJBBM</th>
+                                <th>FTRPSP</th>
+                                <th>FINCENTIVE</th>
+                                <th>FTJMK</th>
+                                <th>FTJKEL</th>
+                                <th>FUPSH</th>
+                                <th>FBFFLAG001</th>
+                                <th>FCUTITHN</th>
+                                <th>FLMBBI</th>
+                                <th>FLMBBS</th>
+                                <th>FLEVEL_JAB</th>
+                                <th>FJOB_TITLE</th>
+                                <th>FKPI_CTCGRY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="report_lines" t-as="line">
+                                <tr>
+                                    <td><span t-esc="line['no']"/></td>
+                                    <td><span t-esc="line['fkelompok']"/></td>
+                                    <td><span t-esc="line['fbagian']"/></td>
+                                    <td><span t-esc="line['fsalary_ke']"/></td>
+                                    <td><span t-esc="line['fnik']"/></td>
+                                    <td class="text-wrap"><span t-esc="line['employee_name']"/></td>
+                                    <td><span t-esc="line['fsp']"/></td>
+                                    <td><span t-esc="line['fmasakrj']"/></td>
+                                    <td><span t-esc="line['fstatus']"/></td>
+                                    <td><span t-esc="line['fnpwp']"/></td>
+                                    <td><span t-esc="line['ftanggung']"/></td>
+                                    <td><span t-esc="line['fkontrak']"/></td>
+                                    <td><span t-esc="line['fhrnormal']"/></td>
+                                    <td><span t-esc="line['fharibyr']"/></td>
+                                    <td><span t-esc="line['fhadir']"/></td>
+                                    <td><span t-esc="line['fharilmb']"/></td>
+                                    <td><span t-esc="line['fdinas1']"/></td>
+                                    <td><span t-esc="line['fdinas2']"/></td>
+                                    <td><span t-esc="line['flembur1']"/></td>
+                                    <td><span t-esc="line['flembur2']"/></td>
+                                    <td><span t-esc="line['flembur3']"/></td>
+                                    <td><span t-esc="line['flembur4']"/></td>
+                                    <td><span t-esc="line['fsakit']"/></td>
+                                    <td><span t-esc="line['fijin']"/></td>
+                                    <td><span t-esc="line['fsuka']"/></td>
+                                    <td><span t-esc="line['fcclkop']"/></td>
+                                    <td><span t-esc="line['fbunga']"/></td>
+                                    <td><span t-esc="line['fhtrans']"/></td>
+                                    <td><span t-esc="line['fhmakan']"/></td>
+                                    <td><span t-esc="line['fcutihml']"/></td>
+                                    <td><span t-esc="line['fcutibyr']"/></td>
+                                    <td><span t-esc="line['fkoperasi']"/></td>
+                                    <td><span t-esc="line['fcclbako']"/></td>
+                                    <td><span t-esc="line['ftjbbm']"/></td>
+                                    <td><span t-esc="line['ftrpsp']"/></td>
+                                    <td><span t-esc="line['fincentive']"/></td>
+                                    <td><span t-esc="line['ftjmk']"/></td>
+                                    <td><span t-esc="line['ftjkel']"/></td>
+                                    <td><span t-esc="line['fupsh']"/></td>
+                                    <td><span t-esc="line['fbfflag001']"/></td>
+                                    <td><span t-esc="line['fcutithn']"/></td>
+                                    <td><span t-esc="line['flmbbi']"/></td>
+                                    <td><span t-esc="line['flmbbs']"/></td>
+                                    <td><span t-esc="line['flevel_jab']"/></td>
+                                    <td class="text-wrap"><span t-esc="line['fjob_title']"/></td>
+                                    <td><span t-esc="line['fkpi_ctgry']"/></td>
+                                </tr>
+                            </t>
+                            <t t-if="not report_lines">
+                                <tr>
+                                    <td colspan="16" class="text-center">
+                                        No Data Available
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- paper format -->
+    <record id="paperformat_report_keuangan" model="report.paperformat">
+        <field name="name">Print Out PDF Rekap Keuangan</field>
+        <field name="default" eval="True" />
+        <field name="format">A3</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">3</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_report_attendance_finance" model="ir.actions.report">
+        <field name="name">Attendance Report (HTML)</field>
+        <field name="type">ir.actions.report</field>
+        <field name="model">hr.tmsentry.summary</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">sanbe_hr_tms.report_finance_html</field>
+        <field name="report_file">sanbe_hr_tms.report_finance_html</field>
+        <field name="binding_model_id" ref="model_hr_tmsentry_summary"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="sanbe_hr_tms.paperformat_report_keuangan"/>
+    </record>
+</odoo>
