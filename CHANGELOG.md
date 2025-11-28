@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.271-2025w48.5 (2025-11-28)
+
+- 78b49da [IMP] TMS : Hide Button Fitur 'Delete' Overtime pada State 'Verify by Admin'
+
+
 ## v0.0.269-2025w48.3 (2025-11-27)
 
 - 279809b [FIX] TMS : Bugfix Error 'psycopg2.ProgrammingError: can't adapt type 'NewId''pada Overtime Request
