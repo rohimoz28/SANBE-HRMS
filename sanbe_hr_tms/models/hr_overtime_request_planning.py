@@ -582,6 +582,9 @@ class HREmpOvertimeRequest(models.Model):
             total_pages = self.env.context.get('pdf_page_total', 1)
 
         return f"{current_page} of {total_pages}"
+    
+    def btn_delete(self):
+        self.unlink()
 
 
 class HREmpOvertimeRequestEmployee(models.Model):
@@ -888,3 +891,6 @@ class HREmpOvertimeRequestEmployee(models.Model):
             'res_id': self.id,
             'context': False,
         }
+    
+    def btn_delete(self):
+        self.unlink()
