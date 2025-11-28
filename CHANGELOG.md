@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.269-2025w48.3 (2025-11-27)
+
+- 279809b [FIX] TMS : Bugfix Error 'psycopg2.ProgrammingError: can't adapt type 'NewId''pada Overtime Request
+
+
 ## v0.0.265-2025w47.10 (2025-11-21)
 
 - f4398d5 [IMP] TMS : Improvement Menu Request vs Realization
