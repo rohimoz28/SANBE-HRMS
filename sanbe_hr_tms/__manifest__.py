@@ -62,6 +62,7 @@
         'views/hr_machine_details.xml',
         'views/sb_break_master.xml',
         'views/sb_route_master.xml',
+        'views/sb_task_desk_master.xml',
         'report/report_kehadiran_templates.xml',
         'report/report_kehadiran_html.xml',
         'report/report_kehadiran_html_tamansari.xml',

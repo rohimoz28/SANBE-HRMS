@@ -296,9 +296,18 @@
         />
 
         <menuitem
+                id="menu_sb_task_desk_master"
+                name="Master Data Task Desk"
+                sequence="70"
+                parent="sanbe_hr_tms.hr_menu_tms_setting"
+                action="sanbe_hr_tms.sb_task_desk_master_action"
+                groups="module_sub_category_master_task_desk_staff,module_sub_category_master_task_desk_supervisor,module_sub_category_master_task_desk_manager"
+        />
+
+        <menuitem
                 id="menu_sb_leave_allocation"
                 name="Leave Allocation"
-                sequence="70"
+                sequence="75"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 action="sanbe_hr_tms.action_sb_leave_allocation"
                 groups="module_sub_category_leave_allocation_staff,module_sub_category_leave_allocation_supervisor,module_sub_category_leave_allocation_manager"
@@ -307,7 +316,7 @@
         <menuitem
                 id="menu_sb_break_master"
                 name="Break Time Setting"
-                sequence="75"
+                sequence="80"
                 parent="sanbe_hr_tms.hr_menu_tms_setting"
                 action="sanbe_hr_tms.sb_break_master_action"
                 groups="module_sub_category_break_time_setting_staff,module_sub_category_break_time_setting_supervisor,module_sub_category_break_time_setting_manager"

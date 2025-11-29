@@ -686,6 +686,30 @@
             <field name="category_id" ref="sanbe_hr_tms.module_sub_category_master_rute"/>
         </record>
 
+        <!-- TMS Master Task Desk -->
+        <record model="ir.module.category" id="module_sub_category_master_task_desk">
+            <field name="name">Master Task Desk</field>
+            <field name="parent_id" ref="sanbe_hr_tms.module_category_time_management_system"/>
+            <field name="description">Access Right for menu Master Task Desk under Settings</field>
+        </record>
+
+        <record model="res.groups" id="module_sub_category_master_task_desk_staff" >
+            <field name="name">Staff</field>
+            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_master_task_desk"/>
+        </record>
+
+        <record model="res.groups" id="module_sub_category_master_task_desk_supervisor" >
+            <field name="name">Supervisor</field>
+            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.module_sub_category_master_task_desk_staff'))]"/>
+            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_master_task_desk"/>
+        </record>
+
+        <record model="res.groups" id="module_sub_category_master_task_desk_manager">
+            <field name="name">Manager</field>
+            <field name="implied_ids" eval="[(4, ref('sanbe_hr_tms.module_sub_category_master_task_desk_supervisor'))]"/>
+            <field name="category_id" ref="sanbe_hr_tms.module_sub_category_master_task_desk"/>
+        </record>
+
         <!-- REPORTING -->
         <record model="ir.module.category" id="module_sub_category_report_ot">
             <field name="name">Report OT</field>
