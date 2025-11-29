@@ -409,14 +409,10 @@ class HRPermissionEntry(models.Model):
         for rec in self:
             rec.permission_status = 'done'
 
-    # button cancel merubah state di hr_leave juga = refuse dan mengembailkan saldo pada leave allocation
     def btn_cancel(self):
+        """button cancel melakukan update permission_status =  cancel dan mengembalikan saldo pada leave allocation"""
         for rec in self:
             rec.permission_status = 'cancel'
-
-            hr_leave = self.env['hr.leave'].sudo().search([('permition_id', '=', rec.id)])
-            if hr_leave:
-                hr_leave.write({'state': 'refuse'})
 
             if rec.permission_type_id:
                 benefit = rec.permission_type_id
