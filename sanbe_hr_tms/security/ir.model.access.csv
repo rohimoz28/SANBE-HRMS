@@ -138,3 +138,7 @@ access_sb_route_master_supervisor,access.sb.route.master.supervisor,model_sb_rou
 access_sb_route_master_manager,access.sb.route.master.manager,model_sb_route_master,sanbe_hr_tms.module_sub_category_master_rute_manager,1,1,1,1
 
 access_sb_view_overtime_review,access.sb.view.overtime.review,model_sb_view_overtime_review,sanbe_hr_tms.module_sub_category_overtime_review_hrd,1,0,0,0
+
+access_sb_task_desk_master_staff,access.sb.task.desk.master.staff,model_sb_task_desk_master,sanbe_hr_tms.module_sub_category_master_task_desk_staff,1,1,0,0
+access_sb_task_desk_master_supervisor,access.sb.task.desk.master.supervisor,model_sb_task_desk_master,sanbe_hr_tms.module_sub_category_master_task_desk_supervisor,1,1,1,0
+access_sb_task_desk_master_manager,access.sb.task.desk.master.manager,model_sb_task_desk_master,sanbe_hr_tms.module_sub_category_master_task_desk_manager,1,1,1,1
