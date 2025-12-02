@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.277-2025w49.5 (2025-12-02)
+
+- 8da2fcc [FIX] TMS : Button Process Tidak Konsisten Tampil
+
+
 ## v0.0.275-2025w49.3 (2025-12-02)
 
 - 2752206 [FEAT] TMS : Create Master Data Task Desk
