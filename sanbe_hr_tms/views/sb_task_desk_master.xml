@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="sb_task_desk_master_view_form" model="ir.ui.view">
+            <field name="name">sb.task.desk.master.view.form</field>
+            <field name="model">sb.task.desk.master</field>
+            <field name="arch" type="xml">
+                <form string="Task Desk">
+                    <sheet>
+                        <group>
+                            <field name="branch_id" required="1"/>
+                            <field name="department_id" required="1"/>
+                            <field name="code" required="1"/>
+                            <field name="work_plan" required="1"/>
+                            <field name="output_plan" required="1"/>
+                            <field name="active" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="sb_task_desk_master_view_tree" model="ir.ui.view">
+            <field name="name">sb.task.desk.master.view.tree</field>
+            <field name="model">sb.task.desk.master</field>
+            <field name="arch" type="xml">
+                <tree string="Task Desk">
+                    <field name="branch_id" />
+                    <field name="department_id" />
+                    <field name="code" />
+                    <field name="work_plan" />
+                    <field name="output_plan" />
+                    <field name="active" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="sb_task_desk_master_view_search" model="ir.ui.view">
+            <field name="name">sb.task.desk.master.view.search</field>
+            <field name="model">sb.task.desk.master</field>
+            <field name="arch" type="xml">
+                <search string="Task Desk">
+                    <field name="branch_id" />
+                    <field name="department_id" />
+                    <field name="code" />
+                    <field name="work_plan" />
+                    <field name="output_plan" />
+                    <field name="active" />
+                </search>
+            </field>
+        </record>
+
+        <record id="sb_task_desk_master_action" model="ir.actions.act_window">
+            <field name="name">Task Desk</field>
+            <field name="res_model">sb.task.desk.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Report Master Task Desk
+                </p>
+                <p>
+                    Create New Master Task Desk
+                </p>
+            </field>
+        </record>
+        
+    
+    </data>
+    
+</odoo>
