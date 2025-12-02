@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.273-2025w49.1 (2025-12-01)
+
+- 263f735 [FIX] TMS : Bugfix Cancel Permission Entry
+
+
 ## v0.0.271-2025w48.5 (2025-11-28)
 
 - 78b49da [IMP] TMS : Hide Button Fitur 'Delete' Overtime pada State 'Verify by Admin'

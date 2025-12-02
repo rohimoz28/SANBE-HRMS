@@ -100,7 +100,7 @@
                             <field name="hr_ot_planning_ids"
                                    context="{'default_area_id': area_id, 'default_branch_id': branch_id, 'default_department_id': department_id}"
                                    invisible="state != 'draft'">
-                                <tree editable="bottom" class="o_horizontal_scroll" delete="0">
+                                <tree editable="bottom" class="o_horizontal_scroll" create="0" delete="0">
                                     <field name="state" force_save="1" column_invisible = "1"/>
                                     <field name="ot_type" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="planning_id" column_invisible="1" readonly="state in ['approved','verification','completed','done']"/>
@@ -130,7 +130,7 @@
                                     <field name="realization_time_to_char" optional="show" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
-                                    <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
+                                    <field name="is_cancel" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
                                     <field name="verify_time_from" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="verify_time_to" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
@@ -197,7 +197,7 @@
                                     <field name="realization_time_to_char" optional="show" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
-                                    <field name="is_cancel" string="Reject by MGR" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
+                                    <field name="is_cancel" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
                                     <field name="verify_time_from" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="verify_time_to" widget="easy_timepicker" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="machine" optional="show" readonly="state in ['approved','verification','completed','done']"/>
@@ -307,7 +307,7 @@
                                 <field name="meals" readonly="1"/>
                                 <field name="meals_cash" readonly="1"/>
                                 <field name="is_approved_mgr" />
-                                <field name="is_cancel" string="Reject by MGR"/>
+                                <field name="is_cancel"/>
                             </group>
                         </group>
                     </sheet>
