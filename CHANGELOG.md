@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.279-2025w49.7 (2025-12-02)
+
+- 3e83f4a [FIX] TMS : Update SP Sanbe by Gilang
+
+
 ## v0.0.277-2025w49.5 (2025-12-02)
 
 - 8da2fcc [FIX] TMS : Button Process Tidak Konsisten Tampil
