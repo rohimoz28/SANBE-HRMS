@@ -20,6 +20,7 @@ date_format = "%Y-%m-%d"
 from odoo.exceptions import AccessError, MissingError, UserError
 import requests
 import logging
+from psycopg2 import OperationalError, errorcodes
 
 _logger = logging.getLogger(__name__)
 
@@ -68,6 +69,30 @@ class HRTmsOpenClose(models.Model):
         default='draft',
         String='Process State',
         tracking=True)
+    show_process_button = fields.Boolean(
+        string='Show Process Button',
+        compute='_compute_show_process_button',
+        store=False,  # Selalu compute fresh
+    )
+    processing_user_id = fields.Many2one(
+        'res.users',
+        string='Processing By',
+        readonly=True,
+        help='User yang sedang memproses record ini'
+    )
+    processing_start = fields.Datetime(
+        string='Processing Started',
+        readonly=True
+    )
+
+    @api.depends('state_process')
+    def _compute_show_process_button(self):
+        """
+        Button SELALU muncul jika state = running
+        Tidak peduli siapa yang sedang proses
+        """
+        for rec in self:
+            rec.show_process_button = (rec.state_process == 'running')
 
     def kumpulhari(self,wd1,wd2):
         listhr = []
@@ -131,6 +156,22 @@ class HRTmsOpenClose(models.Model):
                 date_obj = datetime.strptime(date_string, "%Y-%m-%d")
                 vals['name'] = date_obj.strftime("%B %Y") + ' | ' + br['name']
         res = super(HRTmsOpenClose, self).write(vals)
+
+        # PENTING: Invalidate cache untuk SEMUA perubahan yang mempengaruhi button
+        fields_to_check = ['state_process', 'processing_user_id', 'processing_start', 'isopen']
+
+        if any(field in vals for field in fields_to_check):
+            # Invalidate computed field
+            self.invalidate_recordset([
+                'state_process',
+                'processing_user_id',
+                'processing_start',
+                'isopen',
+                'show_process_button'  # ← Computed field
+            ])
+
+            _logger.debug(f"Cache invalidated for record {self.ids}")
+
         return res
 
     def compute_concate(self):
@@ -141,30 +182,207 @@ class HRTmsOpenClose(models.Model):
             record.periode_from_to = record.periode_id.name + " | " + str(record.date_from) + " | " + str(record.date_to)
 
     def action_reproses(self):
-        for data in self:
-            period_id = data.id
-            area_id = data.area_id
-            branch_id = data.branch_id
+        """
+        Process dengan validasi concurrent access di method
+        Button tetap muncul, validasi saat diklik
+        """
+        self.ensure_one()
 
-            body = _('Re-Process Period')
-            data.message_post(body=body)
+        _logger.info(
+            f"[REPROSES] User {self.env.user.name} (ID: {self.env.user.id}) "
+            f"clicked Process button for record {self.id}"
+        )
 
-            if data.state_process == 'done':
-                raise UserError("Sudah Close")
+        # Validasi 1: Cek state done
+        if self.state_process == 'done':
+            raise UserError(_("Cannot process: This period is already closed."))
 
-            try:
-                self.env.cr.execute("CALL calculate_tms(%s, %s, %s)", (period_id, area_id.id, branch_id.id))
-                self.env.cr.commit()
-                self.recompute_tms_summary()
-                _logger.info("Stored procedure executed successfully for period_id: %s", period_id)
-            except Exception as e:
-                _logger.error("Error calling stored procedure: %s", str(e))
-                raise UserError("Error executing the function: %s" % str(e))
+        # Validasi 2: Cek state running
+        if self.state_process != 'running':
+            raise UserError(_(
+                "Cannot process: Record status is '%s'.\n\n"
+                "Please refresh the page."
+            ) % dict(self._fields['state_process'].selection).get(self.state_process))
 
-            data.isopen = True
-            data.state_process = "running"
-        
-        self.compute_concate()
+        # Lock row untuk prevent concurrent access
+        try:
+            self.env.cr.execute(
+                """
+                SELECT id, processing_user_id
+                FROM hr_opening_closing
+                WHERE id = %s
+                    FOR UPDATE NOWAIT
+                """,
+                (self.id,),
+                log_exceptions=False
+            )
+        except OperationalError as e:
+            if e.pgcode == errorcodes.LOCK_NOT_AVAILABLE:
+                # Row sedang di-lock user lain
+                raise UserError(_(
+                    "This record is currently locked by another user.\n\n"
+                    "Please wait a moment and try again."
+                ))
+            elif e.pgcode == errorcodes.SERIALIZATION_FAILURE:
+                # Concurrent modification detected
+                raise UserError(_(
+                    "This record was just modified by another user.\n\n"
+                    "Please refresh the page and try again."
+                ))
+            else:
+                _logger.error(f"Database lock error: {str(e)}")
+                raise UserError(_(
+                    "Unable to acquire lock on this record.\n\n"
+                    "Please try again or contact administrator."
+                ))
+
+        # Refresh data dari database setelah dapat lock
+        self.invalidate_recordset(['processing_user_id', 'processing_start'])
+        # self.refresh()
+
+        # Validasi 3: Cek apakah sedang diproses user lain
+        if self.processing_user_id:
+            # Hitung elapsed time
+            if self.processing_start:
+                elapsed = fields.Datetime.now() - self.processing_start
+                minutes = int(elapsed.total_seconds() / 60)
+                time_info = f"({minutes} minutes ago)"
+            else:
+                time_info = ""
+
+            raise UserError(_(
+                "❌ Store Procedure sedang dijalankan oleh user lain.\n\n"
+                "Processing by: %s\n"
+                "Started: %s %s\n\n"
+                "Please wait until the process completes and try again."
+            ) % (
+                                self.processing_user_id.name,
+                                self.processing_start.strftime('%Y-%m-%d %H:%M:%S') if self.processing_start else 'N/A',
+                                time_info
+                            ))
+
+        # Set processing flag
+        self.write({
+            'processing_user_id': self.env.user.id,
+            'processing_start': fields.Datetime.now(),
+        })
+
+        # COMMIT immediately agar user lain langsung tahu
+        self.env.cr.commit()
+
+        _logger.info(
+            f"[REPROSES] Record {self.id} locked by user {self.env.user.name}"
+        )
+
+        # Post message to chatter
+        body = _('Re-Process Period started by %s') % self.env.user.name
+        self.message_post(body=body)
+
+        # Execute stored procedure dengan error handling
+        success = False
+        error_message = None
+
+        try:
+            # Prepare parameters
+            period_id = self.id
+            area_id = self.area_id.id if self.area_id else None
+            branch_id = self.branch_id.id if self.branch_id else None
+
+            _logger.info(
+                f"[REPROSES] Calling stored procedure calculate_tms with params: "
+                f"period_id={period_id}, area_id={area_id}, branch_id={branch_id}"
+            )
+
+            # Execute stored procedure (ini yang lama ~2 menit)
+            self.env.cr.execute(
+                "CALL calculate_tms(%s, %s, %s)",
+                (period_id, area_id, branch_id)
+            )
+
+            # Recompute summary
+            self.recompute_tms_summary()
+
+            # Update flags
+            self.isopen = True
+            self.state_process = "running"
+
+            # Compute concatenate
+            self.compute_concate()
+
+            success = True
+            _logger.info(f"[REPROSES] Record {self.id} processed successfully")
+
+        except OperationalError as e:
+            error_message = str(e)
+            if e.pgcode == errorcodes.SERIALIZATION_FAILURE:
+                error_message = "Concurrent modification detected during processing."
+            _logger.error(f"[REPROSES] Database error: {error_message}", exc_info=True)
+
+        except Exception as e:
+            error_message = str(e)
+            _logger.error(f"[REPROSES] Error executing stored procedure: {error_message}", exc_info=True)
+
+        # Clear processing flag
+        try:
+            if success:
+                self.write({
+                    'processing_user_id': False,
+                    'processing_start': False,
+                })
+
+                # TAMBAHKAN INI: Force invalidate cache untuk computed field
+                self.invalidate_recordset([
+                    'state_process',
+                    'processing_user_id',
+                    'processing_start',
+                    'show_process_button'  # ← PENTING!
+                ])
+
+                body = _('Re-Process Period completed successfully by %s') % self.env.user.name
+                self.message_post(body=body)
+
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Success'),
+                        'message': _('Process completed successfully.'),
+                        'type': 'success',
+                        'sticky': False,
+                    }
+                }
+            else:
+                # Clear flag dan raise error
+                self.write({
+                    'processing_user_id': False,
+                    'processing_start': False,
+                })
+
+                # Invalidate cache
+                self.invalidate_recordset([
+                    'processing_user_id',
+                    'processing_start',
+                    'show_process_button'
+                ])
+
+                body = _('Re-Process Period failed: %s') % error_message
+                self.message_post(body=body)
+
+                raise UserError(_(
+                    "Failed to execute the stored procedure.\n\n"
+                    "Error: %s\n\n"
+                    "Please contact your administrator if this problem persists."
+                ) % error_message)
+
+        except UserError:
+            raise
+        except Exception as cleanup_error:
+            _logger.error(f"Failed to cleanup processing flag: {str(cleanup_error)}")
+            if not success:
+                raise UserError(_(
+                    "Process failed and unable to reset processing state.\n\n"
+                    "Please contact your administrator."
+                ))
 
     def recompute_tms_summary(self):
         for rec in self:
