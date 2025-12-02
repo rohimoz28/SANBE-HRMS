@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.275-2025w49.3 (2025-12-02)
+
+- 2752206 [FEAT] TMS : Create Master Data Task Desk
+
+
 ## v0.0.273-2025w49.1 (2025-12-01)
 
 - 263f735 [FIX] TMS : Bugfix Cancel Permission Entry
