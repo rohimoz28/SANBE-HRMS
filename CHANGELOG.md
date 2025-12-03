@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.284-2025w49.12 (2025-12-03)
+
+- 87a4367 [IMP] TMS : Perbaikan Total Jam Lembur
+
+
 ## v0.0.282-2025w49.10 (2025-12-03)
 
 - 060dcfc [IMP] TMS : Improvement Overtime Fase 7
