@@ -4410,7 +4410,7 @@ and*/ aa.department_id = sia.department_id
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
                                               , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in
-                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime)
+                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to)
 
     select hts.area_id,
 
@@ -4469,7 +4469,13 @@ and*/ aa.department_id = sia.department_id
                when he.allowance_ot_flat = true then 'OT Flat'
 
                else 'None'
-               end                                       as overtime
+               end                                       as overtime,
+            
+           hoe.ot_type,
+
+           hoe.verify_time_from,
+
+           hoe.verify_time_to
 
     from hr_overtime_planning hop
 
