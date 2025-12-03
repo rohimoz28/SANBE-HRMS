@@ -67,12 +67,9 @@ class SbOvertimeAttendance(models.Model):
     verify_time_to = fields.Float('Verify Time To')
     aot_total = fields.Float(string='Total Jam Lembur', compute='_compute_aot_total')
     
-    @api.depends('verify_time_from', 'verify_time_to')
+    @api.depends('aot1', 'aot2', 'aot3', 'aot4')
     def _compute_aot_total(self):
         for rec in self:
-            if rec.verify_time_from and rec.verify_time_to:
-                rec.aot_total = rec.verify_time_to - rec.verify_time_from
-            else:
-                rec.aot_total = 0.0
+            rec.aot_total = (rec.aot1 or 0) + (rec.aot2 or 0) + (rec.aot3 or 0) + (rec.aot4 or 0)
     
     
