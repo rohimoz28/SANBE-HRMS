@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.0.282-2025w49.10 (2025-12-03)
+
+- 060dcfc [IMP] TMS : Improvement Overtime Fase 7
+
+
+## v0.0.281-2025w49.9 (2025-12-03)
+
+- 4d70575 [IMP] TMS : Improvement Sorting List Tree View TMS Summary Entry
+
+
+## v0.0.279-2025w49.7 (2025-12-02)
+
+- 3e83f4a [FIX] TMS : Update SP Sanbe by Gilang
+
+
+## v0.0.277-2025w49.5 (2025-12-02)
+
+- 8da2fcc [FIX] TMS : Button Process Tidak Konsisten Tampil
+
+
 ## v0.0.275-2025w49.3 (2025-12-02)
 
 - 2752206 [FEAT] TMS : Create Master Data Task Desk

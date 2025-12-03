@@ -9,19 +9,20 @@
                 <form string="Processing and Period">
                     <header>
                         <field name="isopen" invisible="1"/>
+                        <!-- Hidden field untuk trigger reactive -->
+                        <field name="show_process_button" invisible="1"/>
                         <button name="action_opening_periode" invisible="isopen == True or state_process == 'done'"
                                 string="Open" type="object" class="btn-primary"
                                 groups="sanbe_hr_tms.group_processing_period_manager,
                                 sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
                         <button name="action_reproses" string="Process"
                                 type="object" class="btn-primary"
-                                invisible="state_process != 'running'"
+                                invisible="not show_process_button"
                                 groups="sanbe_hr_tms.group_processing_period_manager,
-                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
+                                sanbe_hr_tms.group_processing_period_supervisor"/>
                         <button name="action_closing_periode" invisible="state_process != 'running'" string="Close" type="object"
                                 class="btn-primary"
-                                groups="sanbe_hr_tms.group_processing_period_manager,
-                                sanbe_hr_tms.group_processing_period_supervisor,sanbe_hr_tms.group_processing_period_staff"/>
+                                groups="sanbe_hr_tms.group_processing_period_manager"/>
                         <button name="transfer_payroll" type="object" data-hotkey="shift+g"
                                 string="Transfer To Payroll" class="oe_highlight" invisible="state_process != 'done'"
                                 groups="sanbe_hr_tms.group_processing_period_manager,
