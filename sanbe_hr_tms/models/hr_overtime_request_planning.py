@@ -424,6 +424,8 @@ class HREmpOvertimeRequest(models.Model):
             if not ot_details:
                 raise ValidationError("Tidak dapat melakukan approval. Detail Overtime (Request Line) masih kosong.")
             for details in ot_details:
+                if details.is_cancel:
+                    continue
                 if not details.output_realization or not details.explanation_deviation:
                     raise ValidationError("Field Output Realization dan Explanation wajib diisi sebelum verifikasi.")
                 if not details.verify_time_from or not details.verify_time_to:
