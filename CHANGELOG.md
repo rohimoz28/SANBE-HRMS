@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.286-2025w49.14 (2025-12-05)
+
+- ea755f8 [FIX] disable base branch validation on production merge
+
+
 ## v0.0.284-2025w49.12 (2025-12-03)
 
 - 87a4367 [IMP] TMS : Perbaikan Total Jam Lembur
