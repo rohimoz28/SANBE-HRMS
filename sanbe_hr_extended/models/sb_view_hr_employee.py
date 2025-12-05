@@ -70,6 +70,15 @@ class SbViewHrEmployee(models.Model):
     contract_dateto = fields.Date('Contract To')
     employee_id = fields.Char('Employee ID')
     join_date_contract = fields.Date('Join Date Contract')
+    kpi_kategory = fields.Selection([
+        ('direct_spv', "Direct"),
+        ('direct_lvp', 'Direct LVP'),
+        ('direct_svp', 'Direct SVP'),
+        ('indirect', 'Indirect'),
+        ('general', 'General'),
+        ('management', 'Management'),
+        ('none', 'None')
+    ], string="KPI Category")
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -104,7 +113,8 @@ class SbViewHrEmployee(models.Model):
                     he.contract_datefrom,
                     he.contract_dateto,
                     he.employee_id,
-                    he.join_date_contract
+                    he.join_date_contract,
+                    he.kpi_kategory
                 from hr_employee he 
         )
         """ % (self._table, ))
