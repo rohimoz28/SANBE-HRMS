@@ -163,6 +163,15 @@ class HrEmployeeMutation(models.Model):
     service_replacement_id = fields.Many2one('sb.view.hr.employee', string='Posisi Pengganti')
     is_join_date = fields.Boolean('Show Join Date', compute="_compute_show_join_date")
     is_join_date_contract = fields.Boolean('Show Join Date Contract', compute="_compute_show_join_date")
+    service_kpi_kategory = fields.Selection([
+        ('direct_spv', "Direct"),
+        ('direct_lvp', 'Direct LVP'),
+        ('direct_svp', 'Direct SVP'),
+        ('indirect', 'Indirect'),
+        ('general', 'General'),
+        ('management', 'Management'),
+        ('none', 'None')
+    ], string="KPI Category")
 
     _sql_constraints = [
         (
@@ -271,6 +280,8 @@ class HrEmployeeMutation(models.Model):
             except Exception as e:
                 _logger.error("Error calling stored procedure: %s", str(e))
                 raise UserError("Error executing the function: %s" % str(e))
+        if self.service_kpi_kategory != self.employee_id.kpi_kategory:
+            employee.write({'kpi_kategory': self.service_kpi_kategory})
 
         return self.write({'state': 'approved',
                            'service_status': 'Approved'})
@@ -376,6 +387,7 @@ class HrEmployeeMutation(models.Model):
             existing.service_coach_id = myemp.coach_id.id
             existing.join_date_contract = myemp.join_date_contract
             existing.service_status = 'Draft'
+            existing.service_kpi_kategory = myemp.kpi_kategory
 
     @api.model
     def _cron_sync_mutation_data(self, work_days=None):
