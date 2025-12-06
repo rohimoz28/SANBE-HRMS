@@ -99,6 +99,7 @@
         'db/temporary_table.sql',
         'db/functions.sql',
         'db/add_monthly_leave.sql',
+        'db/generate_cuti.sql',
         'views/tmsentry_details.xml',
         'security/ir.model.access.csv',
     ],
