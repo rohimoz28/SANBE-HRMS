@@ -61,25 +61,34 @@ check_base_branch:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging")'
       when: always
     - when: never
-
-notify_check_base_branch_failed:
-  stage: notify
+  
+check_merge_conflicts:
+  stage: verify
   tags: [ test4 ]
   <<: *default_before_script
+  allow_failure: false
   script:
-    - MR_TITLE="$CI_MERGE_REQUEST_TITLE"
-    - MR_URL="$CI_PROJECT_URL/-/merge_requests/$CI_MERGE_REQUEST_IID"
-    - MR_LINK="[$MR_TITLE]($MR_URL)"
-    - AUTHOR_NAME=$(echo "$CI_COMMIT_AUTHOR" | sed -E 's/^(.*) <.*>$/\1/')
-    - MR_AUTHOR="**$AUTHOR_NAME**"
-    - /tmp/scripts/send_notification.sh "❌ $MR_LINK Created by $MR_AUTHOR" "Error" 15158332 "Validation Base Branch Failed!" "$WEBHOOK_URL"
-  needs:
-    - job: check_base_branch
-      artifacts: false
-      optional: true
+    - git fetch origin staging
+    - git fetch origin $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    
+    - echo "Checking merge conflicts..."
+    - |
+      if git merge --no-commit --no-ff origin/staging 2>&1 | grep -q "CONFLICT"; then
+        echo "❌ MERGE CONFLICT DETECTED!"
+        echo ""
+        echo "Conflicted files:"
+        git diff --name-only --diff-filter=U
+        echo ""
+        git merge --abort
+        exit 1
+      else
+        echo "✅ No merge conflicts detected"
+        git merge --abort
+        exit 0
+      fi
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging")'
-      when: on_failure
+      when: always
     - when: never
 
 # STAGING
