@@ -216,7 +216,6 @@ class HRTMSEntrySummary(models.Model):
     def _compute_concate(self):
         print("MULAI CONCATE")
         for record in self:
-            print(record.periode_id.name + str(record.date_from) + str(record.date_to), "ini yang baru")
             record.periode_from_to = record.periode_id.name + " | " + str(record.date_from) + " | " + str(record.date_to)
     
     @api.depends('employee_id.allowance_ot')

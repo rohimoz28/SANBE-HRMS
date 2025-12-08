@@ -92,6 +92,8 @@ class HRTmsOpenClose(models.Model):
         Tidak peduli siapa yang sedang proses
         """
         for rec in self:
+            computed_value = rec.show_process_button = (rec.state_process == 'running')
+            _logger.info("Nilai Computed Field untuk record ID %s: %s", rec.id, computed_value)
             rec.show_process_button = (rec.state_process == 'running')
 
     def kumpulhari(self,wd1,wd2):
@@ -135,16 +137,6 @@ class HRTmsOpenClose(models.Model):
         res = super(HRTmsOpenClose, self).create(values)
         return res
 
-    #def init(self):
-    #    dat = self.env['hr.opening.closing'].sudo().search([])
-    #    for rec in dat:
-    #        if rec.branch_id and rec.open_periode_from and rec.open_periode_to:
-    #            br = self.env['res.branch'].sudo().search([('id','=',rec.branch_id.id)])
-    #            #rec.name = br.name + '/' +str(datetime.strptime(str(rec.open_periode_from), "%d-%m-%Y").date())+'-'+str(datetime.strptime(str(rec.open_periode_to), "%d-%m-%Y").date())
-    #            if br:
-    #                rec.write({'name': br.name + '/' + str((datetime.strptime(str(rec.open_periode_from), "%Y-%m-%d").date()).strftime('%d-%m-%Y'))+'-'+str((datetime.strptime(str(rec.open_periode_to), "%Y-%m-%d").date()).strftime('%d-%m-%Y'))})
-    #                rec.env.cr.commit()
-
     def write(self, vals):
         for rec in self:
             if rec.branch_id and rec.open_periode_from and rec.open_periode_to:
@@ -178,15 +170,32 @@ class HRTmsOpenClose(models.Model):
         print("MULAI CONCATE")
         recompute_tms = self.env['hr.tmsentry.summary'].sudo().search([])
         for record in recompute_tms:
-            print(record.periode_id.name + str(record.date_from) + str(record.date_to), "ini yang baru")
             record.periode_from_to = record.periode_id.name + " | " + str(record.date_from) + " | " + str(record.date_to)
 
     def action_reproses(self):
-        """
-        Process dengan validasi concurrent access di method
-        Button tetap muncul, validasi saat diklik
+        """ LOCK ACTIVE ROW - RUN PROCESS - INVALIDATE CACHE
+        1. button action_reproses yang ada di hr_tms_open_close.xml akan selalu di compute setiap user refresh halaman,
+           menggunakan helper field show_process_button | invisible="not show_process_button"
+        2. action_reproses() menggunakan 2 validasi | googling : RACE CONDITION
+            1. dua user dari branch berbeda tidak bisa proses calculate_tms() di waktu bersamaan
+            2. dua user dari branch yang sama tidak bisa klik button proses/proses calculate_tms()
+        3. ketika user klik button process, id user nya akan di store di field processing_user_id && datetime di field processing_start,
+           ketika action_reproses() selesai dijalankan, value kedua field tersebut akan di hapus.
         """
         self.ensure_one()
+
+        if self.env.user.id == self.processing_user_id.id:
+            """
+            ketika user klik button period, field processing_user_id && processing_start 
+            akan di isi dengan data user yang klik button tersebut.
+            jika value dari kedua field sama dengan user active yang klik button process, maka method ini
+            memastikan action_reproses() bisa dijalankan.
+            karena yang tidak boleh adalah, 1 record hr.opening.closing dijalankan oleh 2 user yang berbeda.
+            """
+            self.write({
+                'processing_user_id': False,
+                'processing_start': False,
+            })
 
         _logger.info(
             f"[REPROSES] User {self.env.user.name} (ID: {self.env.user.id}) "
@@ -217,7 +226,24 @@ class HRTmsOpenClose(models.Model):
                 log_exceptions=False
             )
         except OperationalError as e:
+            # Prepare context information
+            user_id = self.env.user.id if self.env.user else 'Unknown'
+            user_name = self.env.user.name if self.env.user else 'Unknown'
+            record_id = self.id
+            record_model = self._name
+            timestamp = datetime.now().isoformat()
+
+            # Get pgcode safely (might be None for connection errors)
+            pgcode = getattr(e, 'pgcode', None)
+            pgerror = getattr(e, 'pgerror', str(e))
+
             if e.pgcode == errorcodes.LOCK_NOT_AVAILABLE:
+                _logger.info(
+                    f"[LOCK_NOT_AVAILABLE] User {user_name} (ID: {user_id}) "
+                    f"tried to lock locked record. "
+                    f"Model: {record_model}, Record ID: {record_id}, "
+                    f"Timestamp: {timestamp}"
+                )
                 # Row sedang di-lock user lain
                 raise UserError(_(
                     "This record is currently locked by another user.\n\n"
@@ -225,12 +251,27 @@ class HRTmsOpenClose(models.Model):
                 ))
             elif e.pgcode == errorcodes.SERIALIZATION_FAILURE:
                 # Concurrent modification detected
+                _logger.info(
+                    f"[SERIALIZATION_FAILURE] User {user_name} (ID: {user_id}) "
+                    f"encountered concurrent modification. "
+                    f"Model: {record_model}, Record ID: {record_id}, "
+                    f"Timestamp: {timestamp}, "
+                    f"Error: {pgerror}"
+                )
                 raise UserError(_(
                     "This record was just modified by another user.\n\n"
                     "Please refresh the page and try again."
                 ))
             else:
-                _logger.error(f"Database lock error: {str(e)}")
+                _logger.error(
+                    f"[UNEXPECTED_DB_ERROR] User {user_name} (ID: {user_id}) "
+                    f"failed to acquire lock. "
+                    f"Model: {record_model}, Record ID: {record_id}, "
+                    f"Timestamp: {timestamp}, "
+                    f"pgcode: {pgcode}, "
+                    f"Error: {pgerror}",
+                    exc_info=True  # Include full traceback
+                )
                 raise UserError(_(
                     "Unable to acquire lock on this record.\n\n"
                     "Please try again or contact administrator."
@@ -238,7 +279,6 @@ class HRTmsOpenClose(models.Model):
 
         # Refresh data dari database setelah dapat lock
         self.invalidate_recordset(['processing_user_id', 'processing_start'])
-        # self.refresh()
 
         # Validasi 3: Cek apakah sedang diproses user lain
         if self.processing_user_id:
@@ -250,16 +290,30 @@ class HRTmsOpenClose(models.Model):
             else:
                 time_info = ""
 
+            # Prepare error context
+            processing_user_name = self.processing_user_id.name
+            processing_start_time = self.processing_start.strftime('%Y-%m-%d %H:%M:%S') if self.processing_start else 'N/A'
+
+            # Log informasi
+            _logger.info(
+                f"[VALIDATION_FAILED] Another user is processing this record. "
+                f"Record: {self._name}({self.id}) | "
+                f"Processing by: {processing_user_name} (ID: {self.processing_user_id.id}) | "
+                f"Started: {processing_start_time} | "
+                f"Elapsed: {minutes if self.processing_start else 'unknown'} minutes | "
+                f"Requested by: {self.env.user.name} (ID: {self.env.user.id})"
+            )
+
             raise UserError(_(
                 "❌ Store Procedure sedang dijalankan oleh user lain.\n\n"
                 "Processing by: %s\n"
                 "Started: %s %s\n\n"
                 "Please wait until the process completes and try again."
             ) % (
-                                self.processing_user_id.name,
-                                self.processing_start.strftime('%Y-%m-%d %H:%M:%S') if self.processing_start else 'N/A',
-                                time_info
-                            ))
+                self.processing_user_id.name,
+                self.processing_start.strftime('%Y-%m-%d %H:%M:%S') if self.processing_start else 'N/A',
+                time_info
+            ))
 
         # Set processing flag
         self.write({
@@ -282,6 +336,7 @@ class HRTmsOpenClose(models.Model):
         success = False
         error_message = None
 
+        # jalankan calculate_tms()
         try:
             # Prepare parameters
             period_id = self.id
@@ -381,7 +436,7 @@ class HRTmsOpenClose(models.Model):
             if not success:
                 raise UserError(_(
                     "Process failed and unable to reset processing state.\n\n"
-                    "Please contact your administrator."
+                    "Try again in few seconds."
                 ))
 
     def recompute_tms_summary(self):
@@ -418,86 +473,16 @@ class HRTmsOpenClose(models.Model):
             ketika button opening process di klik '''
             body = _('Process Period: %s' % self.state_process)
             data.message_post(body=body)
-
-            # period_id = data.id
-            # area_id = data.area_id
-            # branch_id = data.branch_id
-            #
-            # ''' validasi : Seluruh employee group yg sesuai area & branch nya sama dengan
-            # area & branch dari proses open period yg sedang dijalankan,
-            # harus sudah berstatus approve '''
-            # employee_group = self.env['hr.empgroup'].sudo().search([
-            #     ('area_id', '=', area_id.id),
-            #     ('branch_id', '=', branch_id.id),
-            #     ('state', '!=', 'approved')
-            # ])
-            #
-            # if len(employee_group) > 1:
-            #     raise UserError('Ensure all employee groups have been approved.')
-
             data.isopen = True
             data.state_process = "running"
 
     def action_closing_periode(self):
         for data in self:
-            # summary = self.env['hr.tmsentry.summary'].search([('periode_id','=',data.id)])
-            # import pdb
-            # pdb.set_trace()
-            # for record in summary:
-            #     record.write({'state': 'done'})
-            #     attendances = self.env['sb.tms.tmsentry.details'].search([('tmsentry_id','=',record.id)])
-            #     for attn in attendances:
-            #         attn.write({'status': 'done'})
-            #     permissions = self.env['hr.permission.entry'].search([('periode_id','=',record.periode_id.id)])
-            #     for perm in permissions:
-            #         # perm.write({'permission_status': 'done'})
-            #         perm.write({'permission_status': 'close'})
-            #     overtime = self.env['hr.overtime.planning'].search([('periode_id','=',data.id)])
-            #     for ot in overtime:
-            #         ot.write({'state': 'done'})
-
             data.write({'state_process': 'done'})
             data.write({'isopen': 0}) # isopen = False
 
-            # search_permission = self.env['hr.permission.entry'].sudo().search([
-            #     ('permission_date_from', '>=', data.open_periode_from),
-            #     ('permission_date_To', '<=', data.open_periode_to),
-            #     ('branch_id', '=', data.branch_id.id),
-            #     ('area_id', '=', data.area_id.id),
-            #     ('permission_status', '=', 'approved')
-            # ])
-            #
-            # # Update status di permission entry = close (done)
-            # search_permission.write({'permission_status': 'done'})
-
     def transfer_payroll(self):
         pass
-        
-        # for data in self:
-        #     searchpermission = self.env['hr.permission.entry'].sudo().search([
-        #         ('permission_date_from', '>=', data.open_periode_from),
-        #         ('permission_date_To', '<=', data.open_periode_to),
-        #         ('branch_id', '=', data.branch_id.id),
-        #         ('area_id', '=', data.area_id.id)
-        #     ])
-
-        #     for permission in searchpermission:
-        #         permission.permission_status = 'done'
-
-        # for alldata in self:
-        #     # if not alldata.close_periode_from or not alldata.close_periode_to:
-        #     #     raise UserError("Please Input Periode From And To First")
-        #     carisummary = self.env['hr.tmsentry.summary'].sudo().search([
-        #         ('date_from', '=', alldata.open_periode_from),
-        #         ('date_to', '<=', alldata.open_periode_to),
-        #         ('branch_id', '=', alldata.branch_id.id)
-        #     ])
-        #     for allsummary in carisummary:
-        #         if allsummary.state != 'transfer_payroll':
-        #             raise UserError('The Closing process cannot be carried out because there still transaction that have not been transffered to payroll')
-        #         else:
-        #             allsummary.write({'state': 'done'})
-        #     return
 
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id, view_type, **options)

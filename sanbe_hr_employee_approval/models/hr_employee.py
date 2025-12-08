@@ -89,7 +89,7 @@ class HrEmployee(models.Model):
         self.env['hr.employment.log'].sudo().create(datalog)
         
         self.write({'state': 'approved'})
-        
+        self.env.cr.commit()
         try:
             self.env.cr.execute("CALL generate_cuti()")
             self.env.cr.commit()
