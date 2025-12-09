@@ -186,9 +186,9 @@ begin
 
                          hed.employee_id,
 
-                         generate_series(hed.valid_from::date, hed.valid_to::date, interval '1 day')::date AS wd,
+                         generate_series(hoc.open_periode_from::date, hoc.open_periode_to::date, interval '1 day')::date AS wd,
 
-                         to_char(generate_series(hed.valid_from::date, hed.valid_to::date, interval '1 day')::date,
+                         to_char(generate_series(hoc.open_periode_from::date, hoc.open_periode_to::date, interval '1 day')::date,
                                  'FMDay')                                                                  AS day_name,
 
                          he.id                                                                             AS empgroup_id,
@@ -207,8 +207,8 @@ begin
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari <> 'shift'
 
-                           join hr_opening_closing hoc on hoc.id = period and hoc.branch_id = branch and
-                                                          hed.valid_from between hoc.open_periode_from and hoc.open_periode_to
+                           join hr_opening_closing hoc on hoc.id = period and hoc.branch_id = branch --and
+                  --  hed.valid_from between hoc.open_periode_from and hoc.open_periode_to
 
                   WHERE he.branch_id = branch
                     AND he.state = 'approved'), -- Assuming 'branch' is a variable you replace during execution AND he.state = 'approved'),
@@ -4470,7 +4470,7 @@ and*/ aa.department_id = sia.department_id
 
                else 'None'
                end                                       as overtime,
-            
+
            hoe.ot_type,
 
            hoe.verify_time_from,
