@@ -13,6 +13,9 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from datetime import date
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class HrEmployee(models.Model):
@@ -84,7 +87,18 @@ class HrEmployee(models.Model):
                    'job_status': self.job_status,
                    'emp_status': self.emp_status}
         self.env['hr.employment.log'].sudo().create(datalog)
-        return self.write({'state': 'approved'})
+        
+        self.write({'state': 'approved'})
+        self.env.cr.commit()
+        try:
+            self.env.cr.execute("CALL generate_cuti()")
+            self.env.cr.commit()
+            _logger.info("Stored procedure executed successfully")
+        except Exception as e:
+            _logger.error("Error calling stored procedure: %s", str(e))
+            raise UserError("Error executing the function: %s" % str(e))
+        
+        return True
 
     def unlink(self):
         for record in self:
