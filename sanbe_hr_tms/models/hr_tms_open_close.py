@@ -131,9 +131,9 @@ class HRTmsOpenClose(models.Model):
             else:
                 raise UserError('Branch or Open Periode From Not Selected')
 
-            existing_record = self.search([('branch_id', '=', vals['branch_id']), ('state_process', '=', 'running')])
-            if existing_record:
-                raise UserError(_("A record with the same branch and running state already exists."))
+            # existing_record = self.search([('branch_id', '=', vals['branch_id']), ('state_process', '=', 'running')])
+            # if existing_record:
+            #     raise UserError(_("A record with the same branch and running state already exists."))
         res = super(HRTmsOpenClose, self).create(values)
         return res
 
@@ -468,6 +468,16 @@ class HRTmsOpenClose(models.Model):
                 raise UserError(
                     "The 'Periode From' and 'Periode To' fields are required. Please enter values for both fields."
                 )
+            
+            '''Cek jika ada 2 record sebelumnya yang sedang running (max 2 period yang running)'''
+            prev_running = self.env['hr.opening.closing'].search([
+                ('area_id', '=', data.area_id.id),
+                ('branch_id', '=', data.branch_id.id),
+                ('id', '<', data.id),
+                ('state_process', '=', 'running'),
+            ], order="id desc", limit=2)
+            if len(prev_running) == 2:
+                raise UserError(_("You cannot start this period because there are already two active (running) periods in this branch."))
 
             ''' buat pesan pada chatter 
             ketika button opening process di klik '''
@@ -478,6 +488,16 @@ class HRTmsOpenClose(models.Model):
 
     def action_closing_periode(self):
         for data in self:
+            '''cek record sebelumnya yang state belum close'''
+            prev_rec = self.env['hr.opening.closing'].search([
+                ('area_id', '=', data.area_id.id),
+                ('branch_id', '=', data.branch_id.id),
+                ('id', '<', data.id),
+                ('state_process', '!=', 'done'),
+            ], order="id desc", limit=1)
+            if prev_rec:
+                raise UserError(_("Previous periods must be closed before you can close this one."))
+            
             data.write({'state_process': 'done'})
             data.write({'isopen': 0}) # isopen = False
 
