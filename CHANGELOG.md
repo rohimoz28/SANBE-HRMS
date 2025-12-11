@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.295-2025w50.8 (2025-12-11)
+
+- e0cb1d6 [FIX] TMS : Bugfix SP Request Vs Realization Double Data
+
+
 ## v0.0.293-2025w50.6 (2025-12-10)
 
 - c06a439 [IMP] TMS : Improvement Processing and Period: Allow Multiple Running Periods
