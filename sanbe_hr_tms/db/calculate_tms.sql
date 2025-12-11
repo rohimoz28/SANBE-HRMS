@@ -4393,107 +4393,60 @@ and*/ aa.department_id = sia.department_id
 
              join sb_attendance_corrections sac on aa.department_id = sac.department_id;
 
-
 -- monitoring - request vs realization
-
     delete
-
     from sb_overtime_attendance soa
-
     where soa.periode_id = period
-
       and soa.area_id = l_area
-
       and soa.branch_id = branch;
-
 
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
                                               , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in
                                               , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to)
 
-    select hts.area_id,
-
+    SELECT hts.area_id,
            hts.branch_id,
-
            hts.department_id,
-
            hts.periode_id,
-
-           hop.name                                      as no_request,
-
+           hop.name            as no_request,
            hts.nik,
-
-           hoe.plann_date_from                           as tgl_request,
-
+           hoe.plann_date_from as tgl_request,
            hts.employee_id,
-
-           hoe.ot_plann_from                             as req_time_fr,
-
-           hoe.ot_plann_to                               as req_time_to,
-
+           hoe.ot_plann_from   as req_time_fr,
+           hoe.ot_plann_to     as req_time_to,
            coalesce(sttd.time_in, sttd.edited_time_in)   as rlz_time_fr,
-
            coalesce(sttd.time_out, sttd.edited_time_out) as rlz_time_to,
-
            sttd.approval_ot_from,
-
            sttd.approval_ot_to,
-
            hop.state,
-
            he.allowance_jemputan,
-
            hoe.meals,
-
            hoe.meals_cash,
-
            hoe.is_cancel,
-
            sttd.date_in,
-
            sttd.aot1,
-
            sttd.aot2,
-
            sttd.aot3,
-
            sttd.aot4,
-
            case
-
                when he.allowance_ot = true then 'OT'
-
                when he.allowance_ot1 = true then 'OT 1'
-
                when he.allowance_ot_flat = true then 'OT Flat'
-
                else 'None'
-               end                                       as overtime,
-
+               end             as overtime,
            hoe.ot_type,
-
            hoe.verify_time_from,
-
            hoe.verify_time_to
-
-    from hr_overtime_planning hop
-
-             join hr_overtime_employees hoe on hop.id = hoe.planning_id
-
-             join hr_tmsentry_summary hts on hts.employee_id = hoe.employee_id
-
-             join hr_employee he on hts.employee_id = he.id
-
-             left join sb_tms_tmsentry_details sttd
-                       on hoe.employee_id = sttd.employee_id and hoe.plann_date_from = sttd.details_date
-
+    FROM hr_tmsentry_summary hts
+             INNER JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
+             INNER JOIN hr_overtime_employees hoe ON hts.employee_id = hoe.employee_id
+             INNER JOIN hr_overtime_planning hop ON hoe.planning_id = hop.id
+             inner join hr_employee he on he.id = hoe.employee_id
     where hts.periode_id = period
-
       and hts.area_id = l_area
-
-      and hts.branch_id = branch;
-
+      and hts.branch_id = branch
+      AND sttd.details_date = hop.request_date;
 
     -- monitoring overtime
 -- hapus dari sb_employee_overtime
