@@ -662,6 +662,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
     verify_time_to = fields.Float('Verify Time To')
     verify_time_from_char = fields.Char('Verify Time From (Str)', compute="convert_float_to_time", store=True)
     verify_time_to_char = fields.Char('Verify Time To (Str)', compute="convert_float_to_time", store=True)
+    realization_meal_dine_in = fields.Boolean('Realization Meal Dine In')
+    realization_meal_cash = fields.Boolean('Realization Meal Cash')
 
     @api.depends('ot_plann_from', 'ot_plann_to',
                  'approve_time_from', 'approve_time_to',
