@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.297-2025w51.1 (2025-12-15)
+
+- 8d28bb7 [FIX] TMS : adding condition to calculate sb_overtime_attendance
+
+
 ## v0.0.295-2025w50.8 (2025-12-11)
 
 - e0cb1d6 [FIX] TMS : Bugfix SP Request Vs Realization Double Data
