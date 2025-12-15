@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.301-2025w51.5 (2025-12-15)
+
+- 2a31aea [IMP] PAM :Improvement Urutan Record di Menu Kepegawaian Tab Employment Tracking
+
+
 ## v0.0.299-2025w51.3 (2025-12-15)
 
 - 48aee4e [IMP] TMS : Penambahan Field 'Realization Meal Cash' & 'Realization Meal Dine In' di Overtime Request vs Realization
