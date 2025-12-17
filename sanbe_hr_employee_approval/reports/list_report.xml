@@ -36,4 +36,15 @@
         <field name="binding_model_id" ref="sanbe_hr_employee_approval.model_skk_employee_eoc_wizard"/>
         <field name="binding_type">report</field>
     </record>
+    <record id="report_eoc_final_year_pdf_action" model="ir.actions.report">
+        <field name="name">Surat Habis Kontrak Karyawan (Tahun ke-5)</field>
+        <field name="model">skk.employee.eoc.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sanbe_hr_employee_approval.report_eoc_final_year</field>
+        <field name="report_file">sanbe_hr_employee_approval.report_eoc_final_year</field>
+        <field name="print_report_name">'EOC - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="sanbe_hr_employee_approval.paperformat_skk" />
+        <field name="binding_model_id" ref="sanbe_hr_employee_approval.model_skk_employee_eoc_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
 </odoo>

@@ -4446,6 +4446,7 @@ and*/ aa.department_id = sia.department_id
     where hts.periode_id = period
       and hts.area_id = l_area
       and hts.branch_id = branch
+      and hop.state = 'approved'
       AND sttd.details_date = hop.request_date;
 
     -- monitoring overtime
