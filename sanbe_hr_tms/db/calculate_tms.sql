@@ -4462,7 +4462,8 @@ and*/ aa.department_id = sia.department_id
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
                                               , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in
-                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to)
+                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to
+                                              , realization_meal_dine_in, realization_meal_cash)
 
     SELECT hts.area_id,
            hts.branch_id,
@@ -4496,7 +4497,9 @@ and*/ aa.department_id = sia.department_id
                end             as overtime,
            hoe.ot_type,
            hoe.verify_time_from,
-           hoe.verify_time_to
+           hoe.verify_time_to,
+           hoe.realization_meal_dine_in,
+           hoe.realization_meal_cash
     FROM hr_tmsentry_summary hts
              INNER JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
              INNER JOIN hr_overtime_employees hoe ON hts.employee_id = hoe.employee_id

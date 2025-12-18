@@ -66,6 +66,8 @@ class SbOvertimeAttendance(models.Model):
     verify_time_from = fields.Float('Verify Time From')
     verify_time_to = fields.Float('Verify Time To')
     aot_total = fields.Float(string='Total Jam Lembur', compute='_compute_aot_total')
+    realization_meal_dine_in = fields.Boolean('Realization Meal Dine In')
+    realization_meal_cash = fields.Boolean('Realization Meal Cash')
     
     @api.depends('aot1', 'aot2', 'aot3', 'aot4')
     def _compute_aot_total(self):
