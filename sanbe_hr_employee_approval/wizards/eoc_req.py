@@ -45,8 +45,10 @@ class SkkEmployeeEOCWizard(models.TransientModel):
             res['employee_id'] = self.env.context['active_ids'][0]
             employee = self.env['hr.employee'].browse(self.env.context['active_ids'][0])
             res['receiver_id'] = employee.parent_id.id
-            if employee.contract_id and employee.contract_id.contract_year:
+            if employee.contract_id and employee.contract_id.contract_year != '5':
                 res['contract_year'] = int(employee.contract_id.contract_year) + 1
+            if employee.contract_id and employee.contract_id.contract_year == '5':
+                res['contract_year'] = employee.contract_id.contract_year
 
             if employee.contract_dateto:
                 res['char_eoc_date'] = employee.contract_dateto.strftime('%d %B %Y').replace(
@@ -83,4 +85,7 @@ class SkkEmployeeEOCWizard(models.TransientModel):
         if self.employee_id.job_status != 'contract' or not self.employee_id.contract_dateto:
             raise UserError("Cannot allowed to print it used Contract only")
         else:
-            return self.env.ref('sanbe_hr_employee_approval.report_eoc_pdf_action').report_action(self)
+            if self.employee_id.contract_id.contract_year == '5' :
+                return self.env.ref('sanbe_hr_employee_approval.report_eoc_final_year_pdf_action').report_action(self)
+            else:
+                return self.env.ref('sanbe_hr_employee_approval.report_eoc_pdf_action').report_action(self)

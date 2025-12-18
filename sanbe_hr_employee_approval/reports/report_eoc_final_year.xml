@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id="report_eoc_final_year">
+            <t t-call="web.html_container">
+                <style>
+                    .page {
+                        font-family: 'Times New Roman', Times, serif !important;
+                    }
+                    body {
+                        font-family: 'Times New Roman', Times, serif !important;
+                    } 
+                </style>
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.basic_layout">
+                        <thead>
+                            <t t-set="company" t-value="res_company"/>
+                            <table style="width=100%; margin-right: auto; border: 0px solid transparent;">
+                                <tr>
+                                    <td>
+                                        <img
+                                            t-if="company.logo"
+                                            t-att-src="image_data_uri(company.logo)"
+                                            style="max-height: 100px; width: 200px;" alt="Logo"
+                                        />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div style="border-bottom: 1px solid black; margin-bottom: 2px;"/>
+                                    <div style="border-bottom: 4px solid black;"/>
+                                </div>
+                            </div>
+                            <table style="width=100%; margin-left: auto; border: 0px solid transparent;">
+                                <tr>
+                                    <td class="text-left" style="vertical-align: middle; font-family: 'Times New Roman', Times, serif;">
+                                        <strong>
+                                            <span style="font-size:18px;" t-field="company.name"/>
+                                            <span style="font-size:14px;">Pharmaceutical Manufacturer</span> 
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:13px; font-family: 'Times New Roman', Times, serif;" class="text-left">
+                                    <t t-if="doc.employee_id.branch_id.street">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.street"/>
+                                        </strong>
+                                    </t>
+                                    <t t-if="doc.employee_id.branch_id.street2">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.street2"/>
+                                        </strong>
+                                    </t>
+                                    <t t-if="doc.employee_id.branch_id.city">
+                                        <strong>
+                                            <span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.city"/>
+                                        </strong>
+                                    </t>
+                                        <strong>
+                                            <br/> Telp: <t t-if="doc.employee_id.branch_id.phone"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.phone"/></t>
+                                            <br/> Fax: <t t-if="doc.employee_id.branch_id.fax"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.fax"/></t>
+                                            <br/>
+                                            <t t-if="doc.employee_id.branch_id.city"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.city"/></t> <t t-if="doc.employee_id.branch_id.zip"><span style="font-size:13px; font-family: 'Times New Roman', Times, serif;" t-field="doc.employee_id.branch_id.zip"/></t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </thead>
+                        <div class="page">
+                            <style>
+                                p {
+                                    line-height: 1.1;
+                                }
+                            </style>
+                            <div class="text-center" style="text-align: center; font-family: 'Times New Roman', Times, serif; margin-top: -10mm;">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <t t-set="date" t-value="doc.write_date"/>
+                                        <t t-set="dates" t-value="date.strftime('%d %B %Y').replace('January', 'Januari').replace('February', 'Februari').replace('March', 'Maret').replace('April', 'April').replace('May', 'Mei').replace('June', 'Juni').replace('July', 'Juli').replace('August', 'Agustus').replace('September', 'September').replace('October', 'Oktober').replace('November', 'November').replace('December', 'Desember')"/>
+                                        <br/>
+                                        <br/>
+                                        <p style="text-align: justify; font-size:12pt;">
+                                            <strong>Bandung, 
+                                                <t t-esc="dates"/>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div style="text-align: left; font-size:12pt;" class="col-xs-12">
+                                        <strong>
+                                            <p>Kepada
+                                                <br/>
+                                            Yth. Bapak/Ibu 
+                                                <span t-field="doc.receiver_id.name"/>
+                                                <br/>
+                                                <span t-field="doc.receiver_id.job_id.name"/>
+                                                <br/>
+                                            Di Tempat.
+                                            </p>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="content" style="font-family: 'Times New Roman', Times, serif;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p style="text-align:justify; font-size:12pt;">Nomor: 
+                                            <span t-field="doc.name"/>
+                                            <br/>
+                                            Perihal: 
+                                                <u>Pemberitahuan berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT)</u>
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <p style="text-align:justify; font-size:13pt;"> Dengan hormat, <br/><br/>
+                                    Melalui surat ini kami sampaikan mengenai kontrak kerja, atas nama :
+                                </p>
+                                <ol style="text-align:justify; font-size:13pt; margin-top: 10px;">
+                                    <li>
+                                        <strong>
+                                            <span t-field="doc.employee_id.name"/> (NIK.<span t-field="doc.employee_id.nik"/>)
+                                        </strong> - 
+                                        <strong>
+                                            <span t-field="doc.employee_id.job_id.name"/>
+                                        </strong>
+                                        <ul>
+                                            <li> Kontrak kerja ybs berakhir pada tanggal 
+                                                <strong>
+                                                    <span t-field="doc.employee_id.contract_dateto" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                                                    , PKWT ke -
+                                                    <span t-field="doc.contract_year"/>
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                    Kontrak kerja ybs telah menginjak tahun ke 5 dan tidak bisa diperpanjang lagi, untuk itu kami akan menghitung sisa hari kerja dan sisa cutinya untuk dibayarkan.
+                                </p>
+                                <p style="text-align:justify; font-size:13pt;">
+                                                    Jika Ybs masih berminat untuk bekerja di PT. Sanbe Farma, Ybs harus melamar lagi ke Perusahaan dengan memberikan 
+                                                    <strong>surat lamaran lengkap dan surat pengantar dari atasan beserta Lembar Analisa &amp; "Form Tenaga Kerja"</strong> 
+                                                    yang ditujukan ke Personalia, minimal 35 hari kalender (informasi lebih lanjut bisa menghubungi PIC Personalia). 
+                                </p>
+                                <p style="text-align:justify; font-size:13pt;">Terlampir Data Absensi ybs selama 1 tahun sebagai bahan pertimbangan Bapak/Ibu.</p>
+                                <p style="text-align:justify; font-size:13pt;"> Demikian informasi ini kami sampaikan, atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
+                            </div>
+                            <br/>
+                            <div class="text-right" style="font-family: 'Times New Roman', Times, serif;">
+                                <p style="font-size:13pt;">Hormat kami,</p>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p style="line-height: 0.9;">
+                                    <strong>
+                                        <span style="font-size: 14pt; text-decoration: underline; display: block;">
+                                            Asep Rohman, SH.
+                                        </span>
+                                    </strong>
+                                    <span style="font-size: 11pt; display: block; margin-top: -8px;">
+                                        <i>Personnel &amp; G.A. Manager</i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
