@@ -23,6 +23,10 @@
                     <field name="rlz_date" optional="show"/>
                     <field name="rlz_time_fr" optional="show" widget="float_time"/>
                     <field name="rlz_time_to" optional="show" widget="float_time"/>
+                    <field name="is_dine_in" optional="show" />
+                    <field name="is_meal_cash" optional="show" />
+                    <field name="realization_meal_dine_in" optional="show" />
+                    <field name="realization_meal_cash" optional="show" />
                     <field name="overtime" optional="hide" />
                     <field name="aot_total" optional="show"/>
                     <field name="aot1" optional="hide" />

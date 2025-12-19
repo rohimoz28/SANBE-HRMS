@@ -90,7 +90,7 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
                 'No', 'Employee Name', 'Sub Department','Request Number', 'OT Type',
                 'NIK', 'Req Date From', 'Req Time Fr', 'Req Time To', 'App Time Fr', 'App Time To', 'Verify Time From', 'Verify Time To',
                 'Rel Time Fr', 'Rel Time To', 'Overtime', 'Total Jam Lembur', 'OT 1', 'OT 2', 'OT 3', 'OT 4', 
-                'Shuttle Car', 'Dine In', 'Meal Cash', 'Cancel?' #'State', 'Period' 
+                'Shuttle Car', 'Dine In', 'Real Dine In', 'Meal Cash', 'Real Meal Cash', 'Cancel?' #'State', 'Period' 
                 # 'Total Delay', 'Total Times Delay'
             ]
 
@@ -143,7 +143,9 @@ class ReportOvertimeAttendanceXlsx(models.AbstractModel):
                         obj.aot4,
                         obj.is_shuttle_car,
                         obj.is_dine_in,
+                        obj.realization_meal_dine_in,
                         obj.is_meal_cash,
+                        obj.realization_meal_cash,
                         obj.is_cancel
                         # obj.state or None, #State
                         # obj.periode_id.name or None #Periode ID
