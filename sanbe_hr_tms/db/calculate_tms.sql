@@ -3970,6 +3970,65 @@ END AS total_deduction*/
     where ho.employee_id = xx.employee_id
       and xx.details_date = ho.plann_date_from;
 
+    /* update hr_employee orvertime meals / meals_cash
+--------------------------------------------------------------------------------------------------------------------
+(update hr_employee orvertime) logic
+----------------------------------------------------------------------------------------------------------------------
+Jadi Ketika di HR Employee pada Tab Sheet Benefit / Allowance, field "allowance_meal" bernilai false, 
+
+maka menghitung realization time from dan realization time to di overtime request apakah lebih dari 4 jam atau kurang dari 4 jam, dan 
+mengecek jenis OT Type : Regular atau Holiday", 
+ketika Realization Time From dan Realization Time To kurang dari 4 jam, OT Type Regular maupun Holiday maka field meal dine in false. 
+ketika Realization Time From dan Realization Time To lebih dari 4 jam dan OT Type Regular maka field meal dine in true. 
+ketika Realization Time From dan Realization Time To lebih dari 4 jam dan OT Type Holiday maka field meal dine in false. 
+
+Jadi Ketika di HR Employee pada Tab Sheet Benefit / Allowance, field "allowance_meal" bernilai True, 
+
+maka menghitung realization time from dan realization time to di overtime request apakah lebih dari 2 jam atau kurang dari 2 jam. 
+ketika Realization Time From dan Realization Time To kurang dari 2 jam, maka field meal cash = false. 
+ketika Realization Time From dan Realization Time To lebih dari 2 jam maka field meal cash in true. 
+Tidak Memperhatikan OT Type Overtime.
+
+-------------------------------------------------------------------------------------------------------------------------
+note
+---------------------------------------------------------------------------------------------------------------------
+ kritera 7 hari kebelakanga dari current date
+ dan menggunakan branch
+
+*/
+
+UPDATE hr_overtime_employees oe
+SET
+    realization_meal_dine_in=
+        CASE
+            WHEN he.allowance_meal = FALSE THEN
+                CASE
+                    WHEN ROUND((oe.realization_time_to - oe.realization_time_from)::numeric, 2) < 4 THEN FALSE
+                    WHEN ROUND((oe.realization_time_to - oe.realization_time_from)::numeric, 2) >= 4
+                        AND oe.ot_type ILIKE 'regular' THEN TRUE
+                    WHEN ROUND((oe.realization_time_to - oe.realization_time_from)::numeric, 2) >= 4
+                        AND oe.ot_type ILIKE 'holiday' THEN FALSE
+                    ELSE FALSE
+                    END
+            ELSE oe. realization_meal_dine_in
+            END,
+    realization_meal_cash=
+        CASE
+            WHEN he.allowance_meal = TRUE THEN
+                CASE
+                    WHEN ROUND((oe.realization_time_to - oe.realization_time_from)::numeric, 2) < 2 THEN FALSE
+                    WHEN ROUND((oe.realization_time_to - oe.realization_time_from)::numeric, 2) >= 2 THEN TRUE
+                    ELSE FALSE
+                    END
+            ELSE oe.realization_meal_cash
+            END
+FROM hr_employee he
+WHERE oe.employee_id = he.id
+  AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
+  and he.branch_id=branch;
+
+
+
 
 --update total summary detail (footer) || code ini harus selalu paling bawah
 
@@ -4403,7 +4462,8 @@ and*/ aa.department_id = sia.department_id
     insert into sb_overtime_attendance as soa ( area_id, branch_id, department_id, periode_id, no_request
                                               , nik, req_date, employee_id, req_time_fr, req_time_to, rlz_time_fr
                                               , rlz_time_to, approve_time_from, approve_time_to, state, is_shuttle_car, is_dine_in
-                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to)
+                                              , is_meal_cash, is_cancel, rlz_date, aot1, aot2, aot3, aot4, overtime, ot_type, verify_time_from, verify_time_to
+                                              , realization_meal_dine_in, realization_meal_cash)
 
     SELECT hts.area_id,
            hts.branch_id,
@@ -4437,7 +4497,9 @@ and*/ aa.department_id = sia.department_id
                end             as overtime,
            hoe.ot_type,
            hoe.verify_time_from,
-           hoe.verify_time_to
+           hoe.verify_time_to,
+           hoe.realization_meal_dine_in,
+           hoe.realization_meal_cash
     FROM hr_tmsentry_summary hts
              INNER JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
              INNER JOIN hr_overtime_employees hoe ON hts.employee_id = hoe.employee_id
