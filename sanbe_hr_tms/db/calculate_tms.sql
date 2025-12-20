@@ -3971,50 +3971,50 @@ END AS total_deduction*/
       and xx.details_date = ho.plann_date_from;
 
 
-    UPDATE hr_overtime_employees oe
-    SET
-        realization_meal_dine_in =
-            CASE
-                WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN  --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
-                    CASE
-                        WHEN he.allowance_meal = FALSE THEN
-                            CASE
-                                WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 4
-                                    THEN FALSE
-                                WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
-                                    AND oe.ot_type ILIKE 'regular'
-                                    THEN TRUE
-                                WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
-                                    AND oe.ot_type ILIKE 'holiday'
-                                    THEN FALSE
-                                ELSE FALSE
-                                END
-                        ELSE realization_meal_dine_in
-                        END
-                ELSE false
-                END,
-
-        realization_meal_cash =
-            CASE
-                WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN   --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
-                    CASE
-                        WHEN he.allowance_meal = TRUE THEN
-                            CASE
-                                WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 2
-                                    THEN FALSE
-                                WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 2
-                                    THEN TRUE
-                                ELSE FALSE
-                                END
-                        ELSE realization_meal_cash
-                        END
-                ELSE false
-                END
-
-    FROM hr_employee he
-    WHERE oe.employee_id = he.id
-      AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
-      AND he.branch_id = branch_id;
+--     UPDATE hr_overtime_employees oe
+--     SET
+--         realization_meal_dine_in =
+--             CASE
+--                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN  --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
+--                     CASE
+--                         WHEN he.allowance_meal = FALSE THEN
+--                             CASE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 4
+--                                     THEN FALSE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
+--                                     AND oe.ot_type ILIKE 'regular'
+--                                     THEN TRUE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
+--                                     AND oe.ot_type ILIKE 'holiday'
+--                                     THEN FALSE
+--                                 ELSE FALSE
+--                                 END
+--                         ELSE realization_meal_dine_in
+--                         END
+--                 ELSE false
+--                 END,
+--
+--         realization_meal_cash =
+--             CASE
+--                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN   --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
+--                     CASE
+--                         WHEN he.allowance_meal = TRUE THEN
+--                             CASE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 2
+--                                     THEN FALSE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 2
+--                                     THEN TRUE
+--                                 ELSE FALSE
+--                                 END
+--                         ELSE realization_meal_cash
+--                         END
+--                 ELSE false
+--                 END
+--
+--     FROM hr_employee he
+--     WHERE oe.employee_id = he.id
+--       AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
+--       AND he.branch_id = branch_id;
 
 --update total summary detail (footer) || code ini harus selalu paling bawah
 
