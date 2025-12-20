@@ -4449,8 +4449,7 @@ and*/ aa.department_id = sia.department_id
       and hts.area_id = l_area
       and hts.branch_id = branch
       and hop.state = 'approved'
-      and hoe.is_cancel = False
-      AND sttd.details_date = hop.request_date;
+      AND sttd.details_date = hoe.plann_date_from;
 
     -- monitoring overtime
 -- hapus dari sb_employee_overtime
