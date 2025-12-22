@@ -128,8 +128,8 @@
                                     <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_from_char" optional="show" readonly="1"/>
                                     <field name="realization_time_to_char" optional="show" readonly="1"/>
-                                    <field name="realization_meal_dine_in" optional="show" readonly="1"/>
-                                    <field name="realization_meal_cash" optional="show" readonly="1"/>
+                                    <field name="realization_meal_dine_in" optional="hide" readonly="1"/>
+                                    <field name="realization_meal_cash" optional="hide" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="is_cancel" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
@@ -197,8 +197,8 @@
                                     <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_from_char" optional="show" readonly="1"/>
                                     <field name="realization_time_to_char" optional="show" readonly="1"/>
-                                    <field name="realization_meal_dine_in" optional="show" readonly="1"/>
-                                    <field name="realization_meal_cash" optional="show" readonly="1"/>
+                                    <field name="realization_meal_dine_in" optional="hide" readonly="1"/>
+                                    <field name="realization_meal_cash" optional="hide" readonly="1"/>
                                     <field name="output_realization" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="explanation_deviation" optional="show" readonly="state != 'approved_plan_pm'"/>
                                     <field name="is_cancel" optional="show" readonly="is_cancel == True or state in ['approved','verification','completed','done']" force_save="1"/>
