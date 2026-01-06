@@ -184,7 +184,7 @@ class HREmpOvertimeRequest(models.Model):
                             rec.create_uid]
             user = self.env.user
             rec.is_current_user = user in allowed_user
-            print(allowed_user)
+
 
     @api.depends('branch_id', 'department_id')
     def _compute_allowed_approval_ids(self):
@@ -750,6 +750,21 @@ class HREmpOvertimeRequestEmployee(models.Model):
                 raw_from is None or 
                 raw_to is None
             )
+
+    @api.onchange('transport', 'route_id')
+    def _onchange_transport(self):
+        for rec in self:
+            if not rec.transport:
+                rec.route_id = False
+
+    @api.constrains('transport', 'route_id')
+    def _constrains_transport(self):
+        for rec in self:
+            if rec.transport == True and not rec.route_id:
+                raise ValidationError(
+                    f"Employee: {rec.employee_id.name} \n"
+                    "Jemputan & Rute Tidak Boleh Kosong."
+                )
 
     @api.onchange('employee_id', 'approve_time_from', 'approve_time_to')
     def _onchange_allowance_meals_cash(self):
