@@ -120,10 +120,10 @@
                                     <field name="approve_time_to" string="App Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="work_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="output_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="meals" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="meals" optional="show" readonly="1" />
+                                    <field name="meals_cash" optional="show" readonly="1"/>
                                     <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done'] or not transport" force_save="1" />
                                     <field name="realization_time_from" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_from_char" optional="show" readonly="1"/>
@@ -189,10 +189,10 @@
                                     <field name="approve_time_to" string="App Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="work_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="output_plann" optional="show" readonly="state in ['approved','verification','completed','done']"/>
-                                    <field name="meals" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="meals_cash" optional="show" readonly="state in ['approved','verification','completed','done']"/>
+                                    <field name="meals" optional="show" readonly="1" />
+                                    <field name="meals_cash" optional="show" readonly="1"/>
                                     <field name="transport" optional="show" readonly="state in ['approved','verification','completed','done']" />
-                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done']" />
+                                    <field name="route_id" options="{'no_create': True,'no_create_edit': True}" optional="show" readonly="state in ['approved','verification','completed','done'] or not transport" force_save="1" />
                                     <field name="realization_time_from" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_to" widget="float_time" force_save="1" optional="show" readonly="1" column_invisible="1"/>
                                     <field name="realization_time_from_char" optional="show" readonly="1"/>
