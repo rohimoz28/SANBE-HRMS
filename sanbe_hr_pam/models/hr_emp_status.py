@@ -12,6 +12,5 @@ class HrEmpStatus(models.Model):
     # def _compute_job_status(self):
     #     for rec in self:
     #         emp_status_domain=self.env['hr.emp.status'].sudo().search([])
-    #         print(emp_status_domain.job_status)
 
     

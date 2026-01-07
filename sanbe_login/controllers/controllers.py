@@ -156,7 +156,6 @@ class HomeFace(Home):
         background = param_obj.get_param('login_background.background')
         values['background_color'] = param_obj.get_param('login_background.color')
 
-        # print("*******************",param_obj.get_param('login_background.color'))
         background_image = param_obj.get_param('login_background.background_image')
         bg_src = f""
         color_1 = param_obj.get_param('login_background.bgcolor_1')

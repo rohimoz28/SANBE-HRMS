@@ -10,7 +10,6 @@ class HrResignation(models.Model):
     branch_id = fields.Many2one('res.branch', string="Branch")
     # branch_ids = self.env.user.branch_ids.ids  # Ambil branch yang diizinkan untuk user
     # resignations = self.env['hr.resignation'].search([('branch_id', 'in', branch_ids)])
-    # print(resignations)
 
 
     # @api.model

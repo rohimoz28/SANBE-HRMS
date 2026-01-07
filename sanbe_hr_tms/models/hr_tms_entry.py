@@ -389,20 +389,6 @@ class HrAttendance(models.Model):
                             alldata.attendence_status = 'delay_in'
                         if scode == 'LEAV':
                             alldata.attendence_status = 'outstation'
-                            
-                    
-                    # print('===================')
-                    # print('tanggal',alldata.dates)
-                    # print('Employee',alldata.employee_id.name)
-                    # print('jam masuk edit',alldata.time_in_edited)
-                    # print('jam masuk edit konversi',alldata.ubahjam(alldata.time_in_edited))
-                    # print('jam masuk',alldata.time_in)
-                    # print('jam masuk konversi',alldata.ubahjam(alldata.time_in))
-                    # print('jam keluar edit',alldata.time_out_edited)
-                    # print('jam keluar edit konversi',alldata.ubahjam(alldata.time_out_edited))
-                    # print('jam keluar',alldata.time_out)
-                    # print('jam keluar konversi',alldata.ubahjam(alldata.time_out))
-                    # print('===================')
                     
                     stimefrom1 = datetime.strptime(str(alldata.ubahjam(wd.fullday_from)).replace(' ', ''), '%H:%M:%S')
                     #stimefrom1 = alldata.ubahjam(wd.fullday_from)
@@ -509,10 +495,6 @@ class HrAttendance(models.Model):
                             tin = alldata.time_in
                         
                         if alldata.employee_id.attende_premie == True:
-                            print('--------------------')
-                            print(tin)
-                            print(tout)
-                            print(wd.id)
                             sql = """
                                 select qty from hr_allowance_list hal 
                                 where hal.workingday_id={wdid} and hal.code ='ashf'
@@ -522,9 +504,6 @@ class HrAttendance(models.Model):
                             self.env.cr.execute(sql)
                             allow_att = self.env.cr.fetchone()
                             #allow_att = wd.allowance_ids.filtered(lambda p: p.code == 'ashf' and p.time_from >= tin and p.time_to <= tout)
-                            print(allow_att)
-                            #print(allow_att[0])
-                            print('--------------------')
                             ##for allow in wd.allowance_ids.filtered(lambda p: p.code == 'ashf'):
                             ##asfrom1 = datetime.strptime(str(alldata.ubahjam(allow.time_from)).replace(' ', ''), '%H:%M:%S')
                             ##asfrom1 = alldata.ubahjam(allow.time_from)
