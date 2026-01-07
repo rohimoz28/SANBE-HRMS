@@ -167,7 +167,6 @@ class HRTmsOpenClose(models.Model):
         return res
 
     def compute_concate(self):
-        print("MULAI CONCATE")
         recompute_tms = self.env['hr.tmsentry.summary'].sudo().search([])
         for record in recompute_tms:
             record.periode_from_to = record.periode_id.name + " | " + str(record.date_from) + " | " + str(record.date_to)

@@ -10,11 +10,12 @@
                 <form string="Task Desk">
                     <sheet>
                         <group>
+                            <field name="name" />
                             <field name="branch_id" required="1"/>
-                            <field name="department_id" required="1"/>
-                            <field name="code" required="1"/>
+                            <field name="department_id" required="1" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="code" invisible="1"/>
                             <field name="work_plan" required="1"/>
-                            <field name="output_plan" required="1"/>
+                            <field name="output_plan" invisible="1"/>
                             <field name="active" required="1"/>
                         </group>
                     </sheet>
@@ -27,11 +28,12 @@
             <field name="model">sb.task.desk.master</field>
             <field name="arch" type="xml">
                 <tree string="Task Desk">
+                    <field name="name" />
                     <field name="branch_id" />
                     <field name="department_id" />
-                    <field name="code" />
+                    <field name="code" column_invisible="1" />
                     <field name="work_plan" />
-                    <field name="output_plan" />
+                    <field name="output_plan" column_invisible="1"/>
                     <field name="active" />
                 </tree>
             </field>
@@ -42,11 +44,12 @@
             <field name="model">sb.task.desk.master</field>
             <field name="arch" type="xml">
                 <search string="Task Desk">
+                    <field name="name" />
                     <field name="branch_id" />
                     <field name="department_id" />
-                    <field name="code" />
+                    <!-- <field name="code" /> -->
                     <field name="work_plan" />
-                    <field name="output_plan" />
+                    <!-- <field name="output_plan"/> -->
                     <field name="active" />
                 </search>
             </field>

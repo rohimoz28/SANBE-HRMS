@@ -145,6 +145,28 @@
             <!-- <field name="domain_force">[(1, '=', 1)]</field> -->
         </record>
 
+        <!-- Master Task Desk -->
+        <record id="master_task_desk_staff_rule" model="ir.rule">
+            <field name="name">Master Task Desk Staff Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_task_desk_master"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_master_task_desk_staff'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
+        <record id="master_task_desk_supervisor_rule" model="ir.rule">
+            <field name="name">Master Task Desk Supervisor Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_task_desk_master"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_master_task_desk_supervisor'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
+        <record id="master_task_desk_manager_rule" model="ir.rule">
+            <field name="name">Master Task Desk Manager Rule</field>
+            <field name="model_id" ref="sanbe_hr_tms.model_sb_task_desk_master"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_tms.module_sub_category_master_task_desk_manager'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
         <!-- Request vs Realization -->
         <record id="sb_overtime_attedance_staff_rule" model="ir.rule">
             <field name="name">Request vs Realization Staff Rule</field>
