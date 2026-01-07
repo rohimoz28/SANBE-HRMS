@@ -263,37 +263,26 @@ class HrResignation(models.Model):
                     resignation.resign_confirm_date):
                 employee_contract = self.env['hr.contract'].search(
                     [('employee_id', '=', self.employee_id.id)],order='id desc',limit=1)
-                # print('0000000000000000')
                 if employee_contract:
                     # raise ValidationError(
                     #     _("There are no Contracts found for this employee"))
-                    # print('11111111111111111')
                     for contract in employee_contract:
                         if contract.state == 'open':
-                            # print('222222222222222222222222')
                             resignation.employee_contract = contract.name
                             resignation.state = 'approved'
                             resignation.approved_revealing_date = (
                                     resignation.resign_confirm_date + timedelta(
                                 days=contract.notice_days))
                         else:
-                            # print('33333333333333333333')
                             resignation.approved_revealing_date = (
                                 resignation.expected_revealing_date)
                         # Cancelling contract
 
                         contract.state = 'cancel' if contract.state == "open" else contract.state
 
-                # print('=================================')
-                # print((resignation.expected_revealing_date <= fields.Date.today() and resignation.employee_id.active))
-                # print((resignation.expected_revealing_date))
-                # print((fields.Date.today()))
-                # print((resignation.employee_id.active))
-                # print('=================================')
                 # Changing state of the employee if resigning today
                 if (resignation.expected_revealing_date <= fields.Date.today()
                         and resignation.employee_id.active):
-                    # print('444444444444444444444444444')
                     # resignation.employee_id.active = False
                     # Changing fields in the employee table
                     # with respect to resignation
@@ -304,7 +293,6 @@ class HrResignation(models.Model):
                     else:
                         resignation.employee_id.fired = True
                     # Removing and deactivating user
-                    # print('00000000000000000')
                     resignation.state = 'approved'
                     resignation.employee_id.state = 'inactive'
 
@@ -340,7 +328,6 @@ class HrResignation(models.Model):
                     self.env['hr.employment.log'].sudo().create(datalog)
 
                     if resignation.employee_id.user_id:
-                        # print('aaaaaaaaaaaaaaaaa')
 
                         resignation.employee_id.user_id = None
                 else:

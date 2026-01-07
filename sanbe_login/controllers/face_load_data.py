@@ -50,7 +50,6 @@ class FaceLoginWeb(http.Controller):
         passwordnya = request.env.cr.fetchone()
         setpw = CryptContext(schemes=['pbkdf2_sha512'])
         passwd = str(str(str(passwordnya).replace('(','')).replace(',)','')).replace("'",'')
-        # print('password ', ssha512.decode('utf-8'))
         # myuser = request.env['res.users'].sudo().search([('login','=',auth_token)])
         return  passwd
 

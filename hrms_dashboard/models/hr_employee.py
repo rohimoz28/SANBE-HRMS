@@ -256,7 +256,6 @@ class HrEmployee(models.Model):
         dat = cr.fetchall()
         data = []
         # for alldata in dat:
-        #     print('data kpi ',alldata)
         for i in range(0, len(dat)):
             data.append(
                 {'label': dat[i][0], 'value': dat[i][1]})

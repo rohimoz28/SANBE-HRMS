@@ -22,18 +22,15 @@ class IrSequence(models.Model):
         mycomp = self._context.get('company_id')
         if mycomp:
             company_id = self.env['res.company'].sudo().browse(int(mycomp))
-            print(mycomp)
             return str(company_id.inisial_pt)
         else:
             return ""
 
     def write_bisnis_unit(self):
         mycomp = self._context.get('bisnis_unit')
-        print('bisnis unit ', mycomp)
         #sdadas
         if mycomp:
             company_id = self.env['res.company'].sudo().browse(int(mycomp))
-            print(mycomp)
             return str(company_id.inisial_pt)
         else:
             return ""
@@ -42,7 +39,6 @@ class IrSequence(models.Model):
         mycomp = self._context.get('year_join')
         if mycomp:
             company_id = self.env['res.company'].sudo().browse(int(mycomp))
-            print(mycomp)
             return str(company_id.inisial_pt)
         else:
             return ""
@@ -51,7 +47,6 @@ class IrSequence(models.Model):
         mycomp = self._context.get('month_join')
         if mycomp:
             company_id = self.env['res.company'].sudo().browse(int(mycomp))
-            print(mycomp)
             return str(company_id.inisial_pt)
         else:
             return ""

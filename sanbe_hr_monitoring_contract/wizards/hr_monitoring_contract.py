@@ -82,11 +82,9 @@ class HrMonitoringContract(models.TransientModel):
             #     pension_date = pensiun_end
             allrec.result_ids.unlink()
             # if not job_status:
-            #     print('jobstatus ', job_status)
             #     if area and not bisnis_unit and not job_status and not department_id and not emp_status and  not contractend_start and not contract_dateto and not pension_start and not pension_date:
             #         empdata = self.env['hr.employee'].sudo().search(
             #             [('area', '=', area)])
-            #         print('harusnya kemari ')
             #     elif area and bisnis_unit and not job_status and not department_id and not emp_status and  not contractend_start and not contract_dateto and not pension_start and not pension_date:
             #         empdata = self.env['hr.employee'].sudo().search(
             #             [('area', '=', area),('branch_id','=',bisnis_unit)])
@@ -110,7 +108,6 @@ class HrMonitoringContract(models.TransientModel):
             #             [('area','=',area),('branch_id','=',bisnis_unit)])
             #
             #     if empdata:
-            #         print('ketemu data ', allrec.bisnis_unit.name)
             #         for allemp in empdata:
             #             mydet |= self.env['hr.monitoring.contractdetails'].sudo().create({'result_id': allrec.id,
             #                                                                               'employee_id': allemp.id,

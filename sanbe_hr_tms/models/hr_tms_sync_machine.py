@@ -179,9 +179,6 @@ class HRTMSSyncMachine(models.TransientModel):
         for alldata in self:
             tmsdata = []
             emp_id_data = []
-            # print(">>>>>>>>>>>>>>>")
-            # print("self = ", self.read())
-            # print(">>>>>>>>>>>>>>>")
             # raise UserError("ok")
 
             if alldata.file_type == 'mdb':
@@ -286,7 +283,6 @@ class HRTMSSyncMachine(models.TransientModel):
                     }
                     rs = dbf_userinfo.create(data_user)
 
-                #print('+++++++++++++++++++++++++++')
                 #db_att = MDBTable(file_path=fp.name, table="CHECKINOUT")
                 #db_user = MDBTable(file_path=fp.name, table="USERINFO")
 
@@ -364,13 +360,8 @@ class HRTMSSyncMachine(models.TransientModel):
                         if hsl.get('jam_masuk') and hsl.get('jam_keluar'):
                             att_status = 'attendee'
                         if hsl.get('jam_masuk') is not None:
-                            print('++++++++++++++++++')
-                            print('jam masuk',str(hsl.get('jam_masuk')))
                             test = self._getwaktu3(str(hsl.get('jam_masuk')))
-                            print('jam masuk konversi',test)
                             test2 = self.ubahjam(test)
-                            print('konversi diubah lg ke waktu',test2)
-                            print('++++++++++++++++++')
                         if mycaritms:
                             if hsl.get('jam_masuk') is not None or hsl.get('jam_keluar') is not None:
                                 mycaritms.write({
@@ -407,10 +398,6 @@ class HRTMSSyncMachine(models.TransientModel):
                 #crsr.close()
                 #cnxn.close()
             elif alldata.file_type == 'xls':
-                # print(">>>>>>>>>>>>>>>")
-                # print("file_type = ",alldata.file_type)
-                # print("file_import_xls = ",alldata.file_import_xls)
-                # print(">>>>>>>>>>>>>>>")
                 # else:
                 # if not alldata.file_import_xls:
                 #     raise UserWarning("Please Select Excel File To Import First!")
@@ -447,10 +434,6 @@ class HRTMSSyncMachine(models.TransientModel):
                         line = list(
                             map(lambda row: isinstance(row.value, bytes) and row.value.encode('utf-8') or row.value,
                                 sheet.row(row_no)))
-                        # print('==============')
-                        # print(pnik)
-                        # print(str(int(line[pnik])))
-                        # print('==============')
                         absence_date = str(xlrd.xldate.xldate_as_datetime(float(line[pdate]), 0)).split(' ')[0]
                         myemployee = self.env['hr.employee'].sudo().search([
                             ('nik', '=', line[pnik]),
@@ -651,11 +634,6 @@ class DataTblUploadanAttendance(models.Model):
     def sync_data(self):
         sel_ids = self.env.context.get('active_ids', [])
         sel_rec = self.env['data.upload.attendance'].browse(sel_ids)
-        # print(">>>>>>>>>>>>>>>>")
-        # print("sel_ids= ", sel_ids)
-        # print("sel_record= ", sel_rec)
-        # print("self= ", self)
-        # print(">>>>>>>>>>>>>>>>")
 
         # data_upload_attendance
         # bandingkan dengan sb_tmsentry_details

@@ -356,7 +356,6 @@ class HrEmployeeContractMonitoring(models.Model):
     #             # raise UserError('Test')
     #             email.sudo().write(email_dict)
     #             email.with_context().send_mail(self.id,force_send=True)
-    #             print('Kirim ke HR')
                         
     # def mail_send_mentor(self):
     # # try:
@@ -433,7 +432,6 @@ class HrEmployeeContractMonitoring(models.Model):
     #             # Update the email template and send the email
     #             email.sudo().write(email_dict)
     #             email.with_context().send_mail(self.id, force_send=True)
-    #             print('Kirim ke Mentor')
         
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -729,7 +727,6 @@ class HrEmployeeContractMonitoring(models.Model):
                 # raise UserError('Test')
                 email.sudo().write(email_dict)
                 email.with_context().send_mail(self.id,force_send=True)
-                print('Kirim ke HR')
 
 
     def _get_duration(self, contract):
@@ -838,7 +835,6 @@ class HrEmployeeContractMonitoring(models.Model):
     #             # Update the email template and send the email
     #             email.sudo().write(email_dict)
     #             email.with_context().send_mail(self.id, force_send=True)
-    #             print('Kirim ke Mentor')
 class HrContractMonitoring(models.Model):
     _name = 'hr.contract.monitoring'
     _description = 'Hr Contract Monitoring'
@@ -1091,8 +1087,7 @@ class HrContractMonitoring(models.Model):
 #                                     }
 #                     # raise UserError('Test')
 #                     email.sudo().write(email_dict)
-#                     email.with_context().send_mail(self.id, force_send=True)
-#                     print('Kirim ke HR')        
+#                     email.with_context().send_mail(self.id, force_send=True)    
         # except Exception as e:
         #     _logger.error("Error in mail_send_mentor cron job: %s", e)
     
@@ -1169,6 +1164,5 @@ class HrContractMonitoring(models.Model):
     #                             }
     #             email.sudo().write(email_dict)
     #             email.with_context().send_mail(self.id, force_send=True)
-    #             print('Kirim ke Mentor')
     #     # except Exception as e:
     #     #     _logger.error("Error in mail_send_mentor cron job: %s", e)
