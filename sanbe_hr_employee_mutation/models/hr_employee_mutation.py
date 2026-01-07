@@ -331,9 +331,6 @@ class HrEmployeeMutation(models.Model):
                 rec.emp_status_to_pam = rec.emp_status_other
             # else:
             #     self.emp_status 
-            print(rec.emp_status_actv, "1")
-            print(rec.emp_status_other, "2")
-            print(rec.emp_status_to_pam, "3")
 
     @api.onchange('emp_nos')
     def isi_data_employee(self):
