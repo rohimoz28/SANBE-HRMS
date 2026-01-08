@@ -27,7 +27,6 @@ class HrResignation(models.Model):
         context = self._context
         current_uid = context.get('uid')
         user = self.env['res.users'].browse(current_uid)
-        # print(user.branch_id.name)
         for allrecs in self:
             allemps = self.env['hr.employee'].sudo().search(
                 [('state', '=', 'approved'), ('active', '=', True), ('branch_id','=',user.branch_id.id)])

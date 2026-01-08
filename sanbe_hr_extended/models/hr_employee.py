@@ -510,11 +510,9 @@ class HrEmployee(models.Model):
                 mycontract = self.env['hr.contract'].browse(contractid)
                 mycontract.write({'employee_id': res.id})
             # else:
-            #     print('ini kemari ', vals.get('name'))
             #     return super(HrEmployee,self).create(vals_list)
         
             if existing:
-                #     print('ini bener ',existing.name)
                 mycontract = self.env['hr.contract'].browse(contractid)
                 myemps = self.env['hr.employee'].sudo().browse(mycontract.employee_id.id)
                 myemps.unlink()

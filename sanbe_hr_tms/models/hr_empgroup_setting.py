@@ -481,7 +481,7 @@ class HREmpGroupSettingDetails(models.Model):
 
 
     def _message_log(self, body='', subject=False, message_type='notification', **kwargs):
-        print(body, subject, message_type, kwargs)
+        # print(body, subject, message_type, kwargs)
         body = "Employee Name: %s, WD Code: %s %s" %(self.employee_id.name, self.wdcode.code, body)
         self.empgroup_id._message_log(body=body, subject=subject, message_type=message_type, **kwargs)
 

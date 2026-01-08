@@ -179,7 +179,6 @@ class HrEmployee(models.Model):
                 contractid = vals.get('contract_id')
                 existing = self.env['hr.employee'].sudo().search([('name', '=', vals.get('name'))])
             # else:
-            #     print('ini kemari ', vals.get('name'))
             #     return super(HrEmployee,self).create(vals_list)
             if 'emp_status_id' in vals:
                 emp_status_record = self.env['hr.emp.status'].search([('id', '=', vals['emp_status_id'])], limit=1)
@@ -187,7 +186,6 @@ class HrEmployee(models.Model):
                 
         res = super(HrEmployee, self).create(vals_list)
         if existing:
-            #     print('ini bener ',existing.name)
             mycontract = self.env['hr.contract'].browse(contractid)
             myemps = self.env['hr.employee'].sudo().browse(mycontract.employee_id.id)
             myemps.unlink()

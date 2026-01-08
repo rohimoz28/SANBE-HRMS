@@ -67,7 +67,6 @@ class HrContract(models.Model):
     #     default_type = self._context.get('employee_name')
     #     create_values = {self._rec_name: name}
     #     partner = self.create(create_values)
-    #     print('name create')
     #     return partner.id, partner.display_name
     _sql_constraints = [
         ('contract_code_unique', 'UNIQUE(name)', 'A Contract must have a unique name.'),
