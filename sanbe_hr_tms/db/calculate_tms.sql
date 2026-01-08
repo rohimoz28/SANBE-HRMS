@@ -298,7 +298,7 @@ begin
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari = 'shift'
 
                            join hr_opening_closing hoc
-                                on hoc.id = period and hed.valid_from between hoc.open_periode_from and hoc.open_periode_to
+                                on hoc.id = period and hed.valid_to >= hoc.open_periode_from
 
                   WHERE he.branch_id = branch -- Assuming 'branch' is a variable you replace during execution
 
@@ -354,7 +354,7 @@ begin
 
       AND ha.details_date::date = f.wd
 
--- AND ha.type IS NULL
+      AND ha.type is null
 
       AND hts.area_id = l_area
 
@@ -420,7 +420,7 @@ begin
 
       AND ha.details_date::date = f.wd
 
--- AND ha.type IS NULL
+      AND ha.type <> 'H'
 
       AND hts.area_id = l_area
 
@@ -2651,19 +2651,20 @@ and s.details_date = cc.details_date;
                                    WHEN b.break_to >= o.start_ot_num
                                        THEN o.date_in + (b.break_to || ' hour')::interval
                                    ELSE (o.date_in + INTERVAL '1 day') + (b.break_to || ' hour')::interval
-                                   END AS break_to_time
+                                   END AS break_to_time,
+                               CASE
+                                   WHEN b.break_to < b.break_from
+                                       THEN (o.date_in + INTERVAL '1 day') + (b.break_to || ' hour')::interval
+                                   WHEN b.break_to >= o.start_ot_num
+                                       THEN o.date_in + (b.break_to || ' hour')::interval
+                                   ELSE (o.date_in + INTERVAL '1 day') + (b.break_to || ' hour')::interval
+                                   END AS break_to_time, CASE WHEN (end_ot_num > start_ot_num AND start_ot_num < break_to AND end_ot_num > break_from)
+                 OR (end_ot_num < start_ot_num AND (break_from >= start_ot_num OR break_to <= end_ot_num))
+                                                                  THEN break_to - break_from
+                                                              ELSE 0
+                                   END AS break_duration_hours
                         FROM list_jam_istirahat o
                                  JOIN break_schedule b ON b.branch_id = o.branch_id),
-         final_calc AS (SELECT bc.*,
-                               GREATEST(0,
-                                        EXTRACT(EPOCH FROM (
-                                            LEAST(bc.datetime_out, bc.break_to_time) -
-                                            GREATEST(bc.datetime_in, bc.break_from_time)
-                                            )) / 3600
-                               ) AS break_duration_hours
-                        FROM break_calc bc
-                        WHERE (bc.datetime_out > bc.break_from_time AND bc.datetime_in < bc.break_to_time) or (break_from + break_to = 0)
-         ),
          result_total_break_hours as (SELECT branch_id,
                                              periode_id,
                                              employee_id,
@@ -2680,8 +2681,7 @@ and s.details_date = cc.details_date;
                                              total_work_in_hour,
                                              SUM(break_duration_hours)                        AS total_break_hours,
                                              (total_work_in_hour - SUM(break_duration_hours)) as total_work_in_hour_result
-
-                                      FROM final_calc
+                                      FROM break_calc
                                       --where employee_id =19588
                                       GROUP BY branch_id, periode_id, employee_id, sttd_id, total_work_in_hour, start_ot, end_ot,
                                                minutes_left, time_in, time_out
@@ -3970,51 +3970,39 @@ END AS total_deduction*/
     where ho.employee_id = xx.employee_id
       and xx.details_date = ho.plann_date_from;
 
-
---     UPDATE hr_overtime_employees oe
---     SET
---         realization_meal_dine_in =
---             CASE
---                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN  --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
---                     CASE
---                         WHEN he.allowance_meal = FALSE THEN
---                             CASE
---                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 4
---                                     THEN FALSE
---                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
---                                     AND oe.ot_type ILIKE 'regular'
---                                     THEN TRUE
---                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
---                                     AND oe.ot_type ILIKE 'holiday'
---                                     THEN FALSE
---                                 ELSE FALSE
---                                 END
---                         ELSE realization_meal_dine_in
---                         END
---                 ELSE false
---                 END,
---
---         realization_meal_cash =
---             CASE
---                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN   --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
---                     CASE
---                         WHEN he.allowance_meal = TRUE THEN
---                             CASE
---                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 2
---                                     THEN FALSE
---                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 2
---                                     THEN TRUE
---                                 ELSE FALSE
---                                 END
---                         ELSE realization_meal_cash
---                         END
---                 ELSE false
---                 END
---
---     FROM hr_employee he
---     WHERE oe.employee_id = he.id
---       AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
---       AND he.branch_id = branch_id;
+-- teguh update realisasi meal
+    UPDATE hr_overtime_employees oe
+    SET
+        realization_meal_dine_in =
+            CASE
+                WHEN oe.meals = TRUE THEN
+                    CASE
+                        WHEN hours < 4 THEN FALSE
+                        ELSE TRUE
+                        END
+                ELSE FALSE
+                END,
+        realization_meal_cash =
+            CASE
+                WHEN oe.meals_cash = TRUE THEN
+                    CASE
+                        WHEN hours < 2 THEN FALSE
+                        ELSE TRUE
+                        END
+                ELSE FALSE
+                END
+    FROM (
+             SELECT id,
+                    CASE
+                        WHEN verify_time_to < verify_time_from
+                            THEN ROUND(((verify_time_to + 24) - verify_time_from)::numeric, 2)
+                        ELSE ROUND((verify_time_to - verify_time_from)::numeric, 2)
+                        END AS hours
+             FROM hr_overtime_employees
+             where  DATE(plann_date_from) >= CURRENT_DATE - INTERVAL '3 days'
+               AND branch_id = branch
+         ) t
+    WHERE oe.id = t.id;
 
 --update total summary detail (footer) || code ini harus selalu paling bawah
 
