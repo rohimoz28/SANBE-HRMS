@@ -19,7 +19,7 @@ class SbTaskDeskMaster(models.Model):
 
     def _get_branch_sequence(self, branch):
         """Fungsi untuk create/return sequence per-branch"""
-        seq_code = f'hr.empgroup.branch.{branch.id}'
+        seq_code = f'sb.task.desk.branch.{branch.id}'
 
         seq = self.env['ir.sequence'].sudo().search([
             ('code', '=', seq_code)
@@ -27,7 +27,7 @@ class SbTaskDeskMaster(models.Model):
 
         if not seq:
             seq = self.env['ir.sequence'].sudo().create({
-                'name': f'HR Emp Group {branch.name}',
+                'name': f'Task Desk {branch.name}',
                 'code': seq_code,
                 'padding': 4,
                 'number_next': 1,

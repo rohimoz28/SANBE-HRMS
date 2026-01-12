@@ -264,9 +264,6 @@ class HREmpGroupSetting(models.Model):
                     #    #updtms = self.env['hr.attendance'].sudo().search([('periode_id','=',recx.periode_id.id),('employee_id','=',recx.employee_id.id),('id','not in',emp_list)])
                     #    updtms = self.env['hr.attendance'].sudo().search([('employee_id','=',recx.employee_id.id),('id','not in',emp_list)])
                     #    if updtms:
-                    #        print('99999999999999999999')
-                    #        print(updtms)
-                    #        print('99999999999999999999')
                     #        for sisa in updtms:
                     #            sisa.sudo().write({
                     #                'wdcode':False,
@@ -481,7 +478,6 @@ class HREmpGroupSettingDetails(models.Model):
 
 
     def _message_log(self, body='', subject=False, message_type='notification', **kwargs):
-        # print(body, subject, message_type, kwargs)
         body = "Employee Name: %s, WD Code: %s %s" %(self.employee_id.name, self.wdcode.code, body)
         self.empgroup_id._message_log(body=body, subject=subject, message_type=message_type, **kwargs)
 
