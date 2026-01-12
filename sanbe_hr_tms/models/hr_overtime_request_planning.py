@@ -88,7 +88,7 @@ class HREmpOvertimeRequest(models.Model):
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department',
                                     default=lambda self: self._default_department_id())
     periode_from = fields.Date('Tanggal OT Dari', default=fields.Date.today)
-    periode_to = fields.Date('Tanggal OT Hingga', default=fields.Date.today)
+    periode_to = fields.Date('Tanggal OT Hingga')
     approve1 = fields.Boolean('Supervisor Department', default=False)
     approve2 = fields.Boolean('Manager Department', default=False)
     approve3 = fields.Boolean('HCM Department', default=False)
