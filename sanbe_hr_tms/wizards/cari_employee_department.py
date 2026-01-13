@@ -85,6 +85,11 @@ class HrCariEmployeeDepartment(models.TransientModel):
                             tracking=True)
     ot_type = fields.Selection([('regular', 'Regular'), ('holiday', 'Holiday')], string='Ot Type')
 
+    @api.onchange('plann_date_from')
+    def _onchange_plann_date_from(self):
+        if self.plann_date_from:
+            self.plann_date_to = self.plann_date_from
+
     @api.onchange('default_ot_hours')
     def _onchange_default_ot_hours(self):
 
