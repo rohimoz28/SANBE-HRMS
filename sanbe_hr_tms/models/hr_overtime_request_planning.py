@@ -525,7 +525,7 @@ class HREmpOvertimeRequest(models.Model):
                 'default_area_id': self.area_id.id,
                 'default_branch_id': self.branch_id.id,
                 'default_plann_date_from': self.periode_from,
-                'default_plann_date_to': self.periode_to,
+                # 'default_plann_date_to': self.periode_to,
                 'default_department_id': self.department_id.id,
                 'default_ot_type': self.ot_type,
             },
@@ -751,6 +751,11 @@ class HREmpOvertimeRequestEmployee(models.Model):
                 raw_to is None
             )
 
+    @api.onchange('plann_date_from')
+    def _onchange_plann_date_from(self):
+        if self.plann_date_from:
+            self.plann_date_to = self.plann_date_from
+
     @api.onchange('transport', 'route_id')
     def _onchange_transport(self):
         for rec in self:
@@ -837,6 +842,8 @@ class HREmpOvertimeRequestEmployee(models.Model):
                 ('nik', '=', rec.nik),
                 ('plann_date_from', '<=', rec.plann_date_to),
                 ('plann_date_to', '>=', rec.plann_date_from),
+                ('approve_time_from', '<=', rec.approve_time_to),
+                ('approve_time_to', '>=', rec.approve_time_from),
             ])
 
             if len(duplicate_record) > 0:
