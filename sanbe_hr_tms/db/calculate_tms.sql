@@ -157,6 +157,7 @@ begin
       and hts.branch_id = branch;
 
 
+
 -- update national holiday from calendar
 
     UPDATE sb_tms_tmsentry_details ha
@@ -173,11 +174,7 @@ begin
 
       AND hts.periode_id = period
 
-      AND ha.details_date::date IN (SELECT generate_series(rcl.date_from::date, rcl.date_to::date, interval '1 day'))
-
-      AND rcl.state = 'post'
-
-      AND rcl.area_id = l_area;
+      AND ha.details_date::date IN (SELECT generate_series(rcl.date_from::date, rcl.date_to::date, interval '1 day'));
 
 
 -- update W , employee_id, empgroup, workingday
@@ -420,7 +417,7 @@ begin
 
       AND ha.details_date::date = f.wd
 
-      AND ha.type <> 'H'
+      AND (ha.type <> 'H' or  ha.type is null)
 
       AND hts.area_id = l_area
 
@@ -472,80 +469,6 @@ begin
       and hts.area_id = l_area
 
       and hts.branch_id = branch;
-
-
-    --update time_in and time out with swap in out = True
-
--- with xx as (
-
--- select
-
--- distinct dua.employee_id,
-
--- dua.tgl,
-
--- dua.tgl_masuk,
-
--- dua.time_out time_in,
-
--- (dua.tgl_masuk + interval '1 day')::date tgl_keluar,
-
--- dua_next.time_in time_out
-
--- from sb_tms_tmsentry_details sttd
-
--- join hr_tmsentry_summary hts on sttd.tmsentry_id = hts.id
-
--- join hr_working_days hwd on sttd.workingday_id = hwd.id
-
--- join data_upload_attendance dua on sttd.employee_id = dua.employee_id
-
--- left join data_upload_attendance dua_next on dua.employee_id = dua_next.employee_id and dua_next.tgl_masuk = dua.tgl_masuk + interval '1 day'
-
--- where hwd.swap_in_out = True
-
--- and dua.tgl_masuk = dua.tgl_keluar
-
--- and dua.time_out > dua.time_in
-
--- )
-
--- update sb_tms_tmsentry_details sttd
-
--- set time_in = xx.time_in, date_out = xx.tgl_keluar, time_out = xx.time_out
-
--- from xx
-
--- where sttd.employee_id = xx.employee_id and sttd.details_date = xx.tgl;
-
-
---
-
---update sb_tms_tmsentry_details set aot4 = time_in where id in (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
-
--- update sb_tms_tmsentry_details set time_in = null where id in (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
-
--- update sb_tms_tmsentry_details set time_in = time_out where id in (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
-
--- update sb_tms_tmsentry_details set time_out = null where id in (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
-
--- update sb_tms_tmsentry_details ts set time_out = ss.aot4 , date_out = (ts.details_date + INTERVAL '1 day')::date
-
--- from
-
--- (select (details_date - INTERVAL '1 day')::date as details_date, aot4 , sb_tms_tmsentry_details.employee_id
-
--- from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True) and aot4 is not null)ss
-
--- where ss.details_date = ts.details_date and ts.employee_id = ss.employee_id;
-
--- update sb_tms_tmsentry_details set aot4 = null where id in (select id from sb_tms_tmsentry_details where workingday_id in (select id from hr_working_days where swap_in_out = True));
-
-
---swap in out GH 3 Sep 2025
-
-
---swap in out GH 3 Sep 2025
 
 
     update sb_tms_tmsentry_details
@@ -2418,8 +2341,6 @@ and s.details_date = cc.details_date;
       and sttd.workingday_id is not null;
 
 
--- calculate OT holiday
-
     WITH date_series AS (SELECT aa.*,
                                 CASE
                                     WHEN COALESCE(NULLIF(sttd.edited_time_in, 0), NULLIF(sttd.time_in, 0)) <
@@ -2745,6 +2666,7 @@ and s.details_date = cc.details_date;
 
       AND s.approval_ot_to notnull;
 
+
     -- select * from hr_opening_closing hoc
 
 
@@ -2835,105 +2757,105 @@ and s.details_date = cc.details_date;
 
 --POTONGAN HITUNGAN OT BASE ON LIBUR GH 20250917 v-1
 
-    WITH list_jam_istirahat AS (SELECT DISTINCT hts.branch_id,
-
-                                                hts.periode_id,
-
-                                                hts.employee_id,
-
-                                                sttd.id,
-
-                                                sttd.date_in,
-
-                                                sttd.date_out,
-
-                                                sttd.time_in,
-
-                                                sttd.time_out,
-
-                                                sttd.date_in + (sttd.time_in || ' hour')::interval   AS datetime_in,
-
-                                                sttd.date_out + (sttd.time_out || ' hour')::interval AS datetime_out,
-
-                                                CASE
-
-                                                    WHEN sbm.break_from = 0 THEN sttd.date_out + (sbm.break_from || ' hour')::interval
-
-                                                    ELSE sttd.date_in + (sbm.break_from || ' hour')::interval
-                                                    END                                              AS break_from,
-
-                                                CASE
-
-                                                    WHEN sbm.break_from = 0 THEN sttd.date_out + (sbm.break_to || ' hour')::interval
-
-                                                    WHEN sbm.break_to < sbm.break_from
-                                                        THEN sttd.date_out + (sbm.break_to || ' hour')::interval
-
-                                                    ELSE sttd.date_in + (sbm.break_to || ' hour')::interval
-                                                    END                                              AS break_to
-
-                                FROM sb_break_master sbm
-
-                                         JOIN hr_tmsentry_summary hts ON hts.branch_id = sbm.branch_id
-
-                                         JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
-
-                                         JOIN HR_OVERTIME_EMPLOYEES SS
-                                              ON hts.EMPLOYEE_ID = SS.EMPLOYEE_ID AND STTD.DETAILS_DATE = SS.PLANN_DATE_FROM AND
-                                                 SS.OT_TYPE = 'HOLIDAY'
-
-                                where sttd.aot2 is not null
-                                  AND HTS.BRANCH_ID = BRANCH
-                                  AND HTS.PERIODE_ID = PERIOD)
-
-    UPDATE SB_TMS_TMSENTRY_DETAILS AA
-    SET AOT2 = X.calculated_ot2
-
-    from (SELECT ist.id,
-
-                 ist.periode_id,
-
-                 ist.branch_id,
-
-/* ist.date_in,
-
-ist.date_out,
-
-ist.time_in,
-
-ist.time_out,
-
-sttd.aot2,*/
-
-                 sum(
-                         EXTRACT(EPOCH FROM (ist.break_to::timestamp
-                             - ist.break_from ::timestamp)) / 3600)  AS tot_jam_istirahat,
-
-                 (sttd.aot2 - sum(
-                         EXTRACT(EPOCH FROM (ist.break_to::timestamp
-                             - ist.break_from ::timestamp)) / 3600)) AS calculated_ot2
-
-          FROM list_jam_istirahat ist
-
-                   JOIN sb_tms_tmsentry_details sttd ON sttd.id = ist.id
-
-          WHERE ist.break_from BETWEEN ist.datetime_in AND ist.datetime_out
-
---AND sttd.date_in < sttd.date_out;
-
-          group by ist.id,
-                   ist.date_in,
-                   ist.periode_id,
-                   ist.date_out,
-                   ist.time_in,
-                   ist.time_out,
-                   sttd.aot2,
-                   ist.branch_id
-
-          order by ist.id) x
-    where x.tot_jam_istirahat >= 0.5
-
-      and aa.id = x.id;
+--    WITH list_jam_istirahat AS (SELECT DISTINCT hts.branch_id,
+--
+--                                                hts.periode_id,
+--
+--                                                hts.employee_id,
+--
+--                                                sttd.id,
+--
+--                                                sttd.date_in,
+--
+--                                                sttd.date_out,
+--
+--                                                sttd.time_in,
+--
+--                                                sttd.time_out,
+--
+--                                                sttd.date_in + (sttd.time_in || ' hour')::interval   AS datetime_in,
+--
+--                                                sttd.date_out + (sttd.time_out || ' hour')::interval AS datetime_out,
+--
+--                                                CASE
+--
+--                                                    WHEN sbm.break_from = 0 THEN sttd.date_out + (sbm.break_from || ' hour')::interval
+--
+--                                                    ELSE sttd.date_in + (sbm.break_from || ' hour')::interval
+--                                                    END                                              AS break_from,
+--
+--                                                CASE
+--
+--                                                    WHEN sbm.break_from = 0 THEN sttd.date_out + (sbm.break_to || ' hour')::interval
+--
+--                                                    WHEN sbm.break_to < sbm.break_from
+--                                                        THEN sttd.date_out + (sbm.break_to || ' hour')::interval
+--
+--                                                    ELSE sttd.date_in + (sbm.break_to || ' hour')::interval
+--                                                    END                                              AS break_to
+--
+--                                FROM sb_break_master sbm
+--
+--                                         JOIN hr_tmsentry_summary hts ON hts.branch_id = sbm.branch_id
+--
+--                                         JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
+--
+--                                         JOIN HR_OVERTIME_EMPLOYEES SS
+--                                              ON hts.EMPLOYEE_ID = SS.EMPLOYEE_ID AND STTD.DETAILS_DATE = SS.PLANN_DATE_FROM AND
+--                                                 SS.OT_TYPE = 'HOLIDAY'
+--
+--                                where sttd.aot2 is not null
+--                                  AND HTS.BRANCH_ID = BRANCH
+--                                  AND HTS.PERIODE_ID = PERIOD)
+--
+--    UPDATE SB_TMS_TMSENTRY_DETAILS AA
+--    SET AOT2 = X.calculated_ot2
+--
+--    from (SELECT ist.id,
+--
+--                 ist.periode_id,
+--
+--                 ist.branch_id,
+--
+--/* ist.date_in,
+--
+--ist.date_out,
+--
+--ist.time_in,
+--
+--ist.time_out,
+--
+--sttd.aot2,*/
+--
+--                 sum(
+--                         EXTRACT(EPOCH FROM (ist.break_to::timestamp
+--                             - ist.break_from ::timestamp)) / 3600)  AS tot_jam_istirahat,
+--
+--                 (sttd.aot2 - sum(
+--                         EXTRACT(EPOCH FROM (ist.break_to::timestamp
+--                             - ist.break_from ::timestamp)) / 3600)) AS calculated_ot2
+--
+--          FROM list_jam_istirahat ist
+--
+--                   JOIN sb_tms_tmsentry_details sttd ON sttd.id = ist.id
+--
+--          WHERE ist.break_from BETWEEN ist.datetime_in AND ist.datetime_out
+--
+----AND sttd.date_in < sttd.date_out;
+--
+--          group by ist.id,
+--                   ist.date_in,
+--                   ist.periode_id,
+--                   ist.date_out,
+--                   ist.time_in,
+--                   ist.time_out,
+--                   sttd.aot2,
+--                   ist.branch_id
+--
+--          order by ist.id) x
+--    where x.tot_jam_istirahat >= 0.5
+--
+--      and aa.id = x.id;
 
 
 -- time allowance - premi holiday
@@ -3970,39 +3892,51 @@ END AS total_deduction*/
     where ho.employee_id = xx.employee_id
       and xx.details_date = ho.plann_date_from;
 
--- teguh update realisasi meal
-    UPDATE hr_overtime_employees oe
-    SET
-        realization_meal_dine_in =
-            CASE
-                WHEN oe.meals = TRUE THEN
-                    CASE
-                        WHEN hours < 4 THEN FALSE
-                        ELSE TRUE
-                        END
-                ELSE FALSE
-                END,
-        realization_meal_cash =
-            CASE
-                WHEN oe.meals_cash = TRUE THEN
-                    CASE
-                        WHEN hours < 2 THEN FALSE
-                        ELSE TRUE
-                        END
-                ELSE FALSE
-                END
-    FROM (
-             SELECT id,
-                    CASE
-                        WHEN verify_time_to < verify_time_from
-                            THEN ROUND(((verify_time_to + 24) - verify_time_from)::numeric, 2)
-                        ELSE ROUND((verify_time_to - verify_time_from)::numeric, 2)
-                        END AS hours
-             FROM hr_overtime_employees
-             where  DATE(plann_date_from) >= CURRENT_DATE - INTERVAL '3 days'
-               AND branch_id = branch
-         ) t
-    WHERE oe.id = t.id;
+
+    --     UPDATE hr_overtime_employees oe
+--     SET
+--         realization_meal_dine_in =
+--             CASE
+--                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN  --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
+--                     CASE
+--                         WHEN he.allowance_meal = FALSE THEN
+--                             CASE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 4
+--                                     THEN FALSE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
+--                                     AND oe.ot_type ILIKE 'regular'
+--                                     THEN TRUE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 4
+--                                     AND oe.ot_type ILIKE 'holiday'
+--                                     THEN FALSE
+--                                 ELSE FALSE
+--                                 END
+--                         ELSE realization_meal_dine_in
+--                         END
+--                 ELSE false
+--                 END,
+--
+--         realization_meal_cash =
+--             CASE
+--                 WHEN oe.meals = TRUE OR oe.meals_cash = TRUE THEN   --pengecekan meal atau meal_cash jika salah satu true maka akan mengecek case when dibawah
+--                     CASE
+--                         WHEN he.allowance_meal = TRUE THEN
+--                             CASE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) < 2
+--                                     THEN FALSE
+--                                 WHEN ROUND((oe.verify_time_to - oe.verify_time_from)::numeric, 2) >= 2
+--                                     THEN TRUE
+--                                 ELSE FALSE
+--                                 END
+--                         ELSE realization_meal_cash
+--                         END
+--                 ELSE false
+--                 END
+--
+--     FROM hr_employee he
+--     WHERE oe.employee_id = he.id
+--       AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
+--       AND he.branch_id = branch_id;
 
 --update total summary detail (footer) || code ini harus selalu paling bawah
 
