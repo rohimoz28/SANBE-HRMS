@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <!-- Loan Installment -->
+        <record id="loan_installment_staff_rule" model="ir.rule">
+            <field name="name">Loan Installment Staff Rule</field>
+            <field name="model_id" ref="sanbe_hr_installment.model_sb_loan_installment"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_installment.module_sub_category_loan_installment_staff'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+
+        <record id="loan_installment_hrd_rule" model="ir.rule">
+            <field name="name">Loan Installment HRD Rule</field>
+            <field name="model_id" ref="sanbe_hr_installment.model_sb_loan_installment"/>
+            <field name="groups" eval="[(4, ref('sanbe_hr_installment.module_sub_category_loan_installment_hrd'))]"/>
+            <field name="domain_force">[('branch_id', 'in', branch_ids)]</field>
+        </record>
+    
+    </data>
+    
+
+</odoo>
