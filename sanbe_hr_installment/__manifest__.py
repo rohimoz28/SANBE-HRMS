@@ -17,7 +17,8 @@
     'currency': 'USD',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sanbe_hr_tms','hr_payroll_community', 'sanbe_hr_extended'],
+    # 'depends': ['base', 'sanbe_hr_tms','hr_payroll_community', 'sanbe_hr_extended'],
+    'depends': ['base', 'hr','base_territory'],
     'data': [
         # 'views/hr_emp_status.xml',
         'security/installment_groups.xml',
