@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <!-- MENU ROOT -->
+        <menuitem
+                id="menu_hr_installment_root"
+                name="Installment"
+                sequence="300"
+                web_icon="sanbe_hr_installment,static/description/icon.png"
+                groups="group_hr_installment_manager"
+        />
+        <!-- MENU ROOT -->
+
+        <menuitem
+                id="menu_hr_installment"
+                name="Installment"
+                sequence="2"
+                parent="menu_hr_installment_root"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_sb_loan_installment"
+                name="Loan Installment"
+                parent="menu_hr_installment"
+                sequence="10"
+                action="sb_loan_installment_action"
+                groups="module_sub_category_loan_installment_staff,module_sub_category_loan_installment_hrd"
+        />
+
+    
+    </data>
+    
+
+</odoo>

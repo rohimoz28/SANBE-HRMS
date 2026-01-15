@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sb_loan_installment_staff,access.sb.loan.installment.staff,model_sb_loan_installment,sanbe_hr_installment.module_sub_category_loan_installment_staff,1,0,1,0
+access_sb_loan_installment_hrd,access.sb.loan.installment.hrd,model_sb_loan_installment,sanbe_hr_installment.module_sub_category_loan_installment_hrd,1,1,1,1
