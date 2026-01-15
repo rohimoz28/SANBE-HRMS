@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record model="ir.module.category" id="module_installment_category">
+            <field name="name">HR Installment</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_hr_installment_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="sanbe_hr_installment.module_installment_category"/>
+            <field name="comment">Access Right as Manager in Module HR Installment</field>
+        </record>
+
+        <!-- HR Installment -->
+        <record model="ir.module.category" id="module_installment_menu_category">
+            <field name="name">HR Installment</field>
+            <field name="sequence">200</field>
+        </record>
+
+        <!-- Loan Installment -->
+        <record model="ir.module.category" id="module_sub_category_loan_installment">
+            <field name="name">Loan Installment</field>
+            <field name="parent_id" ref="sanbe_hr_installment.module_installment_menu_category"/>
+            <field name="description">Access Right for menu Loan Installment</field>
+        </record>
+
+        <record model="res.groups" id="module_sub_category_loan_installment_staff" >
+            <field name="name">Staff</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+            <field name="category_id" ref="sanbe_hr_installment.module_sub_category_loan_installment"/>
+        </record>
+
+        <record model="res.groups" id="module_sub_category_loan_installment_hrd" >
+            <field name="name">HRD</field>
+            <field name="implied_ids" eval="[(4, ref('sanbe_hr_installment.module_sub_category_loan_installment_staff'))]"/>
+            <field name="category_id" ref="sanbe_hr_installment.module_sub_category_loan_installment"/>
+        </record>
+
+        
+    
+    </data>
+    
+
+</odoo>

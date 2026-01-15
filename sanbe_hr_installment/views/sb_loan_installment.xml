@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="sb_loan_installment_view_form" model="ir.ui.view">
+            <field name="name">sb.loan.installment.view.form</field>
+            <field name="model">sb.loan.installment</field>
+            <field name="arch" type="xml">
+                <form string="Loan Installment">
+                    <header>
+                        <button string="Approved by HRD" name="btn_appv_hrd" type="object" class="oe_highlight" invisible="state != 'draft' or not is_hrd_user"/>
+                        <button string="Payment" name="btn_payment" type="object" class="oe_highlight" invisible="state != 'approved_by_hrd'"/>
+                        <button string="Closed" name="btn_closed" type="object" class="oe_highlight" invisible="state != 'payment_process'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft, approved_by_hrd, payment_process, closed"/>
+                    </header>
+                    <group name="loan" string="pinjaman">
+                        <group>
+                            <field name="is_hrd_user" invisible="1"/>
+                            <field name="trx_no" />
+                            <field name="creditor" />
+                            <field name="area_id" readonly="1" options="{'no_create': True,'no_create_edit': True,'no_open': True}"/>
+                            <field name="branch_ids" invisible="1" />
+                            <field name="branch_id" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="department_id" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="employee_id" options="{'no_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="trx_date" readonly="1"/>
+                            <field name="job_status" invisible="not employee_id" readonly="1" force_save="1"/>
+                            <field name="emp_status_id" options="{'no_create': True,'no_create_edit': True,'no_open': True}" invisible="not employee_id" readonly="1" force_save="1"/>
+                            <field name="join_date_contract" invisible="not employee_id or job_status != 'permanent'" readonly="1" force_save="1"/>
+                            <field name="pension_date" invisible="not employee_id or job_status != 'permanent'" readonly="1" force_save="1"/>
+                            <field name="contract_id" options="{'no_create': True,'no_create_edit': True,'no_open': True}" invisible="not employee_id or job_status != 'contract'" readonly="1" force_save="1"/>
+                            <field name="contract_datefrom" invisible="not employee_id or job_status != 'contract'" readonly="1" force_save="1"/>
+                            <field name="contract_dateto" invisible="not employee_id or job_status != 'contract'" readonly="1" force_save="1"/>
+                        </group>
+                    </group>
+                    
+                    <group name="" string="">
+                        <group>
+                            <field name="loan_contract_no" />
+                            <field name="amount_loan" />
+                            <field name="amt_installment" />
+                            <field name="date_from" />
+                            <field name="date_to" />
+                            <field name="desc" />
+                        </group>
+                        <group>
+                            <field name="contract_date" />
+                            <field name="installment" />
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>    
+
+        <record id="sb_loan_installment_view_tree" model="ir.ui.view">
+            <field name="name">sb.loan.installment.view.tree</field>
+            <field name="model">sb.loan.installment</field>
+            <field name="arch" type="xml">
+                <tree string="Loan Installment">
+                    <field name="trx_no" />
+                    <field name="trx_date" />
+                    <field name="creditor" />
+                    <field name="area_id"/>
+                    <field name="branch_id" />
+                    <field name="department_id" />
+                    <field name="employee_id" />
+                    <field name="loan_contract_no" />
+                    <field name="amount_loan" />
+                    <field name="amt_installment" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                    <field name="desc" />
+                    <field name="contract_date" />
+                    <field name="installment" />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="sb_loan_installment_view_search" model="ir.ui.view">
+            <field name="name">sb.loan.installment.view.search</field>
+            <field name="model">sb.loan.installment</field>
+            <field name="arch" type="xml">
+                <search string="Loan Installment">
+                    <field name="trx_no" />
+                    <field name="trx_date" />
+                    <field name="creditor" />
+                    <field name="area_id"/>
+                    <field name="branch_id" />
+                    <field name="department_id" />
+                    <field name="employee_id" />
+                    <field name="loan_contract_no" />
+                    <field name="amount_loan" />
+                    <field name="amt_installment" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                    <field name="desc" />
+                    <field name="contract_date" />
+                    <field name="installment" />
+                </search>
+            </field>
+        </record>
+
+        <record id="sb_loan_installment_action" model="ir.actions.act_window">
+            <field name="name">Loan Installment</field>
+            <field name="res_model">sb.loan.installment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Loan Installment Records
+                </p>
+                <p>
+                    Create New Loan Installment Records
+                </p>
+            </field>
+        </record>
+    
+    </data>
+    
+
+</odoo>
