@@ -696,6 +696,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     # -------------------------------------------------------
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plan')
+    work_plan_id = fields.Many2one('sb.task.desk.master', string='Work Plan')
     output_plann = fields.Char('Output Plan')
     branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Unit', index=True)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')

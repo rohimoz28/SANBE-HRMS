@@ -502,7 +502,7 @@
                                                     <span t-field="employee.ot_plann_to_char"/>
                                                 </td>
                                                 <td style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;">
-                                                    <span t-field="employee.work_plann"/>
+                                                    <span t-field="employee.work_plan_id.name"/>
                                                 </td>
                                                 <td t-esc="'OK' if employee.output_realization else ''"
                                                     style="border: 1.5px solid black; padding: 2px; text-align: center; vertical-align: middle; font-size: 11pt;"/>

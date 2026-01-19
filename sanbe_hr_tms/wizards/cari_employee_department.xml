@@ -27,7 +27,7 @@
                                     <field name="valid_from" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="valid_to" widget="date" invisible="modelname == 'hr.overtime.planning'" required="modelname == 'hr.overtime.planning'"/>
                                     <field name="plann_date_from" widget="date" invisible="modelname != 'hr.overtime.planning'" readonly="1"/>
-                                    <field name="plann_date_to" widget="date" readonly="1" force_save="1"/>
+                                    <field name="plann_date_to" widget="date" invisible="1" force_save="1"/>
                                     <field name="ot_plann_from" string="Req Time From" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="ot_plann_to" string="Req Time To" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="approve_time_from" widget="easy_timepicker" invisible="modelname != 'hr.overtime.planning'"/>
@@ -35,7 +35,8 @@
                                 </group>
                                 <group>
                                     <field name="machine" invisible="modelname != 'hr.overtime.planning'"/>
-                                    <field name="work_plann" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <field name="work_plann" invisible="1"/>
+                                    <field name="work_plan_id" invisible="modelname != 'hr.overtime.planning'" context="{'default_branch_id': branch_id, 'default_department_id': department_id}"/>
                                     <field name="output_plann" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="transport" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="meals" invisible="1"/>
