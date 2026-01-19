@@ -29,6 +29,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
     approve_time_to = fields.Float('Approve Time To')
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plann')
+    work_plan_id = fields.Many2one('sb.task.desk.master', string='Work Plan')
     output_plann = fields.Char('Output Plann')
     transport = fields.Boolean('Transport')
     meals = fields.Boolean('Meal')
@@ -321,6 +322,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
                     'ot_plann_to': self.ot_plann_to,
                     'machine': self.machine,
                     'work_plann': self.work_plann,
+                    'work_plan_id': self.work_plan_id.id,
                     'output_plann': self.output_plann,
                     'transport': self.transport,
                     'meals': meals_flag,
