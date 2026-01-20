@@ -75,7 +75,7 @@ class HREmpOvertimeRequest(models.Model):
 
     name = fields.Char('Planning Request', default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
-    request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
+    request_date = fields.Date('Planning Request Create', default=lambda self: fields.Date.context_today(self), readonly=True)
     area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area',
                               index=True, required=True, default=lambda self: self._default_area_id())
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
