@@ -75,7 +75,7 @@ class HREmpOvertimeRequest(models.Model):
 
     name = fields.Char('Planning Request', default=lambda self: _('New'),
                        copy=False, readonly=True, tracking=True, requirement=True)
-    request_date = fields.Date('Planning Request Create', default=fields.Date.today(), readonly=True)
+    request_date = fields.Date('Planning Request Create', default=lambda self: fields.Date.context_today(self), readonly=True)
     area_id = fields.Many2one('res.territory', domain=lambda self: [('id', '=', self.env.user.area.id)], string='Area',
                               index=True, required=True, default=lambda self: self._default_area_id())
     branch_ids = fields.Many2many('res.branch', 'res_branch_rel', string='AllBranch', compute='_isi_semua_branch',
@@ -696,6 +696,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     # -------------------------------------------------------
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plan')
+    work_plan_id = fields.Many2one('sb.task.desk.master', string='Work Plan')
     output_plann = fields.Char('Output Plan')
     branch_id = fields.Many2one('res.branch', domain="[('id','in',branch_ids)]", string='Business Unit', index=True)
     department_id = fields.Many2one('hr.department', domain="[('id','in',alldepartment)]", string='Sub Department')
