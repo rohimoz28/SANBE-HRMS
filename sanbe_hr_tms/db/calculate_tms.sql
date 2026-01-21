@@ -200,7 +200,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari <> 'shift'
 
@@ -290,7 +290,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari = 'shift'
 
@@ -381,7 +381,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari = 'fhday'
 
