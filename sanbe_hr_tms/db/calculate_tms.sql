@@ -170,11 +170,11 @@ begin
 
     WHERE ha.tmsentry_id = hts.id
 
-      AND hts.area_id = rcl.area_id
+      -- AND hts.area_id = rcl.area_id
 
       AND hts.periode_id = period
 
-      AND ha.details_date::date IN (SELECT generate_series(rcl.date_from::date, rcl.date_to::date, interval '1 day'));
+      AND ha.details_date::date = rcl.date_from::date;
 
 
 -- update W , employee_id, empgroup, workingday
