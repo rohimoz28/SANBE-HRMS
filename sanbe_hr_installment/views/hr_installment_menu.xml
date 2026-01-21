@@ -22,12 +22,29 @@
         />
 
         <menuitem
+                id="menu_hr_installment_monitoring"
+                name="Monitoring"
+                sequence="3"
+                parent="menu_hr_installment_root"
+                groups="base.group_user"
+        />
+
+        <menuitem
                 id="menu_sb_loan_installment"
                 name="Loan Installment"
                 parent="menu_hr_installment"
                 sequence="10"
                 action="sb_loan_installment_action"
                 groups="module_sub_category_loan_installment_staff,module_sub_category_loan_installment_hrd"
+        />
+
+        <menuitem
+                id="menu_sb_loan_installment_monitoring"
+                name="Loan Installment Monitoring"
+                parent="menu_hr_installment_monitoring"
+                sequence="10"
+                action="sb_loan_installment_monitoring_action"
+                groups="base.group_user"
         />
 
     
