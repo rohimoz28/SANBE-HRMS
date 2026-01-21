@@ -18,7 +18,7 @@
 
     # any module necessary for this one to work correctly
     # 'depends': ['base', 'sanbe_hr_tms','hr_payroll_community', 'sanbe_hr_extended'],
-    'depends': ['base', 'hr','base_territory'],
+    'depends': ['base', 'hr','base_territory', 'sanbe_hr_extended'],
     'data': [
         # 'views/hr_emp_status.xml',
         'security/installment_groups.xml',
@@ -26,6 +26,7 @@
         'security/config_parameter.xml',
         'security/installment_branch_security.xml',
         'views/sb_loan_installment.xml',
+        'views/sb_loan_installment_monitoring.xml',
         'views/hr_installment_menu.xml'
     ],
     'assets': {
