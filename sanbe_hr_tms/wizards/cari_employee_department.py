@@ -29,7 +29,7 @@ class HrCariEmployeeDepartment(models.TransientModel):
     approve_time_to = fields.Float('Approve Time To')
     machine = fields.Char('Machine')
     work_plann = fields.Char('Work Plann')
-    work_plan_id = fields.Many2one('sb.task.desk.master', string='Work Plan')
+    work_plan_id = fields.Many2one('sb.task.desk.master', string='Work Plan', domain="[('branch_id','=',branch_id),('department_id','=',department_id)]")
     output_plann = fields.Char('Output Plann')
     transport = fields.Boolean('Transport')
     meals = fields.Boolean('Meal')
