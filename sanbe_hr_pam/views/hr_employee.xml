@@ -61,6 +61,7 @@
                 <field name="overtime" widget="radio" options="{'horizontal': true}"/>
             </xpath>
             <xpath expr="//field[@name='overtime']" position="after">
+                <field name="is_skip_break" />
                 <field name="leave_calculation" widget="radio" options="{'horizontal': true}"/>
                 <field name="leave_date" invisible="leave_calculation != 'other'"/>
             </xpath>

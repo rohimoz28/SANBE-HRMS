@@ -170,11 +170,11 @@ begin
 
     WHERE ha.tmsentry_id = hts.id
 
-      AND hts.area_id = rcl.area_id
+      -- AND hts.area_id = rcl.area_id
 
       AND hts.periode_id = period
 
-      AND ha.details_date::date IN (SELECT generate_series(rcl.date_from::date, rcl.date_to::date, interval '1 day'));
+      AND ha.details_date::date = rcl.date_from::date;
 
 
 -- update W , employee_id, empgroup, workingday
@@ -200,7 +200,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari <> 'shift'
 
@@ -290,7 +290,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari = 'shift'
 
@@ -381,7 +381,7 @@ begin
 
                   FROM hr_empgroup he
 
-                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id
+                           JOIN hr_empgroup_details hed ON he.id = hed.empgroup_id and hed.state = 'approved'
 
                            JOIN hr_working_days hwd ON hed.wdcode = hwd.id and hwd.type_hari = 'fhday'
 

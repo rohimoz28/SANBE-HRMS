@@ -53,6 +53,7 @@ class HrEmployee(models.Model):
         compute="_compute_last_address", store="True")
     private_zip = fields.Char(string="Private Zip", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
     private_country_id = fields.Many2one("res.country", string="Private Country", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
+    is_skip_break = fields.Boolean('Tidak Mengikuti Jam Istirahat')
 
     _sql_constraints = [
         # ('nik_uniq', 'check(1=1)', "The NIK  must be unique, this one is already assigned to another employee."),

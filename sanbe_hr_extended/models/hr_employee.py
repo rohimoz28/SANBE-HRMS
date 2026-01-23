@@ -194,7 +194,8 @@ class HrEmployee(models.Model):
     apoteker = fields.Boolean('Apoteker', default=False)
     first_date_join = fields.Date('First Date Of Joining')
     wd_type = fields.Selection(selection=[('shift', 'Shift'),
-                                          ('non_shift', 'Non-Shift')],
+                                          ('non_shift', 'Non-Shift'),
+                                          ('working_hours', 'Working Hours')],
                                string='WD Shift/Non-Shift',
                                default='non_shift',
                                index=True)
