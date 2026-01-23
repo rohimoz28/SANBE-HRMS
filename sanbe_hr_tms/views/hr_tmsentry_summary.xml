@@ -61,38 +61,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -126,14 +154,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -222,38 +250,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -287,14 +343,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -379,38 +435,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -444,14 +528,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -546,38 +630,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -611,14 +723,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -705,38 +817,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -770,14 +910,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -885,38 +1025,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -950,14 +1118,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -1069,38 +1237,66 @@
                                 <div class="clearfix"/>
                                 <group colspan="4">
                                     <group style="width:80%">
-                                        <label for="attendee_total" string="Total Hari Kerja"/>
+                                        <label for="attendee_total" string="Total Hari Wajib Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_total" colspan="1" readonly="1"/>
                                             <label for="attendee_total" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="attendee_count" string="Total Kary Masuk"/>
+                                        <label for="attendee_count" string="Total Hari Kary Hadir"/>
                                         <div class="o_row">
                                             <field name="attendee_count" colspan="1" readonly="1"/>
                                             <label for="attendee_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="absent_count" string="Total Kary Absent"/>
+                                        <label for="calendar_day_total" string="Total Hari Kalender"/>
+                                        <div class="o_row">
+                                            <field name="calendar_day_total" readonly="1"/>
+                                            <label for="calendar_day_total" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="holiday_national_count" string="Total Hari Libur Nasional"/>
+                                        <div class="o_row">
+                                            <field name="holiday_national_count" readonly="1"/>
+                                            <label for="holiday_national_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="overtime_day_count" string="Total Hari Karyawan Lembur"/>
+                                        <div class="o_row">
+                                            <field name="overtime_day_count" readonly="1"/>
+                                            <label for="overtime_day_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="absent_count" string="Total Hari Kary Mangkir"/>
                                         <div class="o_row">
                                             <field name="absent_count" colspan="1" readonly="1"/>
                                             <label for="absent_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="leave_count" string="Total Cuti"/>
+                                        <label for="leave_count" string="Total Hari Cuti"/>
                                         <div class="o_row">
                                             <field name="leave_count" colspan="1" readonly="1"/>
                                             <label for="leave_count" string="days"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="sick_count" string="Total Sakit"/>
+                                        <label for="sick_count" string="Total Hari Sakit"/>
                                         <div class="o_row">
                                             <field name="sick_count" colspan="1" readonly="1"/>
                                             <label for="sick_count" string="days"/>
+                                        </div>
+                                    </group>
+                                    <group style="width:80%">
+                                        <label for="permit_count" string="Total Hari Ijin"/>
+                                        <div class="o_row">
+                                            <field name="permit_count" readonly="1"/>
+                                            <label for="permit_count" string="days"/>
                                         </div>
                                     </group>
                                 </group>
@@ -1134,14 +1330,14 @@
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_total" string="Total Delay"/>
+                                        <label for="delay_total" string="Total Menit Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_total" colspan="1" readonly="1"/>
                                             <label for="delay_total" string="Minutes"/>
                                         </div>
                                     </group>
                                     <group style="width:80%">
-                                        <label for="delay_count" string="Total Times Delayed"/>
+                                        <label for="delay_count" string="Total Kali Terlambat"/>
                                         <div class="o_row">
                                             <field name="delay_count" colspan="1" readonly="1"/>
                                             <label for="delay_count" string="Times"/>
@@ -1264,18 +1460,22 @@
                     <field name="area_id"/>
                     <field name="department_id"/>
                     <field name="job_id"/>
-                    <field name="attendee_total" optional="hide" readonly="True" string="Total Hari Kerja"/>
-                    <field name="attendee_count" optional="hide" readonly="True" string="Total Kary Masuk"/>
-                    <field name="absent_count" optional="hide" readonly="True" string="Total Kary Absent"/>
-                    <field name="leave_count" optional="hide" readonly="True" string="Total Cuti"/>
-                    <field name="sick_count" optional="hide" readonly="True" string="Total Sakit"/>
+                    <field name="attendee_total" optional="hide" readonly="True" string="Total Hari Wajib Hadir"/>
+                    <field name="attendee_count" optional="hide" readonly="True" string="Total Hari Kary Hadir"/>
+                    <field name="calendar_day_total" optional="hide" readonly="True" string="Total Hari Kalender"/>
+                    <field name="holiday_national_count" optional="hide" readonly="True" string="Total Hari Libur Nasional"/>
+                    <field name="overtime_day_count" optional="hide" readonly="True" string="Total Hari Karyawan Lembur"/>
+                    <field name="absent_count" optional="hide" readonly="True" string="Total Hari Kary Mangkir"/>
+                    <field name="leave_count" optional="hide" readonly="True" string="Total Hari Cuti"/>
+                    <field name="sick_count" optional="hide" readonly="True" string="Total Hari Sakit"/>
+                    <field name="permit_count" optional="hide" readonly="True" string="Total Hari Ijin"/>
                     <field name="is_deduction_desc" optional="hide" readonly="True" string="Keterangan PG"/>
                     <field name="deduction" optional="hide" readonly="True" string="Potongan"/>
                     <field name="ot1_totalx" optional="hide" readonly="True" string="AOT1"/>
                     <field name="ot2_totalx" optional="hide" readonly="True" string="AOT2"/>
                     <field name="ot3_totalx" optional="hide" readonly="True" string="AOT3"/>
                     <field name="ot4_totalx" optional="hide" readonly="True" string="AOT4"/>
-                    <field name="delay_total" optional="hide" readonly="True" string="Total Delay"/>
+                    <field name="delay_total" optional="hide" readonly="True" string="Total Menit Terlambat"/>
                     <field name="delay_count" optional="hide" readonly="True" string="Delay Times"/>
                     <field name="pattendace_count" optional="hide" readonly="True" string="ASHF"/>
                     <field name="transport_count" optional="hide" readonly="True" string="ANS1"/>
