@@ -210,6 +210,10 @@ class HRTMSEntrySummary(models.Model):
     i30 = fields.Float(string='I30')
     paid_leave = fields.Float(string='CUTI BAYAR')
     remark = fields.Text(string="Remarks")
+    calendar_day_total = fields.Float('Total Hari Kalender')
+    holiday_national_count = fields.Float('Total Hari Libur Nasional')
+    overtime_day_count = fields.Float('Total Hari Karyawan Lembur')
+    permit_count = fields.Float('Total Hari Ijin')
 
 
     @api.depends('periode_id','date_from','date_to')
