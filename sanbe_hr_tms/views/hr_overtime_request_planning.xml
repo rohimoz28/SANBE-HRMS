@@ -119,7 +119,7 @@
                                     <field name="approve_time_from" string="App Time From" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="approve_time_to" string="App Time To" widget="float_time" optional="show" readonly="state in ['approved','verification','completed','done']"/>
                                     <field name="work_plann" optional="show" readonly="state in ['approved','verification','completed','done']" column_invisible="1"/>
-                                    <field name="work_plan_id" optional="show" readonly="state in ['approved','verification','completed','done']" context="{'default_branch_id': planning_id.branch_id, 'default_department_id': planning_id.department_id}"/>
+                                    <field name="work_plan_id" optional="show" readonly="state in ['approved','verification','completed','done']" context="{'default_branch_id': planning_id.branch_id, 'default_department_id': planning_id.department_id}" required="1"/>
                                     <field name="output_plann" optional="show" readonly="state in ['approved','verification','completed','done']" required="1"/>
                                     <field name="meals" optional="show" readonly="1" />
                                     <field name="meals_cash" optional="show" readonly="1"/>
