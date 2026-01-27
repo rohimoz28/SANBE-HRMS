@@ -2398,15 +2398,10 @@ and s.details_date = cc.details_date;
                       WHERE hoe.ot_type = 'holiday'
                         AND hop.state = 'approved'
                         AND status_attendance = 'Attendee'
-
--- AND hts.employee_id = 48051
-
                         AND he.allowance_ot IS TRUE
                         AND hts.periode_id = period
-                        AND hts.area_id = l_area
+                        --  AND hts.area_id = l_area
                         AND hts.branch_id = branch),
-
-
          second_ot AS (SELECT sttd_id,
                               name,
                               employee_id,
@@ -2426,10 +2421,7 @@ and s.details_date = cc.details_date;
 
                               make_time(floor(first_ot.actual_timeout)::int,
                                         round((first_ot.actual_timeout - floor(first_ot.actual_timeout)) * 60)::int,
-                                        0::int) AS actual_timeout
-
-                       FROM first_ot),
-
+                                        0::int) AS actual_timeout FROM first_ot),
          third_ot AS (SELECT sttd_id,
                              name,
                              employee_id,
@@ -2505,19 +2497,8 @@ and s.details_date = cc.details_date;
                        ot_date,
                        start_ot,
                        end_ot,
-                       CASE
-                           WHEN total_work_in_hour BETWEEN 6 AND 11 THEN total_work_in_hour - 0 --1
-
-                           WHEN total_work_in_hour BETWEEN 12 AND 17 THEN total_work_in_hour - 0 --2
-
-                           ELSE total_work_in_hour
-                           END AS total_work_in_hour,
-
-                       minutes_left
-
-                FROM fourth_ot),
-
-
+                       case when minutes_left between 30 and 59 then total_work_in_hour + 0.5 else total_work_in_hour END AS total_work_in_hour,
+                       minutes_left FROM fourth_ot),
 -- select * from fourth_ot;
 
          list_jam_istirahat AS (SELECT hts.branch_id,
@@ -2586,27 +2567,41 @@ and s.details_date = cc.details_date;
                                    END AS break_duration_hours
                         FROM list_jam_istirahat o
                                  JOIN break_schedule b ON b.branch_id = o.branch_id),
-         result_total_break_hours as (SELECT branch_id,
-                                             periode_id,
-                                             employee_id,
-                                             sttd_id                                          AS id,
-                                             minutes_left,
-                                             MIN(date_in)                                     AS date_in,
-                                             start_ot,
-                                             end_ot,
-                                             time_in,
-                                             time_out,
-                                             MAX(date_out)                                    AS date_out,
-                                             MIN(datetime_in)                                 AS datetime_in,
-                                             MAX(datetime_out)                                AS datetime_out,
-                                             total_work_in_hour,
-                                             SUM(break_duration_hours)                        AS total_break_hours,
-                                             (total_work_in_hour - SUM(break_duration_hours)) as total_work_in_hour_result
-                                      FROM break_calc
-                                      --where employee_id =19588
-                                      GROUP BY branch_id, periode_id, employee_id, sttd_id, total_work_in_hour, start_ot, end_ot,
-                                               minutes_left, time_in, time_out
-                                      ORDER BY employee_id, sttd_id),
+         result_total_break_hours as (SELECT
+                                          bc.branch_id,
+                                          bc.periode_id,
+                                          bc.employee_id,
+                                          bc.sttd_id AS id,
+                                          bc.minutes_left,
+                                          MIN(bc.date_in) AS date_in,
+                                          bc.start_ot,
+                                          bc.end_ot,
+                                          MIN(bc.time_in) AS time_in, -- Menggunakan MIN agar tidak merusak GROUP BY
+                                          MAX(bc.time_out) AS time_out, -- Menggunakan MAX agar tidak merusak GROUP BY
+                                          MAX(bc.date_out) AS date_out,
+                                          MIN(bc.datetime_in) AS datetime_in,
+                                          MAX(bc.datetime_out) AS datetime_out,
+                                          bc.total_work_in_hour,
+                                          SUM(bc.break_duration_hours) AS total_break_hours,
+                                          CASE
+                                              WHEN he.is_skip_break = TRUE THEN bc.total_work_in_hour
+                                              ELSE (bc.total_work_in_hour - SUM(bc.break_duration_hours))
+                                              END AS total_work_in_hour_result
+                                      FROM break_calc bc
+                                               JOIN hr_employee he ON he.id = bc.employee_id
+                                      GROUP BY
+                                          bc.branch_id,
+                                          bc.periode_id,
+                                          bc.employee_id,
+                                          bc.sttd_id,
+                                          bc.total_work_in_hour,
+                                          bc.start_ot,
+                                          bc.end_ot,
+                                          bc.minutes_left,
+                                          he.is_skip_break -- Pastikan ini masuk group by
+                                      ORDER BY
+                                          bc.employee_id,
+                                          bc.sttd_id),
 
 
          last as (SELECT ot.*,
@@ -2617,7 +2612,7 @@ and s.details_date = cc.details_date;
                                  THEN CASE
 
                                           WHEN minutes_left BETWEEN 30 AND 60
-                                              THEN total_work_in_hour_result + 0.5 --pembulatan sisa waktu
+                                              THEN total_work_in_hour_result --pembulatan sisa waktu
 
                                           ELSE total_work_in_hour_result
                                  END
@@ -2626,11 +2621,18 @@ and s.details_date = cc.details_date;
                              END AS ot2,
 
                          CASE
-
+                             -- 1. Cek apakah total kerja memenuhi syarat minimal OT3
                              WHEN total_work_in_hour_result >= (SELECT aot_from FROM hr_overtime_setting WHERE id = 4) THEN
-                                 case
-                                     when (total_work_in_hour_result - (SELECT aot_from FROM hr_overtime_setting WHERE id = 4)) >= (SELECT aot_to - aot_from FROM hr_overtime_setting WHERE id = 4) then
-                                         (SELECT aot_to - aot_from FROM hr_overtime_setting WHERE id = 4) end
+                                 CASE
+                                     -- Ambil selisih jam kerja dengan batas bawah OT
+                                     WHEN (total_work_in_hour_result - (SELECT aot_from FROM hr_overtime_setting WHERE id = 4)) >= 1 THEN 1 -- Jika 1 jam atau lebih, tetap dihitung 1
+
+                                 -- Jika antara 0.5 sampai kurang dari 1, maka dihitung 0.5
+                                     WHEN (total_work_in_hour_result - (SELECT aot_from FROM hr_overtime_setting WHERE id = 4)) BETWEEN 0.5 AND 0.99 THEN 0.5
+
+                                     -- Jika di bawah 0.5 jam, maka dihitung 0
+                                     ELSE 0
+                                     END
                              ELSE 0
                              END AS ot3,
 
@@ -2645,8 +2647,6 @@ and s.details_date = cc.details_date;
                   WHERE ot.end_ot != '00:00:00'
 
                     AND ot.start_ot != '00:00:00')
-    --   select * from final_calc
-
 
     UPDATE sb_tms_tmsentry_details s
 

@@ -53,13 +53,13 @@
                         <group col="2">
                             <group>
                                 <button name="action_search_employee" string="Search Employee"
-                                    type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
+                                    type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'approved'"/>
                                 <button name="action_generate_employee_group" string="Generate Emp. Group"
-                                        type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'close'"/>
+                                        type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'approved'"/>
                             </group>
                             <group>
                             <button name="action_export_excel" string="Export to Excel"
-                                        type="object" class="oe_highlight" data-hotkey="q"/>
+                                        type="object" class="oe_highlight" data-hotkey="q" invisible="state == 'approved'"/>
                             </group>
                         </group>
                         <notebook>

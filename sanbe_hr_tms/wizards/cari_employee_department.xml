@@ -36,8 +36,8 @@
                                 <group>
                                     <field name="machine" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="work_plann" invisible="1"/>
-                                    <field name="work_plan_id" invisible="modelname != 'hr.overtime.planning'" context="{'default_branch_id': branch_id, 'default_department_id': department_id}"/>
-                                    <field name="output_plann" invisible="modelname != 'hr.overtime.planning'"/>
+                                    <field name="work_plan_id" invisible="modelname != 'hr.overtime.planning'" context="{'default_branch_id': branch_id, 'default_department_id': department_id}" required="1"/>
+                                    <field name="output_plann" invisible="modelname != 'hr.overtime.planning'" required="1"/>
                                     <field name="transport" invisible="modelname != 'hr.overtime.planning'"/>
                                     <field name="meals" invisible="1"/>
                                     <field name="route_id" options="{'no_create': True,'no_create_edit': True}" invisible="not transport"/>

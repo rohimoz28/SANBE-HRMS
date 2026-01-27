@@ -880,6 +880,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
                     ('employee_id', '=', rec.employee_id.id),
                     ('valid_from', '<=', rec.plann_date_from),
                     ('valid_to', '>=', rec.plann_date_to),
+                    ('state', '=', 'approved'),
                 ], limit=1)
                 wdcode = emp_group.wdcode.id
                 working_day = self.env['hr.working.days'].sudo().search([
