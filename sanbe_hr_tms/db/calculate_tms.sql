@@ -10,12 +10,38 @@ begin
     ALTER TABLE hr_tmsentry_summary
 
         DISABLE TRIGGER ALL;
+    /*
+    --Delete Data Shift Gagal Upload
+    delete from hr_empgroup_details where branch_id is null;
+
+    -- Employee Shift Check Double and Deleted Ketika Status Approved
+    delete from hr_empgroup_details where id in (
+    select id from (
+    SELECT
+        min(id) id, md5(employee_id::text || valid_from::text || valid_to::text) AS hash_value,
+        COUNT(*) AS jumlah,
+        array_agg(employee_id::text || '|' || valid_from::text || '|' || valid_to::text) AS detail
+    FROM hr_empgroup_details where state = 'approved'
+    GROUP BY md5(employee_id::text || valid_from::text || valid_to::text)
+    HAVING COUNT(*) > 1) xx);
+    */
+-- Update state emp shift detail state = header state
+    update hr_empgroup_details s
+    set state = 'approved'
+    where s.empgroup_id in (select id from hr_empgroup hop where hop.state = 'approved')
+      and s.state <> 'approved' and  s.valid_from >= current_date - interval '6 month';
+
+--update overtime type holiday ketika ada libur nasional
+    update hr_overtime_employees hoe
+    set ot_type = 'holiday'
+    where hoe.plann_date_from in
+          (select date_from ::date from resource_calendar_leaves where date_from ::date >= current_date - interval '3 month')
+      and hoe.state = 'approved';
 
 
 -- delete temp_hr_tmsentry_summary
 
     DELETE FROM temp_hr_tmsentry_summary;
-
 
 -- delete temp_sb_tms_tmsentry_details
 
@@ -2354,12 +2380,11 @@ and s.details_date = cc.details_date;
                                     ELSE COALESCE(NULLIF(sttd.edited_time_out, 0), NULLIF(sttd.time_out, 0))
                                     END AS ot_time_out
                          FROM (SELECT hoe.employee_id,
-                                      generate_series(hoe.plann_date_from::date, hoe.plann_date_to::date,
-                                                      interval '1 day')::date AS ot_date,
+                                      hoe.plann_date_from AS ot_date,
                                       hoe.verify_time_from,
                                       hoe.verify_time_to
                                FROM hr_overtime_employees hoe
-                               WHERE ot_type = 'holiday') aa
+                               WHERE ot_type = 'holiday' and state = 'approved') aa
                                   JOIN sb_tms_tmsentry_details sttd
                                        ON aa.employee_id = sttd.employee_id
                                            AND aa.ot_date = sttd.details_date),
@@ -3829,7 +3854,7 @@ END AS total_deduction*/
                                    END,
                                CASE
 
-                                   WHEN sttd.aot1 IS NOT NULL OR sttd.aot2 IS NOT NULL THEN '.30'
+                                   WHEN (sttd.aot1 + sttd.aot2) IS NOT NULL THEN '.30'
 
                                    ELSE ''
                                    END,
@@ -4387,7 +4412,7 @@ and*/ aa.department_id = sia.department_id
            coalesce(sttd.time_out, sttd.edited_time_out) as rlz_time_to,
            sttd.approval_ot_from,
            sttd.approval_ot_to,
-           hop.state,
+           case when hop.ot_type = 'regular' and sttd.workingday_id is null then 'Data Shift Kosong' else hop.state end as state,
            he.allowance_jemputan,
            hoe.meals,
            hoe.meals_cash,

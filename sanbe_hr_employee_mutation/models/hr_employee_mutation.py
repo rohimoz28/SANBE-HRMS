@@ -172,6 +172,7 @@ class HrEmployeeMutation(models.Model):
         ('management', 'Management'),
         ('none', 'None')
     ], string="KPI Category")
+    service_replaced_id = fields.Many2one('sb.view.hr.employee', string='Posisi yang Digantikan', domain="[('state','in',('inactive','approved'))]")
 
     _sql_constraints = [
         (
@@ -272,17 +273,35 @@ class HrEmployeeMutation(models.Model):
         if self.join_date_contract != self.employee_id.join_date_contract:
             employee.write({'join_date_contract': self.join_date_contract})
         employee.write({'state': 'approved'})
-        if self.service_replacement_id:
+        if self.service_kpi_kategory != self.employee_id.kpi_kategory:
+            employee.write({'kpi_kategory': self.service_kpi_kategory})
+        if self.service_type == 'rota':
+            replaced_id = self.service_replaced_id.id
+            replacement_id = self.service_replacement_id.id
+
+            _logger.info(
+            "Employee rotation started | employee_id=%s | replaced_id=%s | replacement_id=%s",
+            self.employee_id.id, replaced_id, replacement_id
+            )
+            
             try:
-                self.env.cr.execute("CALL updateIntermediate(%s, %s)", (self.emp_nos.id, self.service_replacement_id.id))
+                _logger.info("Stored procedure starting...")
+                _logger.debug("Calling stored procedure sp_employee_rotation")
+
+                self.env.cr.execute(
+                "SELECT sp_employee_rotation(%s, %s, %s)",
+                (self.emp_nos.id or None, replaced_id or None, replacement_id or None)
+                )
                 self.env.cr.commit()
-                _logger.info("Stored procedure executed successfully for employee: %s", self.emp_nos.name)
+
+                _logger.info(
+                    "Employee rotation success | employee=%s",
+                    self.emp_nos.name
+                )
             except Exception as e:
                 _logger.error("Error calling stored procedure: %s", str(e))
                 raise UserError("Error executing the function: %s" % str(e))
-        if self.service_kpi_kategory != self.employee_id.kpi_kategory:
-            employee.write({'kpi_kategory': self.service_kpi_kategory})
-
+            
         return self.write({'state': 'approved',
                            'service_status': 'Approved'})
 
