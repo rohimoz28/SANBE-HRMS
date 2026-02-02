@@ -5,7 +5,7 @@ import io
 import os
 
 # Month Mapping
-month_map = {
+MONTH_MAP = {
     '01': 'Januari', '02': 'Februari', '03': 'Maret',
     '04': 'April', '05': 'Mei', '06': 'Juni',
     '07': 'Juli', '08': 'Agustus', '09': 'September',
@@ -13,7 +13,7 @@ month_map = {
 }
 
 # Number Mapping
-number_map = {
+NUMBER_MAP = {
     '00': 'Nol', '01': 'Satu', '02': 'Dua', '03': 'Tiga', '04': 'Empat', '05': 'Lima',
     '06': 'Enam', '07': 'Tujuh', '08': 'Delapan', '09': 'Sembilan',
     '10': 'Sepuluh', '11': 'Sebelas', '12': 'Dua Belas', '13': 'Tiga Belas',
@@ -27,20 +27,20 @@ number_map = {
 
 # Year Helper
 # Mengambil dari number map dari 1 - 19
-year_helper_map = {
+YEAR_HELPER_MAP = {
     int(k): v
-    for k, v in number_map.items()
+    for k, v in NUMBER_MAP.items()
     if 1 <= int(k) <= 19
 }
 
 # Gender Mapping
-gender_map = {
+GENDER_MAP = {
     'male': 'Laki-laki',
     'female': 'Perempuan',
     'other': '',
 }
 
-day_map = {
+DAY_MAP = {
     'Monday': 'Senin',
     'Tuesday': 'Selasa',
     'Wednesday': 'Rabu',
@@ -54,12 +54,12 @@ class PKWTController(http.Controller):
 
     def spell_two_digits(self, n):
         if n < 20:
-            return year_helper_map[n]
+            return YEAR_HELPER_MAP[n]
         tens = n // 10
         ones = n % 10
-        text = year_helper_map[tens] + ' Puluh'
+        text = YEAR_HELPER_MAP[tens] + ' Puluh'
         if ones:
-            text += ' ' + year_helper_map[ones]
+            text += ' ' + YEAR_HELPER_MAP[ones]
         return text
     
     def spell_year_id(self, year: int) -> str:
@@ -75,7 +75,7 @@ class PKWTController(http.Controller):
         if thousands == 1:
             result = 'Seribu'
         else:
-            result = year_helper_map[thousands] + ' Ribu'
+            result = YEAR_HELPER_MAP[thousands] + ' Ribu'
 
         # ratus
         hundreds = remainder // 100
@@ -85,7 +85,7 @@ class PKWTController(http.Controller):
             if hundreds == 1:
                 result += ' Seratus'
             else:
-                result += ' ' + year_helper_map[hundreds] + ' Ratus'
+                result += ' ' + YEAR_HELPER_MAP[hundreds] + ' Ratus'
 
         if tens:
             result += ' ' + self.spell_two_digits(tens)
@@ -96,7 +96,7 @@ class PKWTController(http.Controller):
         if not record:
             return '-'
         day = record.strftime('%d')
-        month = month_map[record.strftime('%m')]
+        month = MONTH_MAP[record.strftime('%m')]
         year = record.strftime('%Y')
         return f"{day} {month} {year}"
 
@@ -185,19 +185,19 @@ class PKWTController(http.Controller):
         mapping = {
             '{{ employee_name }}': contract.employee_id.name or '',
             '{{ employee_ktp }}': contract.employee_id.no_ktp or '',
-            '{{ employee_gender }}': gender_map.get(contract.employee_id.gender, ''),
+            '{{ employee_gender }}': GENDER_MAP.get(contract.employee_id.gender, ''),
             '{{ employee_job }}': contract.job_id.with_context(lang='en_US').name or '',
             '{{ employee_birth }}': f"{contract.employee_id.place_of_birth or ''}, {self._format_date(contract.employee_id.birthday) or ''}",
             '{{ date_start }}': self._format_date(contract.date_start) or '',
             '{{ date_start_header }}': f"{contract.date_start.strftime('%d')}-{contract.date_start.strftime('%m')}-{contract.date_start.strftime('%Y')}" or '',
             '{{ date_end }}': self._format_date(contract.date_end) or '',
-            '{{ month_date }}': month_map[contract.date_start.strftime('%m')] or '',
-            '{{ date_spelled }}': number_map[contract.date_start.strftime('%d')] or '',
-            '{{ month_diff_str }}': f"{month_diff_str} ({number_map[month_diff_str]})" or '',
+            '{{ month_date }}': MONTH_MAP[contract.date_start.strftime('%m')] or '',
+            '{{ date_spelled }}': NUMBER_MAP[contract.date_start.strftime('%d')] or '',
+            '{{ month_diff_str }}': f"{month_diff_str} ({NUMBER_MAP[month_diff_str]})" or '',
             '{{ year_spelled }}': self.spell_year_id(int(contract.date_start.strftime('%Y'))) or '',
             '{{ address }}': f"{address.address or ''} Rt.{address.rt or ''} Rw.{address.rt or ''}" or '',
             '{{ city }}': f"Kel.{address.subdistrict or ''} Kec.{address.district or ''} {address.city or ''}" or '',
-            '{{ day }}': day_map.get(contract.date_start.strftime('%A'), contract.date_start.strftime('%A')) or '',
+            '{{ day }}': DAY_MAP.get(contract.date_start.strftime('%A'), contract.date_start.strftime('%A')) or '',
             '{{ no_contract }}': contract.name or '',
 
         }
