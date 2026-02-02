@@ -1,5 +1,7 @@
 from odoo import fields, models, api, _, Command
 from odoo.exceptions import ValidationError, UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 OT_HOURS_SELECTION = [
     ('h_morning', "H - Lembur Pagi : 07.00 - 15.00"),
@@ -226,16 +228,38 @@ class HrCariEmployeeDepartment(models.TransientModel):
                 alldata.employee_ids = [Command.clear()]
                 continue
 
-            # Fetch employees by department in a single query
-            self.env.cr.execute("""
-                                SELECT id, department_id, nik, job_id
-                                FROM hr_employee
-                                WHERE state = 'approved'
-                                  AND department_id = %s
-                                """, (alldata.department_id.id,))
+            modelname = self._context.get('default_modelname', False)
+
+            if modelname == 'hr.overtime.planning':
+                # Tampilkan SEMUA karyawan tanpa filter regu
+                self.env.cr.execute("""
+                                    SELECT id, department_id, nik, job_id
+                                    FROM hr_employee
+                                    WHERE state = 'approved'
+                                      AND department_id = %s
+                                    """, (alldata.department_id.id,))
+            elif modelname == 'hr.empgroup':
+                # Filter dengan regu jika ada
+                if alldata.regu:
+                    self.env.cr.execute("""
+                                        SELECT id, department_id, nik, job_id
+                                        FROM hr_employee
+                                        WHERE state = 'approved'
+                                          AND department_id = %s
+                                          AND regu = %s
+                                        """, (alldata.department_id.id, alldata.regu))
+            else:
+                # Tanpa filter regu
+                self.env.cr.execute("""
+                                    SELECT id, department_id, nik, job_id
+                                    FROM hr_employee
+                                    WHERE state = 'approved'
+                                      AND department_id = %s
+                                    """, (alldata.department_id.id,))
+
             myemp = self.env.cr.fetchall()
 
-            # Batch create employee details records
+        # Batch create employee details records
             datadetails = self.env['hr.employeedepartment.details']
             employee_data = []
             for allemp in myemp:
@@ -254,6 +278,12 @@ class HrCariEmployeeDepartment(models.TransientModel):
     @api.onchange('regu')
     def _onchange_regu(self):
         for rec in self:
+            modelname = self._context.get('default_modelname', False)
+
+            # Jika dari hr.overtime.planning, SKIP logic ini
+            if modelname == 'hr.overtime.planning':
+                return
+
             if not rec.regu:
                 rec.employee_ids = [Command.clear()]
 
