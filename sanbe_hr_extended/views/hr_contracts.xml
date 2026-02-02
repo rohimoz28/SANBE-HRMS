@@ -11,6 +11,17 @@
             <field name="model">hr.contract</field>
             <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/header/*" position="replace">
+                    <button name="btn_pkwt_print" string="Print Agreement" class="oe_highlight" type="object" invisible="state != 'open'" />
+                    <button name="btn_draft" string="Draft" class="oe_highlight" type="object" invisible="state != 'open'" />
+                    <button name="btn_approved" string="Approved" class="oe_highlight" type="object" invisible="state != 'draft'" />
+                    <button name="btn_expired" string="Expired" class="oe_highlight" type="object" invisible="state != 'open'" />
+                    <button name="btn_cancel" string="Cancel" class="oe_highlight" type="object" invisible="state == 'cancel'" />
+                    <!-- <field name="state" widget="statusbar"/> -->
+                </xpath>
+                <xpath expr="//form/header/field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" readonly="1"/>
+                </xpath>
                 <xpath expr="//field[@name='employee_id']" position="after">
                     <field name="emp_name"/>
                 </xpath>
