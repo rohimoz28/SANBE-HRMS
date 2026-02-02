@@ -297,3 +297,27 @@ class HrContract(models.Model):
             result.append(f"{days} hari")
 
         return ' '.join(result)
+    
+    def btn_draft(self):
+        for rec in self:
+            rec.state = 'draft'
+    
+    def btn_approved(self):
+        for rec in self:
+            rec.state = 'open'
+
+    def btn_expired(self):
+        for rec in self:
+            rec.state = 'close'
+
+    def btn_cancel(self):
+        for rec in self:
+            rec.state = 'cancel'
+    
+    def btn_pkwt_print(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/pkwt/download/{self.id}',
+            'target': 'self',
+        }
