@@ -180,10 +180,16 @@ class PKWTController(http.Controller):
             ('address_type','=', 'KTP'),
             ('default','=', True)
             ], limit=1)
+        
+        name_parts = [
+            f"{contract.employee_id.title} " if contract.employee_id.title else None,
+            contract.employee_id.name,
+            f", {contract.employee_id.back_title}" if contract.employee_id.back_title else None
+        ]
 
         # Mapping placeholder
         mapping = {
-            '{{ employee_name }}': contract.employee_id.name or '',
+            '{{ employee_name }}': ''.join(filter(None, name_parts)),
             '{{ employee_ktp }}': contract.employee_id.no_ktp or '',
             '{{ employee_gender }}': gender_map.get(contract.employee_id.gender, ''),
             '{{ employee_job }}': contract.job_id.with_context(lang='en_US').name or '',
