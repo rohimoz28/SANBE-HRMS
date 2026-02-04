@@ -17,7 +17,7 @@
                     <group name="loan" string="pinjaman">
                         <group>
                             <field name="is_hrd_user" invisible="1"/>
-                            <field name="trx_no" required="1"/>
+                            <field name="trx_no"/>
                             <field name="creditor" required="1"/>
                             <field name="area_id" readonly="1" options="{'no_create': True,'no_create_edit': True,'no_open': True}"/>
                             <field name="branch_ids" invisible="1" />
@@ -29,7 +29,7 @@
                             <field name="trx_date" readonly="1"/>
                             <field name="job_status" invisible="not employee_id" readonly="1" force_save="1"/>
                             <field name="emp_status_id" options="{'no_create': True,'no_create_edit': True,'no_open': True}" invisible="not employee_id" readonly="1" force_save="1"/>
-                            <field name="join_date_contract" invisible="not employee_id or job_status != 'permanent'" readonly="1" force_save="1"/>
+                            <field name="join_date" invisible="not employee_id or job_status != 'permanent'" readonly="1" force_save="1"/>
                             <field name="pension_date" invisible="not employee_id or job_status != 'permanent'" readonly="1" force_save="1"/>
                             <field name="contract_id" options="{'no_create': True,'no_create_edit': True,'no_open': True}" invisible="not employee_id or job_status != 'contract'" readonly="1" force_save="1"/>
                             <field name="contract_datefrom" invisible="not employee_id or job_status != 'contract'" readonly="1" force_save="1"/>
@@ -41,9 +41,9 @@
                         <group>
                             <field name="loan_contract_no" required="1"/>
                             <field name="amount_loan" required="1"/>
-                            <field name="amt_installment" />
+                            <field name="amt_installment" force_save="1"/>
                             <field name="date_from" required="1"/>
-                            <field name="date_to" required="1"/>
+                            <field name="date_to" force_save="1" required="1"/>
                             <field name="desc" />
                         </group>
                         <group>
