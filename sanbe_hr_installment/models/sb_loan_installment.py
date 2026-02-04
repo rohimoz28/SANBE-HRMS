@@ -1,11 +1,12 @@
 from odoo import fields, models, api, Command
 from odoo.exceptions import ValidationError, UserError
+from dateutil.relativedelta import relativedelta
 
 class SbLoanInstallment (models.Model):
     _name = 'sb.loan.installment'
     _description = 'Loan Installment'
 
-    trx_no = fields.Char('Trx No')
+    trx_no = fields.Char('Trx No', readonly=True)
     trx_date = fields.Date('Trx Date', default=fields.Date.today)
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -33,7 +34,7 @@ class SbLoanInstallment (models.Model):
                                    ],
                                   string='Job Status')
     emp_status_id = fields.Many2one('hr.emp.status', string='Employment Status')
-    join_date_contract = fields.Date('Join Date')
+    join_date = fields.Date('Join Date Permanent')
     pension_date = fields.Date('Pension Date')
     contract_id = fields.Many2one('hr.contract', string='Contract No')
     contract_datefrom = fields.Date('Contract From')
@@ -42,11 +43,79 @@ class SbLoanInstallment (models.Model):
     contract_date = fields.Date('Contract Date', default=fields.Date.today)
     amount_loan = fields.Float('Amount Loan')
     installment = fields.Integer('# of Installment')
-    amt_installment = fields.Float('Amt Installment')
+    amt_installment = fields.Float('Amt Installment', compute='_compute_amt_installment', store=True)
     date_from = fields.Date('Start From')
-    date_to = fields.Date('To')
+    date_to = fields.Date('To', compute='_compute_amt_installment', store=True)
     desc = fields.Text('Keterangan')
     is_hrd_user = fields.Boolean('Is HRD User', compute='_compute_is_hrd_user', store=False)
+
+    def _get_branch_sequence(self, branch, trx_date):
+        """Fungsi untuk create/return sequence per-branch"""
+
+        year = trx_date.strftime('%y')   # 26
+        month = trx_date.strftime('%m')  # 01
+        
+        seq_code = f'sb.loan.installment.branch.{branch.id}.{year}{month}'
+
+        seq = self.env['ir.sequence'].sudo().search([
+            ('code', '=', seq_code)
+        ], limit=1)
+
+        if not seq:
+            seq = self.env['ir.sequence'].sudo().create({
+                'name': f'Loan Installment {branch.name}',
+                'code': seq_code,
+                'padding': 6,
+                'number_next': 1,
+                'company_id': False,
+            })
+
+        return seq, year, month
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        """generate kode sequencce dengan format branch_code - year - month - sequence number"""
+        for vals in vals_list:
+            if not vals.get('trx_no'):
+                trx_date = vals.get('trx_date') or fields.Date.today()
+                trx_date = fields.Date.from_string(trx_date)
+
+                branch = self.env['res.branch'].sudo().browse(vals.get('branch_id'))
+                
+                if branch:
+                    seq, year, month = self._get_branch_sequence(branch, trx_date)
+                    seq_number = seq.next_by_id()
+
+                    vals['trx_no'] = f"{branch.branch_code}-{year}-{month}-{seq_number}"
+        
+        res = super(SbLoanInstallment,self).create(vals_list)
+        return res
+
+    @api.depends('date_from', 'amount_loan', 'installment')
+    def _compute_amt_installment(self):
+        for rec in self:
+            if rec.date_from and rec.amount_loan and rec.installment:
+                rec.amt_installment = rec.amount_loan / rec.installment 
+                rec.date_to = rec.date_from + relativedelta(months=rec.installment - 1)
+            else:
+                rec.amt_installment = False
+                rec.date_to = False
+
+    @api.constrains('installment')
+    def _constrains_installment(self):
+        for rec in self:
+            if rec.installment == 0:
+                raise ValidationError(
+                        "# of Installment tidak boleh 0"
+                    )
+    
+    @api.constrains('amount_loan')
+    def _constrains_amount_loan(self):
+        for rec in self:
+            if rec.amount_loan < 1:
+                raise ValidationError(
+                        "Amount Loan harus lebih dari 0"
+                    )
 
     @api.depends('area_id')
     def _compute_branch_ids(self):
@@ -64,7 +133,7 @@ class SbLoanInstallment (models.Model):
             if rec.employee_id:
                 rec.job_status = rec.employee_id.job_status
                 rec.emp_status_id = rec.employee_id.emp_status_id.id
-                rec.join_date_contract = rec.employee_id.join_date_contract
+                rec.join_date = rec.employee_id.join_date
                 rec.pension_date = rec.employee_id.pension_date
                 rec.contract_id = rec.employee_id.contract_id
                 rec.contract_datefrom = rec.employee_id.contract_datefrom
