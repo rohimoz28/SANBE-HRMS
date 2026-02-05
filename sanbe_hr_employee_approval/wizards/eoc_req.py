@@ -50,6 +50,13 @@ class SkkEmployeeEOCWizard(models.TransientModel):
             if employee.contract_id and employee.contract_id.contract_year == '5':
                 res['contract_year'] = employee.contract_id.contract_year
 
+            #definisikan contract_type
+            contract_type=employee.contract_id.contract_type_id.name
+            #jika contract_id ada, tapi tipenya BUKAN 'Extended'
+            if employee.contract_id and contract_type != 'Extended':
+                #kembalikan nilainya ke tahun yang ada di database (tanpa +1)
+                res['contract_year'] = employee.contract_id.contract_year
+
             if employee.contract_dateto:
                 res['char_eoc_date'] = employee.contract_dateto.strftime('%d %B %Y').replace(
                         'January', 'Januari'
