@@ -55,10 +55,6 @@ class HrEmployee(models.Model):
     private_country_id = fields.Many2one("res.country", string="Private Country", groups="hr.group_hr_user", compute="_compute_last_address", store="True")
     is_skip_break = fields.Boolean('Tidak Mengikuti Jam Istirahat')
     no_ot_benefit = fields.Boolean('Tidak Memiliki Benefit OT')
-<<<<<<< HEAD
-=======
-    workingday_id = fields.Many2one('hr.working.days', string='WD Code')
->>>>>>> 33e08dee176c16e3ed4d627ef4401674f00c26ea
     workingday_date = fields.Date('Berlaku Tgl')
 
     _sql_constraints = [
