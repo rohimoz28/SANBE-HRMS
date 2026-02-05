@@ -194,9 +194,10 @@ class HrEmployee(models.Model):
     apoteker = fields.Boolean('Apoteker', default=False)
     first_date_join = fields.Date('First Date Of Joining')
     wd_type = fields.Selection(selection=[('shift', 'Shift'),
-                                          ('non_shift', 'Non-Shift'),
-                                          ('working_hours', 'Working Hours')],
-                               string='WD Shift/Non-Shift',
+                                          ('non_shift', 'Fixed WD'),
+                                          ('working_hours', 'Working Hours'),
+                                          ('shift_non_shift', 'Shift and Non Shift')],
+                               string='WD Type',
                                default='non_shift',
                                index=True)
     workingday = fields.Integer(
@@ -281,6 +282,12 @@ class HrEmployee(models.Model):
     #    #myemployees = self.env['hr.employee'].search([])
     #    #for allemps in myemployees:
     #    #    allemps.write({'nik_lama': ''})
+
+    @api.onchange('no_ktp')
+    def _onchange_no_npwp(self):
+        for rec in self:
+            if rec.no_ktp:
+                rec.no_npwp = rec.no_ktp
 
     @api.model
     def _compute_is_ts_user(self):

@@ -25,7 +25,7 @@
     'currency': 'USD',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr','sanbe_hr','hr_payroll_community','hr_contract'],
+    'depends': ['base', 'hr','sanbe_hr','hr_payroll_community','hr_contract','sanbe_hr_tms'],
     'data': [
         'security/ir.model.access.csv',
         'views/hr_emp_status.xml',
