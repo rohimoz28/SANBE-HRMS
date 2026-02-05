@@ -4079,7 +4079,7 @@ AND*/ hts.branch_id = branch
                          sum(case when type ='H' then 1 else 0 end)								   as jumlah_libur, --jumlah libur
                          sum(case when type = 'W' then 1 else 0 end)                               AS total_workingday,
                          p.jumlah_hari_kalender													   as jumlah_hari_periode, -- jumlah hari per periode
-                         sum (CASE WHEN lower(sttd.status_attendance) = 'eraly out/in' THEN 1 else 0 END) AS total_permistion, --jumlah permission
+                         sum (CASE WHEN (lower(sttd.status_attendance) ilike '%delay in%') or (lower(sttd.status_attendance) ilike '%early out%') THEN 1 else 0 END) AS total_permistion, --jumlah permission
                          sum(CASE WHEN sttd.approval_ot_from is not null THEN 1 else 0 END)        AS total_lembur, -- jumlah_lembur
                          COUNT(CASE
                                    WHEN sttd.status_attendance = 'Attendee' THEN 1 END)            AS total_attendee,
@@ -4121,24 +4121,24 @@ AND*/ hts.branch_id = branch
         leave_count       = flag.total_leave,
         ot1_totalx        = flag.aot1,
         ot2_totalx        = flag.aot2,
-    ot3_totalx        = flag.aot3,
-                        ot4_totalx        = flag.aot4,
-                        delay_count       = flag.total_times_delayed,
-                        delay_total       = flag.delay_total,
-                        pattendace_count  = flag.total_premi_attendee,
-                        nightshift_count  = flag.total_night_shift,
-                        nightshift2_count = flag.total_night_shift2,
-                        transport_count   = flag.total_transport,
-                        meal_count        = flag.total_meal,
-                        sick_count        = flag.total_sick,
-                            calendar_day_total     = flag.jumlah_hari_periode,
-    holiday_national_count = flag.jumlah_libur,
-                             overtime_day_count     = flag.total_lembur,
-                             permit_count           = flag.total_permistion
+        ot3_totalx        = flag.aot3,
+        ot4_totalx        = flag.aot4,
+        delay_count       = flag.total_times_delayed,
+        delay_total       = flag.delay_total,
+        pattendace_count  = flag.total_premi_attendee,
+        nightshift_count  = flag.total_night_shift,
+        nightshift2_count = flag.total_night_shift2,
+        transport_count   = flag.total_transport,
+        meal_count        = flag.total_meal,
+        sick_count        = flag.total_sick,
+        calendar_day_total     = flag.jumlah_hari_periode,
+        holiday_national_count = flag.jumlah_libur,
+        overtime_day_count     = flag.total_lembur,
+        permit_count           = flag.total_permistion
 
-                             FROM flag
+    FROM flag
 
-                             WHERE h.id = flag.hts_id;
+    WHERE h.id = flag.hts_id;
 
     --------------------------------------------------------------------------------------- end query total -----------------------------------------------------------------------------------
 
