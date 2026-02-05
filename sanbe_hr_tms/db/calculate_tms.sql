@@ -3866,7 +3866,7 @@ END AS total_deduction*/
                                    END,
                                CASE
 
-                                   WHEN sttd.status_attendance IN ('Absent', 'Jam pulang lebih awal', 'Alpha 1/2') THEN '.50'
+                                   WHEN sttd.status_attendance IN ('Absent', 'Jam pulang lebih awal', 'Alpha 1/2',  'Early Out/In') THEN '.50'
 
                                    ELSE ''
                                    END
@@ -3962,10 +3962,11 @@ END AS total_deduction*/
 --     WHERE oe.employee_id = he.id
 --       AND DATE(oe.plann_date_from) >= CURRENT_DATE - INTERVAL '7 days'
 --       AND he.branch_id = branch_id;
-
---update total summary detail (footer) || code ini harus selalu paling bawah
-
-    WITH flag AS (SELECT he.name,
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--update total summary detail (footer) || code ini harus selalu paling bawah revisi (04/02/2026)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--- query lama
+    /*WITH flag AS (SELECT he.name,
 
                          he.employee_levels,
 
@@ -4066,8 +4067,83 @@ AND*/ hts.branch_id = branch
 
     FROM flag
 
-    WHERE h.id = flag.hts_id;
-    -- and flag.employee_levels >= 6;
+    WHERE h.id = flag.hts_id;*/
+    -------------------------------------------------------------------------------------- akhir query lama -------------------------------------------------------------------------------
+
+    --- query baru
+
+    WITH flag AS (SELECT he.name,
+                         he.employee_levels,
+                         hts.employee_id,
+                         hts.id                                                                    AS hts_id,
+                         sum(case when type ='H' then 1 else 0 end)								   as jumlah_libur, --jumlah libur
+                         sum(case when type = 'W' then 1 else 0 end)                               AS total_workingday,
+                         p.jumlah_hari_kalender													   as jumlah_hari_periode, -- jumlah hari per periode
+                         sum (CASE WHEN lower(sttd.status_attendance) = 'eraly out/in' THEN 1 else 0 END) AS total_permistion, --jumlah permission
+                         sum(CASE WHEN sttd.approval_ot_from is not null THEN 1 else 0 END)        AS total_lembur, -- jumlah_lembur
+                         COUNT(CASE
+                                   WHEN sttd.status_attendance = 'Attendee' THEN 1 END)            AS total_attendee,
+                         COUNT(CASE WHEN sttd.status_attendance = 'Absent' THEN 1 END)             AS total_absent,
+                         sum(case when left(sttd.status_attendance, 1) = 'S' then 1 else 0 end)    as total_sick,
+                         SUM(CASE
+                                 WHEN sttd.flag = '20' and left(sttd.status_attendance, 1) <> 'S' THEN 1
+                                 ELSE 0
+                             END)                                                                  AS total_leave,
+                         SUM(COALESCE(sttd.delay_level2, 0)) + SUM(COALESCE(sttd.delay_level1, 0)) AS total_times_delayed,
+                         SUM(sttd.delay)                                                           as delay_total,
+                         SUM(sttd.aot1)                                                            AS aot1,
+                         SUM(sttd.aot2)                                                            AS aot2,
+                         SUM(sttd.aot3)                                                            AS aot3,
+                         SUM(sttd.aot4)                                                            AS aot4,
+                         SUM(sttd.premi_attendee)                                                  AS total_premi_attendee,
+                         SUM(sttd.night_shift2)                                                    AS total_night_shift2,
+                         SUM(sttd.transport)                                                       AS total_transport,
+                         SUM(sttd.meal)                                                            AS total_meal,
+                         SUM(sttd.night_shift)                                                     AS total_night_shift
+                  FROM hr_tmsentry_summary hts
+                           JOIN sb_tms_tmsentry_details sttd ON hts.id = sttd.tmsentry_id
+                           JOIN hr_employee he ON hts.employee_id = he.id
+                           cross join (SELECT
+                                           (hoc.open_periode_to - hoc.open_periode_from) + 1 AS jumlah_hari_kalender
+                                       FROM hr_opening_closing hoc
+                                       WHERE hoc.id = period AND hoc.branch_id =branch AND hoc.area_id = l_area -- ganti dengan parameter dari sp tms
+                  ) p
+                  WHERE  hts.branch_id = branch
+                    AND hts.area_id = l_area
+                    AND hts.periode_id = period
+                  GROUP BY he.name, hts.employee_id, hts.id, he.employee_levels, p.jumlah_hari_kalender)
+
+    UPDATE hr_tmsentry_summary h
+
+    SET attendee_total    = flag.total_workingday,
+        attendee_count    = flag.total_attendee,
+        absent_count      = flag.total_absent,
+        leave_count       = flag.total_leave,
+        ot1_totalx        = flag.aot1,
+        ot2_totalx        = flag.aot2
+    ot3_totalx        = flag.aot3,
+                        ot4_totalx        = flag.aot4,
+                        delay_count       = flag.total_times_delayed,
+                        delay_total       = flag.delay_total,
+                        pattendace_count  = flag.total_premi_attendee,
+                        nightshift_count  = flag.total_night_shift,
+                        nightshift2_count = flag.total_night_shift2,
+                        transport_count   = flag.total_transport,
+                        meal_count        = flag.total_meal,
+                        sick_count        = flag.total_sick
+                            calendar_day_total     = flag.jumlah_hari_periode,
+    holiday_national_count = flag.jumlah_libur,
+                             overtime_day_count     = flag.total_lembur,
+                             permit_count           = flag.total_permistion
+
+                             FROM flag
+
+                             WHERE h.id = flag.hts_id;
+
+    --------------------------------------------------------------------------------------- end query total -----------------------------------------------------------------------------------
+
+
+
 
 
 -- table monitoring
@@ -4514,6 +4590,8 @@ and*/ aa.department_id = sia.department_id
                   ON hts.id = sttd.tmsentry_id
     WHERE sttd.aot1 IS NOT NULL
       AND hts.periode_id = period;
+
+
 
 END;
 
