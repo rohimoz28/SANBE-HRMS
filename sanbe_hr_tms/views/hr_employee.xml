@@ -10,6 +10,9 @@
                 <xpath expr="//field[@name='nik_lama']" position="after">
                     <field name="badges_nos" widget="many2many_tags" readonly="state not in ['draft']" required="1" context="{'employee_nik': nik}"/>
                 </xpath>
+                <xpath expr="//field[@name='wd_type']" position="after">
+                    <field name="workingday_id" invisible="wd_type not in ['non_shift', 'shift_non_shift']" required="wd_type in ['non_shift', 'shift_non_shift']" options="{'no_create': True,'no_create_edit': True,'no_open': True}" />
+                </xpath>
             </field>
         </record>
     </data>
