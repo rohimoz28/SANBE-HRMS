@@ -311,13 +311,13 @@ class HrCariEmployeeDepartment(models.TransientModel):
 
     def _check_meals_flag(self, employee_id, approve_from, approve_to, ot_type):
         emp = self.env['hr.employee'].sudo().browse(employee_id)
-        if emp and not emp.allowance_meal and approve_to - approve_from >= 4 and ot_type == 'regular':
+        if emp and not emp.allowance_meal and approve_to - approve_from >= 4 and ot_type == 'regular' and not emp.no_ot_benefit:
             return True
         return False
 
     def _check_meals_cash_flag(self, employee_id, approve_from, approve_to):
         emp = self.env['hr.employee'].sudo().browse(employee_id)
-        if emp and emp.allowance_meal and approve_to - approve_from >= 2:
+        if emp and emp.allowance_meal and approve_to - approve_from >= 2 and not emp.no_ot_benefit:
             return True
         return False
 

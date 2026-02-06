@@ -559,7 +559,8 @@ class HREmpOvertimeRequest(models.Model):
         for rec in self:
             if rec.ot_type and rec.hr_ot_planning_ids:
                 for line in rec.hr_ot_planning_ids:
-                    if line.approve_time_to - line.approve_time_from >= 4 and rec.ot_type == 'regular':
+                    emp = self.env['hr.employee'].sudo().search([('id', '=', line.employee_id.id)], limit=1)
+                    if line.approve_time_to - line.approve_time_from >= 4 and rec.ot_type == 'regular' and not emp.no_ot_benefit:
                         line.ot_type = rec.ot_type
                         line.meals = True
                     else:
@@ -776,7 +777,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     def _onchange_allowance_meals_cash(self):
         for rec in self:
             emp = self.env['hr.employee'].sudo().search([('id', '=', rec.employee_id.id)], limit=1)
-            if emp and emp.allowance_meal and rec.approve_time_to - rec.approve_time_from >= 2:
+            if emp and emp.allowance_meal and rec.approve_time_to - rec.approve_time_from >= 2 and not emp.no_ot_benefit:
                 rec.meals_cash = True
 
     @api.depends('employee_id')
@@ -804,7 +805,7 @@ class HREmpOvertimeRequestEmployee(models.Model):
     def _onchange_meals(self):
         for rec in self:
             emp = self.env['hr.employee'].sudo().search([('id', '=', rec.employee_id.id)], limit=1)
-            if emp and emp.allowance_meal == False and rec.approve_time_to - rec.approve_time_from >= 4 and rec.ot_type == 'regular':
+            if emp and emp.allowance_meal == False and rec.approve_time_to - rec.approve_time_from >= 4 and rec.ot_type == 'regular' and not emp.no_ot_benefit:
                 self.meals = True
             else:
                 self.meals = False
