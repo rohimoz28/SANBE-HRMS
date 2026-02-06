@@ -39,6 +39,7 @@
             </xpath>
             <xpath expr="//field[@name='allowance_nightshift_amount']" position="after">
                 <field name="wd_type" />
+                <field name="workingday_date" invisible="wd_type not in ['non_shift', 'shift_non_shift']" required="wd_type in ['non_shift', 'shift_non_shift']" />
                 <field name="workingday" />
              </xpath>
              <xpath expr="//field[@name='allowance_ot']" position="replace">
@@ -61,6 +62,7 @@
                 <field name="overtime" widget="radio" options="{'horizontal': true}"/>
             </xpath>
             <xpath expr="//field[@name='overtime']" position="after">
+                <field name="no_ot_benefit" />
                 <field name="is_skip_break" />
                 <field name="leave_calculation" widget="radio" options="{'horizontal': true}"/>
                 <field name="leave_date" invisible="leave_calculation != 'other'"/>
